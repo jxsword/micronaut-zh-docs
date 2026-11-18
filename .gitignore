@@ -1,0 +1,15 @@
+# 会话/工具状态
+.mimosa/
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# 同步临时区（上游浅克隆、可重建）
+.upstream/
+workdir/
+
+# 备份与构建产物
+*.bak
+/site/
