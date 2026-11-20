@@ -1,0 +1,71 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Around Advice](https://docs.micronaut.io/5.2.x/core/#core-aroundAdvice)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/aop/aroundAdvice.adoc  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360  upstream_hash: f0dda9beb85d85f4fdcc9adc2e784f4bb3ad671b  translated_at: 2026-11-21 -->
+
+[[aroundAdvice]]
+您最可能应用的最常见通知类型是「环绕（Around）」通知，它允许您装饰方法的行为。
+
+== 编写环绕通知
+
+
+第一步是定义一个将触发 api:aop.MethodInterceptor[] 的注解：
+
+snippet::io.micronaut.docs.aop.around.NotNull[tags="imports,annotation", indent=0, title="Around Advice Annotation Example"]
+
+<1> 注解的保留策略应为 `RUNTIME`
+<2> 通常您希望能够在类或方法级别应用通知，因此目标类型为 `TYPE` 与 `METHOD`
+<3> 添加 ann:aop.Around[] 注解，告诉 Micronaut 框架该注解是环绕通知
+
+定义环绕通知的第二步是实现 api:aop.MethodInterceptor[]。例如，下面的拦截器禁止带有 `null` 值的参数：
+
+snippet::io.micronaut.docs.aop.around.NotNullInterceptor[tags="imports,interceptor", indent=0, title="MethodInterceptor Example"]
+
+<1> ann:aop.InterceptorBean[] 注解用于指示拦截器与哪个注解关联。注意 ann:aop.InterceptorBean[] 以默认作用域 `@Singleton` 进行元注解，因此如果您希望为每个被拦截的 bean 创建并关联一个新的拦截器，应该用 ann:context.annotation.Prototype[] 标注拦截器。
+<2> 拦截器实现 api:aop.MethodInterceptor[] 接口。
+<3> 传入的 link:{api}/io/micronaut/aop/MethodInvocationContext.html[MethodInvocationContext] 用于找到第一个为 `null` 的参数
+<4> 如果发现 `null` 参数，则抛出异常
+<5> 否则调用 link:{api}/io/micronaut/aop/InvocationContext.html#proceed--[proceed()] 以继续方法调用。
+
+NOTE: Micronaut AOP 拦截器不使用反射，这提升了性能并缩短了堆栈跟踪的大小，从而改善调试体验。
+
+将该注解应用到目标类上，让新的 `MethodInterceptor` 发挥作用：
+
+snippet::io.micronaut.docs.aop.around.NotNullExample[tags="example", indent=0, title="Around Advice Usage Example"]
+
+每当 `NotNullExample` 类型被注入到一个类中时，注入的都是一个编译期生成的代理，它用前面定义的 `@NotNull` 通知装饰方法调用。您可以通过编写测试来验证通知是否生效。以下测试验证当参数为 `null` 时会抛出预期的异常：
+
+snippet::io.micronaut.docs.aop.around.AroundSpec[tags="test", indent=0, title="Around Advice Test"]
+
+NOTE: 由于 Micronaut 注入发生在编译期，通常该通知应打包成一个依赖 JAR 文件，在编译上述测试时位于类路径上。它不应位于同一个代码库中，因为您不希望测试在通知本身编译之前被编译。
+
+== 自定义代理生成
+
+link:{api}/io/micronaut/aop/Around.html[Around] 注解的默认行为是在编译期生成一个作为被代理类子类的代理。换句话说，在前面的示例中，将生成 `NotNullExample` 类的编译期子类，其中被代理的方法用拦截器处理装饰，而原始行为通过调用 `super` 触发。
+
+这种行为更高效，因为只需要一个 bean 实例；但根据用例，您可能希望改变这种行为。`@Around` 注解支持多种属性来改变这种行为，包括：
+
+* `proxyTarget` （默认为 `false`）——如果设置为 `true`，代理将不再是通过调用 `super` 的子类，而是委托给原始 bean 实例
+* `hotswap` （默认为 `false`）——与 `proxyTarget=true` 相同，但此外代理还实现 link:{api}/io/micronaut/aop/HotSwappableInterceptedProxy.html[HotSwappableInterceptedProxy]，它将每个方法调用包装在 `ReentrantReadWriteLock` 中，并允许在运行时交换目标实例。
+* `lazy` （默认为 `false`）——默认情况下，Micronaut 框架会在创建代理时饿汉式初始化代理目标。如果设置为 `true`，则代理目标改为在每次方法调用时惰性解析。
+
+== @Factory bean 上的 AOP 通知
+
+AOP 通知应用于 <<factories,bean 工厂>> 时的语义与常规 bean 不同，适用以下规则：
+
+. 应用在 ann:context.annotation.Factory[] bean 类级别的 AOP 通知作用于工厂本身，而不是作用于用 ann:context.annotation.Bean[] 注解定义的任何 bean。
+. 应用在标注了 bean 作用域的方法上的 AOP 通知作用于该工厂产生的 bean。
+
+请看以下两个示例：
+
+snippet::io.micronaut.docs.aop.advice.type.MyFactory[tags="class", indent=0, title="AOP Advice at the type level of a `@Factory`"]
+
+上面的示例记录创建 `MyBean` bean 所花费的时间。
+
+现在考虑这个示例：
+
+snippet::io.micronaut.docs.aop.advice.method.MyFactory[tags="class", indent=0, title="AOP Advice at the method level of a `@Factory`"]
+
+上面的示例记录执行 `MyBean` bean 的公共方法所花费的时间，但不记录 bean 的创建。
+
+这种行为背后的理由是：您有时可能希望将通知应用于工厂，有时又希望应用于工厂产生的 bean。
+
+注意，目前没有办法在方法级别对 ann:context.annotation.Factory[] bean 应用通知，工厂的所有通知都必须在类型级别应用。您可以通过将不希望应用通知的方法定义为非 public，来控制哪些方法应用通知。

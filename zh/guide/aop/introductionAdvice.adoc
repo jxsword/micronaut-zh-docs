@@ -1,0 +1,45 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Introduction Advice](https://docs.micronaut.io/5.2.x/core/#core-introductionAdvice)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/aop/introductionAdvice.adoc  upstream_commit: 7dd6cb2ab4ab3a02c16fae3691798313b8a880fc  upstream_hash: a10c67d786f4f97f4efc22bb5526e548d1ad0752  translated_at: 2026-11-21 -->
+
+[[introductionAdvice]]
+引入通知（Introduction Advice）与环绕通知的不同之处在于，它提供实现而不是装饰。
+
+引入通知的示例包括 https://spring.io/projects/spring-data/[Spring Data]，它为您实现持久化逻辑。
+
+Micronaut 的 api:http.client.annotation.Client[] 注解是引入通知的另一个示例，Micronaut 框架在编译期为您实现 HTTP 客户端接口。
+
+实现引入通知的方式与实现环绕通知非常相似。
+
+首先定义一个驱动引入通知的注解。举例来说，假设您希望实现一个通知，为接口中的每个方法返回存根值（stubbed value，测试框架中的常见需求）。请看以下 `@Stub` 注解：
+
+snippet::io.micronaut.docs.aop.introduction.Stub[tags="imports,class", indent=0, title="Introduction Advice Annotation Example"]
+
+<1> 引入通知以 api:aop.Introduction[] 注解标注
+<2> 添加 api:context.annotation.Bean[] 注解，使所有标注了 `@Stub` 的类型成为 bean
+
+前一示例中引用的 `StubIntroduction` 类必须实现 api:aop.MethodInterceptor[] 接口，与环绕通知一样。
+
+下面是一个示例实现：
+
+snippet::io.micronaut.docs.aop.introduction.StubIntroduction[tags="imports,class", indent=0, title="StubIntroduction"]
+
+<1> api:aop.InterceptorBean[] 注解用于将拦截器与 `@Stub` 注解关联
+<2> 该类标注了 `@Singleton` 并实现 api:aop.MethodInterceptor[] 接口
+<3> 从上下文读取 `@Stub` 注解的值，并尝试将其转换为返回类型
+<4> 否则返回 `null`
+
+要在应用中使用该引入通知，请用 `@Stub` 标注您的抽象类或接口：
+
+snippet::io.micronaut.docs.aop.introduction.StubExample[tags="class", indent=0, title="StubExample"]
+
+所有抽象方法都委托给 `StubIntroduction` 类来实现。
+
+下面的测试演示了 `StubIntroduction` 的行为：
+
+snippet::io.micronaut.docs.aop.introduction.IntroductionSpec[tags="test", indent=0, title="Testing Introduction Advice"]
+
+注意，如果引入通知无法实现该方法，请调用 api:aop.MethodInvocationContext[] 的 `proceed` 方法。这样可以让其他引入通知拦截器来实现该方法；如果没有任何通知能实现该方法，将抛出 `UnsupportedOperationException`。
+
+此外，如果存在多个引入通知，您可能希望重写 api:aop.MethodInterceptor[] 的 `getOrder()` 方法来控制通知的优先级。
+
+以下小节介绍 Micronaut 提供的核心通知类型。

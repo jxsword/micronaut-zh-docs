@@ -1,0 +1,130 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Immutable Configuration](https://docs.micronaut.io/5.2.x/core/#core-immutableConfig)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/config/immutableConfig.adoc  upstream_commit: 9b98b3ee2c416a07f1a6d4af8d6ffb01233adda7  upstream_hash: 3eef8aca10360c7600554f36a28f8351d3a6bdd8  translated_at: 2026-11-21 -->
+
+自 1.3 起，Micronaut 框架支持定义不可变配置。基于接口的不可变配置需要 Micronaut Context 依赖。
+
+dependency::micronaut-context[]
+
+`micronaut-context` 是 `micronaut-http` 的传递依赖。如果您使用 Micronaut HTTP 运行时，您的项目已经包含 `micronaut-context` 依赖。
+
+Micronaut 框架提供多种风格的不可变配置。它们以相同的方式绑定值，但在运行时 <<refreshable,刷新>> 配置时，bean 的行为有所不同。
+
+== 基于接口的配置
+
+一种方式是声明一个标注了 ann:context.annotation.ConfigurationProperties[] 的接口。它会自动反映刷新后的配置，无需任何额外注解：
+
+snippet::io.micronaut.docs.config.itfce.EngineConfig[tags="imports,class",indent=0,title="@ConfigurationProperties Interface"]
+
+<1> ann:context.annotation.ConfigurationProperties[] 注解接受配置前缀，并声明在接口上
+<2> 您可以使用 ann:core.bind.annotation.Bindable[] 设置默认值
+<3> 也可以使用校验注解
+<4> 您可以引用其他 ann:context.annotation.ConfigurationProperties[] bean
+<5> 您可以嵌套不可变配置
+<6> 可选配置通过返回 `Optional` 或指定 `@Nullable` 来表示
+
+Micronaut 框架提供了编译期实现，其 getter 委托给 api:context.env.Environment[] 接口的 `getProperty(..)` 方法。由于每个 getter 在每次调用时都会读取 `Environment`，接口 bean 总是反映当前配置——包括 <<refreshable,刷新>> 之后，即使在刷新发生之前它已被注入到一个长生命周期 bean 中也是如此。
+
+NOTE: 仅允许 getter 方法（支持 default 方法）。声明任何其他抽象方法会导致编译错误。
+
+== 基于构造器的配置
+
+或者，定义一个类并在其某个构造器上标注 ann:context.annotation.ConfigurationInject[]，作用于 ann:context.annotation.ConfigurationProperties[] 或 ann:context.annotation.EachProperty[] bean：
+
+snippet::io.micronaut.docs.config.immutable.EngineConfig[tags="imports,class",indent=0,title="@ConfigurationInject Constructor"]
+
+<1> ann:context.annotation.ConfigurationProperties[] 注解接受配置前缀
+<2> ann:context.annotation.ConfigurationInject[] 注解声明在构造器上
+<3> 您可以使用 ann:core.bind.annotation.Bindable[] 设置默认值
+<4> 也可以使用校验注解
+<5> 您可以嵌套不可变配置
+<6> 可选配置用 `@Nullable` 表示
+
+ann:context.annotation.ConfigurationInject[] 注解告诉框架优先从配置绑定值，而不是注入 bean。满足以下任一条件的构造器参数将跳过绑定：
+
+* 参数标注了 `@Value` （显式绑定）
+* 参数标注了 `@Property` （显式绑定）
+* 参数标注了 `@Parameter` （参数化 bean 处理）
+* 参数标注了 `@Inject` （通用 bean 注入）
+* 参数的类型标注了 bean 作用域（例如 `@Singleton`）
+
+与接口方式不同，基于构造器的 bean 在构造时一次性绑定值并存储在字段中。在类上添加 ann:runtime.context.scope.Refreshable[] 注解会将其置于 refresh 作用域，这样 <<refreshable,运行时配置刷新事件>> 会丢弃该实例，下一次查找或注入会根据当前配置构建新实例。
+
+WARNING: ann:runtime.context.scope.Refreshable[] 不会更新已经注入的引用。在构造器中接收配置的 bean（例如单例）会保留它获得的实例及其当时的值。如果长生命周期 bean 必须观察到刷新，请使用基于接口的配置，或者在需要时从 api:context.BeanContext[] 查找配置 bean。
+
+== Record 类
+
+也可以使用 record 类——即 https://docs.oracle.com/en/java/javase/17/language/records.html[Java record]、Kotlin data class 或冻结（frozen）的 Python dataclass——配合 ann:context.annotation.ConfigurationProperties[] 实现不可变配置。规范（record）或主（data class）构造器会被视为如同标注了 ann:context.annotation.ConfigurationInject[]，因此构造器上无需注解：
+
+snippet::io.micronaut.docs.config.immutable.ValueAddedTaxConfiguration[tags="imports,class",title="Record Example"]
+
+<1> `percentage` 字段为 "vat" 定义了一个配置属性
+
+Record 类属于基于构造器的配置，其在刷新方面的行为与上文描述完全相同，包括标注了 ann:runtime.context.scope.Refreshable[] 的情况。在这里 `final` 与否没有区别：无论如何都不会为 ann:context.annotation.ConfigurationProperties[] 类生成 AOP 代理。
+
+NOTE: 从性能角度看，record 优于接口，因为接口 getter 在每次调用时都要通过 `Environment` 解析值，而 record 返回的是已绑定的字段。差异很小；请根据您的刷新需求来选择。
+
+== 默认值
+
+您可以通过两种方式为属性提供默认值：
+
+* ann:core.bind.annotation.Bindable[] 的 `defaultValue` 成员，例如 `@Bindable(defaultValue = "Ford")`
+* 构造器默认参数（在支持该特性的语言中，例如 Kotlin）
+
+优先使用 ann:core.bind.annotation.Bindable[]。其默认值会写入生成的配置元数据，因此 IDE 补全、JSON schema 校验与生成的文档都会显示它。语言级默认参数在运行时有效，但对这些工具不可见。
+
+== 使用不可变配置
+
+准备好类型安全的配置后，就可以像其他任何 bean 一样将其注入到您的 bean 中：
+
+snippet::io.micronaut.docs.config.immutable.Engine[tags="class",indent=0,title="@ConfigurationProperties Dependency Injection"]
+
+<1> 注入 `EngineConfig` bean
+<2> 使用配置属性
+
+配置值随后可以在运行应用时提供。例如：
+
+snippet::io.micronaut.docs.config.immutable.VehicleSpec[tags="start",indent=0,title="Supply Configuration"]
+
+上例输出：`"Ford Engine Starting V8 [rodLength=7.0]"`
+
+== 自定义访问器
+
+如 <<configurationPropertiesAccessorsStyle,更改访问器风格>> 一节所述，创建不可变配置属性时也可以自定义访问器：
+
+[source, java]
+----
+import io.micronaut.context.annotation.ConfigurationProperties;
+import io.micronaut.core.annotation.AccessorsStyle;
+import io.micronaut.core.bind.annotation.Bindable;
+
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import java.util.Optional;
+
+@ConfigurationProperties("my.engine") // <1>
+@AccessorsStyle(readPrefixes = "read") // <2>
+public interface EngineConfigAccessors {
+
+    @Bindable(defaultValue = "Ford")
+    @NotBlank
+    String readManufacturer(); // <3>
+
+    @Min(1L)
+    int readCylinders(); // <3>
+
+    @NotNull
+    CrankShaft readCrankShaft(); // <3>
+
+    @ConfigurationProperties("crank-shaft")
+    @AccessorsStyle(readPrefixes = "read") // <4>
+    interface CrankShaft {
+        Optional<Double> readRodLength(); // <5>
+    }
+}
+----
+<1> ann:context.annotation.ConfigurationProperties[] 注解接受配置前缀，并声明在接口上
+<2> ann:core.annotation.AccessorsStyle[] 注解将 `readPrefixes` 定义为 `read`。
+<3> getter 全部以 `read` 为前缀。
+<4> 嵌套的不可变配置也可以用 ann:context.annotation.ConfigurationProperties[] 标注。
+<5> 该 getter 以 `read` 为前缀。

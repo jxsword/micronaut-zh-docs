@@ -1,0 +1,16 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Aspect Oriented Programming](https://docs.micronaut.io/5.2.x/core/#core-aop)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/aop.adoc  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360  upstream_hash: e31d17d94aba840cfaca7aed941934ce5e75f813  translated_at: 2026-11-21 -->
+
+[[aop]]
+面向切面编程（Aspect-Oriented Programming，AOP）历来有多种形态，其中一些实现非常复杂。通常可以将 AOP 理解为一种以切面（aspect）的形式定义横切关注点（如日志、事务、追踪等）并将其与应用代码分离的方式，这些切面定义了通知（advice）。
+
+通常有两种形式的通知：
+
+- 环绕通知（Around Advice）——装饰一个方法或类
+- 引入通知（Introduction Advice）——向类引入新的行为。
+
+在现代 Java 应用中，声明通知通常采用注解的形式。Java 世界中最著名的注解式通知可能是 `@Transactional`，它在 Spring 与 Grails 应用中划定事务边界。
+
+传统 AOP 方式的缺点是对运行时代理创建与反射的严重依赖，这会拖慢应用性能、增加调试难度并提高内存消耗。
+
+Micronaut 框架通过提供一个不使用反射的简单编译期 AOP API 来解决这些问题。

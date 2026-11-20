@@ -7,26 +7,26 @@ files:
 - file: guide/aop.adoc
   blob_sha: e31d17d94aba840cfaca7aed941934ce5e75f813
   size: 1039
-  status: missing
+  status: current
   zh: zh/guide/aop.adoc
   paragraphs: 6
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/aop/adapterAdvice.adoc
   blob_sha: 7dba9d597523e6eaff9907962eed70b8dbdee218
   size: 1810
-  status: missing
+  status: current
   zh: zh/guide/aop/adapterAdvice.adoc
   paragraphs: 11
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/aop/aroundAdvice.adoc
   blob_sha: f0dda9beb85d85f4fdcc9adc2e784f4bb3ad671b
   size: 5669
-  status: missing
+  status: current
   zh: zh/guide/aop/aroundAdvice.adoc
   paragraphs: 29
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/aop/caching.adoc
   blob_sha: b87ccd1483b5ee8b76d736d24e8cdb374c2cea1f
@@ -47,10 +47,10 @@ files:
 - file: guide/aop/introductionAdvice.adoc
   blob_sha: a10c67d786f4f97f4efc22bb5526e548d1ad0752
   size: 2851
-  status: missing
+  status: current
   zh: zh/guide/aop/introductionAdvice.adoc
   paragraphs: 19
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 7dd6cb2ab4ab3a02c16fae3691798313b8a880fc
 - file: guide/aop/lifecycleAdvice.adoc
   blob_sha: 0d4adeff82620235fdbe1570ee54285d8d82f7cd
@@ -471,10 +471,10 @@ files:
 - file: guide/config/bootstrap.adoc
   blob_sha: c718890fd4ed679eff43f39400b544702ae1c41f
   size: 3517
-  status: missing
+  status: current
   zh: zh/guide/config/bootstrap.adoc
   paragraphs: 11
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 53af04a2bdea87c92bfb9cc0a87241d21a79b574
 - file: guide/config/configurationProperties.adoc
   blob_sha: 39683df65243717e40697052860aa98baf82cf69
@@ -495,10 +495,10 @@ files:
 - file: guide/config/eachBean.adoc
   blob_sha: 777cdddab8cb69a56c16642160fdf1d03cf308e9
   size: 1593
-  status: missing
+  status: current
   zh: zh/guide/config/eachBean.adoc
   paragraphs: 7
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: bfb3a1601298c19e037120bbdba9d1c722bd6d22
 - file: guide/config/eachProperty.adoc
   blob_sha: fa42f7d051445da837d0185f2293590eb937caf5
@@ -551,18 +551,18 @@ files:
 - file: guide/config/immutableConfig.adoc
   blob_sha: 3eef8aca10360c7600554f36a28f8351d3a6bdd8
   size: 8107
-  status: missing
+  status: current
   zh: zh/guide/config/immutableConfig.adoc
   paragraphs: 40
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 9b98b3ee2c416a07f1a6d4af8d6ffb01233adda7
 - file: guide/config/jmx.adoc
   blob_sha: e924d0f15937ca951e2b9c0c00d75d3979e17c18
   size: 194
-  status: missing
+  status: current
   zh: zh/guide/config/jmx.adoc
   paragraphs: 2
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/config/propertySource.adoc
   blob_sha: ae4b84c3d480f4154a3eb6b81e4a9d8738ff46af

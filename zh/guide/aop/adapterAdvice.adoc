@@ -1,0 +1,35 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Method Adapter Advice](https://docs.micronaut.io/5.2.x/core/#core-adapterAdvice)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/aop/adapterAdvice.adoc  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360  upstream_hash: 7dba9d597523e6eaff9907962eed70b8dbdee218  translated_at: 2026-11-21 -->
+
+在某些情况下，您希望基于方法上某个注解的存在来引入一个新 bean。一个例子是 ann:runtime.event.annotation.EventListener[] 注解，它为每个标注的方法产生一个 api:context.event.ApplicationEventListener[] 实现，该实现会调用被标注的方法。
+
+例如，以下代码片段会在 api:context.ApplicationContext[] 启动时执行方法中包含的逻辑：
+
+[source,java]
+----
+import io.micronaut.context.event.StartupEvent;
+import io.micronaut.runtime.event.annotation.EventListener;
+...
+
+@EventListener
+void onStartup(StartupEvent event) {
+    // startup logic here
+}
+----
+
+ann:runtime.event.annotation.EventListener[] 注解的存在使 Micronaut 框架创建一个实现 api:context.event.ApplicationEventListener[] 的新类，并调用上面 bean 中定义的 `onStartup` 方法。
+
+ann:runtime.event.annotation.EventListener[] 的实际实现非常简单；它只是使用 ann:aop.Adapter[] 注解来指定它所适配的 SAM（单抽象方法，single abstract method）类型：
+
+[source,java]
+----
+include::context/src/main/java/io/micronaut/runtime/event/annotation/EventListener.java[tags=imports, indent=0]
+
+include::context/src/main/java/io/micronaut/runtime/event/annotation/EventListener.java[tags=clazz, indent=0]
+----
+
+<1> ann:aop.Adapter[] 注解指示要适配的 SAM 类型，此例中为 api:context.event.ApplicationEventListener[]。
+
+NOTE: 如果指定了泛型类型，Micronaut 框架还会自动对齐 SAM 接口的泛型类型。
+
+利用这一机制，您可以定义使用 ann:aop.Adapter[] 注解和 SAM 接口的自定义注解，在编译期自动为您实现 bean。

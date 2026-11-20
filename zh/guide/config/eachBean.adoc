@@ -1,0 +1,19 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Using @EachBean to Drive Configuration](https://docs.micronaut.io/5.2.x/core/#core-eachBean)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/config/eachBean.adoc  upstream_commit: bfb3a1601298c19e037120bbdba9d1c722bd6d22  upstream_hash: 777cdddab8cb69a56c16642160fdf1d03cf308e9  translated_at: 2026-11-21 -->
+
+link:{api}/io/micronaut/context/annotation/EachProperty.html[@EachProperty] 注解是驱动动态配置的好方式，但通常您希望将该配置注入到依赖它的另一个 bean 中。使用硬编码限定符注入单个实例并不是好的解决方案，因此 `@EachProperty` 通常与 link:{api}/io/micronaut/context/annotation/EachBean.html[@EachBean] 结合使用：
+
+snippet::io.micronaut.docs.config.env.DataSourceFactory[tags="eachBean", indent=0, title="Using @EachBean"]
+
+<1> 上面的示例定义了一个 link:{api}/io/micronaut/context/annotation/Factory.html[Factory] bean，用于创建 `javax.sql.DataSource` 实例。
+<2> link:{api}/io/micronaut/context/annotation/EachBean.html[@EachBean] 注解表示将为上一节中定义的每个 `DataSourceConfiguration` 创建一个新的 `DataSource` bean。
+<3> `DataSourceConfiguration` 实例作为方法参数注入，并用于驱动每个 `javax.sql.DataSource` 的配置
+
+NOTE: `@EachBean` 要求父 bean 具有 `@Named` 限定符，因为该限定符会被 `@EachBean` 创建的每个 bean 继承。
+
+换句话说，要检索 `test.datasource.one` 创建的 `DataSource`，您可以这样做：
+
+snippet::io.micronaut.docs.config.env.EachBeanTest[tags="beans", indent=0, title="Using a Qualifier"]
+
+<1> 我们在这里演示确实存在两个数据源。那么如何获取其中的特定一个呢？
+<2> 通过使用 `Qualifiers.byName("one")`，我们可以选择要引用两个 bean 中的哪一个。

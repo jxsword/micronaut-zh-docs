@@ -1,0 +1,7 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – JMX Support](https://docs.micronaut.io/5.2.x/core/#core-jmx)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/config/jmx.adoc  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360  upstream_hash: e924d0f15937ca951e2b9c0c00d75d3979e17c18  translated_at: 2026-11-21 -->
+
+[[jmx]]
+Micronaut 框架为 JMX 提供了基础支持。
+
+更多信息请参阅 micronaut-jmx 项目的 https://micronaut-projects.github.io/micronaut-jmx/latest/guide/[文档]。

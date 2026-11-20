@@ -15,7 +15,7 @@
 | B06 | 11 | 3454 | 3489 | current |
 | B07 | 4 | 2507 | 2554 | current |
 | B08 | 4 | 3397 | 3442 | current |
-| B09 | 8 | 2915 | 2915 | pending |
+| B09 | 8 | 2915 | 2915 | current |
 | B10 | 5 | 3086 | 3092 | pending |
 | B11 | 7 | 3350 | 3352 | pending |
 | B12 | 25 | 3454 | 3460 | pending |
@@ -54,6 +54,7 @@
 - B06（2026-11-21 完成）：validate 全量 73 文件 PASSED + 11/11 --mark-current 核销 + squash commit；进度 73/388（18.8%）。锚点注入 5 处（reflection/classImport/nullabilityAnnotations/jspecify/environments；classImport 批内 mixin 引用闭环、nullabilityAnnotations+jspecify 与 whatsNew 批间闭环）。对译 reviewer 11/11 PASS。词数实测 3482/3445（总词/非代码）。⑤ 豁免警告 36 条（+3 新增 −2 消解，详见 reports/batch-B06.md）。冻结窗口遵守。**IoC 章 55 文件全部 current——IoC 全章译出。**
 - B07（2026-11-21 完成）：validate 全量 77 文件 PASSED + 4/4 --mark-current 核销 + squash commit；进度 77/388（19.8%）。锚点注入 2 处（propertySource/valueAnnotation，片段首内容之前；config.adoc/whatsNew/nullableInjection 5 条既有豁免消解，批内 propertySource→valueAnnotation 闭环）。对译 reviewer 4/4 PASS（propertySource 75 段/123 占位符为 config 章最长文件）。词数实测 2540/2484。⑤ 豁免警告 32 条（+1 新增 −5 消解，详见 reports/batch-B07.md）。冻结窗口遵守。config 章 current 7/15（47%）。
 - B08（2026-11-21 完成）：validate 全量 81 文件 PASSED + 4/4 --mark-current 核销 + squash commit；进度 81/388（20.9%）。锚点注入 2 处（evaluatedExpressions/configurationProperties）+ 源内显式锚点 configurationPropertiesAccessorsStyle 保留；5 条既有豁免消解（config.adoc/whatsNew/introspectedAccessorsStyle/beanMappers×2）。reviewer 4/4 PASS（首轮 1 条为脚本对指令行 title 的误报，检查范围修正）。validate ⑦ 邻接违规 ×2 修复（占位符后漏空格）。词数实测 3400/3336。⑤ 豁免警告 27 条（−5 消解，详见 reports/batch-B08.md）。冻结窗口遵守。config 章 current 11/15（73%）。
+- B09（2026-11-21 完成）：validate 全量 89 文件 PASSED + 8/8 --mark-current 核销 + squash commit；进度 89/388（22.9%）。锚点注入 5 处（aop/aroundAdvice/introductionAdvice/bootstrap/jmx）；aop ×3 豁免消解（whatsNew/annotationMetadata/factories 批间闭环）+1 新增（bootstrap→distributedConfiguration）。reviewer 8/8 PASS（脚本术语检查改为复用 validate ③ 同源 check_terms）。词数实测 2852/2835。⑤ 豁免警告 25 条（详见 reports/batch-B09.md）。冻结窗口遵守。**config 章 15/15 全部 current——config 全章译出**；AOP 章 3/10 起步。
 
 ## 硬性纪律（每批次必守）
 
