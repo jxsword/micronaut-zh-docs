@@ -1,0 +1,17 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Micronaut for GraalVM](https://docs.micronaut.io/5.2.x/core/#core-graal)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/languageSupport/graal.adoc  upstream_commit: 2069c06d4efb457624ecdd926fd30335e2d3e3d1  upstream_hash: 9f24f73ebe8dca9d2f47afe9d84b3438949245a3  translated_at: 2026-11-21 -->
+
+https://www.graalvm.org[GraalVM] 是一个先进的 JDK，具备提前编译（ahead-of-time）的 Native Image 编译能力，可为 Micronaut 应用生成原生可执行文件。
+
+任何 Micronaut 应用都可以在 GraalVM JDK 上运行，不过 Micronaut 仍为此添加了专门支持，以支持使用 https://www.graalvm.org/reference-manual/native-image/[GraalVM 的 `native-image` 工具] 运行 Micronaut 应用。
+
+Micronaut 框架当前支持 GraalVM 版本 {graalVersion}，团队在每次新版本发布中持续改进该支持。如果您遇到任何问题，请随时 https://github.com/micronaut-projects/micronaut-core/issues[报告问题]。
+
+Micronaut 的许多模块与第三方库已经过验证可与 GraalVM 协同工作：HTTP 服务器、HTTP 客户端、函数支持、Micronaut Data JDBC 与 JPA、服务发现（Service Discovery）、RabbitMQ、视图、安全、Zipkin 等。对其他模块的支持仍在演进，并会随时间推移而改进。
+
+[[graal]]
+=== 入门（Getting Started）
+
+NOTE: 只有 Java 与 Kotlin 项目支持使用 GraalVM 的 `native-image` 工具。Groovy 大量依赖反射，而 GraalVM 仅部分支持反射。
+
+要开始使用 GraalVM，请安装该 JDK。在 Linux 或 Mac 上安装 GraalVM 最简单的方式是使用 https://sdkman.io/[SDKMAN!]。其他安装选项请访问 https://www.graalvm.org/downloads/[下载页面]。

@@ -1,0 +1,45 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – The Endpoint Annotation](https://docs.micronaut.io/5.2.x/core/#core-endpointAnnotation)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/management/buildingEndpoints/endpointAnnotation.adoc  upstream_commit: 31bdb72f837188d7432007bbee051eb47dd99561  upstream_hash: 4910b307262692997d437d12f229e1fb7ddf66e6  translated_at: 2026-11-21 -->
+
+通过为类标注 link:{api}/io/micronaut/management/endpoint/annotation/Endpoint.html[Endpoint] 注解并提供（至少）一个端点 id，即可创建端点。
+
+[source,java]
+.FooEndpoint.java
+----
+@Endpoint("foo")
+class FooEndpoint {
+    ...
+}
+----
+
+如果向注解提供单个 `String` 实参，它将被用作端点 id。
+
+还可以向注解提供额外的（具名）实参。`@Endpoint` 的其他可用实参见下表：
+
+.端点实参
+|===
+|实参|描述 |端点示例
+
+|`String id`
+|端点 id（或名称）
+|`@Endpoint(id = "foo")`
+
+|`String prefix`
+|用于配置该端点的前缀（参见 <<endpointConfiguration,端点配置>>）
+|`@Endpoint(prefix = "foo")`
+
+|`boolean defaultEnabled`
+|设置未配置时端点是否启用（参见 <<endpointConfiguration,端点配置>>）
+|`@Endpoint(defaultEnabled = false)`
+
+|`boolean defaultSensitive`
+|设置未配置时端点是否敏感（参见 <<endpointConfiguration,端点配置>>）
+|`@Endpoint(defaultSensitive = false)`
+
+|===
+
+== 自定义端点示例
+
+下面的 `Endpoint` 类示例创建了一个可通过 `/date` 访问的端点：
+
+snippet::io.micronaut.docs.server.endpoint.CurrentDateEndpoint[tags="endpointImport, endpointClassBegin, methodSummary, endpointClassEnd", indent=0, title="CurrentDateEndpoint"]

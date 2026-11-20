@@ -1,0 +1,10 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Health Logging](https://docs.micronaut.io/5.2.x/core/#core-healthLogging)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/management/providedEndpoints/healthEndpoint/healthLogging.adoc  upstream_commit: 74ae026c5db6ae318349dc3013ac6c9a3fbe95a8  upstream_hash: 269b4653d5ba6ec4b30d0ff3418e72afea63fcc5  translated_at: 2026-11-21 -->
+
+api:management.health.aggregator.DefaultHealthAggregator[] 还会为健康指示器的状态与详情输出日志语句。要记录这些信息，只记录状态请使用 `Level.DEBUG`；要同时记录状态与详情请使用 Level.TRACE。例如：
+
+[source,xml]
+----
+<logger name="io.micronaut.management.health.aggregator.DefaultHealthAggregator" level="trace" /> // <1>
+----
+<1> 健康指示器状态使用 `level="debug"`，健康指示器详情使用 `level="trace"`

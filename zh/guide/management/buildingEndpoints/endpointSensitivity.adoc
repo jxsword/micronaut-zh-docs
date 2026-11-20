@@ -1,0 +1,18 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Endpoint Sensitivity](https://docs.micronaut.io/5.2.x/core/#core-endpointSensitivity)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/management/buildingEndpoints/endpointSensitivity.adoc  upstream_commit: 51650efcb97939ef02bf726bdcb28266b7ca20d1  upstream_hash: 228fee2888617923cfba0de80ff947d0ea884b3e  translated_at: 2026-11-21 -->
+
+可以通过端点注解与配置控制整个端点的敏感性。不过，单个方法也可以独立于端点整体进行配置。ann:io.micronaut.management.endpoint.annotation.Sensitive[] 注解可应用于方法以控制其敏感性。
+
+snippet::io.micronaut.docs.server.endpoint.AlertsEndpoint[tags="imports,clazz", indent=0, title="AlertsEndpoint"]
+
+<1> 端点默认不敏感，并使用 `endpoints` 默认前缀。
+<2> 该方法始终敏感，不受任何其他因素影响
+<3> `property` 值会附加到前缀与 id 之后，用于查找配置值
+
+如果设置了配置键 `endpoints.alerts.add.sensitive`，该值将决定 `addAlert` 方法的敏感性。
+
+. `endpoint` 是第一个标记，因为它是端点注解中 `prefix` 的默认值，且本例未显式设置。
+. `alerts` 是下一个标记，因为它是端点 id
+. `add.sensitive` 是下一个标记，因为它是 ann:io.micronaut.management.endpoint.annotation.Sensitive[] 注解的 `property` 成员的取值。
+
+如果未设置配置键，则使用 `defaultValue` （默认为 `true`）。

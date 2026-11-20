@@ -1,0 +1,26 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – The Beans Endpoint](https://docs.micronaut.io/5.2.x/core/#core-beansEndpoint)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/management/providedEndpoints/beansEndpoint.adoc  upstream_commit: 41131456aad0338e21715e5053d9ec7cc8da8e50  upstream_hash: 8a44c6989391ab31dbc822a9091a2eaf7f1ccd10  translated_at: 2026-11-21 -->
+
+beans 端点返回应用中已加载 bean 定义的信息。默认返回的 bean 数据是一个对象：键为 bean 定义的类名，值为关于该 bean 的属性对象。
+
+要执行 beans 端点，请向 /beans 发送 GET 请求。
+
+[[beansEndpoint]]
+== 配置
+
+要配置 beans 端点，请通过 `endpoints.beans` 提供配置。
+
+.Beans 端点配置示例
+[configuration]
+----
+endpoints:
+  beans:
+    enabled: Boolean
+    sensitive: Boolean
+----
+
+== 定制
+
+beans 端点由一个 bean 定义数据收集器和一个 bean 数据实现组成。bean 定义数据收集器（link:{api}/io/micronaut/management/endpoint/beans/BeanDefinitionDataCollector.html[BeanDefinitionDataCollector]）负责返回一个发布者，由它返回响应中使用的数据。bean 定义数据（link:{api}/io/micronaut/management/endpoint/beans/BeanDefinitionData.html[BeanDefinitionData]）负责返回关于单个 bean 定义的数据。
+
+要覆盖这两个辅助类中任意一个的默认行为，可以继承默认实现（link:{api}/io/micronaut/management/endpoint/beans/impl/DefaultBeanDefinitionDataCollector.html[DefaultBeanDefinitionDataCollector]、link:{api}/io/micronaut/management/endpoint/beans/impl/DefaultBeanDefinitionData.html[DefaultBeanDefinitionData]），或直接实现相应接口。为确保使用您的实现而非默认实现，请为您的类添加 link:{api}/io/micronaut/context/annotation/Replaces.html[@Replaces] 注解，其值为默认实现。

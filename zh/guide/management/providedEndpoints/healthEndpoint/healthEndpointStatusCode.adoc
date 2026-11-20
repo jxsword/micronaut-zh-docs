@@ -1,0 +1,32 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Health Status Codes](https://docs.micronaut.io/5.2.x/core/#core-healthEndpointStatusCode)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/management/providedEndpoints/healthEndpoint/healthEndpointStatusCode.adoc  upstream_commit: 74ae026c5db6ae318349dc3013ac6c9a3fbe95a8  upstream_hash: 58295ee825b1dfd0776b4e2b1e4e53b5717b01c0  translated_at: 2026-11-21 -->
+
+`endpoints.health.status.http-mapping` 设置控制每种健康状态返回的状态码。默认值见下表：
+
+|===
+|状态 | HTTP 状态码
+
+|api:health.HealthStatus#UP[]
+|api:http.HttpStatus#OK[] （200）
+
+|api:health.HealthStatus#UNKNOWN[]
+|api:http.HttpStatus#OK[] （200）
+
+|api:health.HealthStatus#DOWN[]
+|api:http.HttpStatus#SERVICE_UNAVAILABLE[] （503）
+
+|===
+
+您可以在配置文件（例如 `application.yml`）中提供自定义映射：
+
+.自定义健康状态码
+[configuration]
+----
+endpoints:
+  health:
+    status:
+      http-mapping:
+        DOWN: 200
+----
+
+上例即使 api:health.HealthStatus[] 为 api:health.HealthStatus#DOWN[] 时也返回 api:http.HttpStatus#OK[] （200）。

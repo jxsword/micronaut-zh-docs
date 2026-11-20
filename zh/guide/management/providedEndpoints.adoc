@@ -1,0 +1,82 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Built-In Endpoints](https://docs.micronaut.io/5.2.x/core/#core-providedEndpoints)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/management/providedEndpoints.adoc  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360  upstream_hash: d73eec92e24a4866f3bf31a47c64d65db8baf74f  translated_at: 2026-11-21 -->
+
+向项目添加 `management` 依赖后，以下内置端点默认启用：
+
+.默认端点
+|===
+|端点|URI|描述
+
+|api:management.endpoint.beans.BeansEndpoint[]
+| `/beans`
+|返回应用中已加载 bean 定义的信息（参见 <<beansEndpoint,BeansEndpoint>>）
+
+|api:management.endpoint.health.HealthEndpoint[]
+| `/health`
+|返回应用「健康」状态的信息（参见 <<healthEndpoint,HealthEndpoint>>）
+
+|api:management.endpoint.info.InfoEndpoint[]
+| `/info`
+|返回来自应用状态的静态信息（参见 <<infoEndpoint,InfoEndpoint>>）
+
+|api:management.endpoint.loggers.LoggersEndpoint[]
+| `/loggers`
+|返回可用 logger 的信息，并允许更改已配置的日志级别（参见 <<loggersEndpoint,LoggersEndpoint>>）
+
+| <<metricsEndpoint,MetricsEndpoint>>
+| `/metrics`
+|返回 <<metricsEndpoint,应用指标>>。需要类路径上有 `micrometer-core` 配置。
+
+|api:management.endpoint.refresh.RefreshEndpoint[]
+| `/refresh`
+|刷新应用状态（参见 <<refreshEndpoint,RefreshEndpoint>>）
+
+|api:management.endpoint.routes.RoutesEndpoint[]
+| `/routes`
+|返回应用可调用 URI 的信息（参见 <<routesEndpoint,RoutesEndpoint>>）
+
+|api:management.endpoint.threads.ThreadDumpEndpoint[]
+| `/threaddump`
+|返回应用当前线程的信息。
+
+|===
+
+此外，以下内置端点由 `management` 依赖提供，但默认不启用：
+
+.默认禁用的端点
+|===
+|端点|URI|描述
+
+|api:management.endpoint.env.EnvironmentEndpoint[]
+| `/env`
+|返回环境及其属性源的信息（参见 <<environmentEndpoint,EnvironmentEndpoint>>）
+
+|<<cachesEndpoint, CachesEndpoint>>
+| `/caches`
+|返回缓存信息并允许使其失效（参见 <<cachesEndpoint,CachesEndpoint>>）
+
+|api:management.endpoint.stop.ServerStopEndpoint[]
+| `/stop`
+|关闭应用服务器（参见 <<stopEndpoint,ServerStopEndpoint>>）
+
+|===
+
+WARNING: 可以通过定义 `endpoints.all.sensitive: false` 为所有端点开放未认证访问，但应谨慎使用，因为私有与敏感信息将会暴露。
+
+[[providedEndpoints]]
+=== 管理端口
+
+默认情况下，所有管理端点与应用暴露在同一端口上。您可以通过指定 `endpoints.all.port` 设置改变这一行为：
+
+[configuration]
+----
+endpoints:
+  all:
+    port: 8085
+----
+
+在上例中，管理端点只在 8085 端口上暴露。
+
+=== JMX
+
+Micronaut 框架提供了向 JMX 注册端点的功能。入门请参阅 <<jmx,JMX>> 一节。

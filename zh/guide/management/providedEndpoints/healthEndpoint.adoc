@@ -1,0 +1,13 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – The Health Endpoint](https://docs.micronaut.io/5.2.x/core/#core-healthEndpoint)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/management/providedEndpoints/healthEndpoint.adoc  upstream_commit: f9e87c976ffc7236c409cd7fcc929be553c92a98  upstream_hash: 1d912a24d379d21ab9caff41a4bef3b1505a6cb9  translated_at: 2026-11-21 -->
+
+[[healthEndpoint]]
+health 端点返回应用「健康」状态的信息，该状态由任意多个「健康指示器（health indicator）」共同确定。
+
+向 `/health` 发送 GET 请求即可执行 health 端点。此外，health 端点还暴露 `/health/liveness` 与 `/health/readiness` 健康指示器。
+
+活性检查（liveness check，`/health/liveness`）为正表示应用正在运行且未卡住。若失败，应用可能需要重启。
+
+就绪检查（readiness check，`/health/readiness`）为正表示应用已完全初始化并可以处理请求。
+
+TIP: 更多信息请参阅 https://guides.micronaut.io/latest/micronaut-health-endpoint.html[为 Micronaut 应用暴露 Health 端点] 指南。

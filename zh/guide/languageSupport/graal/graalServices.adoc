@@ -1,0 +1,218 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Microservices as GraalVM native images](https://docs.micronaut.io/5.2.x/core/#core-graalServices)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/languageSupport/graal/graalServices.adoc  upstream_commit: 323b76904b8fe9060f347cffad02ce660b589a5f  upstream_hash: df3c05f4c2d06446bbd92e159d11298b935f11ea  translated_at: 2026-11-21 -->
+
+=== Micronaut 框架与 GraalVM 入门
+
+从 Micronaut 框架 2.2 开始，任何 Micronaut 应用都可以使用 Micronaut Gradle 或 Maven 插件构建为原生镜像（native image）。要开始使用，请创建一个新应用。
+
+.创建 GraalVM 原生微服务
+[source,bash]
+----
+$ mn create-app hello-world
+----
+
+Maven 构建可以使用 `--build maven`。
+
+==== 使用 Docker 构建原生镜像
+
+要使用 Docker 与 Gradle 构建原生镜像，请运行：
+
+.使用 Docker 与 Gradle 构建原生镜像
+[source,bash]
+----
+$ ./gradlew dockerBuildNative
+----
+
+要使用 Docker 与 Maven 构建原生镜像，请运行：
+
+.使用 Docker 与 Maven 构建原生镜像
+[source,bash]
+----
+$ ./mvnw package -Dpackaging=docker-native
+----
+
+==== 不使用 Docker 构建原生镜像
+
+要不用 Docker 构建原生镜像，请安装 GraalVM JDK。在 Linux 或 Mac 上安装 GraalVM 最简单的方式是使用 https://sdkman.io/[SDKMAN!]。其他安装选项请访问 https://www.graalvm.org/downloads/[下载页面]。
+
+.用 SDKMAN! 安装 GraalVM {graalVersion}
+[source,bash,subs="attributes+"]
+----
+$ sdk install java {graalVersion}-graal
+$ sdk use java {graalVersion}-graal
+----
+
+安装 GraalVM 后，`native-image` 工具即可用。
+
+===== Gradle
+
+运行 `nativeCompile` 任务即可用 Gradle 构建原生镜像：
+
+.用 Gradle 创建原生镜像
+[source,bash]
+----
+$ ./gradlew nativeCompile
+----
+
+原生可执行文件生成在 _build/native/nativeCompile_ 目录中。
+随后可以从该目录运行它：`./build/native/nativeCompile/hello-world`。
+
+可以使用 https://graalvm.github.io/native-build-tools/latest/gradle-plugin.html[用于原生镜像构建的 Gradle 插件] 向 `native-image` 传递额外的构建实参。
+将以下配置加入 _build.gradle_：
+
+.build.gradle
+[source,groovy]
+----
+graalvmNative {
+    binaries {
+        main {
+            imageName.set('myApp') // <1>
+            buildArgs.add('-Ob') // <2>
+        }
+    }
+}
+----
+<1> 使用 `imageName.set()` 指定自定义名称。
+<2> 使用 `buildArgs.add()` 向 `native-image` 传递额外构建实参。例如，`-Ob` 启用快速构建模式。
+
+===== Maven
+
+要使用 Maven 创建原生镜像，请使用 `native-image` 打包格式：
+
+.用 Maven 创建原生镜像
+[source,bash]
+----
+$ ./mvnw package -Dpackaging=native-image
+----
+
+原生可执行文件生成在 _target/_ 目录中。
+随后可以从该目录运行它：`./target/hello-world`。
+
+可以使用 https://graalvm.github.io/native-build-tools/latest/maven-plugin.html[用于原生镜像构建的 Maven 插件] 向 `native-image` 传递额外的构建实参。
+按如下方式声明插件：
+
+.pom.xml
+[source,xml]
+----
+<plugin>
+    <groupId>org.graalvm.buildtools</groupId>
+    <artifactId>native-maven-plugin</artifactId>
+    <version>${native-maven-plugin.version}</version>
+    <configuration>
+        <!-- <1> -->
+        <imageName>myApp</imageName> 
+        <buildArgs>
+              <!-- <2> -->
+          <buildArg>-Ob</buildArg>
+        </buildArgs>
+    </configuration>
+</plugin>
+----
+
+<1> 使用 `<imageName>` 指定自定义名称。
+<2> 使用 `buildArg` 向 `native-image` 传递额外构建实参。例如，`-Ob` 启用快速构建模式。
+
+=== 理解 Micronaut 框架与 GraalVM
+
+Micronaut 框架本身不依赖反射或动态类加载，因此可自动与 GraalVM Native Image 协同工作。不过 Micronaut 使用的某些第三方库可能需要关于反射用法的额外输入。
+
+Micronaut 框架包含一个注解处理器，帮助生成 `native-image` 工具可自动拾取的反射配置：
+
+dependency:micronaut-graal[scope="annotationProcessor"]
+
+该处理器生成实现 api:core.graal.GraalReflectionConfigurer[] 接口并程序化注册反射配置的附加类。
+
+例如，参见下面的类：
+
+[source,java]
+----
+package example;
+
+import io.micronaut.core.annotation.ReflectiveAccess;
+
+@ReflectiveAccess
+class Test {
+    ...
+}
+----
+
+上面的示例会把 `example.Test` 的公共方法、声明字段与声明构造器注册为可反射访问。
+
+如果您有更高级的需求，希望只包含特定字段或方法，请在任意构造器、字段或方法上使用该注解，只纳入特定的字段、构造器或方法。
+
+=== 为反射访问添加附加类
+
+Micronaut 框架提供了若干注解，用于指定应纳入生成的反射配置的附加类，例如：
+
+* ann:core.annotation.ReflectiveAccess[] - 可声明在特定类型、构造器、方法或字段上的注解，只为被标注元素启用反射访问。
+* ann:core.annotation.TypeHint[] - 允许对一个或多个类型的反射访问进行批量配置的注解。
+* ann:core.annotation.ReflectionConfig[] - 直接建模 https://www.graalvm.org/reference-manual/native-image/metadata/#reflection[JSON 格式反射配置] 的可重复注解。
+
+`@ReflectiveAccess` 注解通常用在特定类型、构造器、方法或字段上；后两者通常用在模块或 `Application` 类上，以纳入需要反射访问的类。
+参见以下来自 Micronaut Jackson 模块、使用 `@TypeHint` 的示例：
+
+.使用 `@TypeHint` 注解
+[source,java]
+----
+@TypeHint(
+    value = { // <1>
+        PropertyNamingStrategy.UpperCamelCaseStrategy.class,
+        ArrayList.class,
+        LinkedHashMap.class,
+        HashSet.class
+    },
+    accessType = TypeHint.AccessType.ALL_DECLARED_CONSTRUCTORS // <2>
+)
+----
+
+<1> `value` 成员指定哪些类需要反射。
+<2> `accessType` 成员指定是只需类加载访问，还是需要对所有公共成员的完整反射。
+
+或者，使用可重复、可按类型分别配置的 `@ReflectionConfig` 注解：
+
+.使用 `@ReflectionConfig` 注解
+[source,java]
+----
+@ReflectionConfig(
+    type = PropertyNamingStrategy.UpperCamelCaseStrategy.class,
+    accessType = TypeHint.AccessType.ALL_DECLARED_CONSTRUCTORS
+)
+@ReflectionConfig(
+    type = ArrayList.class,
+    accessType = TypeHint.AccessType.ALL_DECLARED_CONSTRUCTORS
+)
+@ReflectionConfig(
+    type = LinkedHashMap.class,
+    accessType = TypeHint.AccessType.ALL_DECLARED_CONSTRUCTORS
+)
+@ReflectionConfig(
+    type = HashSet.class,
+    accessType = TypeHint.AccessType.ALL_DECLARED_CONSTRUCTORS
+)
+----
+
+=== 生成原生镜像
+
+GraalVM 的 `native-image` 命令用于生成原生镜像。您可以手动使用该命令生成原生镜像。例如：
+
+.`native-image` 命令
+[source,bash]
+----
+native-image --class-path build/libs/hello-world-0.1-all.jar # <1>
+----
+<1> `class-path` 实参指向 Micronaut 的 shaded JAR。
+
+镜像构建完成后，用其名称运行应用：
+
+.运行原生应用
+[source,bash]
+----
+$ ./hello-world
+15:15:15.153 [main] INFO  io.micronaut.runtime.Micronaut - Startup completed in 14ms. Server Running: http://localhost:8080
+----
+
+可以看到，原生镜像启动在毫秒级完成，内存消耗不含 JVM 的开销（原生 Micronaut 应用仅用 20MB 内存即可运行）。
+
+=== 资源文件生成
+
+从 Micronaut 框架 3.0 起，_resource-config.json_ 文件的自动生成已集成到 https://github.com/micronaut-projects/micronaut-gradle-plugin[Gradle] 与 https://github.com/micronaut-projects/micronaut-maven-plugin[Maven] 插件中。

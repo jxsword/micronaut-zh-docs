@@ -33,7 +33,7 @@
 | B24 | 5 | 3257 | 3199 | current |
 | B25 | 7 | 3096 | 3070 | current |
 | B26 | 14 | 3416 | 3439 | current |
-| B27 | 17 | 3478 | 3538 | pending |
+| B27 | 17 | 3478 | 3538 | current |
 | B28 | 21 | 2955 | 3023 | pending |
 | B29 | 14 | 3226 | 3257 | pending |
 | B30 | 4 | 3387 | 3401 | pending |
@@ -72,6 +72,7 @@
 - B24（2026-11-21 完成）：validate 全量 302 文件 PASSED + 5/5 --mark-current 核销 + squash commit；进度 302/388（78.1%，剔 skipped 口径）。锚点注入 1 处（[[generatedClasses]] 页内标题锚，title='Nested Classes'，注入 `== 嵌套类` 之前；B23 title 字段教训落实）；validate 首轮 3/5（⑦ 邻接 ×2）修复后全绿；reviewer 5/5 PASS 首轮零缺陷；restore 5/5 首轮全过。词数实测 3170/3224（M1 值 3199/3257，以实测为准）；段落 93。⑤ 豁免 11→11（−1 消解 interfaces→generatedClasses +1 新增 javaInterfaces→extendingJavaClasses，B25 消解）。冻结窗口遵守。python 子章 17/24；languageSupport 章 24/50（48%）。
 - B25（2026-11-21 完成）：validate 全量 309 文件 PASSED + 7/7 --mark-current 核销 + squash commit；进度 309/388（80.1%，剔 skipped 口径）。锚点注入 2 处（[[extendingJavaClasses]] 标题锚消解 B24 豁免 + [[moduleScripts]] basename 锚**消解既有豁免** routing→moduleScripts）；validate 首轮 4/7（⑦ 邻接 ×3 + **④ 标题未译 ×2**——Chrome Inspector/Debug Adapter Protocol 补译名括注）修复后全绿；reviewer 7/7 PASS 首轮零缺陷；restore 7/7 首轮全过；asyncAwait 11 处 snippet:: 逐字节保留。词数实测 2996/3007（M1 值 3070/3096）；段落 111。⑤ 豁免 11→11（−2 消解 +2 新增 asyncio{Networking,Streaming}，B26 消解）。冻结窗口遵守。**python 子章 24/24 全章译出（第十四个全章）**；languageSupport 章 31/50（62%）。
 - B26（2026-11-21 完成）：validate 全量 323 文件 PASSED + 14/14 --mark-current 核销 + squash commit；进度 323/388（83.7%，剔 skipped 口径）。锚点注入 2 处（[[asyncioNetworking]]/[[asyncioStreaming]] 标题锚，前者消解豁免、后者含 asyncioUnsupported 批内闭环）；**占位符多重集校验在 restore 前拦截 2 处真缺陷**（原文复指处误重复占位符，新错误模式）；validate 首轮 11/14（⑦ ×3，含中英文缺空格变体）修复后全绿；reviewer 14/14 PASS 首轮零缺陷；asyncioNetworking 116 占位符/1215 词为 python 章最重。词数实测 3407/3379（M1 值 3439/3416）；段落 160。⑤ 豁免 11→11（−2 消解 +1 新增 kotlin→cli）。冻结窗口遵守。**kotlin 子章 14/14 全章译出（第十五个全章组）**；asyncio 组 6/6 译出；languageSupport 章 45/50（90%）。
+- B27（2026-11-21 完成）：validate 全量 340 文件 PASSED + 17/17 --mark-current 核销 + squash commit；进度 340/388（88.0%，剔 skipped 口径）。锚点注入 6 处（[[graal]] 标题锚消解既有豁免 + endpointConfiguration/healthEndpoint basename 锚 + providedEndpoints/beansEndpoint/infoEndpoint 标题锚，多数批内闭环；**beansEndpoint/infoEndpoint 首轮误置文件首，自查 registry title 后纠正——B23 教训二次生效**）；validate 首轮 13/17（⑦ ×5，URL 宏直贴汉字变体 4 处）修复后全绿；reviewer 17/17 PASS 首轮零缺陷；graalServices 78 段/761 词为批次最重。词数实测 3469/3399（M1 值 3538/3478）；段落 273。⑤ 豁免 11→11（−1 消解 graal +1 新增 stopEndpoint，B28 消解）。冻结窗口遵守。**graal 组 3/3 译出；languageSupport 章 49/50（98%，仅剩 overloads@B32）**；management 章 12/27（44%）。
 
 ## 硬性纪律（每批次必守）
 

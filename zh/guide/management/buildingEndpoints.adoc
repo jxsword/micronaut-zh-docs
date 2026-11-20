@@ -1,0 +1,4 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Creating Endpoints](https://docs.micronaut.io/5.2.x/core/#core-buildingEndpoints)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/management/buildingEndpoints.adoc  upstream_commit: 5280436c47bbcd1a143801fcf266db27b3d6d758  upstream_hash: 2b0b993c0fe54f4229bc26c79e07a43ebf3ff98d  translated_at: 2026-11-21 -->
+
+除了 <<providedEndpoints,内置端点>>，`management` 依赖还支持创建自定义端点。这些端点可以像内置端点一样启用与配置，并可用于检索和返回任何指标或其他应用数据。

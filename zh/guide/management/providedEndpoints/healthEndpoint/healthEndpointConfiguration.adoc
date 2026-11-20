@@ -1,0 +1,32 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Health Endpoint Configuration](https://docs.micronaut.io/5.2.x/core/#core-healthEndpointConfiguration)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/management/providedEndpoints/healthEndpoint/healthEndpointConfiguration.adoc  upstream_commit: 74ae026c5db6ae318349dc3013ac6c9a3fbe95a8  upstream_hash: e681925e8ffbb9890cd38108c995929265e1a383  translated_at: 2026-11-21 -->
+
+要配置 health 端点，请通过 `endpoints.health` 提供配置。
+
+.Health 端点配置示例
+[configuration]
+----
+endpoints:
+  health:
+    enabled: Boolean
+    sensitive: Boolean
+    details-visible: String
+    status:
+      http-mapping: Map<String, HttpStatus>
+----
+
+- `details-visible` 取值为 api:management.endpoint.health.DetailsVisibility[] 之一
+
+`details-visible` 设置控制是否向未认证用户暴露健康详情。如果 details-visible 参数配置为 ANONYMOUS 而 sensitive 标志设为 true，最终结果是 401 Unauthorized。
+
+例如，设置：
+
+.使用 `details-visible`
+[configuration]
+----
+endpoints:
+  health:
+    details-visible: ANONYMOUS
+----
+
+会向匿名未认证用户暴露各健康指示器关于应用健康状态的详细信息。

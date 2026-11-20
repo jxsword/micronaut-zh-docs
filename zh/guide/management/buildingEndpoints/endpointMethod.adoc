@@ -1,0 +1,92 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Endpoint Methods](https://docs.micronaut.io/5.2.x/core/#core-endpointMethod)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/management/buildingEndpoints/endpointMethod.adoc  upstream_commit: 31bdb72f837188d7432007bbee051eb47dd99561  upstream_hash: fb09276c88bfc026026d8aaa4e14a07d0903ff7c  translated_at: 2026-11-21 -->
+
+端点响应 `GET` （「读」）、`POST` （「写」）与 `DELETE` （「删」）请求。要从端点返回响应，请用以下注解之一标注其公共方法：
+
+.端点方法注解
+|===
+|注解|描述
+
+|api:management.endpoint.annotation.Read[]
+|响应 `GET` 请求
+
+|api:management.endpoint.annotation.Write[]
+|响应 `POST` 请求
+
+|api:management.endpoint.annotation.Delete[]
+|响应 `DELETE` 请求
+
+|===
+
+== Read 方法
+
+用 api:management.endpoint.annotation.Read[] 注解标注方法会使它响应 `GET` 请求。
+
+snippet::io.micronaut.docs.server.endpoint.CurrentDateEndpoint[tags="endpointImport, readImport, endpointClassBegin, currentDate, simpleRead, endpointClassEnd", indent=0, title="CurrentDateEndpoint"]
+
+上面的方法响应以下请求：
+
+[source,bash]
+----
+$ curl -X GET localhost:55838/date
+
+1526085903689
+----
+
+api:management.endpoint.annotation.Read[] 注解接受可选的 `produces` 实参，用于设置方法返回的媒体类型（默认为 `application/json`）：
+
+snippet::io.micronaut.docs.server.endpoint.CurrentDateEndpoint[tags="endpointImport, readImport, mediaTypeImport, endpointClassBegin, currentDate, readArg, endpointClassEnd", indent=0, title="CurrentDateEndpoint"]
+
+<1> 受支持的媒体类型由 api:http.MediaType[] 表示
+
+上面的方法响应以下请求：
+
+[source,bash]
+----
+$ curl -X GET localhost:8080/date/the_date_is
+
+the_date_is: Fri May 11 19:24:21 CDT
+----
+
+== Write 方法
+
+用 api:management.endpoint.annotation.Write[] 注解标注方法会使它响应 `POST` 请求。
+
+snippet::io.micronaut.docs.server.endpoint.CurrentDateEndpoint[tags="endpointImport, writeImport, mediaTypeImport, endpointClassBegin, currentDate, simpleWrite, endpointClassEnd", indent=0, title="CurrentDateEndpoint"]
+
+上面的方法响应以下请求：
+
+[source,bash]
+----
+$ curl -X POST http://localhost:39357/date
+
+Current date reset
+----
+
+api:management.endpoint.annotation.Write[] 注解接受可选的 `consumes` 实参，用于设置方法接受的媒体类型（默认为 `application/json`）：
+
+snippet::io.micronaut.docs.server.endpoint.MessageEndpoint[tags="endpointImport, writeImport, mediaTypeImport, endpointClassBegin, message, writeArg, endpointClassEnd", indent=0, title="MessageEndpoint"]
+
+上面的方法响应以下请求：
+
+[source,bash]
+----
+$ curl -X POST http://localhost:65013/message -H 'Content-Type: application/x-www-form-urlencoded' -d $'newMessage=A new message'
+
+Message updated
+----
+
+== Delete 方法
+
+用 api:management.endpoint.annotation.Delete[] 注解标注方法会使它响应 `DELETE` 请求。
+
+snippet::io.micronaut.docs.server.endpoint.MessageEndpoint[tags="endpointImport, deleteImport, endpointClassBegin, message, simpleDelete, endpointClassEnd", indent=0, title="MessageEndpoint"]
+
+上面的方法响应以下请求：
+
+[source,bash]
+----
+$ curl -X DELETE http://localhost:65013/message
+
+Message deleted
+----

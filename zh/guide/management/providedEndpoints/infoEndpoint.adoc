@@ -1,0 +1,82 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – The Info Endpoint](https://docs.micronaut.io/5.2.x/core/#core-infoEndpoint)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/management/providedEndpoints/infoEndpoint.adoc  upstream_commit: 41131456aad0338e21715e5053d9ec7cc8da8e50  upstream_hash: 4c7f14f6de74416191f69907eb2a990748c49b79  translated_at: 2026-11-21 -->
+
+info 端点返回来自应用状态的静态信息。暴露的 info 可由任意多个「info 源」提供。
+
+要执行 info 端点，请向 /info 发送 GET 请求。
+
+[[infoEndpoint]]
+== 配置
+
+要配置 info 端点，请通过 `endpoints.info` 提供配置。
+
+.Info 端点配置示例
+[configuration]
+----
+endpoints:
+  info:
+    enabled: Boolean
+    sensitive: Boolean
+----
+
+== 定制
+
+info 端点由一个 info 聚合器和任意多个 info 源组成。要添加 info 源，请创建一个实现 link:{api}/io/micronaut/management/endpoint/info/InfoSource.html[InfoSource] 的 bean 类。如果您的 info 源需要从 Java properties 文件检索数据，请继承为此提供辅助方法的 link:{api}/io/micronaut/management/endpoint/info/source/PropertiesInfoSource.html[PropertiesInfoSource] 接口。
+
+所有 info 源 bean 会与 info 聚合器一起收集。要提供自己的 info 聚合器实现，请创建一个实现 link:{api}/io/micronaut/management/endpoint/info/InfoAggregator.html[InfoAggregator] 的类并注册为 bean。为确保使用您的实现而非默认实现，请为您的类添加 link:{api}/io/micronaut/context/annotation/Replaces.html[@Replaces] 注解，其值为 link:{api}/io/micronaut/management/endpoint/info/impl/ReactiveInfoAggregator.html[默认实现]。
+
+默认 info 聚合器返回一个映射，其中包含所有 info 源返回的合并属性。该映射以 JSON 形式从 /info 端点返回。
+
+== 提供的 Info 源
+
+=== 配置 Info 源
+
+link:{api}/io/micronaut/management/endpoint/info/source/ConfigurationInfoSource.html[ConfigurationInfoSource] 返回 `info` 键下的配置属性。除字符串、整数与布尔值外，更复杂的属性可以在 JSON 输出中作为映射暴露（若配置格式支持）。
+
+.Info 源示例（`application.groovy`）
+[source,groovy]
+----
+info.demo.string = "demo string"
+info.demo.number = 123
+info.demo.map = [key: 'value', other_key: 123]
+----
+
+上述配置会使 info 端点返回如下 JSON 响应：
+
+[source,json]
+----
+{
+  "demo": {
+    "string": "demo string",
+    "number": 123,
+    "map": {
+      "key": "value",
+      "other_key": 123
+    }
+  }
+}
+----
+
+==== 配置
+
+可以使用 `endpoints.info.config.enabled` 属性禁用配置 info 源。
+
+=== Git Info 源
+
+如果类路径上存在 `git.properties` 文件，link:{api}/io/micronaut/management/endpoint/info/source/GitInfoSource.html[GitInfoSource] 会以 `git` 键暴露该文件中的值。`git.properties` 文件的生成必须作为构建的一部分进行配置。Gradle 用户的一个简便选项是 https://plugins.gradle.org/plugin/com.gorylenko.gradle-git-properties[Gradle Git Properties 插件]；Maven 用户可以使用 https://github.com/git-commit-id/maven-git-commit-id-plugin[Maven Git Commit ID 插件]。
+
+==== 配置
+
+要指定 properties 文件的替代路径或名称，请在 `endpoints.info.git.location` 属性中提供自定义值。
+
+可以使用 `endpoints.info.git.enabled` 属性禁用 git info 源。
+
+=== Build Info 源
+
+如果类路径上存在 `META-INF/build-info.properties` 文件，link:{api}/io/micronaut/management/endpoint/info/source/BuildInfoSource.html[BuildInfoSource] 会以 `build` 键暴露该文件中的值。`build-info.properties` 文件的生成必须作为构建的一部分进行配置。Gradle 用户的一个简便选项是 https://plugins.gradle.org/plugin/com.pasam.gradle.buildinfo[Gradle Build Info 插件]；Maven 用户可以使用 https://docs.spring.io/spring-boot/docs/current/maven-plugin/reference/htmlsingle/#goals-build-info[Spring Boot Maven 插件]
+
+==== 配置
+
+要指定 properties 文件的替代路径/名称，请在 `endpoints.info.build.location` 属性中提供自定义值。
+
+可以使用 `endpoints.info.build.enabled` 属性禁用 build info 源。

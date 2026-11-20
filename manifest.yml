@@ -2255,26 +2255,26 @@ files:
 - file: guide/languageSupport/graal.adoc
   blob_sha: 9f24f73ebe8dca9d2f47afe9d84b3438949245a3
   size: 1365
-  status: missing
+  status: current
   zh: zh/guide/languageSupport/graal.adoc
   paragraphs: 7
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 2069c06d4efb457624ecdd926fd30335e2d3e3d1
 - file: guide/languageSupport/graal/graalFAQ.adoc
   blob_sha: fd2ac7e10f9f6a8167e9525dc8575e68bf088216
   size: 3366
-  status: missing
+  status: current
   zh: zh/guide/languageSupport/graal/graalFAQ.adoc
   paragraphs: 25
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 2069c06d4efb457624ecdd926fd30335e2d3e3d1
 - file: guide/languageSupport/graal/graalServices.adoc
   blob_sha: df3c05f4c2d06446bbd92e159d11298b935f11ea
   size: 7962
-  status: missing
+  status: current
   zh: zh/guide/languageSupport/graal/graalServices.adoc
   paragraphs: 78
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 323b76904b8fe9060f347cffad02ce660b589a5f
 - file: guide/languageSupport/groovy.adoc
   blob_sha: 6994ce5e8af6d622ebbcd2a2fb8d5a0f7927d9ea
@@ -2399,10 +2399,10 @@ files:
 - file: guide/languageSupport/kotlin/kotlinContextPropagation.adoc
   blob_sha: c207cbae4a253677d1f4a250b8ade6afcfd52025
   size: 1542
-  status: missing
+  status: current
   zh: zh/guide/languageSupport/kotlin/kotlinContextPropagation.adoc
   paragraphs: 10
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: cc2f7604cfb5273d34854b2476a6335c07077b20
 - file: guide/languageSupport/kotlin/kotlinretainparamnames.adoc
   blob_sha: 963f6dea8e6b046482b0a85ce2cbf3269d8a608d
@@ -2695,66 +2695,66 @@ files:
 - file: guide/management.adoc
   blob_sha: 3784a11ca7e95f06c09ef27dcd5a3f508bdef90e
   size: 912
-  status: missing
+  status: current
   zh: zh/guide/management.adoc
   paragraphs: 9
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 5015e80a675e9df9caf2a9304717d02be8f79a08
 - file: guide/management/buildingEndpoints.adoc
   blob_sha: 2b0b993c0fe54f4229bc26c79e07a43ebf3ff98d
   size: 286
-  status: missing
+  status: current
   zh: zh/guide/management/buildingEndpoints.adoc
   paragraphs: 1
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 5280436c47bbcd1a143801fcf266db27b3d6d758
 - file: guide/management/buildingEndpoints/endpointAnnotation.adoc
   blob_sha: 4910b307262692997d437d12f229e1fb7ddf66e6
   size: 1485
-  status: missing
+  status: current
   zh: zh/guide/management/buildingEndpoints/endpointAnnotation.adoc
   paragraphs: 11
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 31bdb72f837188d7432007bbee051eb47dd99561
 - file: guide/management/buildingEndpoints/endpointConfiguration.adoc
   blob_sha: 63e4b7dbe4a129fa4af6de4b5dc482880e4566fd
   size: 1406
-  status: missing
+  status: current
   zh: zh/guide/management/buildingEndpoints/endpointConfiguration.adoc
   paragraphs: 11
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 51650efcb97939ef02bf726bdcb28266b7ca20d1
 - file: guide/management/buildingEndpoints/endpointMethod.adoc
   blob_sha: fb09276c88bfc026026d8aaa4e14a07d0903ff7c
   size: 3179
-  status: missing
+  status: current
   zh: zh/guide/management/buildingEndpoints/endpointMethod.adoc
   paragraphs: 32
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 31bdb72f837188d7432007bbee051eb47dd99561
 - file: guide/management/buildingEndpoints/endpointSensitivity.adoc
   blob_sha: 228fee2888617923cfba0de80ff947d0ea884b3e
   size: 1301
-  status: missing
+  status: current
   zh: zh/guide/management/buildingEndpoints/endpointSensitivity.adoc
   paragraphs: 6
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 51650efcb97939ef02bf726bdcb28266b7ca20d1
 - file: guide/management/providedEndpoints.adoc
   blob_sha: d73eec92e24a4866f3bf31a47c64d65db8baf74f
   size: 2821
-  status: missing
+  status: current
   zh: zh/guide/management/providedEndpoints.adoc
   paragraphs: 14
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/management/providedEndpoints/beansEndpoint.adoc
   blob_sha: 8a44c6989391ab31dbc822a9091a2eaf7f1ccd10
   size: 1696
-  status: missing
+  status: current
   zh: zh/guide/management/providedEndpoints/beansEndpoint.adoc
   paragraphs: 10
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 41131456aad0338e21715e5053d9ec7cc8da8e50
 - file: guide/management/providedEndpoints/cachesEndpoint.adoc
   blob_sha: 135d44be0fcfb5de3865efb837c097465b689cc2
@@ -2775,18 +2775,18 @@ files:
 - file: guide/management/providedEndpoints/healthEndpoint.adoc
   blob_sha: 1d912a24d379d21ab9caff41a4bef3b1505a6cb9
   size: 746
-  status: missing
+  status: current
   zh: zh/guide/management/providedEndpoints/healthEndpoint.adoc
   paragraphs: 5
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: f9e87c976ffc7236c409cd7fcc929be553c92a98
 - file: guide/management/providedEndpoints/healthEndpoint/healthEndpointConfiguration.adoc
   blob_sha: e681925e8ffbb9890cd38108c995929265e1a383
   size: 915
-  status: missing
+  status: current
   zh: zh/guide/management/providedEndpoints/healthEndpoint/healthEndpointConfiguration.adoc
   paragraphs: 11
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 74ae026c5db6ae318349dc3013ac6c9a3fbe95a8
 - file: guide/management/providedEndpoints/healthEndpoint/healthEndpointCustomization.adoc
   blob_sha: a60684f9a46d28fcb8583f4a43a4ec19a51f2e0e
@@ -2799,18 +2799,18 @@ files:
 - file: guide/management/providedEndpoints/healthEndpoint/healthEndpointStatusCode.adoc
   blob_sha: 58295ee825b1dfd0776b4e2b1e4e53b5717b01c0
   size: 741
-  status: missing
+  status: current
   zh: zh/guide/management/providedEndpoints/healthEndpoint/healthEndpointStatusCode.adoc
   paragraphs: 7
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 74ae026c5db6ae318349dc3013ac6c9a3fbe95a8
 - file: guide/management/providedEndpoints/healthEndpoint/healthLogging.adoc
   blob_sha: 269b4653d5ba6ec4b30d0ff3418e72afea63fcc5
   size: 501
-  status: missing
+  status: current
   zh: zh/guide/management/providedEndpoints/healthEndpoint/healthLogging.adoc
   paragraphs: 4
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 74ae026c5db6ae318349dc3013ac6c9a3fbe95a8
 - file: guide/management/providedEndpoints/healthEndpoint/healthMonitoringTask.adoc
   blob_sha: 72a5999a72534c879a0f818c44d879961e8ce30b
@@ -2863,10 +2863,10 @@ files:
 - file: guide/management/providedEndpoints/infoEndpoint.adoc
   blob_sha: 4c7f14f6de74416191f69907eb2a990748c49b79
   size: 4226
-  status: missing
+  status: current
   zh: zh/guide/management/providedEndpoints/infoEndpoint.adoc
   paragraphs: 32
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 41131456aad0338e21715e5053d9ec7cc8da8e50
 - file: guide/management/providedEndpoints/loggersEndpoint.adoc
   blob_sha: c4062c4796aa4770d32e0fa95f970f34d2d27f9f

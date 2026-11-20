@@ -1,0 +1,17 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Management & Monitoring](https://docs.micronaut.io/5.2.x/core/#core-management)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/management.adoc  upstream_commit: 5015e80a675e9df9caf2a9304717d02be8f79a08  upstream_hash: 3784a11ca7e95f06c09ef27dcd5a3f508bdef90e  translated_at: 2026-11-21 -->
+
+[TIP]
+.使用 CLI
+====
+如果您使用 Micronaut CLI 创建项目，请提供 `management` feature 以在项目中配置管理端点：
+----
+$ mn create-app my-app --features management
+----
+====
+
+受 Spring Boot 与 Grails 启发，Micronaut `management` 依赖通过*端点*为您的应用提供监控支持：端点是返回应用健康与状态详情的特殊 URI。`management` 端点还与 Micronaut 的 `security` 依赖集成，允许把敏感数据限制给您安全系统中已认证的用户（参见安全章节的 link:https://micronaut-projects.github.io/micronaut-security/latest/guide/#builtInEndpointsAccess[内置端点访问]）。
+
+要使用本节介绍的 `management` feature，请在构建中添加以下依赖：
+
+dependency:micronaut-management[]

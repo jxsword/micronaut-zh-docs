@@ -1,0 +1,74 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – GraalVM and Micronaut FAQ](https://docs.micronaut.io/5.2.x/core/#core-graalFAQ)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/languageSupport/graal/graalFAQ.adoc  upstream_commit: 2069c06d4efb457624ecdd926fd30335e2d3e3d1  upstream_hash: fd2ac7e10f9f6a8167e9525dc8575e68bf088216  translated_at: 2026-11-21 -->
+
+==== Micronaut 框架为何能在 GraalVM 上运行？
+
+Micronaut 框架提供了不使用反射的依赖注入与面向切面编程运行时。
+这使 Micronaut 应用更容易在 GraalVM 上运行，因为 Native Image 中尤其是 https://www.graalvm.org/reference-manual/native-image/metadata/#reflection[反射] 存在 https://www.graalvm.org/reference-manual/native-image/metadata/Compatibility/[兼容性] 问题。
+
+==== 如何让使用 Picocli 的 Micronaut 应用在 GraalVM 上运行？
+
+Picocli 提供了一个 `picocli-codegen` 模块，内含生成 GraalVM 反射配置文件的工具。该工具可以 https://picocli.info/picocli-on-graalvm.html[手动] 运行，也可以作为构建的一部分自动运行。该模块的 https://github.com/remkop/picocli/tree/master/picocli-codegen[README] 提供了配置 Gradle 与 Maven 在构建过程中自动生成 `cli-reflect.json` 文件的用法说明与代码片段。运行 `native-image` 工具时，请把生成的文件加入 `-H:ReflectionConfigurationFiles` 选项。
+
+==== 其他第三方库呢？
+
+Micronaut 框架无法保证第三方库与 GraalVM Native Image 协同工作。是否实现支持取决于每个库自身。
+
+==== 我收到「Class XXX is instantiated reflectively...」异常，该怎么办？
+
+如果您收到类似这样的错误：
+
+----
+Class myclass.Foo[] is instantiated reflectively but was never registered. Register the class by using org.graalvm.nativeimage.RuntimeReflection
+----
+
+您可能需要手动调整生成的 _reflect.json_ 文件。对于普通类，需要在数组中加入一个条目：
+
+[source,json]
+----
+[
+    {
+        "name" : "myclass.Foo",
+        "allDeclaredConstructors" : true
+    },
+    ...
+]
+----
+
+有关提供反射配置的更多信息，请参阅 https://www.graalvm.org/reference-manual/native-image/metadata/[Native Image Reachability 文档]。
+对于数组，必须使用 Java JVM 内部的数组表示形式。例如：
+
+[source,json]
+----
+[
+    {
+        "name" : "[Lmyclass.Foo;",
+        "allDeclaredConstructors" : true
+    },
+    ...
+]
+----
+
+==== 如果我想用 `-Xmx` 设置最大堆大小，却收到 `OutOfMemoryError` 怎么办？
+
+如果您在用于构建原生镜像的 Dockerfile 中设置最大堆大小，很可能会遇到这样的运行时错误：
+
+----
+java.lang.OutOfMemoryError: Direct buffer memory
+----
+
+问题在于，按 `io.netty.allocator.pageSize` 与 `io.netty.allocator.maxOrder` 的默认设置，Netty 会为每个 chunk 尝试分配 16MB 内存：
+
+[source, java]
+----
+int defaultChunkSize = DEFAULT_PAGE_SIZE << DEFAULT_MAX_ORDER; // 8192 << 11 = 16MB
+----
+
+最简单的解决办法是在 Dockerfile 的入口点中显式指定 `io.netty.allocator.maxOrder`。下面是使用 `-Xmx64m` 的可用示例：
+
+[source, dockerfile]
+----
+ENTRYPOINT ["/app/application", "-Xmx64m", "-Dio.netty.allocator.maxOrder=8"]
+----
+
+进一步地，您还可以尝试 `io.netty.allocator.numHeapArenas` 或 `io.netty.allocator.numDirectArenas`。关于 Netty `PooledByteBufAllocator` 的更多信息，请参阅 https://netty.io/4.1/api/io/netty/buffer/PooledByteBufAllocator.html[官方文档]。

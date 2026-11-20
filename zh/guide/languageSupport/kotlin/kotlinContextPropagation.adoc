@@ -1,0 +1,22 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Reactive Context Propagation](https://docs.micronaut.io/5.2.x/core/#core-kotlinContextPropagation)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/languageSupport/kotlin/kotlinContextPropagation.adoc  upstream_commit: cc2f7604cfb5273d34854b2476a6335c07077b20  upstream_hash: c207cbae4a253677d1f4a250b8ade6afcfd52025  translated_at: 2026-11-21 -->
+
+Micronaut 框架支持从 Reactor 上下文到协程上下文的上下文传播。要启用该传播，您需要包含以下依赖：
+
+dependency:org.jetbrains.kotlinx:kotlinx-coroutines-reactor[]
+
+有关如何使用该库的更详细信息，请参阅官方 link:https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-reactor/kotlinx.coroutines.reactor/-reactor-context/index.html[文档]。
+
+NOTE: 自 Micronaut 框架 4 起，我们建议使用最新的 <<contextPropagation,上下文传播 API>>。api:core.propagation.ThreadPropagatedContextElement[] 的设计灵感来自 Kotlin 协程传播 API 元素 `kotlinx.coroutines.ThreadContextElement`，并通过恢复线程本地变量（thread locals）实现类似行为。
+
+下面的示例展示如何把 Reactor 上下文从 HTTP 过滤器传播到控制器的协程：
+
+snippet::io.micronaut.docs.reactor.ReactorContextPropagationSpec[tags="simplefilter", indent=0, title="Simple filter which writes into Reactor's context"]
+
+通过从协程上下文检索 `ReactorContext` 来访问 Reactor 上下文：
+
+snippet::io.micronaut.docs.reactor.ReactorContextPropagationSpec[tags="readctx", indent=0, title="Reading Reactor context in the coroutine"]
+
+还可以使用协程的 Reactor 集成，以挂起函数创建过滤器：
+
+snippet::io.micronaut.docs.reactor.ReactorContextPropagationSpec[tags="suspendfilter", indent=0, title="Suspended function filter which writes into Reactor's context"]

@@ -1,0 +1,32 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Endpoint Configuration](https://docs.micronaut.io/5.2.x/core/#core-endpointConfiguration)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/management/buildingEndpoints/endpointConfiguration.adoc  upstream_commit: 51650efcb97939ef02bf726bdcb28266b7ca20d1  upstream_hash: 63e4b7dbe4a129fa4af6de4b5dc482880e4566fd  translated_at: 2026-11-21 -->
+
+[[endpointConfiguration]]
+带 `endpoints` 前缀的端点可以通过其默认端点 id 进行配置。如果存在 id 为 `foo` 的端点，则可以通过 `endpoints.foo` 对其进行配置。此外，可以通过 `all` 前缀提供默认值。
+
+例如，考虑以下端点。
+
+[source,java]
+.FooEndpoint.java
+----
+@Endpoint("foo")
+class FooEndpoint {
+    ...
+}
+----
+
+默认情况下该端点是启用的。要禁用它，请把 `endpoints.foo.enabled` 设为 false。如果未设置 `endpoints.foo.enabled` 且 `endpoints.all.enabled` 为 `false`，则该端点将被禁用。
+
+端点的配置值会覆盖 `all` 的配置值。如果 `endpoints.foo.enabled` 为 `true` 且 `endpoints.all.enabled` 为 `false`，则该端点将被启用。
+
+所有端点均可设置以下配置值。
+
+[configuration]
+----
+endpoints:
+  <any endpoint id>:
+    enabled: Boolean
+    sensitive: Boolean
+----
+
+NOTE: 所有端点的基础路径默认为 `/`。如果您希望端点位于不同的基础路径下，请配置 `endpoints.all.path`。例如，若其值设为 `/endpoints/`，foo 端点将可以通过相对于上下文路径的 `/endpoints/foo` 访问。注意，除非设置了 `micronaut.server.context-path`，否则 `endpoints.all.path` 必须带前导与尾随 `/`；若已设置上下文路径，则前导 `/` 不再必要。
