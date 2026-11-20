@@ -1,0 +1,239 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – HTTP Routing](https://docs.micronaut.io/5.2.x/core/#core-routing)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/routing.adoc  upstream_commit: 130cfede2d9a325faf7016bf10e0a2060c5a3cbd  upstream_hash: 5f079380a0de0f292b3e02df821cf876008187df  translated_at: 2026-11-21 -->
+
+[[routing]]
+上一节中使用的 link:{api}/io/micronaut/http/annotation/Controller.html[@Controller] 注解是允许您控制 HTTP 路由构造的 link:{api}/io/micronaut/http/annotation/package-summary.html[多个注解] 之一。
+
+== URI 路径
+
+`@Controller` 注解的值是一个 https://tools.ietf.org/html/rfc6570[RFC-6570 URI 模板]，因此您可以使用 URI 模板规范定义的语法在路径中嵌入 URI 变量。
+
+NOTE: 许多其他框架（包括 Spring）都实现了 URI 模板规范
+
+实际实现由 api:http.uri.UriMatchTemplate[] 类处理，该类扩展了 api:http.uri.UriTemplate[]。
+
+您可以在应用中使用该类来构建 URI，例如：
+
+snippet::io.micronaut.docs.server.uris.UriTemplateTest[tags="match", title="Using a UriTemplate",indent=0]
+
+<1> 使用 `match` 方法匹配路径
+<2> 使用 `expand` 方法将模板展开为 URI
+
+您可以使用 api:http.uri.UriTemplate[] 构建要包含在响应中的路径。
+
+[[_uri_path_variables]]
+== URI 路径变量
+
+URI 变量可以通过方法参数引用。当路径变量与方法参数名匹配时，它们会自动绑定在一起。如果您想使用不同的名称，或为缺失的 URI 变量指定默认值，可以使用 link:{api}/io/micronaut/http/annotation/PathVariable.html[PathVariable] 注解。下面的示例演示了这些选项：
+
+snippet::io.micronaut.docs.server.routes.IssuesController[tags="imports,startclass,normal,endclass", title="URI Variables Example"]
+
+<1> `@Controller` 注解指定了基础 URI `/issues`
+<2> link:{api}/io/micronaut/http/annotation/Get.html[Get] 注解将方法映射到 HTTP link:{api}/io/micronaut/http/HttpMethod.html#GET[GET]，URI 中嵌入名为 `number` 的 URI 变量
+<3> 方法参数 `number` 自动绑定到路径变量 `{number}`，因为名称匹配
+<4> URI 变量的值在实现中被引用
+<5> 当方法参数与路径变量名称不匹配时，方法参数需要 link:{api}/io/micronaut/http/annotation/PathVariable.html[PathVariable] 注解
+
+Micronaut 框架为上面的控制器映射 URI `/issues/{number}`。我们可以编写单元测试来断言这一点：
+
+snippet::io.micronaut.docs.server.routes.IssuesControllerTest[tags="imports,startclass,normal,endclass", title="Testing URI Variables"]
+
+<1> 内嵌服务器与 HTTP 客户端启动
+<2> 测试结束后服务器与客户端被清理
+<3> 测试向 URI `/issues/12` 发送请求
+<4> 然后断言响应为 "Issue # 12"
+<5> 另一个使用 `@PathVariable` 定义端点的测试断言响应为 "Issue # 13"
+<6> 另一个测试断言当 URL 中发送了无效数字时返回 400 响应
+<7> 另一个测试断言当 URL 中未提供数字时返回 404 响应。路由要执行，该变量必须存在。
+
+注意，前一示例中的 URI 模板要求指定 `number` 变量。您可以使用语法 `/issues{/number}` 指定可选 URI 模板，并用 `@Nullable` 标注 `number` 参数。或者，您可以使用 link:{api}/io/micronaut/http/annotation/PathVariable.html[PathVariable] 注解的 `defaultValue` 元素在 URI 变量缺失时指定默认值。例如：
+
+snippet::io.micronaut.docs.server.routes.IssuesController[tags="defaultvalue", indent=0, title="Default Value Example"]
+
+<1> 花括号内的正斜杠将 `number` 指定为可选 URI 变量
+<2> `defaultValue` 属性在 URI 变量缺失时指定 `number` 的默认值
+
+snippet::io.micronaut.docs.server.routes.IssuesControllerTest[tags="defaultvalue", indent=0, title="Testing Default Value"]
+
+<1> 此测试演示当 URI 变量缺失时替换默认 `PathVariable` 值
+<2> 另一个测试演示提供了可选 URI 变量的情形
+
+下表提供了 URI 模板及其匹配内容的示例：
+
+.URI 模板匹配
+|===
+|模板 |说明|匹配的 URI
+
+|`/books/{id}`
+| 简单匹配
+| `/books/1`
+
+|`/books/{id:2}`
+| 最多两个字符的变量
+| `/books/10`
+
+|`/books{/id}`
+| 可选 URI 变量
+| `/books/10` 或 `/books`
+
+| `/book{/id:[a-zA-Z]+}`
+| 带正则的可选 URI 变量
+| `/books/foo`
+
+| `/books{?max,offset}`
+| 可选查询参数
+| `/books?max=10&offset=10`
+
+| `/books{/path:.*}{.ext}`
+| 带扩展名的正则路径匹配
+| `/books/foo/bar.xml`
+
+|===
+
+== URI 保留字符匹配
+
+默认情况下，https://tools.ietf.org/html/rfc6570[RFC-6570 URI 模板] 规范定义的 URI 变量不能包含 `/`、`?` 等保留字符。
+
+如果您想匹配或展开完整路径，这可能是个问题。根据 https://tools.ietf.org/html/rfc6570#section-3.2.3[规范第 3.2.3 节]，您可以使用 `+` 运算符进行保留字符展开或匹配。
+
+例如，URI `/books/{\+path}` 同时匹配 `/books/foo` 与 `/books/foo/bar`，因为 `+` 表示变量 `path` 应包含保留字符（此处为 `/`）。
+
+== 路由注解
+
+前面的示例使用 link:{api}/io/micronaut/http/annotation/Get.html[@Get] 注解添加了一个接受 HTTP link:{api}/io/micronaut/http/HttpMethod.html#GET[GET] 请求的方法。下表汇总了可用的注解及其与 HTTP 方法的映射：
+
+.HTTP 路由注解
+|===
+|注解 |HTTP 方法
+
+|link:{api}/io/micronaut/http/annotation/Delete.html[@Delete]
+|link:{api}/io/micronaut/http/HttpMethod.html#DELETE[DELETE]
+
+|link:{api}/io/micronaut/http/annotation/Get.html[@Get]
+|link:{api}/io/micronaut/http/HttpMethod.html#GET[GET]
+
+|link:{api}/io/micronaut/http/annotation/Head.html[@Head]
+|link:{api}/io/micronaut/http/HttpMethod.html#HEAD[HEAD]
+
+|link:{api}/io/micronaut/http/annotation/Options.html[@Options]
+|link:{api}/io/micronaut/http/HttpMethod.html#OPTIONS[OPTIONS]
+
+|link:{api}/io/micronaut/http/annotation/Patch.html[@Patch]
+|link:{api}/io/micronaut/http/HttpMethod.html#PATCH[PATCH]
+
+|link:{api}/io/micronaut/http/annotation/Put.html[@Put]
+|link:{api}/io/micronaut/http/HttpMethod.html#PUT[PUT]
+
+|link:{api}/io/micronaut/http/annotation/Post.html[@Post]
+|link:{api}/io/micronaut/http/HttpMethod.html#POST[POST]
+
+|link:{api}/io/micronaut/http/annotation/Trace.html[@Trace]
+|link:{api}/io/micronaut/http/HttpMethod.html#TRACE[TRACE]
+
+|===
+
+NOTE: 所有方法注解默认为 `/`。
+
+== 路由条件
+
+api:http.annotation.RouteCondition[] 注解允许您定义一个条件，该条件必须求值为 `true`，路由才能匹配请求。条件以 Micronaut 表达式语言（EL）表达式指定，并在请求时求值。
+
+在表达式中，可以使用一个 `request` 变量，它引用当前的 api:http.HttpRequest[]。
+
+这对于基于查询参数、请求头或请求的其他方面来路由请求很有用。例如，您可以使用 `@RouteCondition` 根据查询参数的值将请求路由到不同的方法：
+
+snippet::io.micronaut.docs.server.routing.RouteConditionController[tags="imports,class", indent=0, title="Route Condition Example"]
+
+<1> 路由条件表达式求值判断 `v` 查询参数是否等于 `2`。如果等于，请求被路由到 `helloV2()`；如果不等于，路由不匹配，请求落回 `helloV1()`。
+
+NOTE: api:http.annotation.RouteCondition[] 注解只适用于服务器端路由，放在声明式 HTTP 客户端路由上会被忽略。
+
+TIP: 表达式中的 `request` 变量是 api:http.HttpRequest[] 的实例。您可以通过 `request.headers` 访问请求头，通过 `request.parameters` 访问查询参数，并按需访问其他请求属性。
+
+== @Options
+
+<<cors, CORS>> 支持处理 OPTIONS 预检请求。但是，如果您想在没有 Origin HTTP 头的情况下分发 OPTIONS 请求，可以通过以下方式启用：
+
+[configuration]
+----
+micronaut:
+  server:
+    dispatch-options-requests: true
+----
+
+
+
+== 多个 URI
+
+每种路由注解都支持多个 URI 模板。为每个模板都会创建一个路由。例如，此功能可用于更改 API 的路径，同时保留现有路径以实现向后兼容。例如：
+
+snippet::io.micronaut.docs.server.routing.BackwardCompatibleController[tags="imports,class", indent=0, title="Multiple URIs"]
+
+<1> 指定多个模板
+<2> 按常规方式绑定模板参数
+
+NOTE: 使用多个模板时，路由验证更加复杂。如果一个通常必需的变量并非在所有模板中都存在，该变量将被视为可选，因为它可能并非在方法的每次执行中都存在。
+
+== 以编程方式构建路由
+
+[.lang-java.lang-groovy.lang-kotlin]
+--
+如果您不想使用注解，而是希望在代码中声明所有路由，也不用担心——Micronaut 框架有一个灵活的 link:{api}/io/micronaut/web/router/RouteBuilder.html[RouteBuilder] API，让以编程方式定义路由变得轻而易举。
+
+首先，继承 link:{api}/io/micronaut/web/router/DefaultRouteBuilder.html[DefaultRouteBuilder]，将要路由到的控制器注入到方法中，然后定义您的路由：
+--
+
+snippet::io.micronaut.docs.server.routes.MyRoutes[tags="imports,class", indent=0, title="URI Variables Example"]
+
+[.lang-java.lang-groovy.lang-kotlin]
+--
+<1> 路由定义应继承 link:{api}/io/micronaut/web/router/DefaultRouteBuilder.html[DefaultRouteBuilder]
+<2> 使用 `@Inject` 将要路由到的控制器注入到方法中
+<3> 使用诸如 link:{api}/io/micronaut/web/router/RouteBuilder.html[`RouteBuilder::GET(String,Class,String,Class...)`] 之类的方法路由到控制器方法。注意，即使使用的是 issues 控制器，路由也不知道它的 `@Controller` 注解，因此必须指定完整路径。
+
+TIP: 遗憾的是，由于类型擦除，Java 方法 lambda 引用无法与该 API 一起使用。对于 Groovy，有一个可以继承的 `GroovyRouteBuilder` 类，允许传递 Groovy 方法引用。
+--
+
+[.lang-python]
+--
+Python 应用将路由声明为模块级函数，而不是继承路由构建器。有关路由函数模块如何转化为控制器，请参阅 <<moduleScripts,模块脚本>>。
+--
+
+== 路由编译期校验
+
+Micronaut 框架支持使用校验库在编译期验证路由参数。开始使用时，请将 `micronaut-http-validation` 依赖添加到构建中：
+
+dependency:io.micronaut:micronaut-http-validation[scope='annotationProcessor']
+
+类路径上有正确的依赖后，路由参数将在编译期自动检查。如果满足以下任一条件，编译将失败：
+
+* {blank}
+ URI 模板包含一个可选变量，但方法参数未标注 `@Nullable` 或不是 `java.util.Optional`。
+
+一个可选变量是指即使值不存在，路由也能匹配 URI 的变量。例如 `/foo{/bar}` 匹配对 `/foo` 与 `/foo/abc` 的请求。非可选的变体则是 `/foo/{bar}`。更多信息请参阅 <<_uri_path_variables,URI 路径变量>> 一节。
+
+* {blank}
+ URI 模板包含一个方法参数中缺失的变量。
+
+NOTE: 要禁用路由编译期校验，请设置系统属性 `-Dmicronaut.route.validation=false`。对于使用 Gradle 的 Java 与 Kotlin 用户，从 `annotationProcessor`/`kapt` 作用域中移除 `micronaut-http-validation` 依赖也可以达到同样效果。
+
+== 路由非标准 HTTP 方法
+
+`@CustomHttpMethod` 注解为客户端或服务器支持非标准 HTTP 方法。像 https://tools.ietf.org/html/rfc4918[RFC-4918 Webdav] 这样的规范需要额外的方法，例如 REPORT 或 LOCK。
+
+.RoutingExample
+[source,java]
+----
+@CustomHttpMethod(method = "LOCK", value = "/{name}")
+String lock(String name)
+----
+
+该注解可以用在标准方法注解可用的任何地方，包括控制器和声明式 HTTP 客户端。
+
+== RouteMatch
+
+api:web.router.RouteMatch[] API 提供关于可执行 api:web.router.Route[] 的信息。
+
+给定一个请求，您可以这样获取 RouteMatch：
+
+snippet::io.micronaut.docs.web.router.routematch.RouteMatchTest[tags="routematch", indent=0]

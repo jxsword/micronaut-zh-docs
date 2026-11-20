@@ -1,0 +1,143 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Simple Request Binding](https://docs.micronaut.io/5.2.x/core/#core-binding)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/binding.adoc  upstream_commit: cd72cbf2bfa925c44026ed87fb2a96ce9611e73c  upstream_hash: abbcdc2cdf1843f49eff55b350842cc3c0a20916  translated_at: 2026-11-21 -->
+
+[[binding]]
+上一节的示例演示了 Micronaut 框架如何让您从 URI 路径变量绑定方法参数。本节展示如何从请求的其他部分绑定参数。
+
+== 绑定注解
+
+所有绑定注解都支持通过其 `name` 成员自定义要绑定来源的变量名。
+
+下表汇总了这些注解及其用途，并提供了示例：
+
+.参数绑定注解
+|===
+|注解|说明 |示例
+
+|link:{api}/io/micronaut/http/annotation/Body.html[@Body]
+|从请求体绑定
+|`@Body String body`
+
+|link:{api}/io/micronaut/http/annotation/CookieValue.html[@CookieValue]
+|从 cookie 绑定参数
+|`@CookieValue String myCookie`
+
+|link:{api}/io/micronaut/http/annotation/Header.html[@Header]
+|从 HTTP 请求头绑定参数
+|`@Header String requestId`
+
+|link:{api}/io/micronaut/http/annotation/QueryValue.html[@QueryValue]
+|从请求查询参数绑定
+|`@QueryValue String myParam`
+
+|link:{api}/io/micronaut/http/annotation/Part.html[@Part]
+|从 multipart 请求的某个部分绑定
+|`@Part CompletedFileUpload file`
+
+|link:{api}/io/micronaut/http/annotation/RequestAttribute.html[@RequestAttribute]
+|从请求的属性绑定。属性通常在过滤器中创建
+|`@RequestAttribute String myAttribute`
+
+|link:{api}/io/micronaut/http/annotation/PathVariable.html[@PathVariable]
+|从请求路径绑定
+|`@PathVariable String id`
+
+|link:{api}/io/micronaut/http/annotation/RequestBean.html[@RequestBean]
+|将任意 Bindable 值绑定到单个 Bean 对象
+|`@RequestBean MyBean bean`
+|===
+
+绑定注解中未指定值时，使用方法参数名。换句话说，以下两个方法是等价的，都从名为 `myCookie` 的 cookie 绑定：
+
+snippet::io.micronaut.docs.server.binding.BindingController[tags="cookie1,cookie2",indent=0]
+
+由于变量名中不允许使用连字符，可能需要在注解中设置名称。以下两个定义是等价的：
+
+snippet::io.micronaut.docs.server.binding.BindingController[tags="header1,header2",indent=0]
+
+== 流支持
+
+Micronaut 框架还支持将请求体绑定到 `InputStream`。如果方法要读取流，必须将方法执行转移到另一个线程池，以避免阻塞事件循环。
+
+snippet::io.micronaut.docs.http.server.stream.StreamController[tags="read", indent=0, title="Performing Blocking I/O With InputStream"]
+
+<1> 控制器方法在 IO 线程池上执行
+<2> 请求体作为输入流传入方法
+<3> 读取流
+
+== 从多个查询值绑定
+
+有时可能希望不从请求的单一部分绑定，而是将所有查询值绑定（例如绑定到一个 POJO）。这可以通过在 URI 模板中使用展开操作符（`?pojo*`）来实现。例如：
+
+snippet::io.micronaut.docs.server.binding.BookmarkController[tags="imports,class", indent=0, title="Binding Request parameters to POJO"]
+
+== 从多个 Bindable 值绑定
+
+不仅可以绑定查询值，还可以将任意 Bindable 值绑定到 POJO（例如将 `HttpRequest`、`@PathVariable`、`@QueryValue` 与 `@Header` 绑定到单个 POJO）。这可以通过 `@RequestBean` 注解和一个自定义 Bean 类（其字段带有 Bindable 注解，或可按类型绑定的字段，例如 `HttpRequest`、`BasicAuth`、`Authentication` 等）来实现。
+
+例如：
+
+snippet::io.micronaut.docs.server.binding.MovieTicketController[tags="class", indent=0, title="Binding Bindable values to POJO"]
+
+它使用以下 bean 类：
+
+snippet::io.micronaut.docs.server.binding.MovieTicketBean[tags="class", indent=0, title="Bean definition"]
+
+bean 类必须用 `@Introspected` 内省。它可以是以下之一：
+
+. 带 setter 与 getter 的可变 Bean 类
+. 带 getter 与全参构造器的不可变 Bean 类（或在构造器或静态方法上标注 `@Creator` 注解）。构造器的参数必须与字段名匹配，以便无需反射即可实例化对象。
+
+WARNING: 由于 Java 不会在字节码中保留参数名，必须使用 `-parameters` 编译代码，才能使用来自其他 jar 的不可变 bean 类。另一种选择是在您的源码中扩展该 Bean 类。
+
+== 可绑定类型
+
+通常，任何可以通过 link:{api}/io/micronaut/core/convert/ConversionService.html[ConversionService] API 从字符串表示转换为 Java 类型的类型都可以绑定。
+
+这包括大多数常见 Java 类型。不过，您可以添加额外的 link:{api}/io/micronaut/core/convert/TypeConverter.html[TypeConverter]——将它定义为 bean，或通过服务加载器在 api:core.convert.TypeConverterRegistrar[] 中注册。
+
+可空性的处理值得特别一提。例如，考虑以下示例：
+
+snippet::io.micronaut.docs.server.binding.BindingController[tags="header2",indent=0]
+
+在这种情况下，如果请求中不存在 HTTP 头 `Content-Type`，则该路由被视为无效（因为无法满足），并返回 HTTP 400 `BAD REQUEST`。
+
+要使 `Content-Type` 头成为可选，可以改为编写：
+
+snippet::io.micronaut.docs.server.binding.BindingController[tags="header3",indent=0]
+
+如果请求中缺少该请求头，将传入 `null` 字符串。
+
+NOTE: 也可以使用 `java.util.Optional`，但不建议用于方法参数。
+
+此外，任何符合 link:{jdkapi}/java.base/java/time/format/DateTimeFormatter.html#RFC_1123_DATE_TIME[RFC-1123] 的 `DateTime` 都可以绑定到参数。也可以使用 link:{api}/io/micronaut/core/convert/format/Format.html[Format] 注解自定义格式：
+
+snippet::io.micronaut.docs.server.binding.BindingController[tags="format1,format2",indent=0]
+
+== 基于类型的绑定参数
+
+有些参数按其类型而非注解识别。下表汇总了这些参数类型、其用途并提供示例：
+
+|===
+|类型 |说明 |示例
+
+|api:http.BasicAuth[]
+|允许绑定基本授权凭据
+|`BasicAuth basicAuth`
+
+|===
+
+== 变量解析
+
+Micronaut 框架尝试按以下顺序填充方法参数：
+
+. URI 变量，例如 `/{id}`。
+. 如果请求是 `GET` 请求，则从查询参数绑定（例如 `?foo=bar`）。
+. 如果存在 `@Body` 且请求允许携带请求体，则将请求体绑定到它。
+. 如果请求可以有请求体且未定义 `@Body`，则尝试解析请求体（JSON 或表单数据），并从请求体绑定方法参数（参见示例）。
+. 最后，如果无法填充方法参数，返回 `400 BAD REQUEST`。
+
+snippet::io.micronaut.docs.server.binding.PointController[tags="class", indent=0, title="Binding Method Arguments From Body with no `@Body`"]
+
+<1> JSON 请求体绑定到控制器方法参数，例如 '{"x":10,"y":20}'（"application/json"）
+<2> 表单数据也可以，例如 'x=10&y=20'（"application/x-www-form-urlencoded"）

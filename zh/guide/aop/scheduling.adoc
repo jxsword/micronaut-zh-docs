@@ -1,0 +1,85 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Scheduled Tasks](https://docs.micronaut.io/5.2.x/core/#core-scheduling)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/aop/scheduling.adoc  upstream_commit: 15119ba9ee63100091348d40eaffe708155b53ae  upstream_hash: 1f711edb538ae851e7ca7fb5b6278431a9c9f11a  translated_at: 2026-11-21 -->
+
+与 Spring 和 Grails 一样，Micronaut 框架提供了用于调度后台任务的 api:scheduling.annotation.Scheduled[] 注解。
+
+TIP: 更多信息请参阅 https://guides.micronaut.io/latest/micronaut-scheduled.html[在 Micronaut 应用中调度周期任务] 指南。
+
+== 使用 @Scheduled 注解
+
+api:scheduling.annotation.Scheduled[] 注解可以添加到 bean 的任何方法上，您应当设置 `fixedRate`、`fixedDelay` 或 `cron` 成员之一。调度功能需要 Micronaut Context 依赖：
+
+dependency::micronaut-context[]
+
+`micronaut-context` 是 `micronaut-http` 的传递依赖。如果您使用 Micronaut HTTP 运行时，您的项目已经包含 `Micronaut-context` 依赖。
+
+NOTE: 请记住，bean 的作用域会影响行为。`@Singleton` bean 在每次执行调度方法时共享状态（实例的字段），而对于 `@Prototype` bean，每次执行都会创建新实例。
+
+=== 以固定频率调度
+
+要以固定频率调度任务，请使用 `fixedRate` 成员。例如：
+
+snippet::io.micronaut.docs.aop.scheduled.ScheduledExample[tags="fixedRate", indent=0, title="Fixed Rate Example"]
+
+上面的任务每 5 分钟执行一次。
+
+=== 以固定延迟调度
+
+要调度一个任务使其在上一个任务终止 5 分钟后运行，请使用 `fixedDelay` 成员。例如：
+
+.固定延迟示例
+snippet::io.micronaut.docs.aop.scheduled.ScheduledExample[tags="fixedDelay", indent=0, title="Fixed Delay Example"]
+
+=== 调度 Cron 任务
+
+要调度 https://en.wikipedia.org/wiki/Cron[Cron] 任务，请使用 `cron` 成员：
+
+snippet::io.micronaut.docs.aop.scheduled.ScheduledExample[tags="cron", indent=0, title="Cron Example"]
+
+上例在服务器时区的每个周一早上 10:15 运行任务。
+
+=== 仅以初始延迟调度
+
+要调度一个任务使其在服务器启动后运行一次，请使用 `initialDelay` 成员：
+
+snippet::io.micronaut.docs.aop.scheduled.ScheduledExample[tags="initialDelay", indent=0, title="Initial Delay Example"]
+
+上例仅运行一次，在服务器启动 1 分钟后。
+
+== 以编程方式调度任务
+
+要以编程方式调度任务，请使用 api:scheduling.TaskScheduler[] bean，它可以按如下方式注入：
+
+snippet::io.micronaut.docs.aop.scheduled.TaskSchedulerInjectExample[tags="inject", indent=0]
+
+== 用注解元数据配置调度任务
+
+要让应用的任务可配置，您可以使用注解元数据与属性占位符配置。例如：
+
+snippet::io.micronaut.docs.aop.scheduled.ScheduledExample[tags="configured", indent=0, title="Allow tasks to be configured"]
+
+上例允许用属性 `my.task.rate` 配置任务执行频率，用属性 `my.task.delay` 配置初始延迟。
+
+== 配置调度任务线程池
+
+`@Scheduled` 执行的任务默认在 link:{jdkapi}/java.base/java/util/concurrent/ScheduledExecutorService.html[ScheduledExecutorService] 上运行，其线程数配置为可用处理器数的两倍。
+
+您可以在配置文件（例如 `application.yml`）中配置该线程池：
+
+//TODO: Move YAML snippet to ExecutorServiceConfigSpec
+[configuration,title="Configuring Scheduled Task Thread Pool"]
+----
+micronaut:
+  executors:
+    scheduled:
+      type: scheduled
+      core-pool-size: 30
+----
+
+include::{includedir}configurationProperties/io.micronaut.scheduling.executor.UserExecutorConfiguration.adoc[]
+
+== 处理异常
+
+默认情况下，Micronaut 框架包含一个 api:io.micronaut.scheduling.DefaultTaskExceptionHandler[] bean，它实现 api:io.micronaut.scheduling.TaskExceptionHandler[] 接口，在调用调度任务出错时仅记录该异常。
+
+如果您有自定义需求，可以用自己的实现替换该 bean（例如发送电子邮件，或关闭上下文以快速失败）。为此，请编写您自己的 api:io.micronaut.scheduling.TaskExceptionHandler[] 并用 `@Replaces(DefaultTaskExceptionHandler.class)` 标注。

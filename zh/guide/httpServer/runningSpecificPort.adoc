@@ -1,0 +1,25 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Running Server on a Specific Port](https://docs.micronaut.io/5.2.x/core/#core-runningSpecificPort)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/runningSpecificPort.adoc  upstream_commit: 51650efcb97939ef02bf726bdcb28266b7ca20d1  upstream_hash: c5ebb53643f1d76d50c4bdd94f1c965fa98671d2  translated_at: 2026-11-21 -->
+
+[[runningSpecificPort]]
+默认情况下，服务器运行在 8080 端口。不过，您可以将服务器设置为运行在特定端口上：
+
+[configuration]
+----
+micronaut:
+  server:
+    port: 8086
+----
+
+TIP: 这也可以通过环境变量配置，例如 `MICRONAUT_SERVER_PORT=8086`
+
+要运行在随机端口上：
+
+[configuration]
+----
+micronaut:
+  server:
+    port: -1
+----
+
+TIP: 如果多个服务器在同一端口上同时启动，设置显式端口可能导致测试失败。为避免这种情况，请在测试环境配置中指定随机端口。

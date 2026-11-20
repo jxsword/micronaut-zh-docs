@@ -1,0 +1,35 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Bridging Spring AOP](https://docs.micronaut.io/5.2.x/core/#core-springAop)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/aop/springAop.adoc  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360  upstream_hash: 750b27949a28b6815c5fe944cae2a4aa6c29b32a  translated_at: 2026-11-21 -->
+
+尽管 Micronaut 框架的设计基于编译期方式且不依赖 Spring 依赖注入，Spring 生态中仍有大量不直接依赖 Spring 容器的有价值内容。
+
+您可能希望在 Micronaut 框架中使用现有的 Spring 项目，并配置 bean 供 Micronaut 框架使用。
+
+您还可能希望复用 Spring 现有的 AOP 通知。一个例子是 Spring 对 `@Transactional` 声明式事务的支持。
+
+Micronaut 框架无需 Spring 本身即可提供基于 Spring 的事务管理支持。只需将 `spring` 模块添加到应用依赖中：
+
+dependency:io.micronaut.spring:micronaut-spring[gradleScope="implementation"]
+
+这还要求将 `spring-annotation` 模块依赖作为注解处理器添加：
+
+dependency:io.micronaut.spring:micronaut-spring-annotation[scope="annotationProcessor"]
+
+NOTE: 如果您使用 Micronaut 的 <<hibernateSupport,Hibernate 支持>>，您已经获得了该依赖，并且 `HibernateTransactionManager` 已为您配置好。
+
+
+这是通过用 link:{micronautspringapi}/io/micronaut/spring/tx/annotation/TransactionInterceptor.html[TransactionInterceptor] 拦截标注了 Spring `@Transactional` 的方法调用来实现的。
+
+这样做的好处是，您可以使用 Micronaut 编译期、免反射的 AOP 来声明编程式 Spring 事务。例如：
+
+.使用 @Transactional
+[source,java]
+----
+import org.springframework.transaction.annotation.Transactional;
+...
+
+@Transactional
+public Book saveBook(String title) {
+    ...
+}
+----

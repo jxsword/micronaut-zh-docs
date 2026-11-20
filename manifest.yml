@@ -71,18 +71,18 @@ files:
 - file: guide/aop/scheduling.adoc
   blob_sha: 1f711edb538ae851e7ca7fb5b6278431a9c9f11a
   size: 4248
-  status: missing
+  status: current
   zh: zh/guide/aop/scheduling.adoc
   paragraphs: 39
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 15119ba9ee63100091348d40eaffe708155b53ae
 - file: guide/aop/springAop.adoc
   blob_sha: 750b27949a28b6815c5fe944cae2a4aa6c29b32a
   size: 1657
-  status: missing
+  status: current
   zh: zh/guide/aop/springAop.adoc
   paragraphs: 13
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/aop/validation.adoc
   blob_sha: 68c63c8e2eab54cf3b3da901818d6b55e4700770
@@ -935,10 +935,10 @@ files:
 - file: guide/httpServer.adoc
   blob_sha: 4b54755e91404d6aba0e24af6b129244ac58a43d
   size: 1242
-  status: missing
+  status: current
   zh: zh/guide/httpServer.adoc
   paragraphs: 11
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 81ce0379668d4989110a20d8b9adf924019c0170
 - file: guide/httpServer/apiVersioning.adoc
   blob_sha: 6ba6c817cf372d8711c29644b9338cbfcc2d7dc1
@@ -951,10 +951,10 @@ files:
 - file: guide/httpServer/binding.adoc
   blob_sha: abbcdc2cdf1843f49eff55b350842cc3c0a20916
   size: 7188
-  status: missing
+  status: current
   zh: zh/guide/httpServer/binding.adoc
   paragraphs: 46
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: cd72cbf2bfa925c44026ed87fb2a96ce9611e73c
 - file: guide/httpServer/byteBody.adoc
   blob_sha: 0f35af7cba94cf31d0f49ce9f5659e9cfe444a86
@@ -1431,26 +1431,26 @@ files:
 - file: guide/httpServer/routing.adoc
   blob_sha: 5f079380a0de0f292b3e02df821cf876008187df
   size: 12814
-  status: missing
+  status: current
   zh: zh/guide/httpServer/routing.adoc
   paragraphs: 83
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 130cfede2d9a325faf7016bf10e0a2060c5a3cbd
 - file: guide/httpServer/runningServer.adoc
   blob_sha: 6237609b8e8fe44e4dba201652569763a0994bb9
   size: 1117
-  status: missing
+  status: current
   zh: zh/guide/httpServer/runningServer.adoc
   paragraphs: 6
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 52496518371db590c0a06457586d931823622ef8
 - file: guide/httpServer/runningSpecificPort.adoc
   blob_sha: c5ebb53643f1d76d50c4bdd94f1c965fa98671d2
   size: 539
-  status: missing
+  status: current
   zh: zh/guide/httpServer/runningSpecificPort.adoc
   paragraphs: 8
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 51650efcb97939ef02bf726bdcb28266b7ca20d1
 - file: guide/httpServer/serverConfiguration.adoc
   blob_sha: d7ce888c69c8b896a6a3fac4c80bcb923e1bef5f

@@ -1,0 +1,23 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – The HTTP Server](https://docs.micronaut.io/5.2.x/core/#core-httpServer)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer.adoc  upstream_commit: 81ce0379668d4989110a20d8b9adf924019c0170  upstream_hash: 4b54755e91404d6aba0e24af6b129244ac58a43d  translated_at: 2026-11-21 -->
+
+[[httpServer]]
+[TIP]
+.使用 CLI
+====
+如果您使用 Micronaut CLI 的 `create-app` 命令创建项目，则默认包含 `http-server` 依赖。
+====
+
+Micronaut 框架包含基于 Netty 的非阻塞 HTTP 服务器与客户端 API（https://netty.io[Netty]）。
+
+HTTP 服务器的目标是让您尽可能轻松地对外暴露服务，供 HTTP 客户端与网页使用，而无论它们使用何种语言编写。https://micronaut-projects.github.io/micronaut-views/latest/guide/[Micronaut Views] 模块支持从多种模板框架渲染 HTML。要使用 HTTP 服务器，您需要在构建中添加 `http-server-netty` 依赖：
+
+dependency:micronaut-http-server-netty[]
+
+下面是一个「Hello World」服务器应用：
+
+snippet::io.micronaut.docs.server.intro.HelloController[tags="imports,class"]
+
+<1> 该类用 link:{api}/io/micronaut/http/annotation/Controller.html[@Controller] 注解定义为控制器，映射到路径 `/hello`
+<2> 该方法响应针对 `/hello` 的 GET 请求，并返回内容类型为 `text/plain` 的响应
+<3> 通过定义名为 `index` 的方法，按照惯例该方法通过 `/hello` URI 暴露

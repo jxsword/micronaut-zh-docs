@@ -1,0 +1,19 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Running the Embedded Server](https://docs.micronaut.io/5.2.x/core/#core-runningServer)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/runningServer.adoc  upstream_commit: 52496518371db590c0a06457586d931823622ef8  upstream_hash: 6237609b8e8fe44e4dba201652569763a0994bb9  translated_at: 2026-11-21 -->
+
+要运行服务器，请创建一个带有 `static void main` 方法的 `Application` 类，例如：
+
+.Micronaut 应用类
+snippet::io.micronaut.docs.server.intro.Application[tags="imports,class",indent=0]
+
+要从单元测试运行应用，请使用 link:{api}/io/micronaut/runtime/server/EmbeddedServer.html[EmbeddedServer] 接口：
+
+.Micronaut 测试用例
+snippet::io.micronaut.docs.server.intro.HelloControllerSpec[tags="imports,class", indent=0]
+
+<1> 运行 `EmbeddedServer`，Spock 的 `@AutoCleanup` 注解确保在规约完成后停止服务器。
+<2> `EmbeddedServer` 接口提供被测服务器的 `URL`，该服务器运行在随机端口上。
+<3> 测试使用 Micronaut HTTP 客户端发起调用
+<4> `retrieve` 方法以 `String` 形式返回控制器的响应
+
+IMPORTANT: 未显式配置端口时，端口为 8080，除非应用在 `test` 环境下运行（此时端口为随机值）。当应用上下文从测试类的上下文启动时，会自动添加 test 环境。

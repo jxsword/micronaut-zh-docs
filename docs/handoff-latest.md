@@ -1,6 +1,6 @@
 # 交接文档（handoff-latest）
 
-> 更新：2026-11-21 ｜ 会话：M2 分批翻译（B07–B10 完成，AOP 章 8/10）｜ 下一会话任务：M2 继续分批翻译（B11 起）
+> 更新：2026-11-21 ｜ 会话：M2 分批翻译（B07–B11 完成，AOP 章全章译出）｜ 下一会话任务：M2 继续分批翻译（B12 起）
 
 ## 已完成清单（全部已提交，main 分支）
 
@@ -17,37 +17,38 @@
 | **B07 翻译批次** | `abef899` | 4 文件（config：defaultEnvironment + banner + propertySource + valueAnnotation）全绿核销；词数 2540（实测）/段落 167；报告见 `reports/batch-B07.md`；锚点注入 2 处，5 条既有 ⑤ 豁免消解 + 批内 propertySource→valueAnnotation 闭环；config 章 7/15（47%） |
 | **B08 翻译批次** | `f1fa4cf` | 4 文件（config：evaluatedExpressions + configurationProperties + customTypeConverter + eachProperty）全绿核销；词数 3400（实测）/段落 260；报告见 `reports/batch-B08.md`；锚点注入 2 处 + 显式锚点 configurationPropertiesAccessorsStyle 保留，5 条豁免消解；reviewer 脚本术语检查范围修正（仅查可译段）；config 章 11/15（73%） |
 | **B09 翻译批次** | `a18c135` | 8 文件（config 收尾 4：jmx/eachBean/bootstrap/immutableConfig + AOP 开头 4：aop/aroundAdvice/introductionAdvice/adapterAdvice）全绿核销；词数 2852（实测）/段落 125；报告见 `reports/batch-B09.md`；锚点注入 5 处（aop/aroundAdvice/introductionAdvice/bootstrap/jmx），aop ×3 豁免消解；reviewer 术语检查改为复用 validate ③ check_terms；**config 章 15/15 全章译出**；AOP 章 3/10 起步 |
-| **B10 翻译批次** | 本次提交 | 5 文件（AOP：lifecycleAdvice + interceptorLifecycle + validation + caching + retry）全绿核销；词数 3022（实测）/段落 140；报告见 `reports/batch-B10.md`；锚点注入 4 处（lifecycleAdvice↔interceptorLifecycle 批内互引 + retry/validation）；**retry 首轮漏锚点被 reviewer 抓出补齐**；豁免 25→23；AOP 章 8/10（80%） |
+| **B10 翻译批次** | `cb89326` | 5 文件（AOP：lifecycleAdvice + interceptorLifecycle + validation + caching + retry）全绿核销；词数 3022（实测）/段落 140；报告见 `reports/batch-B10.md`；锚点注入 4 处（lifecycleAdvice↔interceptorLifecycle 批内互引 + retry/validation）；**retry 首轮漏锚点被 reviewer 抓出补齐**；豁免 25→23；AOP 章 8/10（80%） |
+| **B11 翻译批次** | 本次提交 | 7 文件（AOP 收尾 2：scheduling/springAop + httpServer 章页与前 4 节）全绿核销；词数 3270（实测）/段落 206；报告见 `reports/batch-B11.md`；锚点注入 4 处（httpServer/runningSpecificPort 批间消解 + routing/binding）+ **页内标题锚 [[_uri_path_variables]] 原位注入首实践**；httpServer ③ netty→Netty 修正；**AOP 章 10/10 全章译出**；httpServer 章 5/15 起步 |
 
-## 状态快照（2026-11-21，B10 收尾）
+## 状态快照（2026-11-21，B11 收尾）
 
 - 分支 main；基线 v5.2.25（`0b46d27afdfa`，快照日期 2026-11-20）；批次期间冻结窗口遵守（未跑 --apply）
-- manifest：388 条目 = 292 missing + 2 skipped + **94 current**（进度 24.2%）
-- 看板：B01–B10 = current，其余 22 批 pending
-- anchor-registry：121 条（不变）；validate 全量跑：PASSED（94 文件，⑤ 豁免警告 23 条，M3 清零）
+- manifest：388 条目 = 285 missing + 2 skipped + **101 current**（进度 26.0%）
+- 看板：B01–B11 = current，其余 21 批 pending
+- anchor-registry：121 条（不变）；validate 全量跑：PASSED（101 文件，⑤ 豁免警告 24 条，M3 清零）
 - 页头溯源投影：页名=toc 英文原题、URL=`https://docs.micronaut.io/5.2.x/core/#core-<basename>`（复用 B01 实测格式）、基线锁定日期 2026-11-19、translated_at=2026-11-21
-- reports/progress.md 已重新生成（IoC 55/55、introduction 2/2、quickStart 9/9、config 15/15、aop 8/10）
-- 里程碑：AOP 章 8/10（80%，余 scheduling/springAop，均在 B11）；已全章译出：introduction、quickStart、IoC（55）、config（15）
+- reports/progress.md 已重新生成（IoC 55/55、introduction 2/2、quickStart 9/9、config 15/15、**aop 10/10**、httpServer 5/15）
+- 里程碑：**AOP 章全章译出**（第五个全章：introduction、quickStart、IoC、config、AOP）；httpServer 章 5/15 起步，下批 B12 继续
 
 ## 实测结论（本会话新增/沿用）
 
-1. **锚点注入位置规则（B02 精化，B07–B10 复用验证）**：basename 约定锚点 = 官方站 `core-<basename>` = 片段首内容之前的块锚——对正文先行的文件注入于第一段之前。B07–B10 共 13 处注入。
-2. **词数口径差异**：M1 inventory 报告值生成于 B01 snippet:: 保护修复之前；后续批次词数以批次执行时实测为准（B02 3055/2991、B03 3417/3377、B04 2588/2545、B05 2074/2076、B06 3482/3445、B07 2540/2484、B08 3400/3336、B09 2852/2835、B10 3022/3002），M1 报告值仅作切分参考。
-3. **批间前向引用消解模式**：先行文件对未译目标的 xref 记为 ⑤ 豁免；后续批次落盘目标文件后豁免自动消解。B07 消解 5 条、B08 消解 5 条、B09 净消解 2 条、B10 消解 2 条；批次报告须核对豁免增减明细。
-4. **reviewer 术语检查自 B09 起与 validate ③ 同源**：直接 `import validate_translation as vt` 复用 `vt.check_terms`（含 banned），不重写裸正则——裸正则会误报别名子串（DI↔distributed）与宏路径（`api:aop.`↔AOP）；/tmp/b10_reviewer.py 为当前模板（临时不入库，逐批复制改 FILES/NEED_ANCHOR）。
-5. **B10 教训：锚点注入必须在写译文前列清单并在 Write 后自查**——retry.adoc 首轮漏注入 `[[retry]]`，validate --file 不拦（对其他文件的 xref 是豁免警告），**reviewer 抓出**；补救链路（补注入 → restore → assemble → mark-current 重跑）顺畅。mark-current 对已核销文件可幂等重跑。
-6. **③ 必译术语可被宏路径误触发**：caching.adoc 的 `interceptor` 命中来自 `{micronautcacheapi}/…/interceptor/CacheInterceptor` 宏路径（attrref/xref 宏体不被 strip）——按首现括注补「CacheInterceptor（缓存拦截器）」既过门禁又是正确译法。
-7. **advice 译法自 B09 统一为「通知（advice）」**（承 B06 reflection 先例）；环绕通知/引入通知/校验通知等首现括注；eagerly initialize/eager initialization 命中 approved 术语「饿汉式初始化」。
+1. **锚点注入位置规则（B02 精化，B07–B11 复用验证）**：basename 约定锚点 = 官方站 `core-<basename>` = 片段首内容之前的块锚——对正文先行的文件注入于第一段之前。B07–B11 共 17 处注入；**页内标题锚（如 routing 的 `<<_uri_path_variables,…>>`）按 PLAN §5.6 原位注入于标题行之前（B11 首实践，reviewer 脚本加 INNER_HEADING_ANCHOR 检查）**。
+2. **词数口径差异**：M1 inventory 报告值生成于 B01 snippet:: 保护修复之前；后续批次词数以批次执行时实测为准（B02 3055/2991、B03 3417/3377、B04 2588/2545、B05 2074/2076、B06 3482/3445、B07 2540/2484、B08 3400/3336、B09 2852/2835、B10 3022/3002、B11 3270/3240），M1 报告值仅作切分参考。
+3. **批间前向引用消解模式**：先行文件对未译目标的 xref 记为 ⑤ 豁免；后续批次落盘目标文件后豁免自动消解。B07 −5、B08 −5、B09 净 −2、B10 −2、B11 净 −1（消解 2 新增 3：routing→cors、routing→moduleScripts、springAop→hibernateSupport）；批次报告须核对豁免增减明细。
+4. **reviewer 术语检查自 B09 起与 validate ③ 同源**：直接 `import validate_translation as vt` 复用 `vt.check_terms`（含 banned）；/tmp/b11_reviewer.py 为当前模板（临时不入库，逐批复制改 FILES/NEED_ANCHOR/INNER_HEADING_ANCHOR）。
+5. **B10 教训：锚点注入必须在写译文前列清单并在 Write 后自查**——retry.adoc 首轮漏注入 `[[retry]]`，validate --file 不拦（对其他文件的 xref 是豁免警告），**reviewer 抓出**；补救链路（补注入 → restore → assemble → mark-current 重跑）顺畅；mark-current 对已核销文件可幂等重跑。
+6. **③ 必译术语的两类误触与修法**：(a) 宏路径命中（B10：`…/interceptor/CacheInterceptor` → 补首现括注「缓存拦截器」）；(b) 指令行未被 strip 命中小写 API 名而 zh 侧链接 label 被 RE_URL 连带剥除（B11：`dependency:…-netty[]` 命中 netty → 正文改写为普通词物化「基于 Netty 的…（[Netty]）」）——均以正确译法过门禁，不绕过机检。
+7. **advice 译法自 B09 统一为「通知（advice）」**（承 B06 reflection 先例）；eagerly initialize/eager initialization 命中 approved 术语「饿汉式初始化」。
 8. **源内已有显式锚点（ANCLINE 占位符）与 shorthand xref（`<<target,label>>`，未被 protect 捕获）均按纪律手保**：锚点行逐字节保留；xref target 逐字节保留、label 译出（产品名/规范链接 label 保留）。
-9. **validate ⑦ 邻接规则（B08/B10 两次踩坑）**：占位符/行内码后紧跟全角开括号必拒（B10 retry `` `Publisher`（ `` 再犯）；宏 `[]` 后接全角开括号不在机检范围。占位符后接 `（` 一律预留空格必须作为翻译期习惯。
-10. `[NOTE] ====` 嵌套块与内嵌 `~~~`/块标题（.缓存命名）结构保持、标题文本译出；裸代码行与 `dependency:…`/`dependency::…` 宏逐字节保留。
-11. restore 后必须核对 restored 文件数与输入文件数一致（B04 教训沿用）；B07–B10 restore 21/22 全过（1 次为 retry 补锚点后重跑，占位符笔误 0）。
+9. **validate ⑦ 邻接规则（B08/B10 两次踩坑）**：占位符/行内码后紧跟全角开括号必拒；宏 `[]` 后接全角开括号不在机检范围。占位符后接 `（` 一律预留空格必须作为翻译期习惯（B11 全程预留，零违规）。
+10. `[NOTE] ====` 嵌套块、`[.lang-…]`+`--` 开放块、`{blank}` 列表项（ATTRREF 占位符）、块标题（.缓存命名）结构保持、标题文本译出；裸代码行与 `dependency:…`/`dependency::…` 宏逐字节保留；validate ④ 仅拦「≥2 英文词且未翻译」的标题（`== @Options`/`== RouteMatch` 可保留）。
+11. restore 后必须核对 restored 文件数与输入文件数一致（B04 教训沿用）；B07–B11 restore 28/29 全过（1 次为 retry 补锚点后重跑，占位符笔误 0）。
 
 ## 待办（下一会话）
 
-1. **M2 继续**：B11 起（7 文件：aop/scheduling + aop/springAop（AOP 章收尾）+ httpServer 章页与前 4 节（httpServer/runningServer/runningSpecificPort/routing/binding），双指标达标），看板改 in-progress 后按 §5.1 SOP + 固化校验链执行；启动提示词需更新至 B11 起（`docs/新会话启动提示词.md`）。注意：httpServer 在 registry（被 creatingServer/creatingClient 等引用）、runningSpecificPort 在 registry（被 creatingServer 引用）——落盘后预计消解 ≥2 条豁免。
-2. 术语滚动：B05–B10 括注待复核（构造型 stereotype、可保留 retainable、别名 alias、属性源 property source、mixin、规范构造器 canonical constructor、类型使用注解 type-use annotation、可空性注解、banner、kebab case、驼峰式 camel-case、提供者 provider、默认环境 default environment、求值表达式 evaluated expressions、小驼峰式 lower camel case、通知 advice、切面 aspect、环绕通知/引入通知、存根值 stubbed value、校验通知 validation advice、缓存拦截器 CacheInterceptor、weigher 权重计算器、断路器 Circuit Breaker）；context propagation（B01 括注）继续待复核
-3. M3+：断链豁免清零（当前 23 条）、抽检、sync drill、tag v1.0
+1. **M2 继续**：B12 起（25 文件：httpServer 余下大部分，双指标达标），看板改 in-progress 后按 §5.1 SOP + 固化校验链执行；启动提示词需更新至 B12 起（`docs/新会话启动提示词.md`）。B12 文件量大（25 个、多为小片段），建议先跑 protect 全量核对占位符总数再分文件翻译。
+2. 术语滚动：B05–B11 括注待复核（构造型 stereotype、可保留 retainable、别名 alias、属性源 property source、mixin、规范构造器 canonical constructor、类型使用注解 type-use annotation、可空性注解、banner、kebab case、驼峰式 camel-case、提供者 provider、默认环境 default environment、求值表达式 evaluated expressions、小驼峰式 lower camel case、通知 advice、切面 aspect、环绕通知/引入通知、存根值 stubbed value、校验通知 validation advice、缓存拦截器 CacheInterceptor、weigher 权重计算器、断路器 Circuit Breaker、规约 specification、展开操作符 exploded operator）；context propagation（B01 括注）继续待复核
+3. M3+：断链豁免清零（当前 24 条）、抽检、sync drill、tag v1.0
 
 ## 调试经验与坑位（累计）
 
