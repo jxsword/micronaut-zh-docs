@@ -1,0 +1,23 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – The ThreadDump Endpoint](https://docs.micronaut.io/5.2.x/core/#core-threadDumpEndpoint)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/management/providedEndpoints/threadDumpEndpoint.adoc  upstream_commit: 41131456aad0338e21715e5053d9ec7cc8da8e50  upstream_hash: fa1804aaeae226df89df1f57424c60058d18a4e4  translated_at: 2026-11-21 -->
+
+threaddump 端点返回应用中运行线程的信息。
+
+要执行 threaddump 端点，请向 /threaddump 发送 GET 请求。
+
+== 配置
+
+要配置 threaddump 端点，请通过 `endpoints.threaddump` 提供配置。
+
+.Threaddump 端点配置示例
+[configuration]
+----
+endpoints:
+  threaddump:
+    enabled: Boolean
+    sensitive: Boolean
+----
+
+== 定制
+
+线程转储端点委托给一个 link:{api}/io/micronaut/management/endpoint/threads/ThreadInfoMapper.html[ThreadInfoMapper])，它负责把 `java.lang.management.ThreadInfo` 对象转换为任何其他对象以供序列化。

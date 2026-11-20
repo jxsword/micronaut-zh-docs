@@ -1,0 +1,26 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – The Routes Endpoint](https://docs.micronaut.io/5.2.x/core/#core-routesEndpoint)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/management/providedEndpoints/routesEndpoint.adoc  upstream_commit: 51650efcb97939ef02bf726bdcb28266b7ca20d1  upstream_hash: 91446de6ab684ee0398998983bdd457e73bc6503  translated_at: 2026-11-21 -->
+
+routes 端点返回应用可调用 URI 的信息。默认返回的数据包括 URI、允许的方法、产生的内容类型以及将执行的方法的信息。
+
+要执行 routes 端点，请向 /routes 发送 GET 请求。
+
+[[routesEndpoint]]
+== 配置
+
+要配置 routes 端点，请通过 `endpoints.routes` 提供配置。
+
+.Routes 端点配置示例
+[configuration]
+----
+endpoints:
+  routes:
+    enabled: Boolean
+    sensitive: Boolean
+----
+
+== 定制
+
+routes 端点由一个路由数据收集器和一个路由数据实现组成。路由数据收集器（link:{api}/io/micronaut/management/endpoint/routes/RouteDataCollector.html[RouteDataCollector]）负责返回一个发布者，由它返回响应中使用的数据。路由数据（link:{api}/io/micronaut/management/endpoint/routes/RouteData.html[RouteData]）负责返回关于单个路由的数据。
+
+要覆盖这两个辅助类中任意一个的默认行为，可以继承默认实现（link:{api}/io/micronaut/management/endpoint/routes/impl/DefaultRouteDataCollector.html[DefaultRouteDataCollector]、link:{api}/io/micronaut/management/endpoint/routes/impl/DefaultRouteData.html[DefaultRouteData]），或直接实现相应接口。为确保使用您的实现而非默认实现，请为您的类添加 link:{api}/io/micronaut/context/annotation/Replaces.html[@Replaces] 注解，其值为默认实现。

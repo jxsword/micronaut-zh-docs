@@ -1,0 +1,17 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Custom Health Indicator](https://docs.micronaut.io/5.2.x/core/#core-healthEndpointCustomization)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/management/providedEndpoints/healthEndpoint/healthEndpointCustomization.adoc  upstream_commit: 74ae026c5db6ae318349dc3013ac6c9a3fbe95a8  upstream_hash: a60684f9a46d28fcb8583f4a43a4ec19a51f2e0e  translated_at: 2026-11-21 -->
+
+health 端点由一个健康聚合器和任意多个健康指示器组成。要添加健康指示器，请创建一个实现 link:{api}/io/micronaut/management/health/indicator/HealthIndicator.html[HealthIndicator] 的 bean 类。建议同时使用 link:{api}/io/micronaut/management/health/indicator/annotation/Liveness.html[@Liveness] 或 link:{api}/io/micronaut/management/health/indicator/annotation/Readiness.html[@Readiness] 限定符。如果不使用限定符，该健康指示器将成为 /health 与 /health/readiness 端点的一部分。可以使用基类 link:{api}/io/micronaut/management/health/indicator/AbstractHealthIndicator.html[AbstractHealthIndicator] 进行子类化以简化此过程。
+
+所有健康指示器 bean 会与健康聚合器一起收集。要提供自己的健康聚合器实现，请创建一个实现 link:{api}/io/micronaut/management/health/aggregator/HealthAggregator.html[HealthAggregator] 的类并注册为 bean。为确保使用您的实现而非默认实现，请为您的类添加 link:{api}/io/micronaut/context/annotation/Replaces.html[@Replaces] 注解，其值为默认实现 api:management.health.aggregator.DefaultHealthAggregator[]。
+
+默认健康聚合器返回基于各指示器健康状态计算出的总体状态。link:{api}/io/micronaut/health/HealthStatus.html[健康状态] 由若干信息组成。
+
+|=======
+|名称 |状态的名称
+|描述 |状态的描述
+|可运行 |指示器所代表的功能是否正常
+|严重程度 |状态的严重程度。数值越高越严重
+|=======
+
+「最差」的状态将作为总体状态返回。不可运行的状态优先于可运行的状态被选中；严重程度更高的状态优先于严重程度更低的状态。

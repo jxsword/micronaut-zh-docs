@@ -1,0 +1,38 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Provided Indicators](https://docs.micronaut.io/5.2.x/core/#core-healthProvidedIndicators)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/management/providedEndpoints/healthEndpoint/healthProvidedIndicators.adoc  upstream_commit: 130cfede2d9a325faf7016bf10e0a2060c5a3cbd  upstream_hash: 48213dc55139fcabbd29ee65a58f846de981524f  translated_at: 2026-11-21 -->
+
+Micronaut 框架提供的健康指示器暴露在 `/health` 端点上。除 `DeadlockedThreadsHealthIndicator` 是活性指示器、改为暴露在 `/health/liveness` 上之外，其余还同时暴露在 `/health/readiness` 上。
+
+|===
+| 指示器 | 配置开关 | 默认值
+
+
+| `DeadlockedThreadsHealthIndicator`
+  检查是否存在死锁线程。
+| `endpoints.health.deadlocked-threads.enabled`
+| `true`
+
+| `DiscoveryClientHealthIndicator`
+| `endpoints.health.discovery-client-health.enabled`
+| `true`
+
+| `DiskSpaceIndicator`
+  检查服务器磁盘剩余空间是否低于配置的阈值
+| `endpoints.health.disk-space.enabled`
+| `true`
+
+| `JdbcIndicator`
+  检查 JDBC 连接是否有效
+| `endpoints.health.jdbc.enabled`
+| `true`
+
+| `ServiceHttpClientHealthIndicator`
+  检查负载均衡器中是否有可用的 URL。
+| `endpoints.health.service-http-client.enabled`
+| `false`
+
+| `ServiceReadyHealthIndicator` - 在服务可以处理请求时发出信号。
+| `endpoints.health.service-ready-indicator-enabled`
+| `true`
+
+|===

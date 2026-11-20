@@ -1,0 +1,84 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Micronaut CLI](https://docs.micronaut.io/5.2.x/core/#core-cli)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/cli.adoc  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360  upstream_hash: 2f0d44dc4af39a041381a5a87534744a12d5b76b  translated_at: 2026-11-21 -->
+
+Micronaut CLI 是创建新 Micronaut 项目的推荐方式。CLI 包含用于生成特定类别项目的命令，让您可以选择构建工具、测试框架，甚至挑选应用使用的语言。CLI 还提供用于生成控制器、客户端接口与 Serverless 函数等构件的命令。
+
+TIP: 我们有一个可用于代替 CLI 生成项目的网站。请访问 https://micronaut.io/launch/[Micronaut Launch] 开始使用！
+
+<<buildCLI,Micronaut 框架安装到您的计算机>> 后，您就可以用 `mn` 命令调用 CLI。
+
+[source,bash]
+----
+$ mn create-app my-app
+----
+
+Micronaut 框架 CLI 项目可以通过 `micronaut-cli.yml` 文件识别，如果项目由 CLI 生成，该文件会位于项目根目录。此文件包含项目的 profile、默认包及其他变量。项目默认包根据项目名称求值。
+
+[source,bash]
+----
+$ mn create-app my-demo-app
+----
+
+结果是默认包为 `my.demo.app`。
+
+创建应用时，可以通过在应用名前加包名来提供自己的默认包：
+
+[source,bash]
+----
+$ mn create-app example.my-demo-app
+----
+
+结果是默认包为 `example`。
+
+[[cli]]
+== 交互模式
+
+不带任何参数运行 `mn` 时，Micronaut CLI 以交互模式启动。这是一种类 shell 模式，让您无需重新初始化 CLI 运行时即可运行多条 CLI 命令，特别适合使用代码生成命令（如 `create-controller`）、创建多个项目或只是探索 CLI 特性的场景。Tab 补全已启用，可以按 `TAB` 键查看给定命令或 flag 的可用选项。
+
+[source,bash]
+----
+$ mn
+| Starting interactive mode...
+| Enter a command name to run. Use TAB for completion:
+mn>
+----
+
+== 帮助与信息
+
+可以使用命令上的 `help` flag 查看一般用法信息。
+
+[source,bash]
+----
+mn> create-app -h
+Usage: mn create-app [-hivVx] [--list-features] [-b=BUILD-TOOL] [--jdk=<javaVersion>] [-l=LANG]
+                     [-t=TEST] [-f=FEATURE[,FEATURE...]]... [NAME]
+Creates an application
+      [NAME]               The name of the application to create.
+  -b, --build=BUILD-TOOL   Which build tool to configure. Possible values: gradle, gradle_kotlin,
+                             maven.
+  -f, --features=FEATURE[,FEATURE...]
+  -h, --help               Show this help message and exit.
+  -i, --inplace            Create a service using the current directory
+      --jdk, --java-version=<javaVersion>
+                           The JDK version the project should target
+  -l, --lang=LANG          Which language to use. Possible values: java, groovy, kotlin.
+      --list-features      Output the available features and their descriptions
+  -t, --test=TEST          Which test framework to use. Possible values: junit, spock, kotest.
+----
+
+可以使用任一 create 命令上的 `--list-features` flag 查看可用 feature 列表。
+
+[source,bash]
+----
+mn> create-app --list-features
+Available Features
+(+) denotes the feature is included by default
+  Name                             Description
+  -------------------------------  ---------------
+  Cache
+  cache-caffeine                   Adds support for cache using Caffeine (https://github.com/ben-manes/caffeine)
+  cache-ehcache                    Adds support for cache using EHCache (https://www.ehcache.org/)
+  cache-hazelcast                  Adds support for cache using Hazelcast (https://hazelcast.org/)
+  cache-infinispan                 Adds support for cache using Infinispan (https://infinispan.org/)
+
+----

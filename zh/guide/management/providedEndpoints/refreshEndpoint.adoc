@@ -1,0 +1,32 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – The Refresh Endpoint](https://docs.micronaut.io/5.2.x/core/#core-refreshEndpoint)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/management/providedEndpoints/refreshEndpoint.adoc  upstream_commit: 41131456aad0338e21715e5053d9ec7cc8da8e50  upstream_hash: 4f8b1a661d0f11d6e08ddda9032b04d37b16b3f6  translated_at: 2026-11-21 -->
+
+refresh 端点刷新应用状态，使上下文中的所有 link:{api}/io/micronaut/runtime/context/scope/Refreshable.html[Refreshable] bean 被销毁并在后续请求时重新实例化。这通过在应用上下文中发布 api:runtime.context.scope.refresh.RefreshEvent[] 实现。
+
+要执行 refresh 端点，请向 /refresh 发送 POST 请求。
+
+[source,bash]
+----
+$ curl -X POST http://localhost:8080/refresh
+----
+
+不带请求体执行时，该端点首先刷新 link:{api}/io/micronaut/context/env/Environment.html[Environment] 并执行 diff 以检测变化，只有在检测到变化时才执行刷新。要跳过此检查并无视环境变化刷新所有 `@Refreshable` bean（例如强制刷新来自第三方服务的缓存响应），请在 POST 请求体中添加 `force` 参数。
+
+[source,bash]
+----
+$ curl -X POST http://localhost:8080/refresh -H 'Content-Type: application/json' -d '{"force": true}'
+----
+
+[[refreshEndpoint]]
+== 配置
+
+要配置 refresh 端点，请通过 `endpoints.refresh` 提供配置。
+
+.Beans 端点配置示例
+[configuration]
+----
+endpoints:
+  refresh:
+    enabled: Boolean
+    sensitive: Boolean
+----

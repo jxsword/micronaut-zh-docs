@@ -1,6 +1,6 @@
 # 交接文档（handoff-latest）
 
-> 更新：2026-11-21 ｜ 会话：M2 分批翻译（**B07–B27 共二十一批全部完成并提交**，进度 88.0%）｜ 下一会话任务：M2 继续分批翻译（B28 起）
+> 更新：2026-11-21 ｜ 会话：M2 分批翻译（**B07–B28 共二十二批全部完成并提交**，进度 93.5%）｜ 下一会话任务：M2 继续分批翻译（B29 起，仅剩 4 批）
 
 ## 已完成清单（全部已提交，main 分支）
 
@@ -29,17 +29,18 @@
 | **B24 翻译批次** | `bec14a9` | 5 文件（python 子组：nestedTypes/pythonExceptions/functionalInterfaces/javaInterfaces/generatedClasses）；词数 3170/段落 93；锚点 1 处（[[generatedClasses]] 页内标题锚，注入 `== 嵌套类` 之前，B23 title 字段教训落实）；validate 首轮 3/5（⑦ 邻接 ×2）修复后全绿；reviewer 5/5 首轮零缺陷；restore 5/5 首轮全过；python 子章 17/24，languageSupport 章 24/50 |
 | **B25 翻译批次** | `66ed897` | 7 文件（python 子组：aopProxies/extendingJavaClasses/moduleScripts+testing/graalTools/asyncAwait/asyncioRuntime）；词数 2996/段落 111；锚点 2 处（[[extendingJavaClasses]] 标题锚消解 B24 豁免 + [[moduleScripts]] basename 锚消解既有豁免 routing→moduleScripts）；validate 首轮 4/7（⑦ ×3 + ④ 标题未译 ×2——工具名补译名括注）修复后全绿；reviewer 7/7 首轮零缺陷；restore 7/7 首轮全过；**python 子章 24/24 全章译出（第十四个全章）**，languageSupport 章 31/50 |
 | **B26 翻译批次** | `a1e663f` | 14 文件（asyncio 组 3 + kotlin 章 11）；词数 3407/段落 160；锚点 2 处（[[asyncioNetworking]]/[[asyncioStreaming]] 标题锚）；**占位符多重集校验在 restore 前拦截 2 处真缺陷**（原文复指处误重复占位符——新错误模式）；validate 首轮 11/14（⑦ ×3）修复后全绿；reviewer 14/14 首轮零缺陷；**kotlin 子章 14/14 全章译出（第十五个全章组）**；languageSupport 章 45/50 |
-| **B27 翻译批次** | 本次提交 | 17 文件（kotlinContextPropagation + graal 组 3 + management 章 13）；词数 3469/段落 273；锚点 6 处（[[graal]] 标题锚消解既有豁免 + 5 处批内/半批内闭环；beansEndpoint/infoEndpoint 首轮误置文件首，自查 registry title 后纠正）；validate 首轮 13/17（⑦ ×5）修复后全绿；reviewer 17/17 首轮零缺陷；graalServices 78 段/761 词批次最重；**languageSupport 章 49/50（仅剩 overloads@B32）**；management 章 12/27 |
+| **B27 翻译批次** | `3546854` | 17 文件（kotlinContextPropagation + graal 组 3 + management 章 13）；词数 3469/段落 273；锚点 6 处（[[graal]] 标题锚消解既有豁免 + 5 处批内/半批内闭环；beansEndpoint/infoEndpoint 首轮误置文件首，自查 registry title 后纠正）；validate 首轮 13/17（⑦ ×5）修复后全绿；reviewer 17/17 首轮零缺陷；graalServices 78 段/761 词批次最重；**languageSupport 章 49/50（仅剩 overloads@B32）**；management 章 12/27 |
+| **B28 翻译批次** | 本次提交 | 21 文件（management 余 15 + security + multitenancy + cli 组 3）；词数 3023/段落 213；锚点 8 处（[[cli]] 标题锚消解既有豁免 ×2 + 7 处批内/半批内闭环）；validate 逐个 --file **首轮 21/21 全绿（与 B20 并列批次内零修正纪录）**；reviewer 21/21 首轮零缺陷；**management 章 27/27 全章译出（第十六个全章）**；**⑤ 豁免 11→7（−4 消解 +0 新增）——清零在射程内**；cli 章 3/10 起步 |
 
-## 状态快照（2026-11-21，B27 收尾）
+## 状态快照（2026-11-21，B28 收尾）
 
 - 分支 main；基线 v5.2.25（`0b46d27afdfa`，快照日期 2026-11-20）；全部批次冻结窗口遵守（未跑 --apply）
-- manifest：388 条目 = 46 missing + 2 skipped + **340 current**（进度 88.0%，剔 skipped 口径）
-- 看板：B01–B27 = current，其余 5 批 pending
-- anchor-registry：121 条（不变）；validate 全量跑：PASSED（340 文件，⑤ 豁免警告 11 条——B27 −1 消解 +1 新增净 0，M3 清零）
+- manifest：388 条目 = 25 missing + 2 skipped + **361 current**（进度 93.5%，剔 skipped 口径）
+- 看板：B01–B28 = current，其余 4 批 pending（B29 14 文件、B30 4 文件、B31 3 文件、B32 2 文件——合计 23 文件即全库初译完成）
+- anchor-registry：121 条（不变）；validate 全量跑：PASSED（361 文件，⑤ 豁免警告 **7 条**——B28 −4 消解 +0 新增：剩余 proxy（B29）、i18n（M3 专项）、breaks ×3（B32）、裸锚点 ×2（M3 跟踪））
 - 页头溯源投影：页名=toc 英文原题、URL=`https://docs.micronaut.io/5.2.x/core/#core-<basename>`、基线锁定日期 2026-11-19、translated_at=2026-11-21
-- reports/progress.md 已重新生成（**十五个全章**：introduction、quickStart、IoC、config、aop、httpServer、httpClient、cloud、serverlessFunctions、messaging、commandLineApps、configurations、logging、languageSupport/python 24/24、languageSupport/kotlin 14/14；languageSupport 章 49/50 仅剩 overloads@B32）
-- **会话累计**：本会话完成 B07–B27 二十一批共 243 文件，进度 73→340（+267 文件，18.8%→88.0%）
+- reports/progress.md 已重新生成（**十六个全章**：introduction、quickStart、IoC、config、aop、httpServer、httpClient、cloud、serverlessFunctions、messaging、commandLineApps、configurations、logging、languageSupport/python、languageSupport/kotlin、**management 27/27**；languageSupport 49/50、guide 行 20/25、cli 章 3/10）
+- **会话累计**：本会话完成 B07–B28 二十二批共 264 文件，进度 73→361（+288 文件，18.8%→93.5%）
 
 ## 实测结论（累计，下一会话必读）
 
@@ -54,7 +55,7 @@
 9. **大批次工作法（B12–B21 验证）**：先全量 protect（核对占位符总数）→ 逐组翻译（35 文件按 8 组推进）→ 批量 restore（核对 restored 数 = 输入数）→ 批量 assemble → 逐文件 validate → reviewer → mark-current。B21 全程最大批次（35 文件）顺利收官。
 10. **读 progress.md 必须核对列位**（B13 教训）；「报告声称注入的锚点」须与 zh 实际核对（B16 教训，B21 已执行 7/7 grep 核对）；相邻章节接续语段落须核对归属文件（B18 教训）。
 11. **CLI 语境 feature 保留不译**：B20 Consul + B21 8 文件（sqlSupport/hibernateSupport/mongo/neo4j/postgres/redis/cassandra/groovy）口径一致；B26–B28 cli/createProject 落盘时继续沿用。
-12. **reviewer 模板**：/tmp/b27_reviewer.py 为当前模板（临时不入库；复用 `vt.check_terms` 与 validate ③ 同源；含 NEED_ANCHOR 首行与标题锚前置两种位置检查）。**临时脚本一律用 Write 工具创建并先 py_compile 再运行**。
+12. **reviewer 模板**：/tmp/b28_reviewer.py 为当前模板（临时不入库；复用 `vt.check_terms` 与 validate ③ 同源；含 NEED_ANCHOR 首行与标题锚前置两种位置检查）。**临时脚本一律用 Write 工具创建并先 py_compile 再运行**。
 15. **commit message 含反引号必须用 `git commit -F <消息文件>`**（消息文件经 Write 工具落盘）：B24 曾因 bash 命令替换吞掉反引号包裹的「== 嵌套类」片段，amend 修复；正文内引用标题/占位符等含反引号或 `$` 内容时一律走 -F。
 16. **占位符出现次数校验拦截复指重复（B26 新错误模式）**：原文用「one/a + 限定的名词」复指前文占位符时（如 "a `sendto` after that, or one whose name resolution..."），译文只能出现一次该占位符，复指处用代词/名词回指；多重集校验（/tmp/b21_phcheck.py）在 restore 前即拦截，是第 6 道门禁。
 13. **glossary 滚动回流（B22 新错误模式）**：新术语写回 glossary.yml 后必须立即跑全量 validate——③ 必译检查扩及全部已译文件，既有文件若源文含该词而译文未用新译名即报错。修法按 B11/B13 先例：宏路径误触→补首现括注；真实命中旧译→统一为新译名（B22 实证 3 处：evaluatedExpressions/annotationMetadata 补「（类型元素访问者）」括注、classImport「访问器」→「访问者」）。收录 Python 章复现术语前先 grep 既有 zh 是否已有旧译，可提前预判回流面。

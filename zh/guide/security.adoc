@@ -1,0 +1,6 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Security](https://docs.micronaut.io/5.2.x/core/#core-security)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/security.adoc  upstream_commit: 51650efcb97939ef02bf726bdcb28266b7ca20d1  upstream_hash: a2e6045108330d7e09bf04f56702f732e2354b97  translated_at: 2026-11-21 -->
+
+Micronaut 框架为所有常见安全模式提供了功能齐全的安全解决方案。
+
+有关如何保护您的应用的更多信息，请参阅 link:https://micronaut-projects.github.io/micronaut-security/latest/guide/[Micronaut Security] 文档。

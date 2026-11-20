@@ -1,0 +1,20 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – The Metrics Endpoint](https://docs.micronaut.io/5.2.x/core/#core-metricsEndpoint)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/management/providedEndpoints/metricsEndpoint.adoc  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360  upstream_hash: 2ef310bd9e33ab3caa667e949479e4142371b590  translated_at: 2026-11-21 -->
+
+[[metricsEndpoint]]
+Micronaut 框架可以通过与 https://micrometer.io[Micrometer] 的集成暴露应用指标。
+
+[TIP]
+.使用 CLI
+====
+如果您使用 Micronaut CLI 创建项目，请提供任一 micrometer feature 以启用指标并在项目中预配置所选注册表。例如：
+----
+$ mn create-app my-app --features micrometer-atlas
+----
+====
+
+metrics 端点返回应用「指标」的信息。要执行 metrics 端点，请向 `/metrics` 发送 GET 请求，它将返回可用指标名称的列表。
+
+您可以通过 `/metrics/[name]` 获取特定指标，例如 `/metrics/jvm.memory.used`。
+
+可用注册表列表以及如何配置、暴露与定制指标输出的信息，请参阅 https://micronaut-projects.github.io/micronaut-micrometer/latest/guide/[Micronaut Micrometer] 文档。

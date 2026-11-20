@@ -1,0 +1,22 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Health Monitor Task](https://docs.micronaut.io/5.2.x/core/#core-healthMonitoringTask)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/management/providedEndpoints/healthEndpoint/healthMonitoringTask.adoc  upstream_commit: 74ae026c5db6ae318349dc3013ac6c9a3fbe95a8  upstream_hash: 72a5999a72534c879a0f818c44d879961e8ce30b  translated_at: 2026-11-21 -->
+
+使用 api:runtime.server.EmbeddedServer[] 时，可以通过以下应用配置启用一个在后台线程中更新 api:health.CurrentHealthStatus[] 的持续健康监视器：
+
+[configuration]
+----
+micronaut:
+  application:
+    name: foo
+  health:
+    monitor:
+      enabled: true
+----
+- 要启用监视器后台任务，两个配置属性都必须设置。
+
+与 `DefaultHealthAggregator` 类似，它也会为健康指示器的状态与详情输出日志语句。为此请使用以下 logger 配置：
+
+[source,xml]
+----
+<logger name="io.micronaut.management.health.monitor.HealthMonitorTask" level="trace" />
+----

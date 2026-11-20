@@ -1,0 +1,219 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Creating a Project](https://docs.micronaut.io/5.2.x/core/#core-createProject)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/cli/createProject.adoc  upstream_commit: 7dd6cb2ab4ab3a02c16fae3691798313b8a880fc  upstream_hash: bb228133847e294a2375cc2db9c1afa954a2e74a  translated_at: 2026-11-21 -->
+
+创建项目是 CLI 的主要用途。创建新项目的主命令是 `create-app`，它创建通过 HTTP 通信的标准服务器应用。其他类型的应用请参阅下方文档。
+
+.Micronaut CLI 项目创建命令
+[cols="1,2,2,4"]
+|===
+|命令|描述|选项|示例
+
+|`create-app`
+|创建一个基本的 Micronaut 应用。
+a|
+* `-l`, `--lang`
+* `-t`, `--test`
+* `-b`, `--build`
+* `-f`, `--features`
+* `-i`, `--inplace`
+a|
+[source,bash]
+----
+mn create-app my-project --features
+ mongo-reactive,security-jwt --build maven
+----
+
+|`create-cli-app`
+|创建一个命令行 Micronaut 应用。
+a|
+* `-l`, `--lang`
+* `-t`, `--test`
+* `-b`, `--build`
+* `-f`, `--features`
+* `-i`, `--inplace`
+a|
+[source,bash]
+----
+mn create-cli-app my-project --features
+ http-client,jdbc-hikari --build maven
+ --lang kotlin --test kotest
+----
+
+|`create-function-app`
+|创建一个 Micronaut Serverless 函数，默认使用 AWS。
+a|
+* `-l`, `--lang`
+* `-t`, `--test`
+* `-b`, `--build`
+* `-f`, `--features`
+* `-i`, `--inplace`
+a|
+[source,bash]
+----
+mn create-function-app my-lambda-function
+ --lang groovy --test spock
+----
+
+|`create-messaging-app`
+|创建一个仅通过消息协议通信的 Micronaut 应用。默认使用 Kafka，可通过 `--features rabbitmq` 切换为 RabbitMQ。
+a|
+* `-l`, `--lang`
+* `-t`, `--test`
+* `-b`, `--build`
+* `-f`, `--features`
+* `-i`, `--inplace`
+a|
+[source,bash]
+----
+mn create-messaging-app my-broker
+ --lang groovy --test spock
+----
+
+|`create-grpc-app`
+|创建一个使用 gRPC 的 Micronaut 应用。
+a|
+* `-l`, `--lang`
+* `-t`, `--test`
+* `-b`, `--build`
+* `-f`, `--features`
+* `-i`, `--inplace`
+a|
+[source,bash]
+----
+mn create-grpc-app my-grpc-app
+ --lang groovy --test spock
+----
+
+|===
+
+== Create 命令 flag
+
+create-* 命令生成一个基本的 Micronaut 项目，并带有用于指定 feature、语言、测试框架与构建工具的可选 flag。除函数外的所有项目都包含用于启动应用的默认 `Application` 类。
+
+.Flags
+[cols="2,3,3"]
+|===
+|flag|描述|示例
+
+|`-l`, `--lang`
+|项目使用的语言（`java`、`groovy`、`kotlin` 之一——默认为 `java`）
+|`--lang groovy`
+
+|`-t`, `--test`
+|项目使用的测试框架（`junit`、`spock` 之一——默认为 `junit`）
+|`--test spock`
+
+|`-b`, `--build`
+|构建工具（`gradle`、`gradle_kotlin`、`maven` 之一——语言 `java` 与 `groovy` 默认为 `gradle`；语言 `kotlin` 默认为 `gradle_kotlin`）
+|`--build maven`
+
+|`-f`, `--features`
+|项目使用的 feature，逗号分隔
+a|
+[source,bash]
+----
+--features security-jwt,mongo-reactive
+----
+或
+[source,bash]
+----
+-f security-jwt -f mongo-reactive
+----
+
+|`-i`, `--inplace`
+|如提供，则在当前目录生成项目（设置此 flag 时项目名可选）
+|`--inplace`
+
+|===
+
+创建完成后，可以使用 `Application` 类或相应的构建工具任务启动应用。
+
+.启动 Gradle 项目
+[source,bash]
+----
+$ ./gradlew run
+----
+
+.启动 Maven 项目
+[source,bash]
+----
+$ ./mvnw mn:run
+----
+
+=== 语言/测试 feature
+
+默认情况下，create 命令生成一个以 JUnit 为测试框架的 Java 应用。所选的全部选项与应用的 feature 都作为属性存储在 `micronaut-cli.yml` 文件中，如下所示：
+
+.micronaut-cli.yml
+[source,yaml]
+----
+applicationType: default
+defaultPackage: com.example
+testFramework: junit
+sourceLanguage: java
+buildTool: gradle
+features: [annotation-api, app-name, application, gradle, http-client, java, junit, logback, netty-server, shade, yaml]
+----
+
+一些命令依赖该文件中的数据来决定是否可执行。例如，`create-kafka-listener` 命令要求 `kafka` 是列表中的 feature 之一。
+
+NOTE: `micronaut-cli.yml` 中的值由 CLI 用于代码生成。项目生成后，您可以编辑这些值以更改项目默认值，但您必须提供所选语言/框架所需的依赖和/或配置。例如，您可以把 `testFramework` 属性改为 `spock`，使 CLI 在运行命令（如 `create-controller`）时生成 Spock 测试，但您需要向构建中添加 Spock 依赖。
+
+==== Groovy
+
+要创建支持 Groovy 的应用（默认使用 Spock），请通过 `lang` flag 提供相应语言：
+
+[source,bash]
+----
+$ mn create-app my-groovy-app --lang groovy
+----
+
+这会在项目中包含 Groovy 与 Spock 依赖，并把相应的值写入 `micronaut-cli.yml`。
+
+==== Kotlin
+
+要创建支持 Kotlin 的应用（默认使用 Kotest），请通过 `lang` flag 提供相应语言：
+
+[source,bash]
+----
+$ mn create-app my-kotlin-app --lang kotlin
+----
+
+这会在项目中包含 Kotlin 与 Kotest 依赖，并把相应的值写入 `micronaut-cli.yml`。
+
+=== 构建工具
+
+默认情况下，`create-app` 创建一个 Gradle 项目，项目根目录中带有 `build.gradle` 文件。要创建使用 Maven 构建工具的应用，请通过 `build` flag 提供相应选项：
+
+[source,bash]
+----
+$ mn create-app my-maven-app --build maven
+----
+
+== Create-Cli-App
+
+`create-cli-app` 命令生成一个 <<commandLineApps,Micronaut 命令行应用>> 项目，带有用于指定语言、测试框架、feature、profile 与构建工具的可选 flag。默认情况下，项目包含支持命令行选项解析的 `picocli` feature。项目会包含一个 `*Command` 类（基于项目名，例如 `hello-world` 生成 `HelloWorldCommand`），以及一个实例化该命令并验证其能解析命令行选项的关联测试。
+
+创建完成后，可以使用 `*Command` 类或相应的构建工具任务启动应用。
+
+.启动 Gradle 项目
+[source,bash]
+----
+$ ./gradlew run
+----
+
+.启动 Maven 项目
+[source,bash]
+----
+$ ./mvnw mn:run
+----
+
+== 创建函数应用
+
+`create-function-app` 命令生成一个针对 Serverless 环境优化的 <<serverlessFunctions,Micronaut 函数>> 项目，带有用于指定语言、测试框架、feature 与构建工具的可选 flag。项目会包含一个 `*Function` 类（基于项目名，例如 `hello-world` 生成 `HelloWorldFunction`），以及一个实例化该函数并验证其能接收请求的关联测试。
+
+TIP: 目前，AWS Lambda、Micronaut Azure 与 Google Cloud 是 Micronaut 函数支持的云提供商。要使用其他提供商，请在 feature 中添加：`--features azure-function` 或 `--features google-cloud-function`。
+
+== 参与贡献
+
+CLI 源代码位于 https://github.com/micronaut-projects/micronaut-starter.，关于如何贡献的信息与其他资源都在那里。

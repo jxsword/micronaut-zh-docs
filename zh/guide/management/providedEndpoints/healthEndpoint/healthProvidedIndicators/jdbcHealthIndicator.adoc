@@ -1,0 +1,4 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – JDBC Health Indicator](https://docs.micronaut.io/5.2.x/core/#core-jdbcHealthIndicator)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/management/providedEndpoints/healthEndpoint/healthProvidedIndicators/jdbcHealthIndicator.adoc  upstream_commit: 74ae026c5db6ae318349dc3013ac6c9a3fbe95a8  upstream_hash: 3a3af9414648261bedfe67ac8402c884ed929215  translated_at: 2026-11-21 -->
+
+JDBC 健康指示器根据能否成功创建到应用上下文中数据源的连接来判定应用健康。唯一支持的配置选项是通过 `endpoints.health.jdbc.enabled` 键启用或禁用该指示器。

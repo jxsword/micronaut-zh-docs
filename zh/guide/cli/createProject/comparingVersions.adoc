@@ -1,0 +1,4 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Comparing Versions](https://docs.micronaut.io/5.2.x/core/#core-comparingVersions)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/cli/createProject/comparingVersions.adoc  upstream_commit: ede1891bd681062e0992d54fd437b71a40782343  upstream_hash: 6767dcc2d477d56f0739ec3f9797642af06cb41b  translated_at: 2026-11-21 -->
+
+查看新版本 Micronaut 的依赖版本更新与其他变更的最简单方式是：使用旧版本与新版本的 `mn` CLI 分别生成一个干净的应用，然后比较这两个目录。

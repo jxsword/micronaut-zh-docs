@@ -1,0 +1,103 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – The Environment Endpoint](https://docs.micronaut.io/5.2.x/core/#core-environmentEndpoint)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/management/providedEndpoints/environmentEndpoint.adoc  upstream_commit: 5042be620a2299b382a7d4bdaad2adb1438093bd  upstream_hash: 35aa042e0d6242b5c67d4960c9cb11fbb876c144  translated_at: 2026-11-21 -->
+
+environment 端点返回 api:context.env.Environment[] 及其 api:context.env.PropertySource[] 的信息。
+
+[[environmentEndpoint]]
+== 配置
+
+要启用并配置 environment 端点，请通过 `endpoints.env` 提供配置。
+
+.Environment 端点配置示例
+[configuration]
+----
+endpoints:
+  env:
+    enabled: Boolean
+    sensitive: Boolean
+    active-keys: List<String>
+----
+
+- `enabled` 默认为 false，`sensitive` 默认为 true
+- `active-keys` 默认为 ["activeEnvironments", "packages", "propertySources"]
+
+`active-keys` 属性允许您自定义环境信息显示哪些部分。
+您可以指定以下一个或多个值：
+
+- `activeEnvironments`
+- `packages`
+- `propertySources`
+
+例如，只显示活跃环境与包：
+
+[configuration]
+----
+endpoints:
+  env:
+    active-keys:
+      - activeEnvironments
+      - packages
+----
+
+如果提供空列表，则不显示任何部分。
+
+== 屏蔽敏感信息
+
+默认情况下，该端点会屏蔽所有值。
+要自定义此屏蔽，您需要提供一个实现 api:management.endpoint.env.EnvironmentEndpointFilter[] 的 bean。
+
+第一个示例将屏蔽所有值，但以 `safe` 为前缀的值除外
+
+.环境屏蔽示例一
+[source,java]
+----
+@Singleton
+public class OnlySafePrefixedEnvFilter implements EnvironmentEndpointFilter {
+    private static final Pattern SAFE_PREFIX_PATTERN = Pattern.compile("safe.*", Pattern.CASE_INSENSITIVE);
+
+    @Override
+    public void specifyFiltering(@NotNull EnvironmentFilterSpecification specification) {
+        specification
+                .maskAll() // All values will be masked apart from the supplied patterns
+                .exclude(SAFE_PREFIX_PATTERN);
+    }
+}
+----
+
+也可以使用 api:management.endpoint.env.EnvironmentFilterSpecification#maskNone--[`maskNone()`] 允许所有值以明文显示，然后再指定将被屏蔽的名称模式，即：
+
+.拒绝而非允许
+[source,java]
+----
+@Singleton
+public class AllPlainExceptSecretOrMatchEnvFilter implements EnvironmentEndpointFilter {
+    // Mask anything starting with `sekrt`
+    private static final Pattern SECRET_PREFIX_PATTERN = Pattern.compile("sekrt.*", Pattern.CASE_INSENSITIVE);
+
+    // Mask anything exactly matching `exact-match`
+    private static final String EXACT_MATCH = "exact-match";
+
+    // Mask anything that starts with `private.`
+    private static final Predicate<String> PREDICATE_MATCH = name -> name.startsWith("private.");
+
+    @Override
+    public void specifyFiltering(@NotNull EnvironmentFilterSpecification specification) {
+        specification
+                .maskNone() // All values will be in plain-text apart from the supplied patterns
+                .exclude(SECRET_PREFIX_PATTERN)
+                .exclude(EXACT_MATCH)
+                .exclude(PREDICATE_MATCH);
+    }
+}
+----
+
+通过调用 api:management.endpoint.env.EnvironmentFilterSpecification#legacyMasking--[`legacyMasking()`] 方法可以应用合理的默认值。
+这将显示所有值，但名称中任意位置包含 `password`、`credential`、`certificate`、`key`、`secret` 或 `token` 字样的值除外。
+
+== 获取环境信息
+
+要执行该端点，请向 `/env` 发送 `GET` 请求。
+
+== 获取特定 `PropertySource` 的信息
+
+要执行该端点，请向 `/env/{propertySourceName}` 发送 `GET` 请求。

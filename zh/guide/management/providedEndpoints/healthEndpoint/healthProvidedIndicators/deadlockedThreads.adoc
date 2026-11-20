@@ -1,0 +1,54 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Deadlocked Threads](https://docs.micronaut.io/5.2.x/core/#core-deadlockedThreads)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/management/providedEndpoints/healthEndpoint/healthProvidedIndicators/deadlockedThreads.adoc  upstream_commit: 130cfede2d9a325faf7016bf10e0a2060c5a3cbd  upstream_hash: 0ae42547b6b61209e064f3db0ff8a01fe3a2f310  translated_at: 2026-11-21 -->
+
+死锁线程健康指示器使用 link:{jdkapi}/java.management/java/lang/management/ThreadMXBean.html[ThreadMXBean] 检查是否存在死锁线程，属于 `/health` 与 `/health/liveness` 端点的一部分。
+
+它唯一的配置选项是通过 `endpoints.health.deadlocked-threads.enabled` 键启用或禁用该指示器。默认启用。
+
+WARNING: https://github.com/oracle/graal/issues/6101[`ThreadMXBean` 在 GraalVM Native Image 中不受支持]
+
+如果发现死锁线程，健康状态会被设为 api:health.HealthStatus#DOWN[DOWN]，其 link:{jdkapi}/java.management/java/lang/management/ThreadInfo.html[ThreadInfo]（含格式化的堆栈跟踪）会在详情中给出。示例如下。
+
+[source,json]
+----
+{
+    "name": "example-app",
+    "status": "DOWN",
+    "details": {
+        "deadlockedThreads": {
+            "name": "example-app",
+            "status": "DOWN",
+            "details": [
+                {
+                    "threadId": "60",
+                    "threadName": "Thread-0",
+                    "threadState": "BLOCKED",
+                    "daemon": "false",
+                    "priority": "5",
+                    "suspended": "false",
+                    "inNative": "false",
+                    "lockName": "java.lang.Object@7d10b1ca",
+                    "lockOwnerName": "Thread-1",
+                    "lockOwnerId": "61",
+                    "lockedSynchronizers": [],
+                    "stackTrace": "app//com.example.Deadlock.lambda$new$0(Deadlock.java:27)\n-  blocked on java.lang.Object@7d10b1ca\n-  locked java.lang.Object@4505ea74\napp//com.example.Deadlock$$Lambda/0x000001906948b360.run(Unknown Source)\njava.base@21/java.lang.Thread.runWith(Thread.java:1596)\njava.base@21/java.lang.Thread.run(Thread.java:1583)\n"
+                },
+                {
+                    "threadId": "61",
+                    "threadName": "Thread-1",
+                    "threadState": "BLOCKED",
+                    "daemon": "false",
+                    "priority": "5",
+                    "suspended": "false",
+                    "inNative": "false",
+                    "lockName": "java.lang.Object@4505ea74",
+                    "lockOwnerName": "Thread-0",
+                    "lockOwnerId": "60",
+                    "lockedSynchronizers": [],
+                    "stackTrace": "app//com.example.Deadlock.lambda$new$1(Deadlock.java:43)\n-  blocked on java.lang.Object@4505ea74\n-  locked java.lang.Object@7d10b1ca\napp//com.example.Deadlock$$Lambda/0x000001906948b580.run(Unknown Source)\njava.base@21/java.lang.Thread.runWith(Thread.java:1596)\njava.base@21/java.lang.Thread.run(Thread.java:1583)\n"
+                }
+            ]
+        }
+    }
+}
+----

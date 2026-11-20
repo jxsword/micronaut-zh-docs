@@ -1,0 +1,4 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Multi-Tenancy](https://docs.micronaut.io/5.2.x/core/#core-multitenancy)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/multitenancy.adoc  upstream_commit: ede1891bd681062e0992d54fd437b71a40782343  upstream_hash: ff7c36fdaf2daa7a37c0c38d57a1d325e68dda9a  translated_at: 2026-11-21 -->
+
+请参阅 link:https://micronaut-projects.github.io/micronaut-multitenancy/latest/guide[Micronaut Multitenancy 文档]，了解 Micronaut 对多租户感知 Micronaut 应用的租户解析等常见任务的支持。

@@ -1,0 +1,6 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – The Caches Endpoint](https://docs.micronaut.io/5.2.x/core/#core-cachesEndpoint)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/management/providedEndpoints/cachesEndpoint.adoc  upstream_commit: 50eee0a3161e6395029dab343477e01c676d2d03  upstream_hash: 135d44be0fcfb5de3865efb837c097465b689cc2  translated_at: 2026-11-21 -->
+
+
+[[cachesEndpoint]]
+caches 端点的文档可在 https://micronaut-projects.github.io/micronaut-cache/latest/guide/index.html#endpoint[micronaut-cache 项目] 查看。

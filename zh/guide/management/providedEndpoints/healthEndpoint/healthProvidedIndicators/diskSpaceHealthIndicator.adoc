@@ -1,0 +1,20 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Disk Space Health Indicator](https://docs.micronaut.io/5.2.x/core/#core-diskSpaceHealthIndicator)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/management/providedEndpoints/healthEndpoint/healthProvidedIndicators/diskSpaceHealthIndicator.adoc  upstream_commit: 74ae026c5db6ae318349dc3013ac6c9a3fbe95a8  upstream_hash: be0a2c5ac032addedc4d3e5f1d17ee75d3b5feba  translated_at: 2026-11-21 -->
+
+框架提供一个基于可用磁盘空间判定应用健康的健康指示器。磁盘空间健康指示器的配置可在 `endpoints.health.disk-space` 键下提供。
+
+.磁盘空间指示器配置示例
+[configuration]
+----
+endpoints:
+  health:
+    disk-space:
+      enabled: Boolean
+      path: String
+      threshold: String | Long
+----
+
+- `path` 指定用于确定磁盘空间的路径
+- `threshold` 指定最小可用空间
+
+阈值可以提供为「10MB」或「200KB」这样的字符串，也可以是字节数。

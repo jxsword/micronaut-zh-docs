@@ -1,0 +1,22 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – The Server Stop Endpoint](https://docs.micronaut.io/5.2.x/core/#core-stopEndpoint)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/management/providedEndpoints/stopEndpoint.adoc  upstream_commit: 41131456aad0338e21715e5053d9ec7cc8da8e50  upstream_hash: c61d9efbd3d27c88fa4875db64803aa86c4a7db2  translated_at: 2026-11-21 -->
+
+stop 端点会关闭应用服务器。
+
+要执行 stop 端点，请向 /stop 发送 POST 请求。
+
+[[stopEndpoint]]
+== 配置
+
+要配置 stop 端点，请通过 `endpoints.stop` 提供配置。
+
+.Stop 端点配置示例
+[configuration]
+----
+endpoints:
+  stop:
+    enabled: Boolean
+    sensitive: Boolean
+----
+
+NOTE: 默认情况下 stop 端点是禁用的，必须显式启用才能使用。

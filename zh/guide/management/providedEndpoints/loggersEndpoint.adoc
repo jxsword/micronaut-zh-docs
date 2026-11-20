@@ -1,0 +1,89 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – The Loggers Endpoint](https://docs.micronaut.io/5.2.x/core/#core-loggersEndpoint)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/management/providedEndpoints/loggersEndpoint.adoc  upstream_commit: 41131456aad0338e21715e5053d9ec7cc8da8e50  upstream_hash: c4062c4796aa4770d32e0fa95f970f34d2d27f9f  translated_at: 2026-11-21 -->
+
+loggers 端点返回应用中可用 logger 的信息，并允许配置其日志级别。
+
+NOTE: loggers 端点默认禁用，必须通过 `endpoints.loggers.enabled=true` 设置显式启用。
+
+要获取按名称排列的所有 logger 及其已配置与生效日志级别的集合，请向 /loggers 发送 GET 请求。这也会提供可用日志级别的列表。
+
+[source,bash]
+----
+$ curl http://localhost:8080/loggers
+
+{
+    "levels": [
+        "ALL", "TRACE", "DEBUG", "INFO", "WARN", "ERROR", "OFF", "NOT_SPECIFIED"
+    ],
+    "loggers": {
+        "ROOT": {
+            "configuredLevel": "INFO",
+            "effectiveLevel": "INFO"
+        },
+        "io": {
+            "configuredLevel": "NOT_SPECIFIED",
+            "effectiveLevel": "INFO"
+        },
+        "io.micronaut": {
+            "configuredLevel": "NOT_SPECIFIED",
+            "effectiveLevel": "INFO"
+        },
+        // etc...
+    }
+}
+----
+
+要获取特定 logger 的日志级别，请在 GET 请求中包含 logger 名称。例如，要访问 logger「io.micronaut.http」的日志级别：
+
+[source,bash]
+----
+$ curl http://localhost:8080/loggers/io.micronaut.http
+
+{
+    "configuredLevel": "NOT_SPECIFIED",
+    "effectiveLevel": "INFO"
+}
+----
+
+如果指定的 logger 不存在，它会以未指定（即 `NOT_SPECIFIED`）的已配置日志级别创建（其生效日志级别通常为 root logger 的级别）。
+
+要更新单个 logger 的日志级别，请向该 logger 的 URL 发送 POST 请求，并在请求体中提供要配置的日志级别。
+
+[source,bash]
+----
+$ curl -i -X POST \
+       -H "Content-Type: application/json" \
+       -d '{ "configuredLevel": "ERROR" }' \
+       http://localhost:8080/loggers/ROOT
+
+HTTP/1.1 200 OK
+
+$ curl http://localhost:8080/loggers/ROOT
+
+{
+    "configuredLevel": "ERROR",
+    "effectiveLevel": "ERROR"
+}
+----
+
+[[loggersEndpoint]]
+== 配置
+
+要配置 loggers 端点，请通过 `endpoints.loggers` 提供配置。
+
+.Loggers 端点配置示例
+[configuration]
+----
+endpoints:
+  loggers:
+    enabled: Boolean
+    sensitive: Boolean
+----
+
+NOTE: 默认情况下，该端点不允许未认证用户更改日志级别（即使 `sensitive` 设为 `false`）。要允许此操作，您必须将 `endpoints.loggers.write-sensitive` 设为 `false`。
+
+== 定制
+
+loggers 端点由两个可定制部分组成：api:management.endpoint.loggers.LoggersManager[] 与 api:logging.LoggingSystem[]。自定义日志系统的信息请参阅文档的 <<logging,日志章节>>。
+
+api:management.endpoint.loggers.LoggersManager[] 负责检索与设置日志级别。如果默认实现不满足您的使用场景，只需提供自己的实现，并用 ann:context.annotation.Replaces[] 注解替换 api:management.endpoint.loggers.impl.DefaultLoggersManager[默认实现]。

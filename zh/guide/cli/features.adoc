@@ -1,0 +1,17 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Features](https://docs.micronaut.io/5.2.x/core/#core-features)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/cli/features.adoc  upstream_commit: eb891b91ca2ab6aa90a1dd6dde328e8c354bacdb  upstream_hash: 16ed35485c244a34aa0ab09a74e3d19355f89a79  translated_at: 2026-11-21 -->
+
+feature 由为应用启用特定功能的附加依赖与配置组成。Micronaut profile 定义了大量 feature，包括 Micronaut 提供的许多配置对应的 feature，例如 <<dataAccess,数据访问配置>>
+
+[source,bash]
+----
+$ mn create-app my-demo-app --features mongo-reactive
+----
+
+这会为您的应用添加 https://mongodb.github.io/mongo-java-driver-reactivestreams[MongoDB Reactive Driver] 所需的依赖与配置。无论使用哪个 create 命令，都可以用 `--list-features` flag 查看可用 feature。
+
+[source,bash]
+----
+$ mn create-app --list-features # Output will be supported features for the create-app command
+$ mn create-function-app --list-features # Output will be supported features for the create-function-app command, different from above.
+----

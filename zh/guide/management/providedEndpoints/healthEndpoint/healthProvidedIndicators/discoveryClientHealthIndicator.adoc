@@ -1,0 +1,4 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Discovery Client Health Indicator](https://docs.micronaut.io/5.2.x/core/#core-discoveryClientHealthIndicator)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/management/providedEndpoints/healthEndpoint/healthProvidedIndicators/discoveryClientHealthIndicator.adoc  upstream_commit: 74ae026c5db6ae318349dc3013ac6c9a3fbe95a8  upstream_hash: 094368b60d9e10353f529ff4167d38dcda3337c9  translated_at: 2026-11-21 -->
+
+如果您的应用使用服务发现（Service Discovery），会包含一个监控发现客户端健康状态的健康指示器。返回的数据可以包含可用服务的列表。
