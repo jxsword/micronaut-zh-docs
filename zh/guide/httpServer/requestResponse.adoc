@@ -1,0 +1,56 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – The HttpRequest and HttpResponse](https://docs.micronaut.io/5.2.x/core/#core-requestResponse)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/requestResponse.adoc  upstream_commit: 1db1fb2cca43ee8084305cb50c2bde86bb7443f2  upstream_hash: 3e299648c2820ead76677bdb1fd3895a60a8c4b6  translated_at: 2026-11-21 -->
+
+如果您需要对请求处理有更多控制，可以编写一个接收完整 api:io.micronaut.http.HttpRequest[] 的方法。
+
+实际上，有多个更高级别的接口可以绑定到控制器方法参数，包括：
+
+.可绑定的 Micronaut 接口
+|===
+|接口 |说明 |示例
+
+|api:io.micronaut.http.HttpRequest[]
+|完整的 `HttpRequest`
+|`String hello(HttpRequest request)`
+
+|api:io.micronaut.http.HttpHeaders[]
+|请求中存在的所有 HTTP 请求头
+|`String hello(HttpHeaders headers)`
+
+|api:io.micronaut.http.HttpParameters[]
+|请求中存在的所有 HTTP 参数（来自 URI 变量或请求参数）
+|`String hello(HttpParameters params)`
+
+|api:io.micronaut.http.cookie.Cookies[]
+|请求中存在的所有 cookie
+|`String hello(Cookies cookies)`
+|===
+
+IMPORTANT: 如果需要请求体，api:io.micronaut.http.HttpRequest[] 应声明为以具体泛型类型参数化，例如 `HttpRequest<MyClass> request`。否则请求体可能无法从请求中获取。
+
+此外，要对发出的 HTTP 响应有完全控制，可以使用 api:io.micronaut.http.HttpResponse[] 类的静态工厂方法，它们返回 api:io.micronaut.http.MutableHttpResponse[]。
+
+下面的示例使用 api:io.micronaut.http.HttpRequest[] 与 api:io.micronaut.http.HttpResponse[] 对象实现前一个 `MessageController` 示例：
+
+snippet::io.micronaut.docs.server.request.MessageController[tags="imports,class,request,endclass", indent=0, title="Request and Response Example"]
+
+<1> 该方法映射到 URI `/hello` 并接受一个 api:io.micronaut.http.HttpRequest[]
+<2> api:http.HttpRequest[] 用于获取名为 `name` 的查询参数的值。
+<3> api:http.HttpResponse.ok(T)[] 方法返回带有文本请求体的 api:http.MutableHttpResponse[]。响应中还添加了名为 `X-My-Header` 的请求头。
+
+api:io.micronaut.http.HttpRequest[] 也可以通过 api:io.micronaut.http.context.ServerRequestContext[] 从静态上下文获取。
+
+snippet::io.micronaut.docs.server.request.MessageController[tags="imports,class,static-request,endclass", indent=0, title="Using the ServerRequestContext"]
+
+<1> 使用 api:io.micronaut.http.context.ServerRequestContext[] 检索请求。
+
+IMPORTANT: 通常 api:io.micronaut.http.context.ServerRequestContext[] 在响应式流中可用，但推荐的方式是像前一个示例那样将请求作为参数接收。如果下游方法需要请求，应将其作为参数传递给这些方法。有些情况下上下文不会传播，因为使用了其他线程来发出数据。
+
+对于 Project Reactor 用户，替代 ServerRequestContext 的方案是使用 Project Reactor 的上下文特性来检索请求。由于 Micronaut 框架使用 Project Reactor 作为其默认的响应式流实现，Project Reactor 用户可以从上下文中访问请求而获益。例如：
+
+snippet::io.micronaut.docs.server.request.MessageController[tags="imports,class,request-context,endclass", indent=0, title="Using the Project Reactor context"]
+
+<1> 创建 Mono 时携带对上下文的引用
+<2> 从上下文中检索请求
+
+使用上下文检索请求是响应式流的最佳方式，因为 Project Reactor 会传播上下文，且不像 api:io.micronaut.http.context.ServerRequestContext[] 那样依赖线程本地变量。

@@ -1,0 +1,14 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Number Precision](https://docs.micronaut.io/5.2.x/core/#core-jacksonConfigurationNumberPrecision)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/jsonBinding/jacksonConfiguration/jacksonConfigurationNumberPrecision.adoc  upstream_commit: 444c5a1d04bf4d68b1790a78563e8e84393868da  upstream_hash: 178b83a0c7437a5a185a4d29d1f8210708805f13  translated_at: 2026-11-21 -->
+
+在 JSON 解析期间，框架可能会将任何传入数据转换为中间对象模型。默认情况下，该模型对数值使用 `BigInteger`、`long` 与 `double`。这意味着 `BigDecimal` 本可表示的一些信息可能丢失。例如，具有许多小数位、无法用 `double` 表示的数字可能被截断，即使反序列化的目标类型使用 `BigDecimal` 也一样。关于末尾零数量的元数据（`BigDecimal.precision()`）——例如 `0.12` 与 `0.120` 之间的差异——也会被丢弃。
+
+如果您需要对数字类型保持完整精度，请使用以下配置：
+
+[configuration]
+----
+jackson:
+  deserialization:
+    useBigIntegerForInts: true
+    useBigDecimalForFloats: true
+----

@@ -1,0 +1,15 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Locale Resolution](https://docs.micronaut.io/5.2.x/core/#core-localeResolution)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/localeResolution.adoc  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360  upstream_hash: 8e5c2a7bfa8051833a359c4a1ab9302fe6126279  translated_at: 2026-11-21 -->
+
+[[localeResolution]]
+Micronaut 框架支持多种策略来解析给定请求的 locale。api:http.HttpRequest#getLocale--[] 方法可在请求上使用，但它仅支持解析 `Accept-Language` 头。对于 locale 可能位于 cookie、用户会话或应设置为固定值的其他用例，可以使用 api:http.server.util.locale.HttpLocaleResolver[] 来确定当前 locale。
+
+api:core.util.LocaleResolver[] API 无需直接使用。只需为控制器方法定义一个类型为 `java.util.Locale` 的参数，locale 就会被自动解析并注入。
+
+有多个配置选项可控制如何解析 locale：
+
+include::{includedir}configurationProperties/io.micronaut.http.server.HttpServerConfiguration$HttpLocaleResolutionConfigurationProperties.adoc[]
+
+locale 可以用 "en_GB" 格式或 BCP 47（语言标签）格式配置。如果配置了多种方式，固定 locale 优先，其次是会话/cookie，最后是请求头。
+
+如果任何内置方式都无法满足您的用例，请创建类型为 api:http.server.util.locale.HttpLocaleResolver[] 的 bean，并通过 `getOrder` 方法设置其相对于现有解析器的顺序。

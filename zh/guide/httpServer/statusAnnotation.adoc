@@ -1,0 +1,20 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Response Status](https://docs.micronaut.io/5.2.x/core/#core-statusAnnotation)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/statusAnnotation.adoc  upstream_commit: f423b790e9e1cb3fe0f6a1d97346e18dbcb97321  upstream_hash: a6d6ce2006b303c6b934f396f884d85eb9404bd9  translated_at: 2026-11-21 -->
+
+Micronaut 控制器 action 默认以 200 HTTP 状态码响应。
+
+如果 action 返回 `HttpResponse`，可以用 `status` 方法为响应配置状态码。
+
+snippet::io.micronaut.docs.server.response.StatusController[tags="httpresponse", indent=0]
+
+您也可以使用 `@Status` 注解。
+
+snippet::io.micronaut.docs.server.response.StatusController[tags="atstatus", indent=0]
+
+或者甚至用一个 `HttpStatus` 来响应
+
+snippet::io.micronaut.docs.server.response.StatusController[tags="httpstatus", indent=0]
+
+=== 自定义 HTTP 状态码
+Micronaut 支持不属于预定义 `HttpStatus` 枚举的任意 HTTP 状态码。
+您可以使用 API 方法 https://docs.micronaut.io/latest/api/io/micronaut/http/HttpResponse.html#status(int,java.lang.String)[`HttpResponse#status(int,java.lang.String)`]

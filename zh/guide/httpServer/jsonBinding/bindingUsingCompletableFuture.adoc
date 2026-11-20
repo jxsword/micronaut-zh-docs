@@ -1,0 +1,8 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Binding Using CompletableFuture](https://docs.micronaut.io/5.2.x/core/#core-bindingUsingCompletableFuture)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/jsonBinding/bindingUsingCompletableFuture.adoc  upstream_commit: 444c5a1d04bf4d68b1790a78563e8e84393868da  upstream_hash: 5577ea5e934a4612640f5a6d6a041f4ba524c0e0  translated_at: 2026-11-21 -->
+
+与上一个示例相同的方法也可以改用 link:{jdkapi}/java.base/java/util/concurrent/CompletableFuture.html[CompletableFuture] API 编写：
+
+snippet::io.micronaut.docs.server.json.PersonController[tags="class,future,endclass", indent=0, title="Using CompletableFuture to Read the JSON"]
+
+上例使用 `thenApply` 方法实现了与前一个示例相同的功能。

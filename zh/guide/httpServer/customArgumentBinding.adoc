@@ -1,0 +1,53 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Custom Argument Binding](https://docs.micronaut.io/5.2.x/core/#core-customArgumentBinding)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/customArgumentBinding.adoc  upstream_commit: 1db1fb2cca43ee8084305cb50c2bde86bb7443f2  upstream_hash: 613c626a251550b92cef052760d3299b25157750  translated_at: 2026-11-21 -->
+
+Micronaut 框架使用 api:core.bind.ArgumentBinderRegistry[ArgumentBinderRegistry] 来查找能够绑定控制器方法参数的 api:core.bind.ArgumentBinder[ArgumentBinder] bean。默认实现会查找参数上以 ann:core.bind.annotation.Bindable[] 元注解的注解；如果存在这样的注解，参数绑定器注册表会搜索支持该注解的参数绑定器。
+
+如果找不到合适的注解，Micronaut 框架会尝试找到支持该参数类型的参数绑定器。
+
+参数绑定器返回 link:{api}/io/micronaut/core/bind/ArgumentBinder.BindingResult.html[ArgumentBinder.BindingResult]。绑定结果向 Micronaut 框架提供的不只是值本身的信息。绑定结果要么是已满足的（satisfied）要么是未满足的（unsatisfied），要么为空（empty）要么非空。如果参数绑定器返回未满足的结果，在请求处理的不同时间点可能会再次调用该绑定器。参数绑定器最初在读取请求体之前、任何过滤器执行之前被调用。如果绑定器依赖这些数据而它们尚不存在，请返回 link:{api}/io/micronaut/core/bind/ArgumentBinder.BindingResult.html#UNSATISFIED[ArgumentBinder.BindingResult#UNSATISFIED] 结果。返回 link:{api}/io/micronaut/core/bind/ArgumentBinder.BindingResult.html#EMPTY[ArgumentBinder.BindingResult#EMPTY] 或已满足的结果将是最终结果，绑定器不会在该请求中再次被调用。
+
+NOTE: 在处理结束时，如果结果仍为 link:{api}/io/micronaut/core/bind/ArgumentBinder.BindingResult.html#UNSATISFIED[ArgumentBinder.BindingResult#UNSATISFIED]，它将被视为 link:{api}/io/micronaut/core/bind/ArgumentBinder.BindingResult.html#EMPTY[ArgumentBinder.BindingResult#EMPTY]。
+
+关键接口有：
+
+=== AnnotatedRequestArgumentBinder
+
+基于注解的存在进行绑定的参数绑定器必须实现 api:http.bind.binders.AnnotatedRequestArgumentBinder[AnnotatedRequestArgumentBinder]，并可以通过创建一个以 api:io.micronaut.core.bind.annotation.Bindable[@Bindable] 注解的注解来使用。例如：
+
+snippet::io.micronaut.docs.http.server.bind.annotation.ShoppingCart[tags="class", indent=0, title="An example of a binding annotation"]
+
+<1> 绑定注解本身必须以 api:io.micronaut.core.bind.annotation.Bindable[@Bindable] 注解
+
+snippet::io.micronaut.docs.http.server.bind.annotation.ShoppingCartRequestArgumentBinder[tags="class", indent=0, title="Example of annotated data binding"]
+
+<1> 自定义参数绑定器必须实现 api:io.micronaut.http.bind.binders.AnnotatedRequestArgumentBinder[AnnotatedRequestArgumentBinder]，同时指定触发绑定器的注解类型（本例中为 `MyBindingAnnotation`）与期望的参数类型（本例中为 `Object`）
+<2> 用自定义参数绑定逻辑覆写 `bind` 方法——在本例中，我们解析被注解参数的名称，从同名 cookie 中提取值，并将该值转换为参数类型
+
+TIP: 通常使用 api:io.micronaut.core.convert.ConversionService[ConversionService] 将数据转换为参数的类型。
+
+绑定器创建后，我们可以在控制器方法的参数上标注注解，该参数将使用我们指定的自定义逻辑进行绑定。
+
+snippet::io.micronaut.docs.http.server.bind.annotation.ShoppingCartController[tags="method", indent=0, title="A controller operation with this annotated binding"]
+
+<1> 该参数通过与 `MyBindingAnnotation` 关联的绑定器绑定。如果适用，它优先于基于类型的绑定器。
+
+=== TypedRequestArgumentBinder
+
+基于参数类型进行绑定的参数绑定器必须实现 api:http.bind.binders.TypedRequestArgumentBinder[TypedRequestArgumentBinder]。例如，给定以下类：
+
+snippet::io.micronaut.docs.http.server.bind.type.ShoppingCart[tags="class", indent=0, title="Example of POJO"]
+
+我们可以为该类定义一个 `TypedRequestArgumentBinder`，如下所示：
+
+snippet::io.micronaut.docs.http.server.bind.type.ShoppingCartRequestArgumentBinder[tags="class", indent=0, title="Example of typed data binding"]
+
+<1> 覆写 `bind` 方法并指定要绑定的数据类型，本例中为 `ShoppingCart` 类型
+<2> 取到数据后（本例中通过反序列化 cookie 中的 JSON 文本），以 link:{api}/io/micronaut/core/bind/ArgumentBinder.BindingResult.html[ArgumentBinder.BindingResult] 形式返回
+<3> 同时覆写 `argumentType` 方法，ArgumentBinderRegistry 会使用它。
+
+绑定器创建后，它将用于关联类型的任何控制器参数：
+
+snippet::io.micronaut.docs.http.server.bind.type.ShoppingCartController[tags="method", indent=0, title="A controller operation with this typed binding"]
+
+<1> 该参数使用为该类型定义的自定义逻辑绑定到我们的 `TypedRequestArgumentBinder` 中。

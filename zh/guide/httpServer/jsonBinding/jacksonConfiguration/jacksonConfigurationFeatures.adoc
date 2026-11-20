@@ -1,0 +1,20 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Features](https://docs.micronaut.io/5.2.x/core/#core-jacksonConfigurationFeatures)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/jsonBinding/jacksonConfiguration/jacksonConfigurationFeatures.adoc  upstream_commit: b01f693b42261f67d9dd6149095fcf41f3162581  upstream_hash: 092ad71578024d70591d886da7d351be60184cfb  translated_at: 2026-11-21 -->
+
+:jackson-core: https://fasterxml.github.io/jackson-core/javadoc/2.9/
+:jackson-databind: https://fasterxml.github.io/jackson-databind/javadoc/2.9/
+
+如果您使用 <<jsonBinding,`micronaut-jackson-databind`>>，所有 Jackson 特性都可以用特性名作为键、用布尔值表示启用或禁用来配置。属性名请查阅配置参考。
+
+示例：
+
+[configuration]
+----
+jackson:
+  serialization-features:
+    indentOutput: true
+    writeDatesAsTimestamps: false
+  deserialization-features:
+    useBigIntegerForInts: true
+    failOnUnknownProperties: false
+----

@@ -1,0 +1,26 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Jackson Configuration](https://docs.micronaut.io/5.2.x/core/#core-jacksonConfiguration)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/jsonBinding/jacksonConfiguration.adoc  upstream_commit: 39c74acd625cd5264dad23ce05d78a59e4786006  upstream_hash: 03c473812a9d6f11a230403031ba1dc9bc35f8dc  translated_at: 2026-11-21 -->
+
+:jackson-annotations: https://fasterxml.github.io/jackson-annotations/javadoc/2.9/
+:jackson-databind: https://fasterxml.github.io/jackson-databind/javadoc/2.9/
+
+如果您使用 <<jsonBinding,`micronaut-jackson-databind`>>，可以通过 api:io.micronaut.jackson.JacksonConfiguration[] 类经配置来设置 Jackson `ObjectMapper`。本节内容仅针对 Jackson 实现；对于应保持跨 Micronaut JSON 实现可移植的应用代码，建议依赖 api:json.JsonMapper[]。
+
+所有 Jackson 配置键都以 `jackson` 开头。
+
+|=======
+| dateFormat | String | 日期格式
+| locale     | String | 使用 link:{jdkapi}/java.base/java/util/Locale.html#forLanguageTag-java.lang.String-[Locale.forLanguageTag]。示例：`en-US`
+| timeZone   | String |使用 link:{jdkapi}/java.base/java/util/TimeZone.html#getTimeZone-java.lang.String-[TimeZone.getTimeZone]。示例：`PST`
+| serializationInclusion | String | link:{jackson-annotations}com/fasterxml/jackson/annotation/JsonInclude.Include.html[JsonInclude.Include] 之一。示例：`ALWAYS`
+| propertyNamingStrategy | String | link:{jackson-databind}com/fasterxml/jackson/databind/PropertyNamingStrategy.html[PropertyNamingStrategy] 实例的名称。示例：`SNAKE_CASE`
+| defaultTyping          | String | 用于多态类型处理的全局 defaultTyping，取自枚举 link:{jackson-databind}com/fasterxml/jackson/databind/ObjectMapper.DefaultTyping.html[ObjectMapper.DefaultTyping]。示例：`NON_FINAL`
+|=======
+
+示例：
+
+[configuration]
+----
+jackson:
+  serializationInclusion: ALWAYS
+----

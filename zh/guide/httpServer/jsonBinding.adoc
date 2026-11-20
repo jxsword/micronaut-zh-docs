@@ -1,0 +1,11 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – JSON Binding](https://docs.micronaut.io/5.2.x/core/#core-jsonBinding)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/jsonBinding.adoc  upstream_commit: cfeff23c1cc4994af8b35a93d245ac72c4eab18f  upstream_hash: b873e7cb501a06a876b33c20cde1db262e0c2091  translated_at: 2026-11-21 -->
+
+[[jsonBinding]]
+如今最常见的数据交换格式是 JSON。
+
+默认情况下，api:http.annotation.Controller[] 注解指定 Micronaut 框架中的控制器默认消费与产出 JSON。
+
+自 Micronaut Framework 4.0 起，用户必须选择希望使用哪种序列化方式（Jackson Databind 或 Micronaut Serialization）。两种方式都支持使用 https://micronaut-projects.github.io/micronaut-serialization/latest/guide/index.html#jacksonAnnotations[Jackson Annotations]。
+
+无论采用哪种方式，Micronaut 框架都以非阻塞方式读取传入的 JSON。

@@ -1,0 +1,5 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Further customising `JsonFactory`](https://docs.micronaut.io/5.2.x/core/#core-jacksonConfigurationFurtherCustomisingJsonFactory)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/jsonBinding/jacksonConfiguration/jacksonConfigurationFurtherCustomisingJsonFactory.adoc  upstream_commit: 444c5a1d04bf4d68b1790a78563e8e84393868da  upstream_hash: 21282d2c02974aef017616ed2a4acd7e60ac33e3  translated_at: 2026-11-21 -->
+
+如果您使用 <<jsonBinding,`micronaut-jackson-databind`>>，在某些情况下您可能希望超越特性配置来自定义 `ObjectMapper` 所使用的 `JsonFactory` （例如允许自定义字符转义）。
+这可以通过提供您自己的 `JsonFactory` bean 来实现，或通过提供 `BeanCreatedEventListener<JsonFactory>` 在启动时配置默认 bean。

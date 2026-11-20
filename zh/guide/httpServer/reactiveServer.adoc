@@ -1,0 +1,40 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Reactive HTTP Request Processing](https://docs.micronaut.io/5.2.x/core/#core-reactiveServer)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/reactiveServer.adoc  upstream_commit: d30693591dc1d05b57a85ccac2e0aad212e03d9b  upstream_hash: 0346dc2e0e8fb3508aac599fa94473843c5e9f8e  translated_at: 2026-11-21 -->
+
+如前所述，Micronaut 框架构建在 Netty 之上，Netty 围绕事件循环（Event Loop）模型与非阻塞 I/O 设计。Micronaut 在与请求相同的线程（事件循环线程）中执行 ann:http.annotation.Controller[] bean 中定义的代码。
+
+因此，如果您执行任何阻塞 I/O 操作（例如与 Hibernate/JPA 或 JDBC 的交互），将这些任务转移到不阻塞事件循环的独立线程池至关重要。
+
+例如，以下配置将 I/O 线程池配置为具有 75 个线程的固定线程池（类似于 Tomcat 等传统阻塞服务器在每请求一线程模型中使用的配置）：
+
+.配置 IO 线程池
+[configuration]
+----
+micronaut:
+  executors:
+    io:
+      type: fixed
+      nThreads: 75
+----
+
+要在 ann:http.annotation.Controller[] bean 中使用该线程池，您有多种选择。最简单的是使用 ann:scheduling.annotation.ExecuteOn[] 注解，它只能应用于类型或方法级别的 ann:http.annotation.Controller[] 或 ann:http.annotation.Filter[]。它指示在哪个已配置的线程池上运行控制器或过滤器的方法：
+
+snippet::io.micronaut.docs.http.server.executeon.PersonController[tags="imports,class", indent=0,title="Using @ExecuteOn"]
+
+<1> ann:scheduling.annotation.ExecuteOn[] 注解用于在 I/O 线程池上执行该操作
+
+ann:scheduling.annotation.ExecuteOn[] 注解的值可以是在 `micronaut.executors` 下定义的任何具名执行器。
+
+TIP: 一般来说，对于数据库操作，您希望线程池的配置与数据库连接池中指定的最大连接数相匹配。
+
+对于 Kotlin `suspend` 函数，所选执行器也是协程恢复所在的调度器（dispatcher），因此挂起点之后的工作会留在该执行器上，而不会回退到 `Dispatchers.Default`。子协程会继承它，并且在代码块持续期间，显式指定的 `withContext` 仍然优先。
+
+NOTE: 显式的 ann:scheduling.annotation.ExecuteOn[] 与 `micronaut.server.thread-selection` 设置都通过同一个执行器选择机制解析，因此在 `AUTO`、`IO` 与 `BLOCKING` 线程选择下，`suspend` 路由与阻塞路由一样会被转移执行。要让 `suspend` 路由在 `AUTO` 下留在事件循环上，请为其标注 ann:core.annotation.NonBlocking[]。
+
+ann:scheduling.annotation.ExecuteOn[] 注解的替代方案是使用您所选响应式库提供的设施。https://projectreactor.io[Project Reactor] 或 https://github.com/ReactiveX/RxJava[RxJava] 等响应式实现都提供 `subscribeOn` 方法，可让您更改执行用户代码的线程。例如：
+
+snippet::io.micronaut.docs.http.server.reactive.PersonController[tags="imports,class", indent=0,title="Reactive subscribeOn Example"]
+
+<1> 注入已配置的 I/O 执行器服务
+<2> `Mono::fromCallable` 方法包装阻塞操作
+<3> https://projectreactor.io[Project Reactor] 的 `subscribeOn` 方法将操作调度到 I/O 线程池上

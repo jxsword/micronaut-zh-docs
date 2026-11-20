@@ -1,0 +1,26 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Using the @Body Annotation](https://docs.micronaut.io/5.2.x/core/#core-bodyAnnotation)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/reactiveServer/bodyAnnotation.adoc  upstream_commit: 51650efcb97939ef02bf726bdcb28266b7ca20d1  upstream_hash: 18f4d7c4f5aa12d2326b6699c90809aff219979e  translated_at: 2026-11-21 -->
+
+要解析请求体，首先通过 api:http.annotation.Body[] 注解告诉 Micronaut 框架哪个参数接收数据。
+
+下面的示例实现了一个简单的回显服务器，将请求中发送的请求体回显回去：
+
+snippet::io.micronaut.docs.server.body.MessageController[tags="imports,class,echo,endclass", indent=0, title="Using the @Body annotation"]
+
+<1> api:io.micronaut.http.annotation.Post[] 注解与 `text/plain` 的 api:http.MediaType[] 一起使用（默认为 `application/json`）。
+<2> api:http.annotation.Body[] 注解与 `jakarta.validation.constraints.Size` 一起使用，将请求体大小限制为最多 1KB。该约束 *不会* 限制服务器读取/缓冲的数据量。
+<3> 请求体作为方法结果返回
+
+注意，读取请求体以非阻塞方式完成：随着数据可用逐步读取请求内容，并累积到传给方法的 String 中。
+
+TIP: 配置文件（例如 `application.yml`）中的 `micronaut.server.maxRequestSize` 设置限制服务器读取/缓冲的数据大小（默认最大请求大小为 10MB）。`@Size` *不是* 该设置的替代。
+
+无论限制如何，对于大量数据，将数据在内存中累积为 String 可能导致服务器内存紧张。更好的方法是在项目中加入支持响应式流实现的响应式库（例如 `Reactor`、`RxJava` 或 `Akka`），并在数据可用时以流的方式处理：
+
+snippet::io.micronaut.docs.server.body.MessageController[tags="imports,importsreactive,class,echoReactive,endclass", indent=0, title="Using Reactive Streams to Read the request body"]
+
+<1> 在此示例中，方法被改为接收并返回 `Publisher` 类型。
+<2> 本示例使用 https://projectreactor.io[Project Reactor] 并返回单个条目。因此响应类型还标注了 api:core.async.annotation.SingleResult[]。Micronaut 框架只在操作完成后（不阻塞地）发出响应。
+<3> `collect` 方法用于在这个模拟示例中累积数据，但它也可以逐块将数据写入日志服务、数据库等
+
+IMPORTANT: 无需转换类型的请求体参数会导致 Micronaut 框架跳过请求解码！

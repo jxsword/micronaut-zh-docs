@@ -1,0 +1,19 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Host Resolution](https://docs.micronaut.io/5.2.x/core/#core-hostResolution)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/hostResolution.adoc  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360  upstream_hash: db6c021659803c086e82c30c42ff58db779d6247  translated_at: 2026-11-21 -->
+
+您可能需要解析当前服务器的主机名。Micronaut 框架包含 api:http.server.util.HttpHostResolver[] 接口的一个实现。
+
+默认实现按以下顺序在下列位置查找主机信息：
+
+. 提供的配置
+. `Forwarded` 头
+. `X-Forwarded-` 头。如果 `X-Forwarded-Host` 头不存在，其他 `X-Forwarded` 头将被忽略。
+. `Host` 头
+. 请求 URI 上的属性
+. 内嵌服务器 URI 上的属性
+
+可以通过以下配置更改从哪些请求头提取相关数据的行为：
+
+include::{includedir}configurationProperties/io.micronaut.http.server.HttpServerConfiguration$HostResolutionConfiguration.adoc[]
+
+上述配置还支持允许的主机列表。配置该列表可确保解析出的主机匹配所提供的正则表达式模式之一。这有助于防止主机缓存投毒（host cache poisoning）攻击，建议进行配置。

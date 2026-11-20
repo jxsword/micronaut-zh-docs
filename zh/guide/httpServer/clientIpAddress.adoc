@@ -1,0 +1,13 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Client IP Address](https://docs.micronaut.io/5.2.x/core/#core-clientIpAddress)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/clientIpAddress.adoc  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360  upstream_hash: 781cce43e6f16f826b3258fe3d7b4bb598b8b831  translated_at: 2026-11-21 -->
+
+您可能需要解析 HTTP 请求的来源 IP 地址。Micronaut 框架包含 api:http.server.util.HttpClientAddressResolver[] 的一个实现。
+
+默认实现按以下顺序在下列位置解析客户端地址：
+
+. 配置的请求头
+. `Forwarded` 头
+. `X-Forwarded-For` 头
+. 请求的远程地址
+
+第一优先级请求头的名称可以用 `micronaut.server.client-address-header` 配置。

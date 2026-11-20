@@ -1,0 +1,26 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Accepted Request Content-Type](https://docs.micronaut.io/5.2.x/core/#core-consumesAnnotation)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/consumesAnnotation.adoc  upstream_commit: 177ff8c487e6de7e344af9bb60696fe78e017557  upstream_hash: 2d863afa816696dfb8b2745acec17ed605548daa  translated_at: 2026-11-21 -->
+
+Micronaut 控制器 action 默认消费 `application/json`。通过 `@Consumes` 注解或任何 HTTP 方法注解的 `consumes` 成员，可以支持消费其他内容类型。
+
+snippet::io.micronaut.docs.server.consumes.ConsumesController[tags="imports,clazz", indent=0]
+
+<1> 默认情况下，控制器 action 消费 `Content-Type` 类型为 `application/json` 的请求。
+<2> `@Consumes` 注解接受一个 `String[]`，指定入站请求支持的内容类型。
+<3> 内容类型也可以通过方法注解的 `consumes` 成员指定。
+
+=== 自定义可处理的内容类型
+
+通常，只有当内容类型为 `application/json` 时才会进行 JSON 解析。其他 api:io.micronaut.http.codec.MediaTypeCodec[] 类的行为类似：它们都有各自可处理的预定义内容类型。要扩展某个编解码器（codec）可处理的媒体类型列表，请提供将存储在 api:io.micronaut.http.codec.CodecConfiguration[] 中的配置：
+
+[configuration]
+----
+micronaut:
+  codec:
+    json:
+      additional-types:
+        - text/javascript
+        - ...
+----
+
+当前支持的配置前缀有 `json`、`json-stream`、`text` 与 `text-stream`。

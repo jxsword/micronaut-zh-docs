@@ -1,0 +1,13 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Beans](https://docs.micronaut.io/5.2.x/core/#core-jacksonConfigurationBeans)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/jsonBinding/jacksonConfiguration/jacksonConfigurationBeans.adoc  upstream_commit: cfeff23c1cc4994af8b35a93d245ac72c4eab18f  upstream_hash: 5f128cb12ecf69043ab34f4c0e6434e7518d083d  translated_at: 2026-11-21 -->
+
+:jackson-databind: https://fasterxml.github.io/jackson-databind/javadoc/2.9/
+
+如果您使用 <<jsonBinding,`micronaut-jackson-databind`>>，除配置之外，还可以注册 bean 来自定义 Jackson。所有扩展了以下任意类的 bean 都会注册到对象映射器（object mapper）：
+
+* link:{jackson-databind}com/fasterxml/jackson/databind/Module.html[Module]
+* link:{jackson-databind}com/fasterxml/jackson/databind/JsonDeserializer.html[JsonDeserializer]
+* link:{jackson-databind}com/fasterxml/jackson/databind/JsonSerializer.html[JsonSerializer]
+* link:{jackson-databind}com/fasterxml/jackson/databind/KeyDeserializer.html[KeyDeserializer]
+* link:{jackson-databind}com/fasterxml/jackson/databind/deser/BeanDeserializerModifier.html[BeanDeserializerModifier]
+* link:{jackson-databind}com/fasterxml/jackson/databind/ser/BeanSerializerModifier.html[BeanSerializerModifier]

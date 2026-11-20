@@ -1,0 +1,11 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Binding using POJOs](https://docs.micronaut.io/5.2.x/core/#core-bindingUsingPOJOs)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/jsonBinding/bindingUsingPOJOs.adoc  upstream_commit: 444c5a1d04bf4d68b1790a78563e8e84393868da  upstream_hash: 8abd54d69f124877267f0450424bd53ee4341a98  translated_at: 2026-11-21 -->
+
+[[bindingUsingPOJOs]]
+不过请注意，您同样可以简单地写成：
+
+snippet::io.micronaut.docs.server.json.PersonController[tags="class,regular,endclass", indent=0, title="Binding JSON POJOs"]
+
+只有以非阻塞方式读取完数据后，Micronaut 框架才会执行您的方法。
+
+TIP: 您可以通过多种方式自定义输出，例如使用 https://github.com/FasterXML/jackson-annotations/wiki/Jackson-Annotations[Jackson annotations]。

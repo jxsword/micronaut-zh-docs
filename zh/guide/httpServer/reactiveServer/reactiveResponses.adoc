@@ -1,0 +1,45 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Reactive Responses](https://docs.micronaut.io/5.2.x/core/#core-reactiveResponses)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/reactiveServer/reactiveResponses.adoc  upstream_commit: 8c82ee03540bc11bc707c777c7ff4aa00d5be9d7  upstream_hash: ba0ba204b6785df9a19945a5c0e0a984fb3b2ed8  translated_at: 2026-11-21 -->
+
+上一节介绍了使用 https://projectreactor.io[Project Reactor] 与 Micronaut 进行响应式编程的概念。
+
+Micronaut 框架支持从任何控制器方法返回常见的响应式类型，例如 reactor:Mono[]（或 RxJava 的 rx:Single[]、rx:Maybe[]、rx:Observable[] 类型）、rs:Publisher[] 实例或 link:{jdkapi}/java.base/java/util/concurrent/CompletableFuture.html[CompletableFuture]。
+
+NOTE: 要使用 https://projectreactor.io[Project Reactor] 的 `Flux` 或 `Mono`，您需要在项目中添加 Micronaut Reactor 依赖以包含必要的转换器。
+
+NOTE: 要使用 https://github.com/ReactiveX/RxJava[RxJava] 的 `Flowable`、`Single` 或 `Maybe`，您需要在项目中添加 Micronaut RxJava 依赖以包含必要的转换器。
+
+使用 api:http.annotation.Body[] 注解指定为请求体的参数也可以是响应式类型或 link:{jdkapi}/java.base/java/util/concurrent/CompletableFuture.html[CompletableFuture]。
+
+当返回响应式类型时，Micronaut 框架会在与请求相同的线程（Netty 事件循环线程）上订阅返回的响应式类型。因此，如果您执行任何阻塞操作，必须将这些操作转移到适当配置的线程池，例如使用 https://projectreactor.io[Project Reactor] 或 https://github.com/ReactiveX/RxJava[RxJava] 的 `subscribeOn(..)` 设施，或 ann:scheduling.annotation.ExecuteOn[]。
+
+TIP: 有关 Micronaut 框架建立的线程池及其配置方式，请参阅 <<threadPools,配置线程池>> 一节。
+
+总结一下，下表展示了一些常见的响应类型及其处理方式：
+
+.Micronaut 响应类型
+|===
+|类型|说明|示例签名
+
+|rs:Publisher[]
+|任何实现 rs:Publisher[] 接口的类型
+|`Publisher<String> hello()`
+
+|link:{jdkapi}/java.base/java/util/concurrent/CompletableFuture.html[CompletableFuture]
+|Java `CompletableFuture` 实例
+|`CompletableFuture<String> hello()`
+
+|api:http.HttpResponse[]
+|一个 api:http.HttpResponse[] 与可选的响应体
+|`HttpResponse<Publisher<String>> hello()`
+
+|link:{jdkapi}/java.base/java/lang/CharSequence.html[CharSequence]
+|`CharSequence` 的任何实现
+|`String hello()`
+
+|T
+|任何简单的 POJO 类型
+|`Book show()`
+|===
+
+NOTE: 返回响应式类型时，其类型会影响返回的响应。例如，返回 reactor:Flux[] 时，Micronaut 框架无法知道响应大小，因此会使用 `Chunked` 类型的 `Transfer-Encoding`。而对于发出单个结果的类型（例如 `reactor:Mono[]`），则会填充 `Content-Length` 头。

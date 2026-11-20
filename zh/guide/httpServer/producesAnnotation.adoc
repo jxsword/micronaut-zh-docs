@@ -1,0 +1,10 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Response Content-Type](https://docs.micronaut.io/5.2.x/core/#core-producesAnnotation)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/producesAnnotation.adoc  upstream_commit: 51650efcb97939ef02bf726bdcb28266b7ca20d1  upstream_hash: bac33a7751f24e66eabdcf076c92fadad78ced26  translated_at: 2026-11-21 -->
+
+Micronaut 控制器 action 默认产出 `application/json`。不过，您可以使用 `@Produces` 注解或 HTTP 方法注解的 `produces` 成员来更改响应的 `Content-Type`。
+
+snippet::io.micronaut.docs.server.response.ProducesController[tags="imports,clazz", indent=0]
+
+<1> 默认内容类型为 JSON
+<2> 在控制器 action 上标注 `@Produces` 以更改响应内容类型。
+<3> 设置方法注解的 `produces` 成员同样会更改内容类型。

@@ -1,0 +1,16 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Serialization using Jackson Databind](https://docs.micronaut.io/5.2.x/core/#core-serializationUsingJacksonDatabind)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/jsonBinding/serializationUsingJacksonDatabind.adoc  upstream_commit: 598f4bfa89de4d3b2c2afba99b57b57d4be905c4  upstream_hash: ee9ee6cad9a2f2c107662a9b7abdc4238cca7e1b  translated_at: 2026-11-21 -->
+
+[[serializationUsingJacksonDatabind]]
+要使用 https://github.com/FasterXML/jackson[Jackson] Databind 进行序列化，请包含以下依赖：
+
+dependency:micronaut-jackson-databind[]
+
+=== Kotlin 数据类的 Jackson Databind 序列化
+
+WARNING: 如果您使用 Kotlin https://kotlinlang.org/docs/data-classes.html[数据类（Data Classes）] 与 Jackson Databind，您的数据类将通过反射访问以进行序列化。当您使用 https://www.graalvm.org/latest/reference-manual/native-image/[native image] 时，需要用 ann:core.annotation.ReflectiveAccess[] 标注这些数据类。了解更多关于 <<graal,Micronaut GraalVM>> 集成的信息。
+
+[source, kotlin]
+----
+include::test-suite-kotlin-graalvm/src/test/kotlin/example/micronaut/jacksondatabind/Greeting.kt[tags=clazz,indent=0]
+----

@@ -1,0 +1,17 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Binding using Reactive Frameworks](https://docs.micronaut.io/5.2.x/core/#core-bindingUsingReactiveFrameworks)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/jsonBinding/bindingUsingReactiveFrameworks.adoc  upstream_commit: 444c5a1d04bf4d68b1790a78563e8e84393868da  upstream_hash: 74be1c1a8d9bdffe39d3286497485022ad2356e7  translated_at: 2026-11-21 -->
+
+不过，从开发者的视角来看，您通常只需使用普通 Java 对象（POJO），并可选择使用 https://github.com/ReactiveX/RxJava[RxJava] 或 https://projectreactor.io[Project Reactor] 等响应式框架。以下示例展示了一个控制器，它以非阻塞方式从 JSON 读取并保存传入的 POJO：
+
+snippet::io.micronaut.docs.server.json.PersonController[tags="class,single,endclass", indent=0, title="Using Reactive Streams to Read the JSON"]
+
+<1> 该方法接收一个 `Publisher`，JSON 读取完成后它会发出 POJO
+<2> `map` 方法将该实例存储在 `Map` 中
+<3> 返回一个 api:http.HttpResponse[]
+
+在命令行使用 cURL，可以向 `/people` URI 发送 JSON POST 请求：
+
+.使用 cURL 发送 JSON POST
+----
+$ curl -X POST localhost:8080/people -d '{"firstName":"Fred","lastName":"Flintstone","age":45}'
+----

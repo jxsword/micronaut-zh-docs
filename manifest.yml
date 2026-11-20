@@ -991,26 +991,26 @@ files:
 - file: guide/httpServer/clientIpAddress.adoc
   blob_sha: 781cce43e6f16f826b3258fe3d7b4bb598b8b831
   size: 479
-  status: missing
+  status: current
   zh: zh/guide/httpServer/clientIpAddress.adoc
   paragraphs: 4
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/httpServer/consumesAnnotation.adoc
   blob_sha: 2d863afa816696dfb8b2745acec17ed605548daa
   size: 1235
-  status: missing
+  status: current
   zh: zh/guide/httpServer/consumesAnnotation.adoc
   paragraphs: 8
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 177ff8c487e6de7e344af9bb60696fe78e017557
 - file: guide/httpServer/customArgumentBinding.adoc
   blob_sha: 613c626a251550b92cef052760d3299b25157750
   size: 5030
-  status: missing
+  status: current
   zh: zh/guide/httpServer/customArgumentBinding.adoc
   paragraphs: 24
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 1db1fb2cca43ee8084305cb50c2bde86bb7443f2
 - file: guide/httpServer/datavalidation.adoc
   blob_sha: bbb644b9ed1f6c0ec201397bf01853600824a3cd
@@ -1231,10 +1231,10 @@ files:
 - file: guide/httpServer/hostResolution.adoc
   blob_sha: db6c021659803c086e82c30c42ff58db779d6247
   size: 1028
-  status: missing
+  status: current
   zh: zh/guide/httpServer/hostResolution.adoc
   paragraphs: 6
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/httpServer/http2Server.adoc
   blob_sha: 33c303d48aae1be9bed14348938ca4378572f5c8
@@ -1255,122 +1255,122 @@ files:
 - file: guide/httpServer/jsonBinding.adoc
   blob_sha: b873e7cb501a06a876b33c20cde1db262e0c2091
   size: 588
-  status: missing
+  status: current
   zh: zh/guide/httpServer/jsonBinding.adoc
   paragraphs: 4
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: cfeff23c1cc4994af8b35a93d245ac72c4eab18f
 - file: guide/httpServer/jsonBinding/bindingUsingCompletableFuture.adoc
   blob_sha: 5577ea5e934a4612640f5a6d6a041f4ba524c0e0
   size: 408
-  status: missing
+  status: current
   zh: zh/guide/httpServer/jsonBinding/bindingUsingCompletableFuture.adoc
   paragraphs: 3
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 444c5a1d04bf4d68b1790a78563e8e84393868da
 - file: guide/httpServer/jsonBinding/bindingUsingPOJOs.adoc
   blob_sha: 8abd54d69f124877267f0450424bd53ee4341a98
   size: 436
-  status: missing
+  status: current
   zh: zh/guide/httpServer/jsonBinding/bindingUsingPOJOs.adoc
   paragraphs: 4
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 444c5a1d04bf4d68b1790a78563e8e84393868da
 - file: guide/httpServer/jsonBinding/bindingUsingReactiveFrameworks.adoc
   blob_sha: 74be1c1a8d9bdffe39d3286497485022ad2356e7
   size: 896
-  status: missing
+  status: current
   zh: zh/guide/httpServer/jsonBinding/bindingUsingReactiveFrameworks.adoc
   paragraphs: 6
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 444c5a1d04bf4d68b1790a78563e8e84393868da
 - file: guide/httpServer/jsonBinding/jacksonConfiguration.adoc
   blob_sha: 03c473812a9d6f11a230403031ba1dc9bc35f8dc
   size: 1614
-  status: missing
+  status: current
   zh: zh/guide/httpServer/jsonBinding/jacksonConfiguration.adoc
   paragraphs: 9
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 39c74acd625cd5264dad23ce05d78a59e4786006
 - file: guide/httpServer/jsonBinding/jacksonConfiguration/jacksonConfigurationBeans.adoc
   blob_sha: 5f128cb12ecf69043ab34f4c0e6434e7518d083d
   size: 891
-  status: missing
+  status: current
   zh: zh/guide/httpServer/jsonBinding/jacksonConfiguration/jacksonConfigurationBeans.adoc
   paragraphs: 3
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: cfeff23c1cc4994af8b35a93d245ac72c4eab18f
 - file: guide/httpServer/jsonBinding/jacksonConfiguration/jacksonConfigurationFeatures.adoc
   blob_sha: 092ad71578024d70591d886da7d351be60184cfb
   size: 608
-  status: missing
+  status: current
   zh: zh/guide/httpServer/jsonBinding/jacksonConfiguration/jacksonConfigurationFeatures.adoc
   paragraphs: 6
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: b01f693b42261f67d9dd6149095fcf41f3162581
 - file: guide/httpServer/jsonBinding/jacksonConfiguration/jacksonConfigurationFurtherCustomisingJsonFactory.adoc
   blob_sha: 21282d2c02974aef017616ed2a4acd7e60ac33e3
   size: 409
-  status: missing
+  status: current
   zh: zh/guide/httpServer/jsonBinding/jacksonConfiguration/jacksonConfigurationFurtherCustomisingJsonFactory.adoc
   paragraphs: 1
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 444c5a1d04bf4d68b1790a78563e8e84393868da
 - file: guide/httpServer/jsonBinding/jacksonConfiguration/jacksonConfigurationNumberPrecision.adoc
   blob_sha: 178b83a0c7437a5a185a4d29d1f8210708805f13
   size: 763
-  status: missing
+  status: current
   zh: zh/guide/httpServer/jsonBinding/jacksonConfiguration/jacksonConfigurationNumberPrecision.adoc
   paragraphs: 4
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 444c5a1d04bf4d68b1790a78563e8e84393868da
 - file: guide/httpServer/jsonBinding/jacksonConfiguration/jacksonConfigurationServiceLoader.adoc
   blob_sha: 863f4f8a30c5ad88eec586a0d3c9ee085c3f4ab3
   size: 91
-  status: missing
+  status: current
   zh: zh/guide/httpServer/jsonBinding/jacksonConfiguration/jacksonConfigurationServiceLoader.adoc
   paragraphs: 1
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 444c5a1d04bf4d68b1790a78563e8e84393868da
 - file: guide/httpServer/jsonBinding/jacksonConfiguration/jacksonConfigurationSupportForJsonView.adoc
   blob_sha: 93cf7bb6fc553405cc984b89b4bcf2a21458c6b1
   size: 425
-  status: missing
+  status: current
   zh: zh/guide/httpServer/jsonBinding/jacksonConfiguration/jacksonConfigurationSupportForJsonView.adoc
   paragraphs: 2
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 444c5a1d04bf4d68b1790a78563e8e84393868da
 - file: guide/httpServer/jsonBinding/jsonMapper.adoc
   blob_sha: 602c3ad0f8569a9b7029bd9c05628feb6881bc65
   size: 862
-  status: missing
+  status: current
   zh: zh/guide/httpServer/jsonBinding/jsonMapper.adoc
   paragraphs: 3
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 39c74acd625cd5264dad23ce05d78a59e4786006
 - file: guide/httpServer/jsonBinding/serializationUsingJacksonDatabind.adoc
   blob_sha: ee9ee6cad9a2f2c107662a9b7abdc4238cca7e1b
   size: 764
-  status: missing
+  status: current
   zh: zh/guide/httpServer/jsonBinding/serializationUsingJacksonDatabind.adoc
   paragraphs: 6
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 598f4bfa89de4d3b2c2afba99b57b57d4be905c4
 - file: guide/httpServer/jsonBinding/serializeUsingMicronautSerialization.adoc
   blob_sha: 4cd0f4dfbf267d210a1cd99e5d92c165b23f16e5
   size: 569
-  status: missing
+  status: current
   zh: zh/guide/httpServer/jsonBinding/serializeUsingMicronautSerialization.adoc
   paragraphs: 2
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 444c5a1d04bf4d68b1790a78563e8e84393868da
 - file: guide/httpServer/localeResolution.adoc
   blob_sha: 8e5c2a7bfa8051833a359c4a1ab9302fe6126279
   size: 1293
-  status: missing
+  status: current
   zh: zh/guide/httpServer/localeResolution.adoc
   paragraphs: 6
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/httpServer/openapi.adoc
   blob_sha: 8a2414f1a6af84b21afd78f932b691828a57dcee
@@ -1391,42 +1391,42 @@ files:
 - file: guide/httpServer/producesAnnotation.adoc
   blob_sha: bac33a7751f24e66eabdcf076c92fadad78ced26
   size: 528
-  status: missing
+  status: current
   zh: zh/guide/httpServer/producesAnnotation.adoc
   paragraphs: 3
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 51650efcb97939ef02bf726bdcb28266b7ca20d1
 - file: guide/httpServer/reactiveServer.adoc
   blob_sha: 0346dc2e0e8fb3508aac599fa94473843c5e9f8e
   size: 3192
-  status: missing
+  status: current
   zh: zh/guide/httpServer/reactiveServer.adoc
   paragraphs: 16
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: d30693591dc1d05b57a85ccac2e0aad212e03d9b
 - file: guide/httpServer/reactiveServer/bodyAnnotation.adoc
   blob_sha: 18f4d7c4f5aa12d2326b6699c90809aff219979e
   size: 2465
-  status: missing
+  status: current
   zh: zh/guide/httpServer/reactiveServer/bodyAnnotation.adoc
   paragraphs: 10
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 51650efcb97939ef02bf726bdcb28266b7ca20d1
 - file: guide/httpServer/reactiveServer/reactiveResponses.adoc
   blob_sha: ba0ba204b6785df9a19945a5c0e0a984fb3b2ed8
   size: 2743
-  status: missing
+  status: current
   zh: zh/guide/httpServer/reactiveServer/reactiveResponses.adoc
   paragraphs: 11
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 8c82ee03540bc11bc707c777c7ff4aa00d5be9d7
 - file: guide/httpServer/requestResponse.adoc
   blob_sha: 3e299648c2820ead76677bdb1fd3895a60a8c4b6
   size: 3609
-  status: missing
+  status: current
   zh: zh/guide/httpServer/requestResponse.adoc
   paragraphs: 17
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 1db1fb2cca43ee8084305cb50c2bde86bb7443f2
 - file: guide/httpServer/routing.adoc
   blob_sha: 5f079380a0de0f292b3e02df821cf876008187df
@@ -1695,10 +1695,10 @@ files:
 - file: guide/httpServer/statusAnnotation.adoc
   blob_sha: a6d6ce2006b303c6b934f396f884d85eb9404bd9
   size: 839
-  status: missing
+  status: current
   zh: zh/guide/httpServer/statusAnnotation.adoc
   paragraphs: 9
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: f423b790e9e1cb3fe0f6a1d97346e18dbcb97321
 - file: guide/httpServer/transfers.adoc
   blob_sha: 1e884487057ac3dcd5e754f99f85099777d98878

@@ -1,0 +1,4 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Service Loader](https://docs.micronaut.io/5.2.x/core/#core-jacksonConfigurationServiceLoader)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/jsonBinding/jacksonConfiguration/jacksonConfigurationServiceLoader.adoc  upstream_commit: 444c5a1d04bf4d68b1790a78563e8e84393868da  upstream_hash: 863f4f8a30c5ad88eec586a0d3c9ee085c3f4ab3  translated_at: 2026-11-21 -->
+
+通过服务加载器注册的任何模块也会添加到默认的对象映射器（object mapper）。

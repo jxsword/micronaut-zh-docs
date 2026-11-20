@@ -1,0 +1,7 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Serialize using Micronaut Serialization](https://docs.micronaut.io/5.2.x/core/#core-serializeUsingMicronautSerialization)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/jsonBinding/serializeUsingMicronautSerialization.adoc  upstream_commit: 444c5a1d04bf4d68b1790a78563e8e84393868da  upstream_hash: 4cd0f4dfbf267d210a1cd99e5d92c165b23f16e5  translated_at: 2026-11-21 -->
+
+https://micronaut-projects.github.io/micronaut-serialization/latest/guide/index.html#quickStart[Micronaut Serialization] 借助构建期 <<introspection,bean 内省>> 提供免反射序列化。它支持 https://micronaut-projects.github.io/micronaut-serialization/latest/guide/index.html#jsonpQuick[JSON-P 或 JSON-B] 等替代格式。您需要添加以下依赖：
+
+dependency:micronaut-serde-processor[groupId=io.micronaut.serde,scope=annotationProcessor]
+dependency:micronaut-serde-jackson[groupId=io.micronaut.serde]

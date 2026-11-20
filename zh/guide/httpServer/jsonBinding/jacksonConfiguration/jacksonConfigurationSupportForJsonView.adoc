@@ -1,0 +1,6 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Support for `@JsonView`](https://docs.micronaut.io/5.2.x/core/#core-jacksonConfigurationSupportForJsonView)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/jsonBinding/jacksonConfiguration/jacksonConfigurationSupportForJsonView.adoc  upstream_commit: 444c5a1d04bf4d68b1790a78563e8e84393868da  upstream_hash: 93cf7bb6fc553405cc984b89b4bcf2a21458c6b1  translated_at: 2026-11-21 -->
+
+如果您使用 <<jsonBinding,`micronaut-jackson-databind`>>，只要在配置文件（例如 `application.yml`）中将 `jackson.json-view.enabled` 设置为 `true`，就可以在控制器方法上使用 `@JsonView` 注解。
+
+Jackson 的 `@JsonView` 注解让您能够按响应控制暴露哪些属性。更多信息参见 https://www.baeldung.com/jackson-json-view-annotation[Jackson JSON Views]。
