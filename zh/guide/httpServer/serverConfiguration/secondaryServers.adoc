@@ -1,0 +1,29 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Starting Secondary Servers](https://docs.micronaut.io/5.2.x/core/#core-secondaryServers)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/serverConfiguration/secondaryServers.adoc  upstream_commit: 1db1fb2cca43ee8084305cb50c2bde86bb7443f2  upstream_hash: 15624a78719d6a69f47f3e17298fc3336957bb33  translated_at: 2026-11-21 -->
+
+Micronaut 框架支持通过 api:http.server.netty.NettyEmbeddedServerFactory[] 接口以编程方式创建额外的 Netty 服务器。
+
+这在某些场景下很有用，例如您需要在不同端口上暴露具有不同配置（HTTPS、线程资源等）的独立服务器。
+
+下面的示例演示如何定义一个 <<factories,工厂 bean>>，使用以编程方式创建的配置启动一个额外服务器：
+
+snippet::io.micronaut.docs.http.server.secondary.SecondaryNettyServer[tags="imports,class", indent=0, title="Programmatically creating Secondary servers"]
+
+<1> 为服务器定义唯一名称
+<2> 使用服务器名称定义一个 ann:context.annotation.Context[] 作用域的 bean，并包含 `preDestroy="close"` 以确保上下文关闭时服务器被关闭
+<3> 将 api:http.server.netty.NettyEmbeddedServerFactory[] 注入 <<factories,工厂 bean>>
+<4> 以编程方式创建 api:http.server.netty.configuration.NettyHttpServerConfiguration[]
+<5> 可选创建 api:http.ssl.ServerSslConfiguration[]
+<6> 使用 `build` 方法构建服务器实例
+<7> 用 `start` 方法启动服务器
+<8> 将服务器实例作为受管 bean 返回
+<9> 如果希望按服务器名称注入 <<httpClient,HTTP 客户端>>，可选定义一个 api:discovery.ServiceInstanceList[] 实例
+
+有了这个类，当 api:context.ApplicationContext[] 启动时，服务器也会以相应配置启动。
+
+得益于第 8 步中 api:discovery.ServiceInstanceList[] 的定义，您可以在测试中注入客户端来测试次要服务器：
+
+snippet::io.micronaut.docs.http.server.secondary.SecondaryServerTest[tags="inject", indent="0", title="Injecting the server or client"]
+
+<1> 使用服务器名称按 ID 注入客户端
+<2> 使用 `@Named` 注解作为限定符注入内嵌服务器实例

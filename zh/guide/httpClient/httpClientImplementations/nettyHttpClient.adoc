@@ -1,0 +1,19 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – HTTP Client based on Netty](https://docs.micronaut.io/5.2.x/core/#core-nettyHttpClient)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpClient/httpClientImplementations/nettyHttpClient.adoc  upstream_commit: 8fbb1c848e5b3efa9cca6687546ec41a7a5fc9eb  upstream_hash: a5c1905e8c734622e41c4c811c5dfef6fa79dfe8  translated_at: 2026-11-21 -->
+
+[[nettyHttpClient]]
+要使用基于 https://netty.io[Netty] 的实现，请向构建中添加以下依赖：
+
+dependency:micronaut-http-client[]
+
+== 在 SSL 配置中禁用主机名验证
+
+在测试或开发环境中可能需要禁用主机名验证。
+
+要在测试类路径中禁用主机名验证，您可以在 `src/test/java` 中创建一个 <<replaces,bean 替换>>：
+
+[source,java]
+----
+include::http-client/src/test/java/io/micronaut/http/client/netty/ssl/NettyClientSslBuilderReplacement.java[indent=0]
+----
+WARNING: 禁用主机名验证会使您的应用容易受到中间人（Man-in-the-Middle）攻击，因此应极为谨慎地执行，通常仅在开发/测试环境中进行。切勿在生产环境中，或在通过互联网进行远程调用的场景中禁用主机名验证。

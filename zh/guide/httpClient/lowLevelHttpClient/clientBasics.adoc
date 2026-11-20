@@ -1,0 +1,142 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Sending your first HTTP request](https://docs.micronaut.io/5.2.x/core/#core-clientBasics)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpClient/lowLevelHttpClient/clientBasics.adoc  upstream_commit: 8c82ee03540bc11bc707c777c7ff4aa00d5be9d7  upstream_hash: 563af401f2c76d292efef14a963e39cf5a2a5ee2  translated_at: 2026-11-21 -->
+
+==== 获取 HttpClient
+
+有几种方式可以获得 api:http.client.HttpClient[] 的引用。最常见的是使用 api:http.client.annotation.Client[] 注解。例如：
+
+.注入 HTTP 客户端
+[source,java]
+----
+@Client("https://api.twitter.com/1.1") @Inject HttpClient httpClient;
+----
+
+上例注入了一个面向 Twitter API 的客户端。
+
+[source,kotlin]
+----
+@field:Client("\${myapp.api.twitter.url}") @Inject lateinit var httpClient: HttpClient
+----
+
+上面的 Kotlin 示例注入了一个使用配置路径、面向 Twitter API 的客户端。注意 `"\${path.to.config}"` 上必需的转义（反斜杠），这是 Kotlin 字符串插值所要求的。
+
+api:http.client.annotation.Client[] 注解还是一个自定义作用域，管理 api:http.client.HttpClient[] 实例的创建并确保应用关闭时它们被停止。
+
+传给 api:http.client.annotation.Client[] 注解的值可以是以下之一：
+
+* 绝对 URI，例如 `https://api.twitter.com/1.1`
+* 相对 URI——此时目标服务器就是当前服务器（便于测试）
+* 服务标识符。有关该主题的更多信息，请参阅 <<serviceDiscovery,服务发现>> 一节。
+
+创建 `HttpClient` 的另一种方式是使用 api:http.client.HttpClient[] 的静态 `create` 方法，但不推荐这种方式，因为您必须确保手动关闭客户端，而且当然不会为创建的客户端发生依赖注入。
+
+==== 执行 HTTP GET
+
+使用 `HttpClient` 时一般有两个值得关注的方法。第一个是 `retrieve`，它执行 HTTP 请求并以您请求的类型（默认为 `String`）以 `Publisher` 形式返回响应体。
+
+`retrieve` 方法接受一个 api:http.HttpRequest[] 或您希望请求的端点的 `String` URI。
+
+下面的示例展示如何使用 `retrieve` 执行 HTTP `GET` 并以 `String` 接收响应体：
+
+snippet::io.micronaut.docs.basics.HelloControllerSpec[tags="simple", indent=0, title="Using retrieve"]
+
+注意，在本示例中，为便于说明我们调用 `toBlocking()` 返回客户端的阻塞版本。但在生产代码中不应这样做，而应依赖 Micronaut HTTP 服务器的非阻塞特性。
+
+例如，下面的 `@Controller` 方法以非阻塞方式调用另一个端点：
+
+snippet::io.micronaut.docs.basics.HelloController[tags="imports, nonblocking", indent=0, title="Using the HTTP client without blocking"]
+
+<1> `hello` 方法返回一个 reactor:Mono[]，它可能发出也可能不发出条目。如果不发出条目，则返回 404。
+<2> 调用 `retrieve` 方法，它返回一个 reactor:Flux[]。它有一个 `firstElement` 方法，返回第一个发出的条目或不返回。
+
+TIP: 使用 Reactor（或您偏好的 RxJava），您可以轻松高效地组合多个 HTTP 客户端调用而无需阻塞（阻塞会限制应用的吞吐量与可扩展性）。
+
+==== 调试/追踪 HTTP 客户端
+
+要调试 HTTP 客户端发送与接收的请求，您可以在 `logback.xml` 文件中启用追踪日志：
+
+.logback.xml
+[source,xml]
+----
+<logger name="io.micronaut.http.client" level="TRACE"/>
+----
+
+==== 客户端特定的调试/追踪
+
+要启用客户端特定的日志记录，您可以为所有 HTTP 客户端配置默认 logger。您还可以使用 <<_client_specific_configuration,客户端特定配置>> 为不同客户端配置不同的 logger。例如，在配置文件（例如 `application.yml`）中：
+
+[configuration]
+----
+micronaut:
+  http:
+    client:
+      logger-name: mylogger
+    services:
+      otherClient:
+        logger-name: other.client
+----
+
+然后在 `logback.xml` 中启用日志记录：
+
+.logback.xml
+[source,xml]
+----
+<logger name="mylogger" level="DEBUG"/>
+<logger name="other.client" level="TRACE"/>
+----
+
+==== 自定义 HTTP 请求
+
+前面的示例演示了使用 api:http.HttpRequest[] 接口的静态方法构造 api:http.MutableHttpRequest[] 实例。顾名思义，`MutableHttpRequest` 是可变的，包括添加请求头、自定义请求体等能力。例如：
+
+snippet::io.micronaut.docs.basics.HelloControllerSpec[tags="headers", indent=0, title="Passing an HttpRequest to retrieve"]
+
+上例在发送前向响应添加了一个请求头（`X-My-Header`）。api:http.MutableHttpRequest[] 接口有更多便捷方法，便于以常见方式修改请求。
+
+==== 读取 JSON 响应
+
+微服务通常使用 JSON 等消息编码格式。Micronaut 的 HTTP 客户端利用 Jackson 进行 JSON 解析，因此任何 Jackson 可解码的类型都可以作为第二个参数传给 `retrieve`。
+
+例如，考虑以下返回 JSON 响应的 `@Controller` 方法：
+
+snippet::io.micronaut.docs.basics.HelloController[tags="json", indent=0, title="Returning JSON from a controller"]
+
+上面的方法返回类型为 `Message` 的 POJO，其形如：
+
+snippet::io.micronaut.docs.basics.Message[tags="imports, class", indent=0, title="Message POJO"]
+
+NOTE: Jackson 注解用于映射构造器
+
+在客户端，您可以调用该端点并使用 `retrieve` 方法将 JSON 解码为映射，如下所示：
+
+snippet::io.micronaut.docs.basics.HelloControllerSpec[tags="jsonmap", indent=0, title="Decoding the response body to a Map"]
+
+上例将响应解码为表示该 JSON 的 link:{jdkapi}/java.base/java/util/Map.html[Map]。您可以使用 `Argument.of(..)` 方法自定义键与值的类型：
+
+snippet::io.micronaut.docs.basics.HelloControllerSpec[tags="jsonmaptypes", indent=0, title="Decoding the response body to a Map"]
+
+<1> `Argument.of` 方法返回一个 `Map`，其键与值类型均为 `String`
+
+虽然以映射形式获取 JSON 可能合意，但通常您希望将对象解码为 POJO。为此，传入类型即可：
+
+snippet::io.micronaut.docs.basics.HelloControllerSpec[tags="jsonpojo", indent=0, title="Decoding the response body to a POJO"]
+
+注意，在客户端与服务器上可以使用相同的 Java 类型。这意味着通常您会定义一个公共 API 项目，在其中定义描述您 API 的接口与类型。
+
+==== 解码其他内容类型
+
+如果您通信的服务器使用非 JSON 的自定义内容类型，默认情况下 Micronaut 的 HTTP 客户端不知道如何解码该类型。
+
+要解决此问题，将 api:http.codec.MediaTypeCodec[] 注册为 bean，它会被自动拾取并用于解码（或编码）消息。
+
+==== 接收完整的 HTTP 响应
+
+有时仅接收响应体并不足够，您还需要响应中的其他信息，例如请求头、cookie 等。此时不使用 `retrieve`，而使用 `exchange` 方法：
+
+snippet::io.micronaut.docs.basics.HelloControllerSpec[tags="pojoresponse", indent=0, title="Receiving the Full HTTP Response"]
+
+<1> `exchange` 方法接收 api:http.HttpResponse[]
+<2> 使用响应的 `getBody(..)` 方法检索请求体
+<3> 可以检查响应的其他方面，例如 api:http.HttpStatus[]
+
+上例接收完整的 api:http.HttpResponse[]，您可以从中获取请求头与其他有用信息。

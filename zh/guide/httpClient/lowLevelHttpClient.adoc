@@ -1,0 +1,11 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Using the Low-Level HTTP Client](https://docs.micronaut.io/5.2.x/core/#core-lowLevelHttpClient)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpClient/lowLevelHttpClient.adoc  upstream_commit: 15119ba9ee63100091348d40eaffe708155b53ae  upstream_hash: 8d3aec5f453416debf9dc995c5803a6adbdd1d8f  translated_at: 2026-11-21 -->
+
+[[lowLevelHttpClient]]
+api:http.client.HttpClient[] 接口构成低层 API 的基础。该接口声明了一些方法，帮助简化 HTTP 请求的执行与响应的接收。
+
+api:http.client.HttpClient[] 接口中的大多数方法返回 Reactive Streams rs:Publisher[] 实例，这并不总是最便于使用的接口。
+
+Micronaut 的 Reactor HTTP 客户端依赖附带一个名为 link:{micronautreactorapi}/io/micronaut/reactor/http/client/ReactorHttpClient.html[ReactorHttpClient] 的子接口。它提供 api:http.client.HttpClient[] 接口的一个变体，返回 https://projectreactor.io[Project Reactor] 的 reactor:Flux[] 类型。
+
+TIP: 更多信息请参阅 https://guides.micronaut.io/latest/micronaut-http-client.html[Micronaut HTTP Client] 指南。

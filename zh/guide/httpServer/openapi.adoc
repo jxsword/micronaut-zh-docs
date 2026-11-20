@@ -1,0 +1,4 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – OpenAPI / Swagger Support](https://docs.micronaut.io/5.2.x/core/#core-openapi)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/openapi.adoc  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360  upstream_hash: 8a2414f1a6af84b21afd78f932b691828a57dcee  translated_at: 2026-11-21 -->
+
+要配置 Micronaut 与 https://swagger.io/docs/specification/about/[OpenAPI/Swagger] 的集成，请遵循 https://micronaut-projects.github.io/micronaut-openapi/latest/guide/index.html[这些说明]

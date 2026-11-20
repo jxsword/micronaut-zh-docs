@@ -1,0 +1,113 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Enabling Access Logger](https://docs.micronaut.io/5.2.x/core/#core-accessLogger)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/serverConfiguration/accessLogger.adoc  upstream_commit: a9c9208e4abf8af75c7d4c75d17f42b0af85bdd8  upstream_hash: 8633b373a1a59c763adc2c3faeb983ad15e35539  translated_at: 2026-11-21 -->
+
+本着 https://httpd.apache.org/docs/current/mod/mod_log_config.html[apache mod_log_config] 与 https://tomcat.apache.org/tomcat-10.0-doc/config/valve.html#Access_Logging[Tomcat Access Log Valve] 的精神，可以为 HTTP 服务器启用访问日志记录器（对 HTTP/1 与 HTTP/2 均有效）。
+
+要启用并配置访问日志记录器，请在配置文件（例如 `application.yml`）中设置：
+
+.启用访问日志记录器
+[configuration]
+----
+micronaut:
+  server:
+    netty:
+      access-logger:
+        enabled: true
+        logger-name: my-access-logger
+        log-format: common
+----
+
+- `enabled` 启用访问日志记录器
+- 可选指定 `logger-name`，默认为 `HTTP_ACCESS_LOGGER`
+- 可选指定 `log-format`，默认为 Common Log Format
+
+==== 过滤访问日志
+
+如果您不希望记录对某些路径的访问，可以在配置中指定正则表达式过滤器：
+
+.过滤访问日志
+[configuration]
+----
+micronaut:
+  server:
+    netty:
+      access-logger:
+        enabled: true
+        logger-name: my-access-logger
+        log-format: common
+        exclusions:
+          - /health
+          - /path/.+
+----
+
+- `enabled` 启用访问日志记录器
+- 可选指定 `logger-name`，默认为 `HTTP_ACCESS_LOGGER`
+- 可选指定 `log-format`，默认为 Common Log Format
+
+==== Logback 配置
+
+除了启用访问日志记录器，还必须为指定或默认的日志记录器名称添加一个 logger。例如，使用 logback 的默认 logger 名称：
+
+.Logback 配置
+[source,xml]
+----
+<appender
+    name="httpAccessLogAppender"
+    class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <append>true</append>
+    <file>log/http-access.log</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+        <!-- daily rollover -->
+        <fileNamePattern>log/http-access-%d{yyyy-MM-dd}.log
+        </fileNamePattern>
+        <maxHistory>7</maxHistory>
+    </rollingPolicy>
+    <encoder>
+        <charset>UTF-8</charset>
+        <pattern>%msg%n</pattern>
+    </encoder>
+    <immediateFlush>true</immediateFlush>
+</appender>
+
+<logger name="HTTP_ACCESS_LOGGER" additivity="false" level="info">
+    <appender-ref ref="httpAccessLogAppender" />
+</logger>
+----
+
+pattern 应只包含消息标记（marker），其他元素将由访问日志记录器处理。
+
+==== 日志格式
+
+该语法基于 https://httpd.apache.org/docs/current/mod/mod_log_config.html[Apache httpd 日志格式]。
+
+以下是支持的标记：
+
+* *%a* - 远程 IP 地址
+* *%A* - 本地 IP 地址
+* *%b* - 发送的字节数（不含 HTTP 头），未发送字节时为 '-'
+* *%B* - 发送的字节数（不含 HTTP 头）
+* *%h* - 远程主机。不进行反向 DNS 查询，因此这是远程 IP 地址
+* *%H* - 请求协议
+* *%{<header>}i* - 请求头。省略参数时（*%i*）打印所有请求头
+* *%{<header>}o* - 响应头。省略参数时（*%o*）打印所有响应头
+* *%{<cookie>}C* - 请求 cookie（COOKIE）。省略参数时（*%C*）打印所有 cookie
+* *%{<cookie>}c* - 响应 cookie（SET_COOKIE）。省略参数时（*%c*）打印所有 cookie
+* *%l* - 来自 identd 的远程逻辑用户名（始终返回 '-'）
+* *%m* - 请求方法
+* *%p* - 本地端口
+* *%q* - 查询字符串（不含 '?' 字符）
+* *%r* - 请求的第一行
+* *%s* - 响应的 HTTP 状态码
+* *%{<format>}t* - 日期与时间。省略参数时使用 Common Log Format（"'['dd/MMM/yyyy:HH:mm:ss Z']'"）。
+** 如果格式以 begin: 开头（默认），时间取自请求处理开始时；如果以 end: 开头，则是写入日志条目的时间，接近请求处理的末尾。
+** 格式应遵循 `DateTimeFormatter` 语法。
+* *%{property}u* - 远程已认证用户。当 *micronaut-session* 在类路径上时，省略参数则返回会话 id，否则打印指定属性或 '-'
+* *%U* - 请求的 URI
+* *%v* - 本地服务器名
+* *%D* - 处理请求所用时间（毫秒）
+* *%T* - 处理请求所用时间（秒）
+
+此外，对于常见模式可以使用以下别名：
+
+* *common* - `%h %l %u %t "%r" %s %b`，即 https://httpd.apache.org/docs/2.4/logs.html#common[Common Log Format]（CLF）
+* *combined* - `%h %l %u %t "%r" %s %b "%{Referer}i" "%{User-Agent}i"`，即 https://httpd.apache.org/docs/2.4/logs.html#combined[Combined Log Format]

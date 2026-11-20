@@ -1,0 +1,87 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Posting a Request Body](https://docs.micronaut.io/5.2.x/core/#core-clientPostRequests)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpClient/lowLevelHttpClient/clientPostRequests.adoc  upstream_commit: 461985c2db1cfad049219629d4d289da46fd34dd  upstream_hash: b1fd3fd078c8b38078ec62c7446195332fb17d35  translated_at: 2026-11-21 -->
+
+到目前为止的所有示例都使用了相同的 HTTP 方法，即 `GET`。api:http.HttpRequest[] 接口为所有不同的 HTTP 方法提供了工厂方法。下表汇总了它们：
+
+.HttpRequest 工厂方法
+|===
+|方法 |说明|允许请求体
+
+| api:http.HttpRequest.GET(java.lang.String)[]
+| 构造 HTTP `GET` 请求
+| `false`
+
+| api:http.HttpRequest.OPTIONS(java.lang.String)[]
+| 构造 HTTP `OPTIONS` 请求
+| `false`
+
+| api:http.HttpRequest.HEAD(java.lang.String)[]
+| 构造 HTTP `HEAD` 请求
+| `false`
+
+| api:http.HttpRequest.POST(java.lang.String,T)[]
+| 构造 HTTP `POST` 请求
+| `true`
+
+| api:http.HttpRequest.PUT(java.lang.String,T)[]
+| 构造 HTTP `PUT` 请求
+| `true`
+
+| api:http.HttpRequest.PATCH(java.lang.String,T)[]
+| 构造 HTTP `PATCH` 请求
+| `true`
+
+| api:http.HttpRequest.DELETE(java.lang.String)[]
+| 构造 HTTP `DELETE` 请求
+| `true`
+
+|===
+
+还存在一个 `create` 方法，可用于为任何 api:http.HttpMethod[] 类型构造请求。由于 `POST`、`PUT` 与 `PATCH` 方法需要请求体，因此需要第二个参数作为请求体对象。
+
+下面的示例演示如何发送简单的 `String` 请求体：
+
+snippet::io.micronaut.docs.basics.HelloControllerSpec[tags="poststring", indent=0, title="Sending a `String` body"]
+
+<1> 使用 `POST` 方法；第一个参数是 URI，第二个是请求体
+<2> 内容类型与接受类型设置为 `text/plain` （默认为 `application/json`）
+<3> 期望的响应类型是 `String`
+
+== 发送 JSON
+
+前面的示例发送纯文本。要发送 JSON，将要编码为 JSON 的对象（无论是 Map 还是 POJO）传入即可，只要 Jackson 能够编码它。
+
+例如，您可以创建上一节中的 `Message` 并将其传给 `POST` 方法：
+
+snippet::io.micronaut.docs.basics.HelloControllerSpec[tags="postpojo", indent=0, title="Sending a JSON body"]
+
+<1> 创建 `Message` 实例并传给 `POST` 方法
+<2> 同一个类解码响应
+
+在上例中，以下 JSON 会作为请求体发送：
+
+.产生的 JSON
+[source,json]
+----
+{"text":"Hello John"}
+----
+
+可以使用 https://github.com/FasterXML/jackson-annotations[Jackson Annotations] 自定义 JSON。
+
+== 使用 URI 模板
+
+如果要将对象的某些属性包含在 URI 中，可以使用 URI 模板。
+
+例如，假设您有一个具有 `title` 属性的 `Book` 类。您可以在 URI 模板中包含 `title`，然后从 `Book` 实例填充它。例如：
+
+snippet::io.micronaut.docs.basics.BookControllerSpec[tags="posturitemplate", indent=0, title="Sending a JSON body with a URI template"]
+
+在上例中，`title` 属性包含在 URI 中。
+
+== 发送表单数据
+
+您也可以将 POJO 或映射编码为表单数据而不是 JSON。只需在 post 请求上将内容类型设置为 `application/x-www-form-urlencoded`：
+
+snippet::io.micronaut.docs.basics.BookControllerSpec[tags="postform", indent=0, title="Sending a Form Data"]
+
+注意，Jackson 也可以绑定表单数据，因此要自定义绑定过程，请使用 https://github.com/FasterXML/jackson-annotations[Jackson annotations]。

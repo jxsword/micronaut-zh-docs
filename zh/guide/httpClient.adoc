@@ -1,0 +1,7 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – The HTTP Client](https://docs.micronaut.io/5.2.x/core/#core-httpClient)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpClient.adoc  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360  upstream_hash: 55eabc3e3a984be0c3790d3b161ba8bfacd0a7d6  translated_at: 2026-11-21 -->
+
+[[httpClient]]
+微服务之间的客户端通信是任何微服务架构的关键组成部分。有鉴于此，Micronaut 框架包含一个既有低层 API 又有高层 AOP 驱动 API 的 HTTP 客户端。
+
+TIP: 无论您是否选择使用 Micronaut 的 HTTP 服务器，您都可能希望在应用中使用 Micronaut HTTP 客户端，因为它是一个功能丰富的客户端实现。

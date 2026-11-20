@@ -1,0 +1,4 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Low-Level and High-Level APIs](https://docs.micronaut.io/5.2.x/core/#core-lowLevelOrHighLevel)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpClient/lowLevelOrHighLevel.adoc  upstream_commit: 96b31e99e0507ffbb2633a87a8c8660684da672e  upstream_hash: a469afb7b3cc2b9c0e8080bf395590c2956d6a4b  translated_at: 2026-11-21 -->
+
+由于较高级的 API 构建在低层 HTTP 客户端之上，我们首先介绍低层客户端。

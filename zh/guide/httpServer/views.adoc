@@ -1,0 +1,6 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Server Side View Rendering](https://docs.micronaut.io/5.2.x/core/#core-views)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/views.adoc  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360  upstream_hash: 680dee54869b3efca92b9351463738a52a2cb593  translated_at: 2026-11-21 -->
+
+Micronaut 框架支持服务器端视图渲染。
+
+更多信息请参阅 link:https://micronaut-projects.github.io/micronaut-views/latest/guide[Micronaut Views] 文档。

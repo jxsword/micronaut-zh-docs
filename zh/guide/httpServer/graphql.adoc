@@ -1,0 +1,6 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – GraphQL Support](https://docs.micronaut.io/5.2.x/core/#core-graphql)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/graphql.adoc  upstream_commit: fef87bbe1d6aba475241386c1fc2f4fd3f2709a3  upstream_hash: 56d83f3b00bc376a7ceb051bb00bcfd0d451e554  translated_at: 2026-11-21 -->
+
+https://graphql.org/[GraphQL] 是一种用于构建 API 的查询语言，它提供直观灵活的语法，以及描述数据需求与交互的系统。
+
+有关如何使用 Micronaut 构建 GraphQL 应用的更多信息，请参阅 https://micronaut-projects.github.io/micronaut-graphql/latest/guide[Micronaut GraphQL] 文档。

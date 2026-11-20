@@ -1,0 +1,44 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Streaming JSON over HTTP](https://docs.micronaut.io/5.2.x/core/#core-clientStreaming)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpClient/lowLevelHttpClient/clientStreaming.adoc  upstream_commit: e78e2b3f353f89c72d9de5f333d83ddcd10c6227  upstream_hash: 473e2957ef249f8c5e971311fdaa647dee6ed86c  translated_at: 2026-11-21 -->
+
+[[clientStreaming]]
+Micronaut 的 HTTP 客户端通过 link:{micronautreactorapi}/io/micronaut/reactor/http/client/ReactorStreamingHttpClient.html[ReactorStreamingHttpClient] 接口支持通过 HTTP 流式传输数据，该接口包含特定于流式传输的方法，包括：
+
+.HTTP 流式方法
+|===
+|方法 |说明
+
+| `dataStream(HttpRequest<I> request)`
+| 以 api:core.io.buffer.ByteBuffer[] 的 reactor:Flux[] 形式返回数据流
+
+| `exchangeStream(HttpRequest<I> request)`
+| 返回包装 api:core.io.buffer.ByteBuffer[] 的 reactor:Flux[] 的 api:http.HttpResponse[]
+
+| `jsonStream(HttpRequest<I> request)`
+| 返回 JSON 对象的非阻塞流
+
+|===
+
+要使用 JSON 流，在服务器上声明一个返回 JSON 对象 `application/x-json-stream` 的控制器方法。例如：
+
+snippet::io.micronaut.docs.streaming.HeadlineController[tags="imports, streaming", indent=0, title="Streaming JSON on the Server"]
+
+<1> `streamHeadlines` 方法产生 `application/x-json-stream`
+<2> 一个 reactor:Flux[] 从 `Callable` 函数创建（注意函数内没有发生阻塞，所以这样是可以的；否则您应该对 I/O 线程池使用 `subscribeOn`）。
+<3> reactor:Flux[] 重复 100 次
+<4> reactor:Flux[] 发出条目，每个条目之间延迟一秒
+
+NOTE: 服务器不必用 Micronaut 编写，任何支持 JSON 流的服务器都可以。
+
+然后在客户端使用 `jsonStream` 订阅该流，服务器每次发出 JSON 对象时客户端都会解码并消费它：
+
+snippet::io.micronaut.docs.streaming.HeadlineControllerSpec[tags="streaming", indent=0, title="Streaming JSON on the Client"]
+
+<1> `jsonStream` 方法返回一个 reactor:Flux[]
+<2> 使用 `CompletableFuture` 接收值，但如何处理每个发出的条目取决于应用
+<3> rs:Subscription[] 请求单个条目。您可以使用 rs:Subscription[] 来调节背压与需求。
+<4> 发出条目时调用 `onNext` 方法
+<5> 发生错误时调用 `onError` 方法
+<6> 所有 `Headline` 实例都发出后调用 `onComplete` 方法
+
+注意，上例中的服务器与客户端都没有执行任何阻塞 I/O。

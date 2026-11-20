@@ -1,0 +1,18 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Multipart Client Uploads](https://docs.micronaut.io/5.2.x/core/#core-clientUploads)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpClient/lowLevelHttpClient/clientUploads.adoc  upstream_commit: 461985c2db1cfad049219629d4d289da46fd34dd  upstream_hash: d1aeec3b6b876389248d99fcc615cb5743091740  translated_at: 2026-11-21 -->
+
+:linkattrs:
+Micronaut HTTP 客户端支持 multipart 请求。要构建 multipart 请求，请将内容类型设置为 `multipart/form-data`，并将请求体设置为 api:io.micronaut.http.client.multipart.MultipartBody[] 的实例。
+
+例如：
+
+snippet::io.micronaut.docs.client.upload.MultipartFileUploadSpec[tags="multipartBodyImports, file, multipartBody", indent=0, title="Creating the body"]
+
+<1> 创建 MultipartBody 构建器，用于向请求体添加部件。
+<2> 向请求体添加一个部件，本例中是一个文件。link:{api}/io/micronaut/http/client/multipart/MultipartBody.Builder.html[MultipartBody.Builder, window="_blank"] 中有该方法的不同变体。
+<3> build 方法将构建器中的所有部件组装成 MultipartBody。至少需要一个部件。
+
+snippet::io.micronaut.docs.client.upload.MultipartFileUploadSpec[tags="request", indent=0, title="Creating a request"]
+
+<1> 包含不同类型数据的 multipart 请求体。
+<2> 将请求的 content-type 头设置为 `multipart/form-data`。

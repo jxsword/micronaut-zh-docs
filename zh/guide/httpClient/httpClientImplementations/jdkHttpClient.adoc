@@ -1,0 +1,20 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – HTTP Client based on the Java HTTP Client](https://docs.micronaut.io/5.2.x/core/#core-jdkHttpClient)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpClient/httpClientImplementations/jdkHttpClient.adoc  upstream_commit: dfc95c44e18513d331ca74fb3384074ee41fc974  upstream_hash: 0722f1928a2fe533d203ed5550b948444d530dee  translated_at: 2026-11-21 -->
+
+[[jdkHttpClient]]
+要使用基于 https://openjdk.org/groups/net/httpclient/intro.html[Java HTTP Client] 的实现，请向构建中添加以下依赖：
+
+dependency:micronaut-http-client-jdk[]
+
+NOTE: 该 Micronaut HTTP 客户端实现自 Micronaut Framework 4.0 起可用。
+
+基于 https://openjdk.org/groups/net/httpclient/intro.html[Java HTTP Client] 的实现不支持以下特性：
+
+* <<proxyClient,代理请求>> 支持（我们确实支持 <<proxy,HTTP 代理>>）。
+* 客户端过滤器。
+* 流式支持。
+* Multipart 请求。
+* H2C 与 HTTP/3。
+* pcap 日志
+
+如果您需要其中任何一项，我们建议您使用 <<nettyHttpClient,基于 Netty 的 HTTP 客户端实现>>。

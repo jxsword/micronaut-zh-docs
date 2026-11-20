@@ -1,0 +1,4 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – HTTP Client Implementations](https://docs.micronaut.io/5.2.x/core/#core-httpClientImplementations)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpClient/httpClientImplementations.adoc  upstream_commit: 96b31e99e0507ffbb2633a87a8c8660684da672e  upstream_hash: 1ca30803a798ceaa296c5efe90cdfcbc3dea7117  translated_at: 2026-11-21 -->
+
+Micronaut HTTP 客户端有多种实现。
