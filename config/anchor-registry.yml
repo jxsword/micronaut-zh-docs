@@ -1,0 +1,900 @@
+# 锚点登记表（check_anchors.py 自动生成，禁手改）
+# 被引用锚点 → 所在文件/标题；translator 翻译被引用标题时
+# 原位注入 [[原锚点]]（PLAN §5.6）。unresolved 供 M3 断链清零跟踪。
+anchors:
+- id: aop
+  file: guide/aop.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/appendix/architecture/aopArch.adoc
+  - guide/introduction/whatsNew.adoc
+  - guide/ioc/annotationMetadata.adoc
+  - guide/ioc/factories.adoc
+  - guide/languageSupport/java/incrementalannotationgradle.adoc
+  - guide/languageSupport/kotlin/openandaop.adoc
+  - guide/languageSupport/python/aopProxies.adoc
+- id: aroundAdvice
+  file: guide/aop/aroundAdvice.adoc
+  title: Writing Around Advice
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/appendix/architecture/aopArch.adoc
+- id: interceptorLifecycle
+  file: guide/aop/interceptorLifecycle.adoc
+  title: Interception Kinds
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/aop/lifecycleAdvice.adoc
+- id: introductionAdvice
+  file: guide/aop/introductionAdvice.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/httpClient/clientAnnotation.adoc
+- id: lifecycleAdvice
+  file: guide/aop/lifecycleAdvice.adoc
+  title: Exceptions Thrown by Construct Advice
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/aop/interceptorLifecycle.adoc
+- id: retry
+  file: guide/aop/retry.adoc
+  title: Retry Dependency
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/cloud/clientSideLoadBalancing.adoc
+  - guide/httpClient/clientAnnotation/clientFallback.adoc
+  - guide/httpClient/clientAnnotation/clientRetry.adoc
+  - guide/introduction/whatsNew.adoc
+- id: validation
+  file: guide/aop/validation.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/httpServer/datavalidation.adoc
+  - guide/ioc/annotationMetadata.adoc
+  - guide/languageSupport/python/javaInterfaces.adoc
+- id: annotationArch
+  file: guide/appendix/architecture/annotationArch.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/appendix/architecture/iocArch.adoc
+- id: compilerArch
+  file: guide/appendix/architecture/compilerArch.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/appendix/architecture/annotationArch.adoc
+  - guide/appendix/architecture/aopArch.adoc
+  - guide/appendix/architecture/containerArch.adoc
+  - guide/appendix/architecture/iocArch.adoc
+- id: containerArch
+  file: guide/appendix/architecture/containerArch.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/appendix/architecture/httpServerArch.adoc
+- id: iocArch
+  file: guide/appendix/architecture/iocArch.adoc
+  title: Configuration Properties Handling
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/appendix/architecture/aopArch.adoc
+  - guide/appendix/architecture/httpServerArch.adoc
+- id: breaks
+  file: guide/appendix/breaks.adoc
+  title: A reflectively dispatched executable method propagates the method's exception
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/introduction/upgrading.adoc
+  - guide/introduction/whatsNew.adoc
+- id: certificates
+  file: guide/certificates.adoc
+  title: Certificate providers
+  reftext: ''
+  explicit: true
+  referenced_by:
+  - guide/httpServer/serverConfiguration/https.adoc
+- id: cli
+  file: guide/cli.adoc
+  title: Interactive Mode
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/languageSupport/groovy.adoc
+  - guide/languageSupport/kotlin.adoc
+- id: proxy
+  file: guide/cli/proxy.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/httpClient/httpClientImplementations/jdkHttpClient.adoc
+- id: gradleReload
+  file: guide/cli/reloading/gradleReload.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/cli/reloading/jrebel.adoc
+- id: ideReload
+  file: guide/cli/reloading/ideReload.adoc
+  title: IntelliJ
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/cli/reloading/jrebel.adoc
+- id: clientSideLoadBalancing
+  file: guide/cloud/clientSideLoadBalancing.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/cloud/cloudConfiguration.adoc
+- id: cloudConfiguration
+  file: guide/cloud/cloudConfiguration.adoc
+  title: Using Cloud Instance Metadata
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/config/environments.adoc
+- id: distributedConfiguration
+  file: guide/cloud/cloudConfiguration/distributedConfiguration.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/config/bootstrap.adoc
+- id: distributedConfigurationVault
+  file: guide/cloud/cloudConfiguration/distributedConfigurationVault.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/config/propertySource.adoc
+- id: serviceDiscovery
+  file: guide/cloud/serviceDiscovery.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/cloud/clientSideLoadBalancing.adoc
+  - guide/cloud/cloudConfiguration.adoc
+  - guide/httpClient/clientAnnotation.adoc
+  - guide/httpClient/lowLevelHttpClient/clientBasics.adoc
+  - guide/httpClient/lowLevelHttpClient/clientConfiguration.adoc
+- id: serviceDiscoveryManual
+  file: guide/cloud/serviceDiscovery/serviceDiscoveryManual.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/httpClient/lowLevelHttpClient/clientConfiguration.adoc
+- id: commandLineApps
+  file: guide/commandLineApps.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/cli/createProject.adoc
+- id: config
+  file: guide/config.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/appendix/architecture/iocArch.adoc
+- id: bootstrap
+  file: guide/config/bootstrap.adoc
+  title: Bootstrap Context Beans
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/cloud/cloudConfiguration/distributedConfiguration.adoc
+  - guide/cloud/cloudConfiguration/distributedConfigurationAwsParameterStore.adoc
+  - guide/cloud/cloudConfiguration/distributedConfigurationConsul.adoc
+  - guide/cloud/cloudConfiguration/distributedConfigurationSpringCloud.adoc
+  - guide/cloud/cloudConfiguration/distributedConfigurationVault.adoc
+- id: configurationProperties
+  file: guide/config/configurationProperties.adoc
+  title: Includes / Excludes
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/appendix/architecture/containerArch.adoc
+  - guide/config.adoc
+  - guide/httpClient/lowLevelHttpClient/clientConfiguration.adoc
+  - guide/introduction/whatsNew.adoc
+- id: configurationPropertiesAccessorsStyle
+  file: guide/config/configurationProperties.adoc
+  title: Change accessors style
+  reftext: ''
+  explicit: true
+  referenced_by:
+  - guide/config/immutableConfig.adoc
+  - guide/ioc/introspection/introspectedAccessorsStyle.adoc
+- id: environments
+  file: guide/config/environments.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/appendix/architecture/iocArch.adoc
+  - guide/cloud/cloudConfiguration.adoc
+- id: evaluatedExpressions
+  file: guide/config/evaluatedExpressions.adoc
+  title: Using Expressions in Micronaut framework
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/ioc/beanMappers.adoc
+- id: jmx
+  file: guide/config/jmx.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/management/providedEndpoints.adoc
+- id: configImport
+  file: guide/config/propertySource.adoc
+  title: Importing Additional Configuration
+  reftext: ''
+  explicit: true
+  referenced_by:
+  - guide/cloud/cloudConfiguration/distributedConfiguration.adoc
+  - guide/introduction/whatsNew.adoc
+- id: customPropertySourceImporter
+  file: guide/config/propertySource.adoc
+  title: Implementing a Custom PropertySourceImporter
+  reftext: ''
+  explicit: true
+  referenced_by:
+  - guide/cloud/cloudConfiguration/distributedConfiguration.adoc
+  - guide/introduction/whatsNew.adoc
+- id: duplicateConfigurationResources
+  file: guide/config/propertySource.adoc
+  title: Duplicate Configuration Resources
+  reftext: ''
+  explicit: true
+  referenced_by:
+  - guide/appendix/breaks.adoc
+- id: propertySource
+  file: guide/config/propertySource.adoc
+  title: Included PropertySource Loaders
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/config.adoc
+  - guide/config/bootstrap.adoc
+  - guide/introduction/whatsNew.adoc
+- id: valueAnnotation
+  file: guide/config/valueAnnotation.adoc
+  title: Using the `@Value` Annotation
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/appendix/architecture/containerArch.adoc
+  - guide/appendix/architecture/httpServerArch.adoc
+  - guide/config/propertySource.adoc
+  - guide/ioc/injection/nullableInjection.adoc
+- id: dataAccess
+  file: guide/configurations/dataAccess.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/cli/features.adoc
+- id: hibernateSupport
+  file: guide/configurations/dataAccess/hibernateSupport.adoc
+  title: Setting up a Hibernate/JPA EntityManager
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/aop/springAop.adoc
+- id: sqlSupport
+  file: guide/configurations/dataAccess/sqlSupport.adoc
+  title: Configuring a JDBC DataSource
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/configurations/dataAccess/hibernateSupport.adoc
+- id: contextPropagation
+  file: guide/contextPropagation.adoc
+  title: PropagatedContext building blocks
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/appendix/breaks.adoc
+  - guide/introduction/whatsNew.adoc
+  - guide/languageSupport/kotlin/kotlinContextPropagation.adoc
+- id: clientAnnotation
+  file: guide/httpClient/clientAnnotation.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/cloud/cloudConfiguration/distributedConfigurationConsul.adoc
+  - guide/httpServer/apiVersioning.adoc
+  - guide/quickStart/creatingClient.adoc
+- id: clientFilter
+  file: guide/httpClient/clientFilter.adoc
+  title: Injecting Another Client into a ClientFilter
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/httpClient/clientAnnotation/clientHeaders.adoc
+- id: clientHttp3
+  file: guide/httpClient/clientHttp3.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/introduction/whatsNew.adoc
+- id: jdkHttpClient
+  file: guide/httpClient/httpClientImplementations/jdkHttpClient.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/introduction.adoc
+- id: nettyHttpClient
+  file: guide/httpClient/httpClientImplementations/nettyHttpClient.adoc
+  title: Disable hostname verification in ssl config
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/httpClient/httpClientImplementations/jdkHttpClient.adoc
+  - guide/introduction.adoc
+- id: lowLevelHttpClient
+  file: guide/httpClient/lowLevelHttpClient.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/quickStart/creatingClient.adoc
+- id: clientStreaming
+  file: guide/httpClient/lowLevelHttpClient/clientStreaming.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/httpClient/clientAnnotation/clientAnnotationStreaming.adoc
+- id: proxyClient
+  file: guide/httpClient/proxyClient.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/httpClient/httpClientImplementations/jdkHttpClient.adoc
+- id: binding
+  file: guide/httpServer/binding.adoc
+  title: Binding Annotations
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/appendix/architecture/httpServerArch.adoc
+  - guide/httpServer/errorHandling/localErrorHandling.adoc
+- id: exceptionHandler
+  file: guide/httpServer/errorHandling/exceptionHandler.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/httpServer/errorHandling/errorFormatting.adoc
+- id: filters
+  file: guide/httpServer/filters.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/httpClient/clientFilter.adoc
+  - guide/httpClient/proxyClient.adoc
+- id: filtermethods
+  file: guide/httpServer/filters/filtermethods.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/httpServer/filters.adoc
+  - guide/httpServer/filters/httpServerFilter.adoc
+- id: order
+  file: guide/httpServer/filters/filtermethods/order.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/introduction/whatsNew.adoc
+- id: form
+  file: guide/httpServer/form.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/introduction/whatsNew.adoc
+- id: formCapable
+  file: guide/httpServer/form/formCapable.adoc
+  title: Field Metadata
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/introduction/whatsNew.adoc
+- id: jsonBinding
+  file: guide/httpServer/jsonBinding.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/httpServer/jsonBinding/jacksonConfiguration.adoc
+  - guide/httpServer/jsonBinding/jacksonConfiguration/jacksonConfigurationBeans.adoc
+  - guide/httpServer/jsonBinding/jacksonConfiguration/jacksonConfigurationFeatures.adoc
+  - guide/httpServer/jsonBinding/jacksonConfiguration/jacksonConfigurationFurtherCustomisingJsonFactory.adoc
+  - guide/httpServer/jsonBinding/jacksonConfiguration/jacksonConfigurationSupportForJsonView.adoc
+  - guide/httpServer/jsonBinding/jsonMapper.adoc
+- id: bindingUsingPOJOs
+  file: guide/httpServer/jsonBinding/bindingUsingPOJOs.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/httpServer/formData.adoc
+- id: serializationUsingJacksonDatabind
+  file: guide/httpServer/jsonBinding/serializationUsingJacksonDatabind.adoc
+  title: Kotlin Data Classes Jackson Databind Serialization
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/appendix/breaks.adoc
+- id: localeResolution
+  file: guide/httpServer/localeResolution.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/i18n/localizedMessageSource.adoc
+- id: routing
+  file: guide/httpServer/routing.adoc
+  title: URI Paths
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/httpClient/clientAnnotation/clientParameters.adoc
+- id: runningSpecificPort
+  file: guide/httpServer/runningSpecificPort.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/quickStart/creatingServer.adoc
+- id: serverConfiguration
+  file: guide/httpServer/serverConfiguration.adoc
+  title: Using Native Transports
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/appendix/architecture/httpServerArch.adoc
+  - guide/httpServer/serverConfiguration/listener.adoc
+- id: cors
+  file: guide/httpServer/serverConfiguration/cors.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/httpServer/routing.adoc
+- id: corsConfiguration
+  file: guide/httpServer/serverConfiguration/cors/corsConfiguration.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/httpServer/serverConfiguration/cors/annotationBasedCors.adoc
+  - guide/httpServer/serverConfiguration/corsCrossOriginEmbedderPolicy.adoc
+  - guide/httpServer/serverConfiguration/corsCrossOriginResourcePolicy.adoc
+- id: corsCrossOriginEmbedderPolicy
+  file: guide/httpServer/serverConfiguration/corsCrossOriginEmbedderPolicy.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/httpServer/filters/responseHeaderPopulator.adoc
+- id: corsCrossOriginResourcePolicy
+  file: guide/httpServer/serverConfiguration/corsCrossOriginResourcePolicy.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/httpServer/filters/responseHeaderPopulator.adoc
+- id: listener
+  file: guide/httpServer/serverConfiguration/listener.adoc
+  title: systemd socket activation support
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/httpServer/http3Server.adoc
+- id: threadPools
+  file: guide/httpServer/serverConfiguration/threadPools.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/httpServer/reactiveServer/reactiveResponses.adoc
+  - guide/httpServer/serverIO.adoc
+- id: sessions
+  file: guide/httpServer/sessions.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/httpServer/websocket/websocketServer.adoc
+- id: uploads
+  file: guide/httpServer/uploads.adoc
+  title: Route Arguments
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/introduction/whatsNew.adoc
+- id: i18n
+  file: guide/i18n.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/httpServer/errorHandling/errorFormatting.adoc
+- id: upgrading
+  file: guide/introduction/upgrading.adoc
+  title: Upgrading between Micronaut Framework versions
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/introduction/whatsNew.adoc
+- id: annotationMetadata
+  file: guide/ioc/annotationMetadata.adoc
+  title: Annotation Inheritance
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/ioc.adoc
+- id: beanValidation
+  file: guide/ioc/beanValidation.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/aop/validation.adoc
+- id: classImport
+  file: guide/ioc/classImport.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/ioc/mixin.adoc
+- id: conditionalBeans
+  file: guide/ioc/conditionalBeans.adoc
+  title: Configuration Requirements
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/appendix/architecture/containerArch.adoc
+  - guide/cloud/cloudConfiguration.adoc
+  - guide/ioc/annotationMetadata.adoc
+  - guide/ioc/replaces.adoc
+- id: events
+  file: guide/ioc/events.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/appendix/architecture/httpServerArch.adoc
+  - guide/cloud/cloudConfiguration.adoc
+  - guide/httpServer/serverConfiguration/nettyClientPipeline.adoc
+  - guide/httpServer/serverConfiguration/nettyServerPipeline.adoc
+  - guide/httpServer/serverEvents.adoc
+- id: factories
+  file: guide/ioc/factories.adoc
+  title: Beans from Fields
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/aop/aroundAdvice.adoc
+  - guide/httpServer/serverConfiguration/secondaryServers.adoc
+- id: introspection
+  file: guide/ioc/introspection.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/appendix/architecture/introspectionArch.adoc
+  - guide/httpServer/jsonBinding/serializeUsingMicronautSerialization.adoc
+  - guide/ioc/beanMappers.adoc
+- id: introspectedAnnotationOnAConfigurationClass
+  file: guide/ioc/introspection/introspectedAnnotationOnAConfigurationClass.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/ioc/introspection/atIntrospected.adoc
+- id: propertyMembers
+  file: guide/ioc/introspection/propertyMembers.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/ioc/reflection.adoc
+- id: staticAtCreator
+  file: guide/ioc/introspection/staticAtCreator.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/ioc/introspection/atCreator.adoc
+- id: nullabilityAnnotations
+  file: guide/ioc/nullabilityAnnotations.adoc
+  title: Micronaut’s Nullability Annotations
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/introduction/whatsNew.adoc
+- id: jspecify
+  file: guide/ioc/nullabilityAnnotations/jspecify.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/introduction/whatsNew.adoc
+  - guide/ioc/nullabilityAnnotations.adoc
+- id: qualifiers
+  file: guide/ioc/qualifiers.adoc
+  title: Qualifying By Name
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/ioc/annotationMetadata.adoc
+  - guide/ioc/injection/constructorInjection.adoc
+- id: reflection
+  file: guide/ioc/reflection.adoc
+  title: Annotation Metadata and Arguments
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/languageSupport/python/generatedClasses.adoc
+- id: replaces
+  file: guide/ioc/replaces.adoc
+  title: Factory Replacement
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/cloud/clientSideLoadBalancing.adoc
+  - guide/httpClient/httpClientImplementations/nettyHttpClient.adoc
+- id: scopes
+  file: guide/ioc/scopes.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/ioc/annotationMetadata.adoc
+  - guide/ioc/factories.adoc
+  - guide/ioc/lifecycle.adoc
+- id: refreshable
+  file: guide/ioc/scopes/refreshable.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/config/immutableConfig.adoc
+- id: types
+  file: guide/ioc/types.adoc
+  title: Collection Ordering
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/introduction/whatsNew.adoc
+- id: languageSupport
+  file: guide/languageSupport.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/appendix/problems.adoc
+- id: graal
+  file: guide/languageSupport/graal.adoc
+  title: Getting Started
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/appendix/breaks.adoc
+  - guide/httpServer/jsonBinding/serializationUsingJacksonDatabind.adoc
+- id: incrementalannotationgradle
+  file: guide/languageSupport/java/incrementalannotationgradle.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/languageSupport/kotlin/gradlekapt.adoc
+- id: asyncioNetworking
+  file: guide/languageSupport/python/asyncAwait/asyncioNetworking.adoc
+  title: Address families and name resolution
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/languageSupport/python/asyncAwait.adoc
+- id: asyncioStreaming
+  file: guide/languageSupport/python/asyncAwait/asyncioStreaming.adoc
+  title: Consuming a Publisher with async for
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/languageSupport/python/asyncAwait.adoc
+  - guide/languageSupport/python/asyncAwait/asyncioUnsupported.adoc
+- id: extendingJavaClasses
+  file: guide/languageSupport/python/extendingJavaClasses.adoc
+  title: Checked exceptions
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/languageSupport/python/javaInterfaces.adoc
+- id: generatedClasses
+  file: guide/languageSupport/python/generatedClasses.adoc
+  title: Nested Classes
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/languageSupport/python/interfaces.adoc
+- id: moduleScripts
+  file: guide/languageSupport/python/moduleScripts.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/httpServer/routing.adoc
+- id: runtimeTypes
+  file: guide/languageSupport/python/runtimeTypes.adoc
+  title: Python Classes as Java Class Arguments
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/languageSupport/python/javaCollections.adoc
+- id: standardTypes
+  file: guide/languageSupport/python/standardTypes.adoc
+  title: Aware datetimes
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/languageSupport/python/runtimeTypes.adoc
+- id: logging
+  file: guide/logging.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/ioc/conditionalBeans.adoc
+  - guide/management/providedEndpoints/loggersEndpoint.adoc
+- id: endpointConfiguration
+  file: guide/management/buildingEndpoints/endpointConfiguration.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/management/buildingEndpoints/endpointAnnotation.adoc
+- id: providedEndpoints
+  file: guide/management/providedEndpoints.adoc
+  title: Management Port
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/management/buildingEndpoints.adoc
+- id: beansEndpoint
+  file: guide/management/providedEndpoints/beansEndpoint.adoc
+  title: Configuration
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/management/providedEndpoints.adoc
+- id: cachesEndpoint
+  file: guide/management/providedEndpoints/cachesEndpoint.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/management/providedEndpoints.adoc
+- id: environmentEndpoint
+  file: guide/management/providedEndpoints/environmentEndpoint.adoc
+  title: Configuration
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/management/providedEndpoints.adoc
+- id: healthEndpoint
+  file: guide/management/providedEndpoints/healthEndpoint.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/management/providedEndpoints.adoc
+- id: infoEndpoint
+  file: guide/management/providedEndpoints/infoEndpoint.adoc
+  title: Configuration
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/management/providedEndpoints.adoc
+- id: loggersEndpoint
+  file: guide/management/providedEndpoints/loggersEndpoint.adoc
+  title: Configuration
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/management/providedEndpoints.adoc
+- id: metricsEndpoint
+  file: guide/management/providedEndpoints/metricsEndpoint.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/management/providedEndpoints.adoc
+- id: refreshEndpoint
+  file: guide/management/providedEndpoints/refreshEndpoint.adoc
+  title: Configuration
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/management/providedEndpoints.adoc
+- id: routesEndpoint
+  file: guide/management/providedEndpoints/routesEndpoint.adoc
+  title: Configuration
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/management/providedEndpoints.adoc
+- id: stopEndpoint
+  file: guide/management/providedEndpoints/stopEndpoint.adoc
+  title: Configuration
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/management/providedEndpoints.adoc
+- id: buildCLI
+  file: guide/quickStart/buildCLI.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/cli.adoc
+- id: ideSetup
+  file: guide/quickStart/ideSetup.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/languageSupport/java/ide.adoc
+  - guide/quickStart.adoc
+- id: serverlessFunctions
+  file: guide/serverlessFunctions.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/appendix/faq.adoc
+  - guide/cli/createProject.adoc
+  - guide/ioc/scopes/builtInScopes/eagerInit.adoc
+  - guide/languageSupport/groovy.adoc
+unresolved:
+- target: _client_specific_configuration
+  from: guide/httpClient/lowLevelHttpClient/clientBasics.adoc
+  reason: anchor-missing
+- target: _uri_path_variables
+  from: guide/httpServer/routing.adoc
+  reason: anchor-missing
+scanned_files: 386

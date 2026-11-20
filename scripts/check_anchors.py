@@ -83,41 +83,77 @@ def build_registry(source_dir: Path) -> Dict:
     unresolved: List[Dict] = []
     files = sorted(source_dir.rglob("*.adoc"))
     texts = {}
+    basename_index: Dict[str, List[str]] = defaultdict(list)
     for f in files:
         rel = f.relative_to(source_dir).as_posix()
         texts[rel] = f.read_text(encoding="utf-8", errors="replace")
         anchors_by_file[rel] = scan_file_anchors(texts[rel])
+        basename_index[f.stem].append(rel)
     for rel in sorted(texts):
         for target in collect_xrefs(texts[rel]):
-            fpart, _, anchor = target.partition("#")
+            fpart, sep, anchor = target.partition("#")
             fpart = fpart.strip()
             anchor = anchor.strip()
-            if not fpart:
-                fpart = rel
             if fpart.startswith(("http", "mailto")):
                 continue
-            if fpart not in texts:
+            if not sep and fpart:
+                # 无 #：页级文件引用（含 / 或 .adoc）或裸锚点
+                if "." in fpart or "/" in fpart:
+                    anchor = ""
+                else:
+                    anchor, fpart = fpart, ""
+            if not fpart and not anchor:
+                continue
+            if fpart and fpart not in texts:
                 unresolved.append({"target": target, "from": rel,
                                    "reason": "file-missing"})
                 continue
-            if not anchor:
-                continue  # 页级引用，无锚点
-            if anchor in anchors_by_file[fpart]:
-                key = f"{fpart}#{anchor}"
-                referenced_by[key].append(rel)
-            else:
+            if fpart and not anchor:
+                continue  # 页级文件引用，存在性已验证
+            if fpart and fpart not in texts:
                 unresolved.append({"target": target, "from": rel,
-                                   "reason": "anchor-missing"})
+                                   "reason": "file-missing"})
+                continue
+            if fpart:
+                if anchor in anchors_by_file[fpart]:
+                    referenced_by[f"{fpart}#{anchor}"].append(rel)
+                else:
+                    unresolved.append({"target": target, "from": rel,
+                                       "reason": "anchor-missing"})
+            else:
+                # 裸锚点全域解析：
+                # ① 显式 [[id]] 定义；② micronaut 约定——锚 id = include 文件
+                # basename（如 <<buildCLI>> → guide/quickStart/buildCLI.adoc，
+                # 标题取该文件首个标题）；都失败才记 unresolved。
+                hits = [f for f in sorted(anchors_by_file)
+                        if anchor in anchors_by_file[f]]
+                if not hits:
+                    hits = sorted(basename_index.get(anchor, []))
+                if hits:
+                    for f in hits:
+                        referenced_by[f"{f}#{anchor}"].append(rel)
+                else:
+                    unresolved.append({"target": target, "from": rel,
+                                       "reason": "anchor-missing"})
     anchors = []
     for key, refs in sorted(referenced_by.items()):
         fpart, anchor = key.split("#", 1)
-        a = anchors_by_file[fpart][anchor]
+        a = anchors_by_file[fpart].get(anchor) or {}
+        title = a.get("title", "")
+        if not title:
+            # basename 派生锚：标题 = 该文件首个标题行
+            from segment_adoc import RE_HEADING
+            for line in texts[fpart].split("\n"):
+                if RE_HEADING.match(line.strip()):
+                    equals = RE_HEADING.match(line.strip()).group(1)
+                    title = line.strip()[len(equals):].strip()
+                    break
         anchors.append({
             "id": anchor,
             "file": fpart,
-            "title": a.get("title", ""),
+            "title": title,
             "reftext": a.get("reftext", ""),
-            "explicit": a.get("explicit", True),
+            "explicit": a.get("explicit", False),
             "referenced_by": sorted(set(refs)),
         })
     return {"anchors": anchors, "unresolved": unresolved,
