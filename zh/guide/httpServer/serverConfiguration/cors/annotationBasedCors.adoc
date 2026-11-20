@@ -1,0 +1,32 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Annotation-based CORS Configuration](https://docs.micronaut.io/5.2.x/core/#core-annotationBasedCors)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/serverConfiguration/cors/annotationBasedCors.adoc  upstream_commit: 47ee115f3816518db832989c8c78e7fd4f25ef24  upstream_hash: 69962087550acc10bdb7b0cb33039a8ae750e2ff  translated_at: 2026-11-21 -->
+
+Micronaut CORS 配置默认应用于运行中的应用内的所有端点。
+
+作为替代方案，<<corsConfiguration,CORS 配置>> 可以使用 link:{api}/io/micronaut/http/server/cors/CrossOrigin.html[@CrossOrigin] 注解以更细粒度的方式应用于特定路由。将其应用于 `@Controller` 即可对控制器中的所有端点应用 CORS 配置。或者，该注解可以应用于控制器上的特定端点，实现更细粒度的控制。
+
+`@CrossOrigin` 注解与应用级 link:{api}/io/micronaut/http/server/cors/CorsOriginConfiguration.html[CorsOriginConfiguration] 配置属性一一对应。要只指定一个允许的来源，使用 `@CrossOrigin("https://foo.com")`。要指定其他配置细节，使用注解属性的组合，就像指定全局 `CorsOriginConfiguration` 属性一样。
+
+[source,java]
+----
+@CrossOrigin(
+	allowedOrigins = { "http://foo.com" },
+	allowedOriginsRegex = "^http(|s):\\/\\/www\\.google\\.com$",
+	allowedMethods = { HttpMethod.POST, HttpMethod.PUT },
+	allowedHeaders = { HttpHeaders.CONTENT_TYPE, HttpHeaders.AUTHORIZATION },
+	exposedHeaders = { HttpHeaders.CONTENT_TYPE, HttpHeaders.AUTHORIZATION },
+	allowCredentials = false,
+	allowPrivateNetwork = false,
+	maxAge = 3600
+)
+----
+
+下面的示例演示如何将该注解应用于特定端点。要为控制器中的所有端点启用 CORS，请将注解移到类级别并进行适当配置。
+
+snippet::io.micronaut.docs.http.server.cors.CorsController[tags="imports,controller", indent=0, title="@CrossOrigin Example"]
+
+<1> ann:http.server.cors.CrossOrigin[] 注解应用于特定端点，使 CORS 配置更加细粒度。
+<2> `GET /hello` 端点将 "https://myui.com" 作为允许的跨源端点
+<3> `GET /hello/nocors` 端点不能使用 "https://myui.com" 作为来源，因为它没有允许该来源的 CORS 配置。
+
+NOTE: 当未设置对应的注解属性时，`@CrossOrigin` 注解使用与应用配置方式相同的默认值。详情参见 <<corsConfiguration,CORS 配置>>。

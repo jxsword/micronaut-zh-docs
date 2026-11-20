@@ -1,0 +1,16 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Allow Private Network](https://docs.micronaut.io/5.2.x/core/#core-corsAllowPrivateNetwork)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/serverConfiguration/cors/corsAllowPrivateNetwork.adoc  upstream_commit: 47ee115f3816518db832989c8c78e7fd4f25ef24  upstream_hash: 7528e6356bee691775e7b8fea9f4a49d5c5a87fb  translated_at: 2026-11-21 -->
+
+CORS 请求默认允许来自 https://developer.chrome.com/blog/private-network-access-preflight[专用网络] 的访问。要禁止来自本地网络的访问，请将 `allow-private-network` 选项设置为 `false`。
+
+.CORS 配置示例
+[configuration]
+----
+micronaut:
+  server:
+    cors:
+      enabled: true
+      configurations:
+        web:
+          allow-private-network: false
+----

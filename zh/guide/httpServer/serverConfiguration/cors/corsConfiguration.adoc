@@ -1,0 +1,40 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – CORS via Configuration](https://docs.micronaut.io/5.2.x/core/#core-corsConfiguration)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/serverConfiguration/cors/corsConfiguration.adoc  upstream_commit: e114ba068ff3ff1c69a22fef9b97a7be3a53d2be  upstream_hash: 96862b8e19eb3219e7bbe1df89d8d0ec7834466d  translated_at: 2026-11-21 -->
+
+[[corsConfiguration]]
+要启用 CORS 请求处理，请在应用配置文件中修改配置：
+
+.CORS 配置示例
+[configuration]
+----
+micronaut:
+  server:
+    cors:
+      enabled: true
+----
+
+仅启用 CORS 处理时，采用一种「完全开放」策略，允许来自任何来源的请求。
+
+要更改所有来源或特定来源的设置，请修改配置以提供一个或多个「配置」。只要提供了任何配置，默认的「完全开放」配置就不会再被使用。
+
+.CORS 配置
+[configuration]
+----
+micronaut:
+  server:
+    cors:
+      enabled: true
+      configurations:
+        all:
+          ...
+        web:
+          ...
+        mobile:
+          ...
+----
+
+上例提供了三个配置。它们的名称（`all`、`web`、`mobile`）并不重要，在 Micronaut 内部没有意义，纯粹是为了便于识别配置的预期使用者。
+
+相同的配置属性可以应用于每个配置。可定义的属性参见 link:{api}/io/micronaut/http/server/cors/CorsOriginConfiguration.html[CorsOriginConfiguration]。提供的每个配置的值将默认为对应字段的默认值。
+
+当发出 CORS 请求时，会在各配置中搜索与请求来源精确匹配或通过正则表达式匹配的允许来源。

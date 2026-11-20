@@ -1,0 +1,18 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Exposed Headers](https://docs.micronaut.io/5.2.x/core/#core-corsExposedHeaders)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/serverConfiguration/cors/corsExposedHeaders.adoc  upstream_commit: bdf7b2ed69099fdff5cdacc09dcc2015504834b4  upstream_hash: 77bbf99c22609292dbd4efe679562df9e4b3f410  translated_at: 2026-11-21 -->
+
+要配置通过 `Access-Control-Expose-Headers` 头在对 CORS 请求的响应中发送的请求头，请在配置中为 `exposed-headers` 键包含一个字符串列表。默认不暴露任何请求头。
+
+.CORS 配置示例
+[configuration]
+----
+micronaut:
+  server:
+    cors:
+      enabled: true
+      configurations:
+        web:
+          exposed-headers:
+            - Content-Type
+            - Authorization
+----

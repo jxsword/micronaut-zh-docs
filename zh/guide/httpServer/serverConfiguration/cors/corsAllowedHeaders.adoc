@@ -1,0 +1,20 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Allowed Headers](https://docs.micronaut.io/5.2.x/core/#core-corsAllowedHeaders)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/serverConfiguration/cors/corsAllowedHeaders.adoc  upstream_commit: bdf7b2ed69099fdff5cdacc09dcc2015504834b4  upstream_hash: fb6e540e8a715dccb518110d51df6c08f3083672  translated_at: 2026-11-21 -->
+
+要允许某个配置的任意请求头，请不要在配置中包含 `allowed-headers` 键。
+
+对于多个允许的请求头，将配置的 `allowed-headers` 键设置为字符串列表。
+
+.CORS 配置示例
+[configuration]
+----
+micronaut:
+  server:
+    cors:
+      enabled: true
+      configurations:
+        web:
+          allowed-headers:
+            - Content-Type
+            - Authorization
+----

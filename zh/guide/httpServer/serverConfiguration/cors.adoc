@@ -1,0 +1,7 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Configuring CORS](https://docs.micronaut.io/5.2.x/core/#core-cors)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/serverConfiguration/cors.adoc  upstream_commit: 15119ba9ee63100091348d40eaffe708155b53ae  upstream_hash: 6ef48df5e357f26a2109efd8067b72c28ee0a0fc  translated_at: 2026-11-21 -->
+
+[[cors]]
+Micronaut 框架开箱即支持 CORS（link:https://www.w3.org/TR/cors/[跨源资源共享，Cross Origin Resource Sharing]）。默认情况下，CORS 请求会被拒绝。
+
+TIP: 更多信息请参阅 https://guides.micronaut.io/latest/micronaut-cors.html[在 Micronaut 应用中配置 CORS] 指南。

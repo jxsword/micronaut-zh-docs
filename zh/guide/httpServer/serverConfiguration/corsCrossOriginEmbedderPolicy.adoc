@@ -1,0 +1,16 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Cross-Origin-Embedder-Policy](https://docs.micronaut.io/5.2.x/core/#core-corsCrossOriginEmbedderPolicy)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/serverConfiguration/corsCrossOriginEmbedderPolicy.adoc  upstream_commit: 159bd3b9ae9f4c38afb2b619796afbd301c2a61b  upstream_hash: 84a9f7139343124d024573c5f3992abd5a63a9d5  translated_at: 2026-11-21 -->
+
+[[corsCrossOriginEmbedderPolicy]]
+要配置 https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html#cross-origin-embedder-policy-coep[Cross-Origin-Embedder-Policy（COEP）] 响应头，请设置 `cross-origin-embedder-policy` 选项。<<corsConfiguration,CORS>> 无需启用。
+
+.COEP 配置示例
+[configuration]
+----
+micronaut:
+  server:
+    cors:
+      cross-origin-embedder-policy: require-corp
+----
+
+支持的值为 `unsafe-none`、`require-corp` 与 `credentialless`。

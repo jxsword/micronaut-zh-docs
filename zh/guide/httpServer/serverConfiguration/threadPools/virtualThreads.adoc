@@ -1,0 +1,26 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Virtual Threads](https://docs.micronaut.io/5.2.x/core/#core-virtualThreads)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/serverConfiguration/threadPools/virtualThreads.adoc  upstream_commit: 69fa75ec5ab8d3854cf993cde254467f3d96f88b  upstream_hash: 28ee22fe685ef18128f418fd1ba1d381a4c2a69a  translated_at: 2026-11-21 -->
+
+自 Java 19 起，JVM 包含对 https://openjdk.org/jeps/425[虚拟线程（「Project Loom」）] 的实验性支持。由于这是一个预览特性，您需要传入 `--enable-preview` 作为 JVM 参数来启用它。
+
+Micronaut 框架会检测虚拟线程支持，并在可用时将其用于名为 `blocking` 的执行器。如果不支持虚拟线程，该执行器将别名到 `io` 线程池。
+
+要使用 `blocking` 执行器，只需例如用 `ExecuteOn` 标注控制器：
+
+snippet::io.micronaut.docs.taskexecutors.HelloWorldController[tags="clazz", indent=0, title="Configuring the Server I/O Thread Pool"]
+
+=== 事件循环载体（Event loop carrier）
+
+Micronaut HTTP Server Netty 4.9 引入了一种 *实验性* 模式，在 Netty 事件循环上运行虚拟线程。这可以提升虚拟线程的性能，因为它避免了 Netty 事件循环与 JDK ForkJoinPool 之间的上下文切换。
+
+该模式需要访问 JDK 内部 API。请以 `--add-opens=java.base/java.lang=ALL-UNNAMED` 运行您的应用。然后为事件循环启用 `loom-carrier` 标志，例如 `micronaut.netty.event-loops.loom-carrier=true`
+
+.启用事件循环载体
+[configuration]
+----
+micronaut:
+  netty:
+    event-loops:
+      default:
+        loom-carrier: true
+----

@@ -1,0 +1,16 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Cross-Origin-Resource-Policy](https://docs.micronaut.io/5.2.x/core/#core-corsCrossOriginResourcePolicy)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/serverConfiguration/corsCrossOriginResourcePolicy.adoc  upstream_commit: 159bd3b9ae9f4c38afb2b619796afbd301c2a61b  upstream_hash: 986fbd74b8dfc117a915e27e51b28e21484ffeb0  translated_at: 2026-11-21 -->
+
+[[corsCrossOriginResourcePolicy]]
+要配置 https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html#cross-origin-resource-policy-corp[Cross-Origin-Resource-Policy（CORP）] 响应头，请设置 `cross-origin-resource-policy` 选项。<<corsConfiguration,CORS>> 无需启用。
+
+.CORP 配置示例
+[configuration]
+----
+micronaut:
+  server:
+    cors:
+      cross-origin-resource-policy: same-origin
+----
+
+支持的值为 `same-origin`、`same-site` 与 `cross-origin`。

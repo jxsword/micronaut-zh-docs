@@ -1455,10 +1455,10 @@ files:
 - file: guide/httpServer/serverConfiguration.adoc
   blob_sha: d7ce888c69c8b896a6a3fac4c80bcb923e1bef5f
   size: 3051
-  status: missing
+  status: current
   zh: zh/guide/httpServer/serverConfiguration.adoc
   paragraphs: 29
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: c7d277606d0198c1c5d3067f209600a65bdc03a6
 - file: guide/httpServer/serverConfiguration/accessLogger.adoc
   blob_sha: 8633b373a1a59c763adc2c3faeb983ad15e35539
@@ -1471,146 +1471,146 @@ files:
 - file: guide/httpServer/serverConfiguration/cors.adoc
   blob_sha: 6ef48df5e357f26a2109efd8067b72c28ee0a0fc
   size: 297
-  status: missing
+  status: current
   zh: zh/guide/httpServer/serverConfiguration/cors.adoc
   paragraphs: 2
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 15119ba9ee63100091348d40eaffe708155b53ae
 - file: guide/httpServer/serverConfiguration/cors/annotationBasedCors.adoc
   blob_sha: 69962087550acc10bdb7b0cb33039a8ae750e2ff
   size: 2337
-  status: missing
+  status: current
   zh: zh/guide/httpServer/serverConfiguration/cors/annotationBasedCors.adoc
   paragraphs: 9
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 47ee115f3816518db832989c8c78e7fd4f25ef24
 - file: guide/httpServer/serverConfiguration/cors/corsAllowCredentials.adoc
   blob_sha: ee01952771ebb4b101318582659ed9f704ad0452
   size: 298
-  status: missing
+  status: current
   zh: zh/guide/httpServer/serverConfiguration/cors/corsAllowCredentials.adoc
   paragraphs: 4
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 6ec2e242eb3876bd80e128aa34034607afc552ce
 - file: guide/httpServer/serverConfiguration/cors/corsAllowPrivateNetwork.adoc
   blob_sha: 7528e6356bee691775e7b8fea9f4a49d5c5a87fb
   size: 406
-  status: missing
+  status: current
   zh: zh/guide/httpServer/serverConfiguration/cors/corsAllowPrivateNetwork.adoc
   paragraphs: 4
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 47ee115f3816518db832989c8c78e7fd4f25ef24
 - file: guide/httpServer/serverConfiguration/cors/corsAllowedHeaders.adoc
   blob_sha: fb6e540e8a715dccb518110d51df6c08f3083672
   size: 445
-  status: missing
+  status: current
   zh: zh/guide/httpServer/serverConfiguration/cors/corsAllowedHeaders.adoc
   paragraphs: 5
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: bdf7b2ed69099fdff5cdacc09dcc2015504834b4
 - file: guide/httpServer/serverConfiguration/cors/corsAllowedMethods.adoc
   blob_sha: c34bc16f788f3fed6351db4fc11da971b60e5996
   size: 427
-  status: missing
+  status: current
   zh: zh/guide/httpServer/serverConfiguration/cors/corsAllowedMethods.adoc
   paragraphs: 5
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: bdf7b2ed69099fdff5cdacc09dcc2015504834b4
 - file: guide/httpServer/serverConfiguration/cors/corsAllowedOrigins.adoc
   blob_sha: f9cb137d8e486dd015e528067716bae9438c1ffa
   size: 1276
-  status: missing
+  status: current
   zh: zh/guide/httpServer/serverConfiguration/cors/corsAllowedOrigins.adoc
   paragraphs: 8
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 8c82ee03540bc11bc707c777c7ff4aa00d5be9d7
 - file: guide/httpServer/serverConfiguration/cors/corsConfiguration.adoc
   blob_sha: 96862b8e19eb3219e7bbe1df89d8d0ec7834466d
   size: 1457
-  status: missing
+  status: current
   zh: zh/guide/httpServer/serverConfiguration/cors/corsConfiguration.adoc
   paragraphs: 12
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: e114ba068ff3ff1c69a22fef9b97a7be3a53d2be
 - file: guide/httpServer/serverConfiguration/cors/corsExposedHeaders.adoc
   blob_sha: 77bbf99c22609292dbd4efe679562df9e4b3f410
   size: 456
-  status: missing
+  status: current
   zh: zh/guide/httpServer/serverConfiguration/cors/corsExposedHeaders.adoc
   paragraphs: 4
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: bdf7b2ed69099fdff5cdacc09dcc2015504834b4
 - file: guide/httpServer/serverConfiguration/cors/corsMaxAge.adoc
   blob_sha: 34523504b66cd9cfae886488c878b1a72da0ce1b
   size: 304
-  status: missing
+  status: current
   zh: zh/guide/httpServer/serverConfiguration/cors/corsMaxAge.adoc
   paragraphs: 4
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: bdf7b2ed69099fdff5cdacc09dcc2015504834b4
 - file: guide/httpServer/serverConfiguration/cors/corsMultipleHeaderValues.adoc
   blob_sha: 81d929a8e18b541379799eee6639b3009db4ad00
   size: 319
-  status: missing
+  status: current
   zh: zh/guide/httpServer/serverConfiguration/cors/corsMultipleHeaderValues.adoc
   paragraphs: 3
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: e114ba068ff3ff1c69a22fef9b97a7be3a53d2be
 - file: guide/httpServer/serverConfiguration/corsCrossOriginEmbedderPolicy.adoc
   blob_sha: 84a9f7139343124d024573c5f3992abd5a63a9d5
   size: 500
-  status: missing
+  status: current
   zh: zh/guide/httpServer/serverConfiguration/corsCrossOriginEmbedderPolicy.adoc
   paragraphs: 5
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 159bd3b9ae9f4c38afb2b619796afbd301c2a61b
 - file: guide/httpServer/serverConfiguration/corsCrossOriginResourcePolicy.adoc
   blob_sha: 986fbd74b8dfc117a915e27e51b28e21484ffeb0
   size: 494
-  status: missing
+  status: current
   zh: zh/guide/httpServer/serverConfiguration/corsCrossOriginResourcePolicy.adoc
   paragraphs: 5
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 159bd3b9ae9f4c38afb2b619796afbd301c2a61b
 - file: guide/httpServer/serverConfiguration/dualProtocol.adoc
   blob_sha: fdf932f6b45b0ce8e8152a773cc1344eb955d5a7
   size: 1088
-  status: missing
+  status: current
   zh: zh/guide/httpServer/serverConfiguration/dualProtocol.adoc
   paragraphs: 10
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/httpServer/serverConfiguration/https.adoc
   blob_sha: ace90f07b5a591b5d122612fd33056a2fee0b1cd
   size: 5158
-  status: missing
+  status: current
   zh: zh/guide/httpServer/serverConfiguration/https.adoc
   paragraphs: 45
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: ae09525c20868251edcc602b1aeee750a4eff458
 - file: guide/httpServer/serverConfiguration/listener.adoc
   blob_sha: 679261eb4eeaff7abea36a90e87abd2b20cd4db6
   size: 4189
-  status: missing
+  status: current
   zh: zh/guide/httpServer/serverConfiguration/listener.adoc
   paragraphs: 31
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 67fd54d6794046a550dfc6fdf0df9524fc8109bb
 - file: guide/httpServer/serverConfiguration/nettyClientPipeline.adoc
   blob_sha: 8b94ac90a4c9018498c7dd9129363c829e290189
   size: 1216
-  status: missing
+  status: current
   zh: zh/guide/httpServer/serverConfiguration/nettyClientPipeline.adoc
   paragraphs: 5
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 4236bf162a06cf8b51a4dc91eb222a0f85fc3e08
 - file: guide/httpServer/serverConfiguration/nettyServerPipeline.adoc
   blob_sha: dd482e1ce23e28b139bc0274220cee92261a317c
   size: 1541
-  status: missing
+  status: current
   zh: zh/guide/httpServer/serverConfiguration/nettyServerPipeline.adoc
   paragraphs: 6
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: a04877b58f5c4e98b91ffec498fa48b25c68785a
 - file: guide/httpServer/serverConfiguration/secondaryServers.adoc
   blob_sha: 15624a78719d6a69f47f3e17298fc3336957bb33
@@ -1623,42 +1623,42 @@ files:
 - file: guide/httpServer/serverConfiguration/threadPools.adoc
   blob_sha: 7b2d3a11e329ea93f28b1e3a9212c34cecd9398a
   size: 1655
-  status: missing
+  status: current
   zh: zh/guide/httpServer/serverConfiguration/threadPools.adoc
   paragraphs: 12
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 41131456aad0338e21715e5053d9ec7cc8da8e50
 - file: guide/httpServer/serverConfiguration/threadPools/atBlocking.adoc
   blob_sha: 027f1686e353c8dfb7573334d97a052655b37925
   size: 1536
-  status: missing
+  status: current
   zh: zh/guide/httpServer/serverConfiguration/threadPools/atBlocking.adoc
   paragraphs: 6
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/httpServer/serverConfiguration/threadPools/blockingOperations.adoc
   blob_sha: ff3cbff3c1874605306e78696b65e59cadb48328
   size: 472
-  status: missing
+  status: current
   zh: zh/guide/httpServer/serverConfiguration/threadPools/blockingOperations.adoc
   paragraphs: 5
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/httpServer/serverConfiguration/threadPools/virtualThreads.adoc
   blob_sha: 28ee22fe685ef18128f418fd1ba1d381a4c2a69a
   size: 1300
-  status: missing
+  status: current
   zh: zh/guide/httpServer/serverConfiguration/threadPools/virtualThreads.adoc
   paragraphs: 10
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 69fa75ec5ab8d3854cf993cde254467f3d96f88b
 - file: guide/httpServer/serverEvents.adoc
   blob_sha: 695679e2bead72fbb0442388ffc88d5a6d922a49
   size: 3078
-  status: missing
+  status: current
   zh: zh/guide/httpServer/serverEvents.adoc
   paragraphs: 13
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 81a969fe688bddb27d0b350d3814fd2e5b6deffd
 - file: guide/httpServer/serverIO.adoc
   blob_sha: f17ab1a25868056aa936211e3825e43d1fdf69e1

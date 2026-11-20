@@ -1,0 +1,16 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Blocking Operations](https://docs.micronaut.io/5.2.x/core/#core-blockingOperations)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/serverConfiguration/threadPools/blockingOperations.adoc  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360  upstream_hash: ff3cbff3c1874605306e78696b65e59cadb48328  translated_at: 2026-11-21 -->
+
+处理阻塞操作时，Micronaut 框架默认将阻塞操作转移到一个无界的缓存 I/O 线程池。您可以使用名为 `io` 的 api:scheduling.executor.ExecutorConfiguration[] 来配置 I/O 线程池。例如：
+
+.配置服务器 I/O 线程池
+[configuration]
+----
+micronaut:
+  executors:
+    io:
+      type: fixed
+      nThreads: 75
+----
+
+上述配置创建了一个具有 75 个线程的固定线程池。

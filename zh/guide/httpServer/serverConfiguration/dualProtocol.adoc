@@ -1,0 +1,33 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Enabling HTTP and HTTPS](https://docs.micronaut.io/5.2.x/core/#core-dualProtocol)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/serverConfiguration/dualProtocol.adoc  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360  upstream_hash: fdf932f6b45b0ce8e8152a773cc1344eb955d5a7  translated_at: 2026-11-21 -->
+
+Micronaut 框架支持同时绑定 HTTP 与 HTTPS。要启用双协议支持，请修改您的配置。例如：
+
+.双协议配置示例
+[configuration]
+----
+micronaut:
+  server:
+    ssl:
+      enabled: true
+      build-self-signed: true
+    dual-protocol : true
+----
+- 必须配置 SSL 才能使 HTTPS 生效。本例中我们仅使用带 `build-self-signed` 的自签名证书，其他配置参见 <<https,用 HTTPS 保护服务器>>
+- `dual-protocol` 同时启用 HTTP 与 HTTPS 是一项可选（opt-in）特性——设置 `dualProtocol` 标志即可启用。默认情况下，Micronaut 框架只启用其中一个。
+
+也可以自动将所有 HTTP 请求重定向到 HTTPS。除了前面的配置，您还需要启用该选项。例如：
+
+.启用 HTTP 到 HTTPS 重定向
+[configuration]
+----
+micronaut:
+  server:
+    ssl:
+      enabled: true
+      build-self-signed: true
+    dual-protocol : true
+    http-to-https-redirect: true
+----
+
+- `http-to-https-redirect` 启用 HTTP 到 HTTPS 重定向

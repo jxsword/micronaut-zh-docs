@@ -1,0 +1,16 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Max Age](https://docs.micronaut.io/5.2.x/core/#core-corsMaxAge)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/serverConfiguration/cors/corsMaxAge.adoc  upstream_commit: bdf7b2ed69099fdff5cdacc09dcc2015504834b4  upstream_hash: 34523504b66cd9cfae886488c878b1a72da0ce1b  translated_at: 2026-11-21 -->
+
+预检请求可缓存的最大时长默认为 30 分钟。要更改该行为，请以秒为单位指定一个值。
+
+.CORS 配置示例
+[configuration]
+----
+micronaut:
+  server:
+    cors:
+      enabled: true
+      configurations:
+        web:
+          max-age: 3600 # 1 hour
+----

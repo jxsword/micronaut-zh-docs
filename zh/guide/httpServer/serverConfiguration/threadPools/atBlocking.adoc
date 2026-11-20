@@ -1,0 +1,24 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – @Blocking](https://docs.micronaut.io/5.2.x/core/#core-atBlocking)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/serverConfiguration/threadPools/atBlocking.adoc  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360  upstream_hash: 027f1686e353c8dfb7573334d97a052655b37925  translated_at: 2026-11-21 -->
+
+您可以使用 ann:core.annotation.Blocking[] 注解将方法标记为阻塞。
+
+如果您将 `micronaut.server.thread-selection` 设置为 `AUTO`，Micronaut 框架会将标注了 `@Blocking` 的方法的执行转移到 IO 线程池（参见 api:io.micronaut.scheduling.TaskExecutors[]）。
+
+NOTE: `@Blocking` 仅在使用 `AUTO` 线程选择时有效。自 Micronaut 2.0 起，Micronaut 框架默认采用 `MANUAL` 线程选择。我们推荐使用 ann:scheduling.annotation.ExecuteOn[] 注解在另一个线程池上执行阻塞操作。`@ExecutesOn` 对 `MANUAL` 与 `AUTO` 线程选择均有效。
+
+Micronaut 框架内部在一些地方使用 ann:core.annotation.Blocking[]：
+
+|===
+|阻塞类型|说明
+
+|link:{micronautapi}http/client/BlockingHttpClient.html[BlockingHttpClient]
+| 用于测试，为 api:http.client.HttpClient[] 操作的子集提供阻塞版本。
+|link:{micronautapi}core/io/IOUtils.html[IOUtils]
+| 以阻塞方式读取 `BufferedReader` 的内容，并作为 `String` 返回。
+|link:{micronautapi}context/env/BootstrapPropertySourceLocator.html[BootstrapPropertySourceLocator]
+| 为当前 `Environment` 解析远程或本地 api:context.env.PropertySource[] 实例。
+
+|===
+
+TIP: https://micronaut-projects.github.io/micronaut-data/latest/guide/[Micronaut Data] 也在内部将 `@Blocking` 用于某些事务操作、CRUD 拦截器与仓库。

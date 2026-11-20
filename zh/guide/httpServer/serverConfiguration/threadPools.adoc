@@ -1,0 +1,35 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Configuring Server Thread Pools](https://docs.micronaut.io/5.2.x/core/#core-threadPools)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/serverConfiguration/threadPools.adoc  upstream_commit: 41131456aad0338e21715e5053d9ec7cc8da8e50  upstream_hash: 7b2d3a11e329ea93f28b1e3a9212c34cecd9398a  translated_at: 2026-11-21 -->
+
+[[threadPools]]
+HTTP 服务器构建于 https://netty.io[Netty] 之上，Netty 被设计为事件循环模型中的非阻塞 I/O 工具集。
+
+Netty 工作事件循环使用名为「default」的事件循环组。可以通过 `micronaut.netty.event-loops.default` 配置。
+
+IMPORTANT: 只有当 `event-loop-group` 设置为一个不对应任何 `micronaut.netty.event-loops` 配置的名称时，才会使用 `micronaut.server.netty.worker` 下的 事件循环配置。该行为已弃用，并将在未来版本中移除。除了通过 `event-loop-group` 设置名称之外，任何事件循环组配置请使用 `micronaut.netty.event-loops.*`。这不适用于父事件循环配置（`micronaut.server.netty.parent`）。
+
+include::{includedir}configurationProperties/io.micronaut.http.server.netty.configuration.NettyHttpServerConfiguration$Worker.adoc[]
+
+TIP: 父事件循环可以用 `micronaut.server.netty.parent` 以相同的配置选项进行配置。
+
+服务器也可以配置为使用不同的具名工作事件循环：
+
+.为服务器使用不同的事件循环
+[configuration]
+----
+micronaut:
+  server:
+    netty:
+      worker:
+        event-loop-group: other
+  netty:
+    event-loops:
+      other:
+        num-threads: 10
+----
+
+NOTE: 线程数的默认值是系统属性 `io.netty.eventLoopThreads` 的值；如果未指定，则为可用处理器数 × 2。
+
+事件循环配置参见下表：
+
+include::{includedir}configurationProperties/io.micronaut.http.netty.channel.DefaultEventLoopGroupConfiguration.adoc[]

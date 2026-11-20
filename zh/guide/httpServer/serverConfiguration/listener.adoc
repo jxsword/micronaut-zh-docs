@@ -1,0 +1,118 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Advanced Listener Configuration](https://docs.micronaut.io/5.2.x/core/#core-listener)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/serverConfiguration/listener.adoc  upstream_commit: 67fd54d6794046a550dfc6fdf0df9524fc8109bb  upstream_hash: 679261eb4eeaff7abea36a90e87abd2b20cd4db6  translated_at: 2026-11-21 -->
+
+[[listener]]
+除了配置单个端口之外，您也可以手动指定每个监听器。
+
+[configuration]
+----
+micronaut:
+  server:
+    netty:
+      listeners:
+        httpListener:
+          host: 127.0.0.1
+          port: 8086
+          ssl: false
+        httpsListener:
+          port: 8087
+          ssl: true
+----
+
+- `httpListener` 是监听器名称，可以是任意值
+- `host` 是可选的，默认绑定所有接口
+
+WARNING: 如果手动指定监听器，其他配置（例如 `micronaut.server.port`）将被忽略。
+
+SSL 可以为每个监听器单独启用或禁用。启用时，SSL 将按 <<https,上文所述>> 配置。
+
+内嵌服务器还支持通过 Netty 绑定到 Unix 域套接字。这需要以下依赖：
+
+dependency:netty-transport-native-unix-common[groupId="io.netty",artifactId="netty-transport-native-unix-common"]
+
+还必须将服务器配置为 <<serverConfiguration,使用原生传输>>（epoll 或 kqueue）。
+
+[configuration]
+----
+micronaut:
+  server:
+    netty:
+      listeners:
+        unixListener:
+          family: UNIX
+          path: /run/micronaut.socket
+          ssl: true
+----
+
+- `unixListener` 是监听器名称，可以是任意值
+
+NOTE: 要使用抽象域套接字而不是普通套接字，请在路径前加 NUL 字符，例如 `"\0/run/micronaut.socket"`
+
+== systemd 套接字激活支持
+
+HTTP 服务器可以配置为使用现有的文件描述符。借助该特性，您可以使用由 systemd 创建并传递给 micronaut 进程的套接字：
+
+[configuration]
+----
+micronaut:
+  netty:
+    event-loops:
+      # use epoll transport
+      parent:
+        transport: epoll
+      default:
+        transport: epoll
+    listeners:
+      systemd:
+        fd: 3 # systemd passes the server socket as fd 3
+        bind: false # do not bind again, systemd already did this
+----
+
+`app.service` 文件示例：
+
+----
+[Unit]
+Description=Micronaut HTTP server with socket activation
+After=network.target app.socket
+Requires=app.socket
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/java -jar /app.jar
+----
+
+`app.socket` 文件示例：
+
+----
+[Socket]
+ListenStream=127.0.0.1:8080
+
+[Install]
+WantedBy=sockets.target
+----
+
+现在，您的 Micronaut 应用可以由连接到 `http://127.0.0.1:8080` 的客户端启动。
+
+NOTE: nio 传输仅支持 `fd: 0` （「inetd 风格」），通过 JDK `System.inheritedChannel()` API。如果您希望使用 systemd 推荐的默认 `fd: 3`，必须使用 epoll 传输。
+
+=== inetd 风格套接字激活
+
+systemd 还支持 inetd 风格的套接字激活。在该模式下，systemd 不会传递监听套接字 fd（`ServerSocketChannel`），而是传递一个已接受的 fd（`SocketChannel`），代表单个 TCP 连接。systemd 会为每个新 TCP 连接启动一个新的服务实例。
+
+Micronaut HTTP 服务器通过 `accepted-fd` 配置选项支持该模式。`accepted-fd` 会注册到声明它的监听器上，并基本上被视为由该监听器接受的一个连接。Netty 父通道将被设置为监听器服务器套接字，这对于避免与 HTTP/2 相关的 https://github.com/netty/netty/pull/12546[Netty 缺陷] 很重要。
+
+WARNING: Epoll 不支持设置父通道，因此 HTTP/2 在 `accepted-fd` 与 epoll 组合下可能无法工作。
+
+[configuration]
+----
+micronaut:
+  netty:
+    listeners:
+      systemd:
+        accepted-fd: 0 # inetd-style socket activation typically uses fd 0 (stdin)
+        bind: false # do not bind, we only use the server channel as the parent
+----
+
+通过设置 `server-socket: false`，您可以完全禁用父通道。这可以节省少量启动时间，但可能导致 HTTP/2 出现问题。
+
+WARNING: 由于 inetd 风格套接字激活通常使用 fd 0，它会劫持 stdin 与 stdout。您必须注意绝不要在 stdout 上输出任何内容，否则可能破坏 HTTP 响应，甚至显示给用户。特别是，您必须将 logback 配置为记录到 `System.err`，并禁用 Micronaut 启动 banner。

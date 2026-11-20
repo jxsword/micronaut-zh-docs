@@ -1,0 +1,18 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Configuring the Netty Server Pipeline](https://docs.micronaut.io/5.2.x/core/#core-nettyServerPipeline)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/serverConfiguration/nettyServerPipeline.adoc  upstream_commit: a04877b58f5c4e98b91ffec498fa48b25c68785a  upstream_hash: dd482e1ce23e28b139bc0274220cee92261a317c  translated_at: 2026-11-21 -->
+
+您可以通过编写一个监听 api:io.micronaut.http.server.netty.NettyServerCustomizer.Registry[] 创建的 <<events,bean 事件监听器>> 来自定义 Netty 服务器管道。
+
+api:http.netty.channel.ChannelPipelineCustomizer[] 接口为 Micronaut 框架注册的各个处理器（handler）的名称定义了常量。
+
+例如，下面的代码示例演示注册 https://github.com/zalando/logbook[Logbook] 库，它包含执行请求与响应日志记录的额外 Netty 处理器：
+
+snippet::io.micronaut.docs.netty.LogbookNettyServerCustomizer[tags="imports,class", indent=0, title="Customizing the Netty server pipeline for Logbook"]
+
+<1> `LogbookNettyServerCustomizer` 监听 api:http.server.netty.NettyServerCustomizer.Registry[]，并要求定义一个 `Logbook` bean
+<2> 根定制器在不带通道的情况下初始化并注册
+<3> 实际定制器实现 api:http.server.netty.NettyServerCustomizer[]
+<4> 创建新通道时，会为该通道创建一个新的专用定制器
+<5> 当服务器发出流管道已完全构建的信号时，注册 logbook 处理器
+
+WARNING: 自 4.5.0 版起，Micronaut Netty HTTP 服务器不再对 HTTP/2 使用每请求通道。这使得许多管道修改（包括 logbook）难以或无法实现。要恢复旧行为，请使用 `micronaut.server.netty.legacy-multiplex-handlers=true` 属性。

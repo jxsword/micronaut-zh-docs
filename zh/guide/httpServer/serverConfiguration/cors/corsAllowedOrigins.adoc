@@ -1,0 +1,26 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Allowed Origins](https://docs.micronaut.io/5.2.x/core/#core-corsAllowedOrigins)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/serverConfiguration/cors/corsAllowedOrigins.adoc  upstream_commit: 8c82ee03540bc11bc707c777c7ff4aa00d5be9d7  upstream_hash: f9cb137d8e486dd015e528067716bae9438c1ffa  translated_at: 2026-11-21 -->
+
+不要定义 `allowed-origins` 或 `allowed-origins-regex`，即可允许某个配置的任意来源。
+
+对于多个有效来源，将配置的 `allowed-origins` 键设置为字符串列表。
+
+您也可以通过 `allowed-origins-regex` 定义正则表达式（`^http(|s)://www\.google\.com$`）。正则表达式会传给 link:{jdkapi}/java.base/java/util/regex/Pattern.html#compile-java.lang.String-[Pattern#compile]，并通过 link:{jdkapi}/java.base/java/util/regex/Matcher.html#matches--[Matcher#matches] 与请求来源比较。
+
+.CORS 配置示例
+[configuration]
+----
+micronaut:
+  server:
+    cors:
+      enabled: true
+      configurations:
+        web:
+          allowed-origins-regex: '^http(|s):\/\/www\.google\.com$'
+          allowed-origins:
+            - http://foo.com
+----
+
+WARNING: 请谨慎使用 `allowed-origins-regex` 配置。您可能意外创建不安全的配置，攻击者可以注册针对该正则表达式的域名加以利用。
+
+NOTE: `allowed-origins-regex` 与 `allowed-origins` 可以组合使用。但是，如果使用前者而未显式设置后者，则 `allowed-origins` 默认为 _无_ 而不是 _任意_，以避免出现意外的允许来源。

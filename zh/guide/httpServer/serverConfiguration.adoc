@@ -1,0 +1,76 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Configuring the HTTP Server](https://docs.micronaut.io/5.2.x/core/#core-serverConfiguration)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/serverConfiguration.adoc  upstream_commit: c7d277606d0198c1c5d3067f209600a65bdc03a6  upstream_hash: d7ce888c69c8b896a6a3fac4c80bcb923e1bef5f  translated_at: 2026-11-21 -->
+
+[[serverConfiguration]]
+HTTP 服务器具有许多配置选项。它们定义在 api:http.server.netty.configuration.NettyHttpServerConfiguration[] 配置类中，该类扩展自 api:http.server.HttpServerConfiguration[]。
+
+Netty bean 默认启用。设置 `netty.enabled=false` 可禁用所有 Netty 集成，或设置 `micronaut.server.netty.enabled=false` 仅禁用 Netty 服务器。这些属性支撑 api:http.netty.RequiresNetty[] 与 api:http.server.netty.RequiresNettyServer[]。
+
+下面的示例展示如何通过配置文件（例如 `application.yml`）调整服务器的配置选项：
+
+.配置 HTTP 服务器设置
+[configuration]
+----
+micronaut:
+  server:
+    maxRequestSize: 1MB
+    host: localhost
+    netty:
+      maxHeaderSize: 500KB
+      worker:
+        threads: 8
+      childOptions:
+        autoRead: true
+----
+- 默认情况下，Micronaut 框架绑定所有网络接口。使用 `localhost` 只绑定回环网络接口
+- `maxHeaderSize` 设置最大请求头大小
+- `worker.threads` 指定 Netty 工作线程数
+- `autoRead` 启用请求体自动读取
+
+include::{includedir}configurationProperties/io.micronaut.http.server.netty.configuration.NettyHttpServerConfiguration.adoc[]
+
+=== 使用原生传输
+
+原生 Netty 传输会添加特定于某一平台的功能，产生更少的垃圾，与基于 NIO 的传输相比通常能提升性能。
+
+要启用原生传输，首先添加依赖：
+
+macOS x86：
+
+dependency:netty-transport-native-kqueue[groupId="io.netty",scope="runtimeOnly",classifier="osx-x86_64"]
+
+macOS M1：
+
+dependency:netty-transport-native-kqueue[groupId="io.netty",scope="runtimeOnly",classifier="osx-aarch_64"]
+
+Linux x86：
+
+dependency:netty-transport-native-epoll[groupId="io.netty",scope="runtimeOnly",classifier="linux-x86_64"]
+
+或
+
+dependency:netty-transport-native-io_uring[groupId="io.netty",scope="runtimeOnly",classifier="linux-x86_64"]
+
+Linux ARM64：
+
+dependency:netty-transport-native-epoll[groupId="io.netty",scope="runtimeOnly",classifier="linux-aarch_64"]
+
+或
+
+dependency:netty-transport-native-io_uring[groupId="io.netty",scope="runtimeOnly",classifier="linux-aarch_64"]
+
+然后配置默认事件循环组以优先使用原生传输：
+
+.配置默认事件循环以优先使用原生传输
+[configuration]
+----
+micronaut:
+  netty:
+    event-loops:
+      default:
+        transport: io_uring,epoll,kqueue,nio
+----
+
+将使用上述列表中第一个可用的传输。如果您想确保在所有环境中都使用原生传输，请移除 `nio` 条目。如果没有可用的原生传输，将抛出异常。
+
+NOTE: Netty 启用了简化的资源泄漏抽样检测，以少量开销报告是否存在泄漏。您可以通过将属性 `netty.resource-leak-detector-level` 设置为 `DISABLED` （默认）、`SIMPLE`、`PARANOID` 或 `ADVANCED` 之一来启用它。

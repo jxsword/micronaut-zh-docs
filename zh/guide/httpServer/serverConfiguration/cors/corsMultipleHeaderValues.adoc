@@ -1,0 +1,12 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Multiple Header Values](https://docs.micronaut.io/5.2.x/core/#core-corsMultipleHeaderValues)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/serverConfiguration/cors/corsMultipleHeaderValues.adoc  upstream_commit: e114ba068ff3ff1c69a22fef9b97a7be3a53d2be  upstream_hash: 81d929a8e18b541379799eee6639b3009db4ad00  translated_at: 2026-11-21 -->
+
+默认情况下，当一个请求头有多个值时，会发送多个请求头，每个头一个值。可以通过设置配置选项，改为发送单个请求头并以逗号分隔的值列表。
+
+[configuration]
+----
+micronaut:
+  server:
+    cors:
+      single-header: true
+----

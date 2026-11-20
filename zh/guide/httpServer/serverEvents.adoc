@@ -1,0 +1,69 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Server Events](https://docs.micronaut.io/5.2.x/core/#core-serverEvents)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/serverEvents.adoc  upstream_commit: 81a969fe688bddb27d0b350d3814fd2e5b6deffd  upstream_hash: 695679e2bead72fbb0442388ffc88d5a6d922a49  translated_at: 2026-11-21 -->
+
+HTTP 服务器会发出若干 <<events,bean 事件>>，定义在 pkg:io.micronaut.runtime.server.event[] 包中，您可以为它们编写监听器。下表汇总了这些事件：
+
+.服务器事件
+|===
+|事件|说明
+
+|api:runtime.server.event.ServerStartupEvent[]
+|服务器完成启动时发出
+
+|api:runtime.server.event.ServerShutdownEvent[]
+|服务器关闭时发出
+
+|api:discovery.event.ServiceReadyEvent[]
+|在所有 api:runtime.server.event.ServerStartupEvent[] 监听器被调用之后发出，并暴露 api:discovery.EmbeddedServerInstance[]
+
+|api:discovery.event.ServiceStoppedEvent[]
+|在所有 api:runtime.server.event.ServerShutdownEvent[] 监听器被调用之后发出，并暴露 api:discovery.EmbeddedServerInstance[]
+
+|api:http.context.event.HttpRequestReceivedEvent[]
+|服务器每收到一个请求都会发出，在请求被路由之前。暴露不含请求体的请求。
+
+|api:http.context.event.HttpRequestTerminatedEvent[]
+|服务器处理完每个请求后发出。这并不意味着响应已送达。
+
+|===
+
+WARNING: 在 api:runtime.server.event.ServerStartupEvent[] 监听器中做大量工作会增加启动时间。
+
+WARNING: api:http.context.event.HttpRequestReceivedEvent[] 与 api:http.context.event.HttpRequestTerminatedEvent[] 的监听器在服务器为请求处理所选的线程上调用，在默认 `micronaut.server.thread-selection` （`MANUAL`，`AUTO` 亦然）下是连接的 Netty 事件循环。它们不得阻塞：一个慢监听器会延迟该事件循环上的所有其他连接。用 ann:scheduling.annotation.Async[] 标注 `@EventListener` 方法使其在执行器上运行，或将 `micronaut.server.thread-selection` 设为 `BLOCKING` 以把监听器（和控制器）移出事件循环。为 `io.micronaut.http.server.netty.RoutingInBoundHandler` 启用调试日志后，服务器会记录在事件循环上耗时超过 100 ms 的监听器。
+
+下面的示例定义了一个监听 api:runtime.server.event.ServerStartupEvent[] 的 api:context.event.ApplicationEventListener[]：
+
+.监听服务器启动事件
+[source,java]
+----
+import io.micronaut.context.event.ApplicationEventListener;
+...
+@Singleton
+public class StartupListener implements ApplicationEventListener<ServerStartupEvent> {
+    @Override
+    public void onApplicationEvent(ServerStartupEvent event) {
+        // logic here
+        ...
+    }
+}
+----
+
+或者，您也可以在接受 `ServerStartupEvent` 的任意 bean 方法上使用 ann:runtime.event.annotation.EventListener[] 注解：
+
+.将 `@EventListener` 与 `ServerStartupEvent` 配合使用
+[source,java]
+----
+import io.micronaut.runtime.event.annotation.EventListener;
+import io.micronaut.runtime.server.event.ServerStartupEvent;
+import jakarta.inject.Singleton;
+...
+@Singleton
+public class MyBean {
+
+    @EventListener
+    public void onStartup(ServerStartupEvent event) {
+        // logic here
+        ...
+    }
+}
+----

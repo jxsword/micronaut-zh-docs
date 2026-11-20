@@ -1,0 +1,154 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Securing the Server with HTTPS](https://docs.micronaut.io/5.2.x/core/#core-https)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/serverConfiguration/https.adoc  upstream_commit: ae09525c20868251edcc602b1aeee750a4eff458  upstream_hash: ace90f07b5a591b5d122612fd33056a2fee0b1cd  translated_at: 2026-11-21 -->
+
+[[https]]
+Micronaut 框架开箱即支持 HTTPS。默认情况下，HTTPS 被禁用，所有请求都通过 HTTP 提供。要启用 HTTPS 支持，请使用具名证书提供者定义 TLS 材料，并从 SSL 配置中引用它们。详情参见 <<certificates,证书提供者>>。
+
+.HTTPS 配置示例（开发用自签名证书）
+[configuration]
+----
+micronaut:
+  server:
+    ssl:
+      enabled: true
+      # Reference the named provider below
+      key-name: cert-a
+
+  certificate:
+    self-signed:
+      # Declare a self-signed provider named "cert-a"
+      cert-a: ""
+----
+- Micronaut 框架将创建一个自签名证书。
+
+TIP: 默认情况下，支持 HTTPS 的 Micronaut 应用在端口 `8443` 上启动，但您可以通过属性 `micronaut.server.ssl.port` 更改端口。
+
+为生成自签名证书，Micronaut HTTP 服务器将使用 Netty 的 netty-pkitesting 库，它需要以下依赖：
+
+dependency:io.netty:netty-pkitesting[scope="runtimeOnly"]
+
+WARNING: 该配置会在浏览器中产生警告。
+
+== 使用有效的 X.509 证书（PEM）
+
+也可以将 Micronaut 应用配置为使用现有的有效 x509 证书，例如用 https://letsencrypt.org/[Let's Encrypt] 创建的证书。您需要 `server.crt` 与 `server.key` 文件。
+
+.HTTPS 配置示例
+[configuration]
+----
+micronaut:
+  server:
+    ssl:
+      enabled: true
+      key-name: cert-a
+
+  certificate:
+    file:
+      cert-a:
+        format: pem
+        path: server.key
+        certificate-path: server.crt
+----
+
+使用此配置，如果我们启动 Micronaut 应用并连接到 `https://localhost:8443`，浏览器中仍会看到警告，但如果我们检查证书，可以确认它就是 Let's Encrypt 生成的证书。
+
+image::https-certificate.jpg[]
+
+最后，我们可以通过在 `/etc/hosts` 文件中为该域添加一条别名，来测试证书对浏览器是否有效：
+
+[source,bash]
+----
+$ cat /etc/hosts
+...
+127.0.0.1   my-domain.org
+...
+----
+
+现在我们可以连接到 `https://my-domain.org:8443`：
+
+image::https-valid-certificate.jpg[]
+
+== 使用 PKCS#12 密钥库
+
+在 Java 中管理证书的更传统方式是使用密钥库，可以是 PKCS#12 或较旧的 JKS 格式。您可以按如下方式将 PEM 文件转换为 PKCS#12：
+
+[source,bash]
+----
+$ openssl pkcs12 -export \
+                 -in server.crt \ # <1>
+                 -inkey server.key \ # <2>
+                 -out server.p12 \ # <3>
+                 -name someAlias \ <4>
+                 -chain -CAfile ca.crt -caname root
+----
+<1> 原始 `server.crt` 文件
+<2> 原始 `server.key` 文件
+<3> 要创建的 `server.p12` 文件
+<4> 证书的别名
+
+在提供者中引用 PKCS#12 并将 SSL 指向它：
+
+.HTTPS 配置示例
+[configuration]
+----
+micronaut:
+  server:
+    ssl:
+      enabled: true
+      key-name: cert-a
+
+  certificate:
+    resource:
+      cert-a:
+        resource: classpath:server.p12
+        password: mypassword
+        # format: pkcs12  # optional, auto-detected
+----
+- 指定 `p12` 文件路径
+- 同时提供导出期间定义的 `password`
+
+== 使用 JKS 密钥库
+
+您可以选择将 `p12` 密钥库转换为 JKS：
+
+[source,bash]
+----
+$ keytool -importkeystore \
+          -deststorepass newPassword -destkeypass newPassword \ # <1>
+          -destkeystore server.keystore \ # <2>
+          -srckeystore server.p12 -srcstoretype PKCS12 -srcstorepass mypassword \ # <3>
+          -alias someAlias # <4>
+----
+<1> 必须定义密钥库的密码
+<2> 要创建的文件
+<3> 之前创建的 PKCS12 文件及创建期间定义的密码
+<4> 之前使用的别名
+
+WARNING: 如果 `srcstorepass` 或 `alias` 与 `p12` 文件中定义的不一致，转换将失败。
+
+现在修改您的配置：
+
+.HTTPS 配置示例
+[configuration]
+----
+micronaut:
+  server:
+    ssl:
+      enabled: true
+      key-name: cert-a
+
+  certificate:
+    resource:
+      cert-a:
+        resource: classpath:server.keystore
+        password: newPassword
+        # format: jks  # optional, auto-detected
+----
+
+启动 Micronaut，应用将使用密钥库中的证书在 `https://localhost:8443` 上运行。
+
+== 刷新/重载 HTTPS 证书
+
+在证书过期后保持 HTTPS 证书最新可能是个挑战。一个很好的解决方案是 https://en.wikipedia.org/wiki/Automated_Certificate_Management_Environment[自动化证书管理环境]（ACME）与 https://micronaut-projects.github.io/micronaut-acme/latest/guide/index.html[Micronaut ACME 模块]，它支持从证书颁发机构自动刷新证书。
+
+如果无法使用证书颁发机构，且您需要从磁盘手动更新证书，则应使用 <<certificates,基于文件的证书提供者>>。只要底层文件系统支持文件监视，提供者就会自动识别更新后的密钥或证书文件。

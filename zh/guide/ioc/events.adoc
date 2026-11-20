@@ -1,6 +1,7 @@
 > 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Bean Events](https://docs.micronaut.io/5.2.x/core/#core-events)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
 <!-- upstream_file: guide/ioc/events.adoc  upstream_commit: 52496518371db590c0a06457586d931823622ef8  upstream_hash: bc6cd652b5959aa0b77ab3cbbac5a8d39822e22e  translated_at: 2026-11-21 -->
 
+[[events]]
 您可以使用以下接口之一挂钩（hook）bean 的创建过程：
 
 * link:{api}/io/micronaut/context/event/BeanInitializedEventListener.html[BeanInitializedEventListener] - 允许在属性设置之后、`@PostConstruct` 事件挂钩之前修改或替换 bean。

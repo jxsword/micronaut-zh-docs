@@ -22,7 +22,7 @@
 | B13 | 17 | 3167 | 3185 | current |
 | B14 | 13 | 3482 | 3476 | in-progress |
 | B15 | 13 | 3452 | 3485 | current |
-| B16 | 24 | 3223 | 3291 | pending |
+| B16 | 24 | 3223 | 3291 | current |
 | B17 | 15 | 3004 | 3008 | pending |
 | B18 | 8 | 3379 | 3379 | pending |
 | B19 | 14 | 3455 | 3491 | pending |
@@ -61,6 +61,7 @@
 - B13（2026-11-21 完成）：validate 全量 143 文件 PASSED + 17/17 --mark-current 核销 + squash commit；进度 143/388（36.9%）。锚点注入 3 处（exceptionHandler 批内 errorFormatting 闭环 + form/formCapable 消解 whatsNew ×2）；validate 首轮 errorFormatting ⑦（占位符后漏空格）与 apiVersioning ③（宏路径误触 interceptor，补「（客户端拦截器配置）」括注）修正。词数实测 3122/3076。⑤ 豁免警告 27 条（−2 消解 +3 新增，详见 reports/batch-B13.md）。冻结窗口遵守。httpServer 组 46/101（46%）；errorHandling 组与 form 组全组 current。
 - B14（2026-11-21 完成）：validate 全量 156 文件 PASSED + 13/13 --mark-current 核销 + squash commit；进度 156/388（40.2%）。锚点注入 5 处（filtermethods/httpServerFilter 批内闭环 + uploads/order 消解 whatsNew ×2 + filters）；transfers ⑦ 邻接 ×2（含加粗标记 `*响应式流*（`）修正。词数实测 3410/3402。⑤ 豁免警告 26 条（−2 消解 +1 新增，详见 reports/batch-B14.md）。冻结窗口遵守。httpServer 组 59/101（58%）；filters 子目录全组 current。
 - B15（2026-11-21 完成）：validate 全量 169 文件 PASSED + 13/13 --mark-current 核销 + squash commit；进度 169/388（43.6%）。锚点注入 2 处（sessions 批内 websocketServer 闭环 + http3Server 消解 whatsNew）；byteBodySplitting/websocketClient ⑦ 邻接 ×3（占位符后漏空格）修正。词数实测 3457/3416。⑤ 豁免警告 31 条（−1 消解 +6 新增，详见 reports/batch-B15.md）。冻结窗口遵守。httpServer 组 72/101（71%）；byteBody 与 websocket 子目录全组 current。
+- B16（2026-11-21 完成）：validate 全量 193 文件 PASSED + 24/24 --mark-current 核销 + squash commit；进度 193/388（49.7%）。锚点注入 8 处（threadPools/listener/cors/corsConfiguration/corsCrossOrigin* ×2/https/serverConfiguration，9 条豁免消解）；**回溯补注入 [[events]]**（B03 报告声称注入但实际缺失，本批 netty* 引用触发 validate ⑤ 硬拦后补齐）；⑦ 邻接 ×3 与 https ③ netty→Netty 修正。词数实测 3265/3193。⑤ 豁免警告 24 条（详见 reports/batch-B16.md）。冻结窗口遵守。httpServer 组 96/101（95%）；serverConfiguration 子目录全组 current。
 
 ## 硬性纪律（每批次必守）
 
