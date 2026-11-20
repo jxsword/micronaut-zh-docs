@@ -1,0 +1,56 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Implementing Java Interfaces](https://docs.micronaut.io/5.2.x/core/#core-javaInterfaces)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/languageSupport/python/javaInterfaces.adoc  upstream_commit: 46a762b7346456a5bcaea9a20a842b2c095ac3ff  upstream_hash: bd681018980f12c842edfe7812258d3174cc37fd  translated_at: 2026-11-21 -->
+
+Python 类通过把 Java 接口列入其基类来实现该接口。生成的 Java 类会实现该接口，因此 bean 可以注入到任何期望该接口的位置，Java 调用方也能通过接口触达 Python 方法：
+
+[source,python]
+----
+from jakarta.inject import Singleton
+import java
+
+Describable = java.type("com.example.Describable")  # <1>
+
+
+@Singleton
+class PythonDescribable(Describable):
+
+    def name(self) -> str:  # <2>
+        return "python"
+
+    def describe(self) -> str:  # <3>
+        return "python:" + self.name()
+----
+
+<1> Java 接口，声明为 `interface Describable { String name(); default String describe() { ... } }`
+<2> 接口的抽象方法必须由 Python 类定义
+<3> 接口的 default 方法可以被重写；无论是否标注 `@Executable`，重写都会以继承的签名桥接到 Java
+
+在 Python 侧，实例就是一个普通 Python 对象：无论对象是注入另一个 Python bean、通过 `ApplicationContext.getBean` 查找，还是直接用类本身创建，`isinstance`、`==` 与 `is` 的行为都与任何 Python 类一致。类未重写的接口 default 方法（以及其父接口的 default 方法）依然可用。调用它们时，会在对象的 Java 视图上运行 Java default 实现，因此 default 实现对其他接口方法的调用会到达 Python 定义。
+
+Python 类继承 Java 类（无论抽象还是具体类）的方式见 <<extendingJavaClasses,继承 Java 类>> 一节。
+
+== 在函数内定义的类
+
+在函数内定义的类（工厂函数、测试方法中的类）没有生成的 Java 类。它保留该 Java 接口作为基类，由 GraalPy 宿主适配器实现该接口：其实例是该接口的 Java 对象，因此在多个接口上重载的 Java 方法——例如响应式发布者的 `subscribe(Subscriber)` 与 `subscribe(Consumer)` 并存——都能接受这些实例，`isinstance(obj, Interface)` 的结果是 `True`，接口的 default 方法也会被继承。
+
+snippet::micronaut.docs.javabases.LocalEventListenerSpec[tags="imports,factory,publish", indent=0, title="Implementing a Java interface inside a function"]
+
+<1> 类定义在函数内，并保留接口作为其基类
+<2> 其实例是实现该接口的 Java 对象
+<3> 在其他接口上重载的 Java 方法可以接受该实例
+
+基类的类型实参（`class Sub(Subscriber[str])`）在运行时被丢弃；适配器以原始接口为基类。
+
+宿主适配器只在 JVM 上可用：在原生可执行文件（native image 或原生 Pyronaut 启动器）中，class 语句会以 `SystemError: Java Class can be extended only in JVM mode` 失败，编译器也会对此类给出警告（`Python class [...] is defined inside a function and implements the Java interface [...]`）。必须同时以原生方式运行的代码，应在模块层定义类，或在 Java 期望函数式接口的位置传入函数或 lambda。
+
+适配器会把构造器实参转交给 Java 构造器——而接口没有构造器——且无法把该接口与其他基类组合。因此，在函数内定义、声明了带参数 `__init__` 的类、被装饰的类（像 `@dataclass` 这样的装饰器可能会生成构造器）或拥有多个基类的类，都如上文所述是普通 Python 对象：Java 收到的是该接口的代理，这对未在其他接口上重载的 Java 方法而言已经足够。
+
+== 继承的参数约束
+
+Python 重写方法会采纳其所重写 Java 方法的参数注解，与重写它的 Java 方法一样。当接口在其参数上声明了 <<validation,校验>> 约束，且 `micronaut-validation-processor` 位于 Python 源码的注解处理器路径上时，Python bean 无需自身的任何装饰器即可获得校验——包括它未重写的方法所继承的约束：
+
+snippet::micronaut.docs.javainterfaces.PythonMessageSender[tags="imports,class", indent=0, title="Implementing a constrained Java interface"]
+
+<1> 级联（`@Valid`）实参通过 dataclass 的内省进行校验
+<2> 接口，声明为 `interface MessageSender<M> { String send(@NotBlank String recipient, @NotNull @Valid M message); default String broadcast(@NotNull @Valid M message) { ... } }`
+<3> 重写方法自身无需任何约束：`send("", message)` 与 `send("bob", None)` 会引发 `ConstraintViolationException`，继承的 default 方法 `broadcast(Message(""))` 同样如此

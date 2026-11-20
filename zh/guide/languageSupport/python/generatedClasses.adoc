@@ -1,0 +1,103 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Generated Java Classes](https://docs.micronaut.io/5.2.x/core/#core-generatedClasses)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/languageSupport/python/generatedClasses.adoc  upstream_commit: 32406cbe4031c62a1c5df1410f703cf31a499d93  upstream_hash: 8eda95db0a4e4c1830fb0cb991db7ffeb39e572a  translated_at: 2026-11-21 -->
+
+每个 Python 类都会编译为同名生成的 Java 类，Java 代码、bean 上下文与测试扩展都用它代替 Python 对象。当 Python 类从 Java 或测试中使用时，这些生成类的若干性质值得了解。
+
+[[generatedClasses]]
+== 嵌套类
+
+嵌套在 Python 类中的类会编译为其外围类生成类的成员类型，二进制名称与 Java 成员类型的命名一致（`Outer$Inner`）。Java 代码以 `Outer.Inner` 引用它，检查类嵌套关系的框架也能看到它：`@MicronautTest` 类的 JUnit 5 `@Nested` 测试类会被生成为测试类的内部类，因此 JUnit 会以外围测试的应用上下文运行它并注入其属性。
+
+[source,python]
+----
+@MicronautTest
+class OrderServiceTest:
+
+    order_service: Annotated[OrderService, Inject]
+
+    @Test
+    def test_places_an_order(self):
+        assert self.order_service.place("book") == "placed book"
+
+    @Nested
+    class Placing:
+
+        order_service: Annotated[OrderService, Inject]
+
+        @Test
+        def test_places_an_order_from_the_nested_test(self):
+            assert self.order_service.place("pen") == "placed pen"
+----
+
+嵌套的枚举、接口（抽象基类与协议）以及 `@ContextPooled` 类会生成名为 `Outer$Inner` 的顶层类型。
+
+== 生成类的 Python 对象
+
+通过无参构造器创建的生成类实例——例如框架实例化的、列于 `META-INF/services` 中的服务——会在当时正在运行的应用的 Python 上下文中创建其 Python 对象。该实例不绑定那个上下文：当应用停止、同一 JVM 中启动另一个应用时，下一次使用会在新上下文中重新创建对象，因此静态持有器中的服务可以跨应用与测试类持续工作。带构造器实参创建的实例，以及包装既有 Python 对象的实例，会保留创建时所用的对象。
+
+类通过其包解析，而包会先被导入：同一包的多个类同时在多个线程上实例化时，会等待该包的那一次导入。在包导入期间，其中的类会改为通过以该类命名的模块解析，因此在导入期间于另一线程实例化的类（并行服务加载器为导入时发起的调用创建的服务）不必等待包的导入。
+
+== 字符串表示
+
+生成类的 `toString()` 会调用 Python 类的 `__str__`；若类未定义 `__str__`，则调用 `__repr__`。因此对对象进行格式化的 Java 代码看到的是 Python 表示：把对象作为映射键写入的序列化器、日志语句、`text/plain` 响应或 `String.valueOf(...)`。两者都未定义的类保留默认的 `Object.toString()`。
+
+snippet::micronaut.docs.tostring.Feature[tags="class", indent=0, title="The string representation of a Python class"]
+
+<1> `String.valueOf(feature)` 与持有该对象的 Java 集合的字符串形式给出 feature 名称
+
+`__eq__` 与 `__hash__` 不做桥接：生成实例的同一性就是 Java 对象的同一性，与两者都未定义的 Python 类一样。
+
+== 运行时注解与反射数据
+
+Micronaut 从编译器为 Python 类构建的注解元数据中读取其注解，因此 Python bean、控制器或配置类的装饰器无需出现在生成的 Java 类上。而以 `Class.getAnnotation` 或 `Method.getAnnotation` 从 Java 类反射读取注解的框架则不同：Hibernate 会在它映射的类上寻找 `@Entity`、`@Id` 及其他 `jakarta.persistence` 注解——除非编译器把它们复制过去，否则生成类上什么都没有。
+
+编译器只对「主动要求的类型」复制这类注解——即每个具有 `RUNTIME` 保留策略、可置于相应声明上的 Java 注解类型的注解：从类复制到生成类，从属性复制到其字段，从 `@property` 访问器或方法复制到生成的访问器或桥接方法，从接口、其方法及其参数复制到生成的接口。其余情况一律关闭：携带 `@Entity` 的生成类会被后续 Java 编译轮次的注解处理器视同 Java 实体类，因此只在基于反射的框架需要之处才做复制。
+
+=== @AllowsReflection 提示
+
+类型用 ann:core.annotation.AllowsReflection[] 提示申请自己的反射数据。它是一个构造型（stereotype）：适用于声明它的 Python 类或方法、标注了「本身被它标注的注解类型」的每个类，以及其注解被注解映射器映射到它的类。这是首选方式，因为无需任何配置：
+
+snippet::micronaut.docs.reflection.AuditedRecord[tags="imports,class", indent=0, title="Reflection data of a generated class"]
+
+<1> 该提示把类标记为「其注解将被库以反射方式读取」
+<2> `@Audited` 会被复制到生成的 `AuditedRecord` 类上
+<3> 属性的注解会被复制到生成的字段上
+
+注解会被反射读取的框架集成应在其注解类型或注解映射器上声明一次该提示，让用户无需任何操作：例如 LangChain4j 模块中的 AI 服务注解 `@AiService` （其实现由 `java.lang.reflect.Proxy` 基于接口构建），或 Micronaut Data 注解映射器处理的 JPA `@Entity`。在模块这样做之前，用户需在自己的类上声明提示，或使用下述选项。
+
+提示本身通过注解元数据提供，不会复制到生成类型上。
+
+=== allow-reflection 选项
+
+无法标注的类型用 `micronaut.introspection.allow-reflection` 属性指名——该属性即 <<reflection,反射模块>> 中允许运行时反射内省的属性。模式语言与运行时属性一致：逗号分隔的类名列表，其中 `*` 代表任意字符序列，与生成类的全名匹配。`com.example.model.*` 指名一个包及其子包的类，`com.example.Order` 指名一个类，`*` 指名所有类。
+
+编译器把该属性读取为注解处理器选项（`-A`）或编译器 JVM 的系统属性。javac 选项的键必须是以点分隔的标识符序列，因此该选项以驼峰式（camel case）拼写为 `-Amicronaut.introspection.allowReflection=...`——这是同一 Micronaut 属性在框架属性名规范化之下的形式。使用 Micronaut Gradle 构建插件（`micronaut-build` 8.1.2 或更高版本）时，可通过 `micronautBuild.python.compilerArgs` 为项目的每个 Python 编译任务设置它，或通过单个任务的 `compilerArgs` 属性设置：
+
+[source,groovy]
+----
+micronautBuild {
+    python {
+        compilerArgs.add("-Amicronaut.introspection.allowReflection=com.example.model.*")
+    }
+}
+
+tasks.named("compileTestPython") {
+    compilerArgs.add("-Amicronaut.introspection.allowReflection=com.example.model.*")
+}
+----
+
+用 Python 编写的 JPA 或 Hibernate 实体需要提示或选项二者之一：没有它们时，实体扫描（读取注解元数据）能找到该类，但 Hibernate 会以「未标注 `@Entity`」为由拒绝生成类。任何从类上反射读取注解的库同样如此，例如未配合 Micronaut 内省模块使用的 JAXB 或 Jackson。
+
+=== 报告被省略注解的类
+
+编译器对省略注解的类默认保持沉默：大多数应用不以反射读取注解，逐类备注只会是噪音。当基于反射的框架看不到某注解时，`-Amicronaut.python.reflection.warnings=true` （或编译器 JVM 的同名系统属性）会让编译器对每个这样的类报告一次备注，列出被省略的注解并指名可复制它们的选项。Bean Validation 约束（Micronaut Validation 从注解元数据读取）即使在此时也省略且不备注。
+
+=== 始终被复制的内容
+
+Micronaut 与测试框架自己会从生成类上读取的内容，无论提示与选项如何都会被复制：测试类及其测试方法的 JUnit 5 注解、通过 `@ExtendWith` 注册 JUnit 扩展的 `@MicronautTest` 及其他测试注解，以及 `@Property` 的 `@PropertySource` 容器注解。除此之外的 Micronaut 注解——`jakarta.inject`、`jakarta.annotation` 与 `javax` 注入注解——、Python 自定义注解，以及 `java.lang` 中约束声明的注解（如 `@FunctionalInterface`）都不会被复制。成员值无法写入 Java 源码的注解会以编译警告报告并被省略。
+
+== 作用域代理
+
+生成「带代理作用域的 Python 类」（如 `@Refreshable` 或 Micronaut Test 的 `@MockBean`）的工厂方法，与 Java 类一样由生成的代理提供服务。代理自身没有 Python 对象：Java 调用方通过被拦截的方法触达作用域当前持有的 bean；而收到代理的 Python 代码会得到同类的一个 Python 作用域代理，它把每次属性读取、写入与方法调用都转发给那个 bean，因此刷新后的 bean 或测试之间被替换的 mock 对 Python 调用方同样可见。返回 Python 抽象基类的工厂方法会生成实现该生成接口的代理。
+
+Python 代码调用此类代理的方法时，直接调用目标的 Python 对象；声明在工厂方法上的环绕通知（around advice）只作用于从 Java 发起的调用。

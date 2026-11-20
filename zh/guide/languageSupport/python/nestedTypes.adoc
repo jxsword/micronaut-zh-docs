@@ -1,0 +1,30 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Nested Java Types](https://docs.micronaut.io/5.2.x/core/#core-nestedTypes)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/languageSupport/python/nestedTypes.adoc  upstream_commit: 5b42af205d644fda591f84b5af01ad967f744913  upstream_hash: 039a1cf3a83c1f80bab1b802ca478826c7b5aecd  translated_at: 2026-11-21 -->
+
+嵌套在其他类型中的 Java 类型——例如 `Map.Entry` 或 picocli 的 `CommandLine.Command`——有两种方式供 Python 代码使用：作为被导入外层类型的属性，以及从以外层类型命名的模块中导入。
+
+[source,python]
+----
+from java.util import Map
+from java.util.Map import Entry
+----
+
+两种写法指名同一 Java 类型，因此 `Map.Entry` 与 `Entry` 可以互换。Java 类型的模块导出其嵌套类型及类型本身（`from java.util.Map import Map`），嵌套还可以更深（`from a.b.Outer.Middle import Inner`）。从 Java 类型模块导入非其嵌套类型的名称是编译期错误。
+
+嵌套注解类型一经导入，其作用与顶层注解相同——可作为装饰器，也可作为 `Annotated[...]` 元数据：
+
+[source,python]
+----
+from typing import Annotated
+
+from picocli.CommandLine import Command, Option, Parameters
+
+@Command(name="greet", description="Greets a name")
+class GreetCommand:
+    verbose: Annotated[bool, Option(names=["-v", "--verbose"])] = False
+    name: Annotated[str, Parameters(index="0")] = "World"
+----
+
+导入注解中嵌套的注解也是外层装饰器的属性，因此 `@ToString.Exclude` 与 `Annotated[int, EqualsAndHashCode.Exclude]` 无需二次导入即可解析。
+
+Java 类（而非注解）的嵌套注解必须按上文所示从类模块导入：`@CommandLine.Command(...)` 在运行时指向的是 Java 注解接口，不可调用。

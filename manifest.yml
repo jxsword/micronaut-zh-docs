@@ -2503,18 +2503,18 @@ files:
 - file: guide/languageSupport/python/functionalInterfaces.adoc
   blob_sha: 57de17a6220475adac34ee6448f8271e57f8d65f
   size: 5009
-  status: missing
+  status: current
   zh: zh/guide/languageSupport/python/functionalInterfaces.adoc
   paragraphs: 20
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 9d8cb94499098faf2a2bbb9b76f26d7d23a8ca5e
 - file: guide/languageSupport/python/generatedClasses.adoc
   blob_sha: 8eda95db0a4e4c1830fb0cb991db7ffeb39e572a
   size: 9975
-  status: missing
+  status: current
   zh: zh/guide/languageSupport/python/generatedClasses.adoc
   paragraphs: 36
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 32406cbe4031c62a1c5df1410f703cf31a499d93
 - file: guide/languageSupport/python/graalTools.adoc
   blob_sha: 10ab4ed57819e896200618be8f53b08cdf771288
@@ -2551,10 +2551,10 @@ files:
 - file: guide/languageSupport/python/javaInterfaces.adoc
   blob_sha: bd681018980f12c842edfe7812258d3174cc37fd
   size: 4766
-  status: missing
+  status: current
   zh: zh/guide/languageSupport/python/javaInterfaces.adoc
   paragraphs: 17
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 46a762b7346456a5bcaea9a20a842b2c095ac3ff
 - file: guide/languageSupport/python/keywords.adoc
   blob_sha: 4822ee5aa3a9c9d3db332df50b5ff59f54873b57
@@ -2583,10 +2583,10 @@ files:
 - file: guide/languageSupport/python/nestedTypes.adoc
   blob_sha: 039a1cf3a83c1f80bab1b802ca478826c7b5aecd
   size: 1538
-  status: missing
+  status: current
   zh: zh/guide/languageSupport/python/nestedTypes.adoc
   paragraphs: 9
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 5b42af205d644fda591f84b5af01ad967f744913
 - file: guide/languageSupport/python/overloads.adoc
   blob_sha: 47656d65c012dfa31fd7470ce53431d5316d3207
@@ -2599,10 +2599,10 @@ files:
 - file: guide/languageSupport/python/pythonExceptions.adoc
   blob_sha: 17e40cf47172c760add9ec86f9e0a6a8666fff07
   size: 3303
-  status: missing
+  status: current
   zh: zh/guide/languageSupport/python/pythonExceptions.adoc
   paragraphs: 11
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: a247ada5327e0df9751f28b07d40c989a67075a6
 - file: guide/languageSupport/python/pythonRuntime.adoc
   blob_sha: 27ec64dec9a4680c96fef3738655132862dd60c8

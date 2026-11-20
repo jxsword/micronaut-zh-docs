@@ -1,0 +1,62 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Python Callables as Functional Interfaces](https://docs.micronaut.io/5.2.x/core/#core-functionalInterfaces)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/languageSupport/python/functionalInterfaces.adoc  upstream_commit: 9d8cb94499098faf2a2bbb9b76f26d7d23a8ca5e  upstream_hash: 57de17a6220475adac34ee6448f8271e57f8d65f  translated_at: 2026-11-21 -->
+
+传给「参数为函数式接口（functional interface）的 Java 方法」的 Python 可调用对象（lambda、函数或绑定方法）会被转换为该接口的一个实现。Java 侧收到的是一个代理；当代理被返回给 Python 时，它又变回原来的 Python 可调用对象：从 Python 注册后读回的监听器与注册时的 lambda 是同一个对象（`is`），并且仍可调用。
+
+[source,python]
+----
+from java.util import ArrayList
+
+names = ArrayList()
+names.add("b")
+names.add("a")
+names.sort(lambda left, right: (left > right) - (left < right))  # <1>
+----
+
+<1> `sort` 接受一个 `Comparator`；lambda 成为 `compare` 实现。
+
+=== 重载的函数式参数
+
+一些 Java 方法以不同元数（arity）的函数式接口重载，例如 `exitCondition(Predicate<Scope>)` 与 `exitCondition(BiPredicate<Scope, Integer>)`。Python 可调用对象不声明自己实现哪个接口，因此 Micronaut 按可调用对象的位置参数数量选择重载：
+
+* 位置参数数量恰好等于接口方法参数数量的可调用对象选中该重载：两个参数的 lambda 选中 `BiPredicate`，一个参数的选中 `Predicate`。绑定方法不计 `self`。
+* 当「有返回值的接口」与 `void` 接口同时匹配时，前者胜出：传给以 `Runnable` 与 `Supplier` 重载的方法的零参 lambda 选中 `Supplier`，与 Java lambda 表达式的行为一致。
+* 只有当没有重载能精确匹配声明参数时，默认值才计入：`lambda a, b="x": ...` 声明两个参数并选中 `BiFunction`；传给以 `BiPredicate` 与三参接口重载的方法时，`lambda a, b, c=1: ...` 选中 `BiPredicate`。`*args` 不会让可调用对象适配更多元数：`lambda a, *rest: ...` 声明一个参数并选中 `Predicate`。
+* 签名无法内省的可调用对象（`functools.partial`、内置函数或类），或仅通过 `*args` 才能适配某元数的可调用对象，仍按此前方式经宿主互操作的默认转换处理：`Function` 参数优先于任何其他接口接受它，其他接口上的重载则有歧义。
+
+[source,python]
+----
+builder.exitCondition(lambda scope, index: index == 3)  # <1>
+----
+
+<1> 选中 `exitCondition(BiPredicate<AgenticScope, Integer>)`。
+
+该规则覆盖 `java.util.function` 的每个接口，外加 `Runnable`、`java.util.concurrent.Callable` 与 `java.util.Comparator`，以及 Python 编译器在 Python 源码引用的 Java 类型中找到的每个函数式接口（标注 `@FunctionalInterface` 的接口或仅含单个抽象方法的接口）：包括导入的 Java 类型、Python 类的 Java 基类、类型提示中指名的 Java 类型，这些类型的方法参数（含继承的方法），以及再深入一层——这些方法返回类型的那些方法的参数。以规约（specification）与 `Iterable` 重载的数据仓库（例如 `deleteAll(PredicateSpecification<T>)` 与 `deleteAll(Iterable<T>)`），或由工厂返回、以 `ValueMapper` 与 `ValueMapperWithKey` 重载的 `KStream`，都可以用普通 lambda 调用：
+
+[source,python]
+----
+def name_equals(name: str):
+    return lambda root, criteria_builder: criteria_builder.equal(root.get("name"), name)
+
+person_repository.deleteAll(name_equals("Denis"))  # <1>
+person_repository.deleteAll([denis, josh])  # <2>
+----
+
+<1> 可调用对象不是 `Iterable`：lambda 选中 `deleteAll(PredicateSpecification<Person>)`。若无此规则，宿主互操作也会把 `Iterable` 当作函数式接口，该调用将有歧义。
+<2> 序列仍按此前方式选中 `deleteAll(Iterable<Person>)`。
+
+库的接口只要只有单个抽象方法即视为函数式接口，无论是否标注：传给以 `Iterable<String>` 与 `org.reactivestreams.Publisher<String>` 重载的方法的 lambda 会实现 `subscribe(Subscriber)` 并选中 `Publisher` 重载，而 list 选中 `Iterable` 重载。
+
+=== 显式适配可调用对象
+
+对于同元数函数式接口之间的重载，或编译器未曾见到的接口（只能通过运行时获得的对象触达），请在传参前用 api:context.python.PythonInterop[PythonInterop] 将可调用对象适配到该接口：
+
+[source,python]
+----
+from java.util.function import BiPredicate
+from micronaut.context.python import PythonInterop
+
+builder.exitCondition(PythonInterop.fn(BiPredicate, lambda scope, index: index == 3))
+----
+
+`PythonInterop.fn` 返回一个实现该接口并调用可调用对象的 Java 对象。与自动转换的可调用对象不同，它被返回给 Python 时保留自己的 Java 类，因此也适用于需要在 Java 侧识别该实现的代码——例如通过 `getClass()`。

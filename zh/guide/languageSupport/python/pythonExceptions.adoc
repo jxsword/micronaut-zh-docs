@@ -1,0 +1,51 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Python Exceptions Extending Java Exceptions](https://docs.micronaut.io/5.2.x/core/#core-pythonExceptions)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/languageSupport/python/pythonExceptions.adoc  upstream_commit: a247ada5327e0df9751f28b07d40c989a67075a6  upstream_hash: 17e40cf47172c760add9ec86f9e0a6a8666fff07  translated_at: 2026-11-21 -->
+
+Python 类可以继承 Java 异常类，例如 `RuntimeException` 或诸如 `AbstractThrowableProblem` 的库基类。Python 编译器会为它生成一个继承该 Java 基类的 Java 类，因此为 Python 类型（或其 Java 基类）声明的 Micronaut 异常处理器与 `@Error` 方法，都能在异常从 Python 代码抛出时匹配到它：
+
+[source,python]
+----
+from java.lang import RuntimeException
+
+
+class NotEligibleException(RuntimeException):
+
+    def __init__(self, message: str):
+        super().__init__(message)
+----
+
+运行时，该 Python 类就是一个普通的 Python 异常；其 `super().__init__(...)` 调用的实参保存在 `args` 中，与任何 Python 异常一样。当异常跨越到 Java 时，生成的 Java 类把这些实参转发给匹配的 Java 父类构造器。因此，传给父类构造器的消息成为 Java 的 `getMessage()`，而作为原因（cause）给出的 Java 异常（`raise NotEligibleException("...") from e`）成为 Java 的 `getCause()`。没有 `__init__` 方法的子类会把 `str(exception)` 传给 Java 基类的消息构造器；若没有消息构造器，则调用其无参构造器。以下情形同样如此：构造器以不同实参多次调用 `super().__init__(...)` （例如在 `if` 的各分支中），或把自身的 `*args`/`**kwargs` 透传——因为无法为它选定唯一的 Java 构造器。
+
+Java 构造器在编译期依据 `super().__init__(...)` 调用的实参数量及其类型（在编译器能判断的范围内）选定：字面量与 f-string、经注解判定的构造器参数、模块常量以及 Java 类的构造器调用。未知类型的实参可匹配任何参数，优先匹配 `String` 参数。当 Java 基类没有构造器接受该调用、有多个构造器接受、或调用使用了关键字实参时，编译失败。Java 构造器的基本类型参数（比如 `int` 状态码）不能取 `None`：以 `None` 作为其值抛出异常时，会在异常跨越到 Java 时失败。
+
+[source,python]
+----
+from java.net import URI
+from micronaut.http import HttpStatus
+from micronaut.problem import HttpStatusType
+from org.zalando.problem import AbstractThrowableProblem
+
+TYPE = URI.create("https://example.org/not-found")
+
+
+class TaskNotFoundProblem(AbstractThrowableProblem):
+
+    def __init__(self, task_id: int):
+        super().__init__(TYPE, "Not found", HttpStatusType(HttpStatus.NOT_FOUND), f"Task '{task_id}' not found")
+----
+
+上面的调用解析为基类的 `(URI, String, StatusType, String)` 构造器：第二个与最后一个实参是字符串，第三个是 `HttpStatusType`，而 `TYPE` （静态方法调用）可接受任何参数。
+
+异常一旦跨越到 Java，它就是生成的 Java 类。因此，回调进入 Java 的 Python 代码（例如通过被拦截的方法）捕获的是 Java 类而非 Python 类：
+
+[source,python]
+----
+import java
+
+NotEligibleException = java.type("example.NotEligibleException")
+
+try:
+    service.register(customer)
+except NotEligibleException as rejected:
+    print(rejected.getMessage())
+----
