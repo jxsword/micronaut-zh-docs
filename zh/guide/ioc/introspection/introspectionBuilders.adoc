@@ -1,0 +1,14 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Builders](https://docs.micronaut.io/5.2.x/core/#core-introspectionBuilders)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/ioc/introspection/introspectionBuilders.adoc  upstream_commit: 056c7bc89c3ce14ccab2c3c585f18b4a7d429673  upstream_hash: 5c97bba19e9486c8728302a49280e82dade10eb2  translated_at: 2026-11-21 -->
+
+如果某个类型只能通过构建器（builder）模式构造，您可以使用 ann:core.annotation.Introspected[] 注解的 `builder` 成员生成动态构建器。例如给定以下类：
+
+snippet::io.micronaut.docs.ioc.builders.Person[tags="class"]
+
+您可以使用 api:core.beans.BeanIntrospection[] API 的 `builder()` 方法构造实例：
+
+snippet::io.micronaut.docs.ioc.builders.IntrospectionBuilderSpec[tags="builder", indent=0]
+
+TIP: 无论该类型是否使用构建器，`builder()` 方法都能工作，并可作为对象构造的通用抽象。但请注意，与通过 `instantiate()` 方法直接实例化相比有轻微的性能开销，因此如果需要优化的代码路径，可以先检查 `hasBuilder()` 方法。
+
+NOTE: 内省构建器不适用于 https://groovy-lang.org/metaprogramming.html#xform-Builder[Groovy `@Builder` AST]。

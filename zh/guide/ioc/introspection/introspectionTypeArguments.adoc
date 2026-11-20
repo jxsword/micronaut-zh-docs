@@ -1,0 +1,35 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Type Arguments](https://docs.micronaut.io/5.2.x/core/#core-introspectionTypeArguments)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/ioc/introspection/introspectionTypeArguments.adoc  upstream_commit: bff2ca174be33d95217ae9369048f5a46c7240b2  upstream_hash: 6efbe5632dc5105c81adbf044932459d86654973  translated_at: 2026-11-21 -->
+
+api:core.beans.BeanIntrospection[] 记录被内省类型在其每个超类型中绑定的类型实参，方式与 api:inject.BeanDefinition[] 对 bean 的处理相同。这可以在不反射读取类的情况下回答类型绑定了什么，也不要求该类型必须是 bean。
+
+给定一个绑定泛型接口两个实参的类型：
+
+[source,java]
+----
+@Introspected
+class PhoneValidator implements Validator<Phone> { // <1>
+    // ...
+}
+----
+
+<1> `Validator` 是一个泛型接口，`interface Validator<T>`
+
+绑定的实参可以按超类型从内省中读回：
+
+[source,java]
+----
+BeanIntrospection<PhoneValidator> introspection = BeanIntrospection.getIntrospection(PhoneValidator.class);
+
+List<Argument<?>> arguments = introspection.getTypeArguments(Validator.class); // <1>
+assert arguments.get(0).getType() == Phone.class;
+
+assert introspection.getTypeArguments(Comparable.class).isEmpty(); // <2>
+----
+
+<1> 实参按声明它们的超类或接口查找，或以 `Class` 或按名称
+<2> 被内省类型未绑定或不存在的超类型返回空列表
+
+通过中间超类型绑定的实参也会被解析，而类型保持开放的实参会以类型变量（type variable）而非已解析类型的形式报告。
+
+NOTE: 无参的 `getTypeArguments()` 报告的是被内省类型自身*声明*的实参，而不是它在超类型中绑定的实参。对于 `class PhoneValidator implements Validator<Phone>`，结果为空；对于 `class AnyValidator<T> implements Validator<T>`，结果为 `[T]`。

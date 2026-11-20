@@ -1,0 +1,50 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Bean Mappers](https://docs.micronaut.io/5.2.x/core/#core-beanMappers)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/ioc/beanMappers.adoc  upstream_commit: 130cfede2d9a325faf7016bf10e0a2060c5a3cbd  upstream_hash: e14ab1972f56e583f459ce2d278bbb97eabf081c  translated_at: 2026-11-21 -->
+
+自 4.1.x 起，ann:context.annotation.Mapper[] 注解可用于任何抽象方法，以自动创建一种类型与另一种类型之间的映射。自 4.8.x 起，该注解还可用于合并 bean。
+
+受 https://mapstruct.org[Map Struct] 等库中类似功能的启发，`Mapper` 使用 Micronaut 框架内置的 <<introspection, Bean 内省>> 与 <<evaluatedExpressions, 表达式>> 特性，它们本身就是无反射的。
+
+NOTE: 对于映射，源类型和目标类型都需要 <<introspection, 被内省>>。
+
+=== @Mapper 示例
+
+给定以下类型：
+
+snippet::io.micronaut.docs.ioc.mappers.ContactForm[tags="class"]
+
+snippet::io.micronaut.docs.ioc.mappers.ContactEntity[tags="class"]
+
+您可以编写一个接口来定义这两种类型之间的映射，只需用 ann:context.annotation.Mapper[] 注解一个方法。
+
+snippet::io.micronaut.docs.ioc.mappers.ContactMappers[tags="imports, class"]
+
+Micronaut 编译器会在编译期为前述接口生成实现。
+
+随后您可以注入 `ContactMappers` 类型的 bean，轻松地在两种类型之间映射。
+
+snippet::io.micronaut.docs.ioc.mappers.SimpleMapperSpec[tags="mappers", indent=0]
+
+=== @Mapping 示例
+
+每个抽象方法可以定义单个 ann:context.annotation.Mapper[@Mapper] 注解，或定义一个或多个 ann:context.annotation.Mapper.Mapping[@Mapping] 注解来指定属性如何映射到目标类型。
+
+例如，给定以下类型：
+
+snippet::io.micronaut.docs.ioc.mappers.Product[tags="class"]
+
+在 HTTP 响应中改变该类型的表示形式是常见需求。例如，考虑以下响应类型：
+
+snippet::io.micronaut.docs.ioc.mappers.ProductDTO[tags="class"]
+
+此处 `price` 属性类型不同，且多出一个名为 `distributor` 的属性。您可以编写手动逻辑来处理映射及这些差异，也可以定义一个映射：
+
+snippet::io.micronaut.docs.ioc.mappers.ProductMappers[tags="class"]
+
+`from` 成员可用于定义源类型上的属性名，或定义一个 <<evaluatedExpressions, 表达式>>——从方法实参读取值并按您选择的任意方式转换它们，包括调用实例的其他方法。
+
+NOTE: 只有当需要应用转换才能成功完成映射时，才需要 `@Mapping` 定义。其他属性将自动映射和转换。
+
+您可以从上下文获取或注入 `ProductMappers` 类型的 bean。然后，可以使用 `toProductDTO` 方法将 Product 类型映射为 ProductDTO 类型：
+
+snippet::io.micronaut.docs.ioc.mappers.MappersSpec[tags="mappers", indent="0"]

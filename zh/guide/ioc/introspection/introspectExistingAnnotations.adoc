@@ -1,0 +1,8 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Write an AnnotationMapper to Introspect Existing Annotations](https://docs.micronaut.io/5.2.x/core/#core-introspectExistingAnnotations)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/ioc/introspection/introspectExistingAnnotations.adoc  upstream_commit: e7c661f2fdd0d01f955c8449e5af4ac7a883d50f  upstream_hash: 54727fc94b69d37fd7d1a3b51110d665793a9b47  translated_at: 2026-11-21 -->
+
+如果有一个您希望默认进行内省的既有注解，您可以编写一个 api:inject.annotation.AnnotationMapper[]。
+
+一个例子是 https://github.com/micronaut-projects/micronaut-core/blob/master/core-processor/src/main/java/io/micronaut/inject/beans/visitor/EntityIntrospectedAnnotationMapper.java[EntityIntrospectedAnnotationMapper]，它确保所有标注了 `javax.persistence.Entity` 的 bean 默认都是可内省的。
+
+NOTE: `AnnotationMapper` 必须位于注解处理器的类路径上。

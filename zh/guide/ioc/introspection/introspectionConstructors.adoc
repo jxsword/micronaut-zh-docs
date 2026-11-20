@@ -1,0 +1,27 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Describing Constructors](https://docs.micronaut.io/5.2.x/core/#core-introspectionConstructors)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/ioc/introspection/introspectionConstructors.adoc  upstream_commit: 469fd6a6789618074a27f1f463784d959e402b35  upstream_hash: 2685ee333578482c2145c84e974098fee4c55650  translated_at: 2026-11-21 -->
+
+api:core.beans.BeanIntrospection[] 描述它用于实例化 bean 的构造器，即 `getConstructor` 返回、`instantiate` 使用的那个构造器。默认情况下这是唯一被描述的构造器，因此 `getConstructors` 返回单元素列表。
+
+若要改为描述所有已声明的构造器，请将 ann:core.annotation.Introspected[] 注解的 `constructors` 成员设置为 `true`：
+
+snippet::io.micronaut.docs.ioc.beans.Shipment[tags="class"]
+
+<1> 类的每个已声明构造器都被描述
+<2> ann:core.annotation.Creator[] 注解仍选择用于实例化 bean 的构造器
+
+每个被描述的构造器都是一个 api:core.beans.BeanConstructor[]，携带自身的注解元数据及其参数的注解元数据，且每个构造器都能实例化该类型：
+
+snippet::io.micronaut.docs.ioc.beans.IntrospectionSpec[tags="constructors", indent=0]
+
+<1> `getConstructors` 返回所有被描述的构造器，`getConstructor` 返回的那个排在首位
+<2> 构造器通过其参数区分
+<3> 任何被描述的构造器都能实例化该类型
+
+若要描述某个特定构造器而非全部，请用 ann:context.annotation.Executable[] 注解该构造器：
+
+snippet::io.micronaut.docs.ioc.beans.Delivery[tags="class"]
+
+<1> 除实例化 bean 所用的构造器外，该构造器也被描述
+
+NOTE: 描述构造器不会改变该类型 bean 的构建方式。无论哪种方式，`getConstructor` 返回的构造器都相同，且用 ann:context.annotation.Executable[] 注解的构造器不会成为 bean 的可执行方法。

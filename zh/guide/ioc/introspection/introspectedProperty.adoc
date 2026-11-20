@@ -1,0 +1,55 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Explicit Bean Properties](https://docs.micronaut.io/5.2.x/core/#core-introspectedProperty)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/ioc/introspection/introspectedProperty.adoc  upstream_commit: fa30d74f59340588f6f93fb0fe7737ea19371177  upstream_hash: 6d107943990de7be19c5427f7342dc89f57a5fbb  translated_at: 2026-11-21 -->
+
+ann:core.annotation.Introspected.Property[] 注解可用于被内省的字段或方法，使该成员成为显式的 bean 属性。
+当成员不符合常规的 JavaBean getter 或 setter 命名规则，或当属性需要暴露额外元数据（例如外部序列化名称）时，这很有用。
+
+snippet::io.micronaut.docs.ioc.introspection.Book[tags="imports,class", indent=0]
+
+在上面的示例中，`title()` 和 `title(String)` 被纳入为可读可写的 bean 属性访问器，尽管它们不是 JavaBean 的 `getTitle` 和 `setTitle` 方法。
+`author()` 方法被纳入为只读属性，因为其 `accessKind` 仅包含 `Introspected.Property.Access.READ`。
+
+`value` 成员是 `name` 的简写。
+`name` 成员表示外部属性名，可通过属性注解元数据获取。
+它不会改变与 api:core.beans.BeanIntrospection[] 查找方法一起使用的 Micronaut bean 属性名。
+如果同时声明 `value` 和 `name`，它们必须包含相同的值。
+
+snippet::io.micronaut.docs.ioc.introspection.IntrospectedPropertyTest[tags="metadata", indent=0]
+
+`accessKind` 成员控制 bean 属性是否可读、可写或两者兼有：
+
+* `Introspected.Property.Access.READ` 允许读取该属性。
+* `Introspected.Property.Access.WRITE` 允许写入该属性。
+* 默认值同时包含 `READ` 和 `WRITE`。
+
+如果 getter 和 setter 同时存在，Micronaut 仍可暴露可读可写属性。当字段或方法必须限制单侧访问（例如只读或只写属性）时，请使用 `accessKind`。
+访问声明适用于整个 bean 属性。同一个 bean 属性的多个 ann:core.annotation.Introspected.Property[] 声明必须声明相同的 `accessKind`；冲突的声明会在编译期被拒绝。
+当 ann:core.annotation.Introspected.Property[] 声明在与 getter 或 setter 方法属于同一 bean 属性的字段上时，Micronaut 采用常规的 bean 访问器优先级：若存在 getter 方法则用于读取，若存在 setter 方法则用于写入。
+被注解的字段仍会贡献映射的属性元数据，并在缺少对应 getter 或 setter 时提供字段访问。
+
+当被注解的成员必须用于其访问方向（即使同一 bean 属性还存在其他字段、getter 或 setter）时，请将 `ignoreOtherAccessors` 设置为 `true`。
+例如，标注了默认可读可写 `accessKind` 的字段将同时用于读取和写入，而不是同名的 getter 和 setter 方法。
+
+== Jackson 注解
+
+当被内省的类型上存在 Jackson 注解时，Micronaut 会在编译期将以下注解映射为 ann:core.annotation.Introspected.Property[]：
+
+* `com.fasterxml.jackson.annotation.JsonProperty`
+* `com.fasterxml.jackson.annotation.JsonGetter`
+* `com.fasterxml.jackson.annotation.JsonSetter`
+
+这意味着 Jackson 风格的属性名可以通过 Micronaut 的 bean 属性注解元数据看到，并且标注了 Jackson 注解、不符合 JavaBean 命名规则的方法仍可被识别为 bean 属性。
+
+snippet::io.micronaut.docs.ioc.introspection.User[tags="imports,class", indent=0]
+
+`displayName` 方法被视为一个 bean 属性，外部名 `display_name` 可从映射的 ann:core.annotation.Introspected.Property[] 元数据中获取。
+对于 `JsonGetter` 和 `JsonSetter`，读写可用性由可用的 bean 属性读取器和写入器决定。
+Jackson 注解不设置 `ignoreOtherAccessors`，因此 Micronaut 保持与 Jackson Databind 相同的访问器优先级：若存在 getter 则优先用于读取，若存在 setter 则优先用于写入。
+
+对于 `JsonProperty`，Micronaut 还会映射 Jackson 的 `access` 成员：
+
+* `JsonProperty.Access.READ_ONLY` 映射为 `Introspected.Property.Access.READ`。
+* `JsonProperty.Access.WRITE_ONLY` 映射为 `Introspected.Property.Access.WRITE`。
+* `JsonProperty.Access.AUTO` 和 `JsonProperty.Access.READ_WRITE` 映射为可读可写访问。
+
+由于 `accessKind` 是属性级别的，映射到同一 bean 属性的多个 Jackson 注解必须在映射后的访问声明上保持一致。

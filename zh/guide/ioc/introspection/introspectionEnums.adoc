@@ -1,0 +1,4 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Introspect Enums](https://docs.micronaut.io/5.2.x/core/#core-introspectionEnums)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/ioc/introspection/introspectionEnums.adoc  upstream_commit: 9c73f45b86c1558c73f1bd4cc34ee5282bc199bc  upstream_hash: afeefd13dd01ed87d4954ae8b538bba8a73075c4  translated_at: 2026-11-21 -->
+
+枚举也可以被内省。将注解添加到枚举上，即可通过标准 `valueOf` 方法构造它。

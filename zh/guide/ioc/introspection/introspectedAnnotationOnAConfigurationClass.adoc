@@ -1,0 +1,11 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Use the @Introspected Annotation on a Configuration Class](https://docs.micronaut.io/5.2.x/core/#core-introspectedAnnotationOnAConfigurationClass)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/ioc/introspection/introspectedAnnotationOnAConfigurationClass.adoc  upstream_commit: 9c73f45b86c1558c73f1bd4cc34ee5282bc199bc  upstream_hash: 1ecd64750b8a5e13e70457226e208cccb0bb16b2  translated_at: 2026-11-21 -->
+
+[[introspectedAnnotationOnAConfigurationClass]]
+如果要内省的类已经编译且不受您控制，另一种选择是定义一个配置类，并设置 ann:core.annotation.Introspected[] 注解的 `classes` 成员。
+
+snippet::io.micronaut.docs.ioc.beans.PersonConfiguration[tags="class"]
+
+在上面的示例中，`PersonConfiguration` 类为 `Person` 类生成内省。
+
+NOTE: 您也可以使用 ann:core.annotation.Introspected[] 的 `packages` 成员，它会在编译期进行包扫描并为包中的所有类生成内省。但请注意，该特性目前被视为实验性功能。

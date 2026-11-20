@@ -1,0 +1,15 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Bean Mappers Merging](https://docs.micronaut.io/5.2.x/core/#core-beanMappersMerging)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/ioc/beanMappers/beanMappersMerging.adoc  upstream_commit: c9d771fbf81ef9073eda010c4f969cb526bb7eb0  upstream_hash: ee5b30a06289cf7e4529328e7bd58c42b6937bb5  translated_at: 2026-11-21 -->
+
+给定以下类型：
+
+snippet::io.micronaut.docs.ioc.mappers.ChristmasTypes[tags="beans", indent=0]
+
+您可以编写接口和方法来合并这些类型，只需为方法指定两个或更多实参，并用 ann:context.annotation.Mapper[@Mapper] 注解该方法。
+可选地，使用 ann:context.annotation.Mapper.Mapping[@Mapping] 定义自定义映射规则。
+
+snippet::io.micronaut.docs.ioc.mappers.ChristmasMappers[tags="imports, mapper"]
+
+随后您可以注入 `ChristmasMappers` 类型，轻松合并这些类型。
+
+snippet::io.micronaut.docs.ioc.mappers.MappersSpec[tags="merge", indent=0]

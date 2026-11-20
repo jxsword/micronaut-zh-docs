@@ -1847,34 +1847,34 @@ files:
 - file: guide/ioc/beanMappers.adoc
   blob_sha: e14ab1972f56e583f459ce2d278bbb97eabf081c
   size: 2751
-  status: missing
+  status: current
   zh: zh/guide/ioc/beanMappers.adoc
   paragraphs: 24
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 130cfede2d9a325faf7016bf10e0a2060c5a3cbd
 - file: guide/ioc/beanMappers/beanMappersMerging.adoc
   blob_sha: ee5b30a06289cf7e4529328e7bd58c42b6937bb5
   size: 621
-  status: missing
+  status: current
   zh: zh/guide/ioc/beanMappers/beanMappersMerging.adoc
   paragraphs: 6
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: c9d771fbf81ef9073eda010c4f969cb526bb7eb0
 - file: guide/ioc/beanMappers/beanMappersMerging/beanMappersMergingStrategy.adoc
   blob_sha: ea57af5cd7ff2e8a207aa5c83ad20927a6c9779a
   size: 362
-  status: missing
+  status: current
   zh: zh/guide/ioc/beanMappers/beanMappersMerging/beanMappersMergingStrategy.adoc
   paragraphs: 3
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: c9d771fbf81ef9073eda010c4f969cb526bb7eb0
 - file: guide/ioc/beanValidation.adoc
   blob_sha: f36fd9577ec49d04157658b0c2b533ce04fe9a74
   size: 76
-  status: missing
+  status: current
   zh: zh/guide/ioc/beanValidation.adoc
   paragraphs: 1
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 84852a75dc5bb9490d46aed90c92159cbfc391ef
 - file: guide/ioc/beans.adoc
   blob_sha: 39fb3c150b5f301119ea480bb46afd4203a51df8
@@ -1991,106 +1991,106 @@ files:
 - file: guide/ioc/introspection/accessKind.adoc
   blob_sha: d2783d04735c64f51e4a76bf057079cbe3a9ae6d
   size: 813
-  status: missing
+  status: current
   zh: zh/guide/ioc/introspection/accessKind.adoc
   paragraphs: 5
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 130cfede2d9a325faf7016bf10e0a2060c5a3cbd
 - file: guide/ioc/introspection/atCreator.adoc
   blob_sha: 9cc095baa236af22a9aca635226f80719de4ee6b
   size: 706
-  status: missing
+  status: current
   zh: zh/guide/ioc/introspection/atCreator.adoc
   paragraphs: 9
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 130cfede2d9a325faf7016bf10e0a2060c5a3cbd
 - file: guide/ioc/introspection/atIntrospected.adoc
   blob_sha: 8ff795c4c72a2abd36c93990045f60368d7bc09d
   size: 1710
-  status: missing
+  status: current
   zh: zh/guide/ioc/introspection/atIntrospected.adoc
   paragraphs: 14
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 130cfede2d9a325faf7016bf10e0a2060c5a3cbd
 - file: guide/ioc/introspection/beanWrapperApi.adoc
   blob_sha: f4bb372c6e879eef7537ed8663c9271a6a7453a8
   size: 1187
-  status: missing
+  status: current
   zh: zh/guide/ioc/introspection/beanWrapperApi.adoc
   paragraphs: 5
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 9c73f45b86c1558c73f1bd4cc34ee5282bc199bc
 - file: guide/ioc/introspection/introspectExistingAnnotations.adoc
   blob_sha: 54727fc94b69d37fd7d1a3b51110d665793a9b47
   size: 534
-  status: missing
+  status: current
   zh: zh/guide/ioc/introspection/introspectExistingAnnotations.adoc
   paragraphs: 3
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: e7c661f2fdd0d01f955c8449e5af4ac7a883d50f
 - file: guide/ioc/introspection/introspectedAccessorsStyle.adoc
   blob_sha: 868214a67d6bbd95eb06389fed40f4f324c54940
   size: 580
-  status: missing
+  status: current
   zh: zh/guide/ioc/introspection/introspectedAccessorsStyle.adoc
   paragraphs: 5
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: c2f666c042f4d793b74e381831c7c6fd9fb3b36e
 - file: guide/ioc/introspection/introspectedAnnotationOnAConfigurationClass.adoc
   blob_sha: 1ecd64750b8a5e13e70457226e208cccb0bb16b2
   size: 643
-  status: missing
+  status: current
   zh: zh/guide/ioc/introspection/introspectedAnnotationOnAConfigurationClass.adoc
   paragraphs: 4
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 9c73f45b86c1558c73f1bd4cc34ee5282bc199bc
 - file: guide/ioc/introspection/introspectedProperty.adoc
   blob_sha: 6d107943990de7be19c5427f7342dc89f57a5fbb
   size: 4301
-  status: missing
+  status: current
   zh: zh/guide/ioc/introspection/introspectedProperty.adoc
   paragraphs: 18
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: fa30d74f59340588f6f93fb0fe7737ea19371177
 - file: guide/ioc/introspection/introspectionBuilders.adoc
   blob_sha: 5c97bba19e9486c8728302a49280e82dade10eb2
   size: 944
-  status: missing
+  status: current
   zh: zh/guide/ioc/introspection/introspectionBuilders.adoc
   paragraphs: 6
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 056c7bc89c3ce14ccab2c3c585f18b4a7d429673
 - file: guide/ioc/introspection/introspectionConstructors.adoc
   blob_sha: 2685ee333578482c2145c84e974098fee4c55650
   size: 1667
-  status: missing
+  status: current
   zh: zh/guide/ioc/introspection/introspectionConstructors.adoc
   paragraphs: 11
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 469fd6a6789618074a27f1f463784d959e402b35
 - file: guide/ioc/introspection/introspectionEnums.adoc
   blob_sha: afeefd13dd01ed87d4954ae8b538bba8a73075c4
   size: 141
-  status: missing
+  status: current
   zh: zh/guide/ioc/introspection/introspectionEnums.adoc
   paragraphs: 1
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 9c73f45b86c1558c73f1bd4cc34ee5282bc199bc
 - file: guide/ioc/introspection/introspectionTypeArguments.adoc
   blob_sha: 6efbe5632dc5105c81adbf044932459d86654973
   size: 1602
-  status: missing
+  status: current
   zh: zh/guide/ioc/introspection/introspectionTypeArguments.adoc
   paragraphs: 11
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: bff2ca174be33d95217ae9369048f5a46c7240b2
 - file: guide/ioc/introspection/kotlinAndBeanIntrospection.adoc
   blob_sha: f69e755494ed09efa1ba300bc30c3eed6ca6739a
   size: 693
-  status: missing
+  status: current
   zh: zh/guide/ioc/introspection/kotlinAndBeanIntrospection.adoc
   paragraphs: 9
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: eea9f6c9b38656e40af35bcfecb823bc6c1d0b88
 - file: guide/ioc/introspection/makingABeanAvailableForIntrospection.adoc
   blob_sha: df81b63ff867e4ca7200fcb6cc94d34226082a45
@@ -2103,18 +2103,18 @@ files:
 - file: guide/ioc/introspection/propertyMembers.adoc
   blob_sha: ef2a9d334b02d5c93d0bbf07320077c04f96b232
   size: 2756
-  status: missing
+  status: current
   zh: zh/guide/ioc/introspection/propertyMembers.adoc
   paragraphs: 12
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 701fae7b4620f1716fcce7b9e071137e9cf61fc8
 - file: guide/ioc/introspection/staticAtCreator.adoc
   blob_sha: 0bd831d7e7b11c2bc6c87bb99a450405590ec0f2
   size: 496
-  status: missing
+  status: current
   zh: zh/guide/ioc/introspection/staticAtCreator.adoc
   paragraphs: 4
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 9c73f45b86c1558c73f1bd4cc34ee5282bc199bc
 - file: guide/ioc/iocDebugging.adoc
   blob_sha: 01f819a26d948ef64bf477d7e2dfad9a788b2ccd

@@ -1,0 +1,33 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Use the @Introspected Annotation](https://docs.micronaut.io/5.2.x/core/#core-atIntrospected)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/ioc/introspection/atIntrospected.adoc  upstream_commit: 130cfede2d9a325faf7016bf10e0a2060c5a3cbd  upstream_hash: 8ff795c4c72a2abd36c93990045f60368d7bc09d  translated_at: 2026-11-21 -->
+
+ann:core.annotation.Introspected[] 注解可用于任何类，使其可用于内省。只需用 ann:core.annotation.Introspected[] 标注该类：
+
+snippet::io.micronaut.docs.ioc.beans.Person[tags="imports,class"]
+
+在编译期生成内省数据后，通过 api:core.beans.BeanIntrospection[] API 获取它：
+
+snippet::io.micronaut.docs.ioc.beans.IntrospectionSpec[tags="usage", indent=0]
+
+<1> 可以使用静态 `getIntrospection` 方法获取 api:core.beans.BeanIntrospection[]
+<2> 获得 api:core.beans.BeanIntrospection[] 后，可以使用 `instantiate` 方法实例化 bean。
+<3> 可以从内省中获取 api:core.beans.BeanProperty[]
+<4> 使用 `set` 方法设置属性值
+<5> 使用 `get` 方法获取属性值
+
+[.lang-java.lang-groovy]
+--
+可以将内省应用于一个包中的所有类。只需创建 `package-info` 文件，并用 ann:core.annotation.Introspected[] 注解该包。
+
+snippet::io.micronaut.docs.ioc.introspection.pck.foobar.package-info[tags="usage", indent=0]
+
+WARNING: 该包应仅包含可被内省的类。
+
+NOTE: 仅处理直接位于该包中的类；子包将被忽略。
+--
+
+[.lang-kotlin.lang-python]
+--
+NOTE: 包级内省需要 `package-info` 声明，只有 Java 和 Groovy 支持它。在 Kotlin 和 Python 中，请用 ann:core.annotation.Introspected[] 注解每个类，或使用 `classes` 成员列出类型，如 <<introspectedAnnotationOnAConfigurationClass, 在配置类上使用 @Introspected 注解>> 所示。
+--
+

@@ -1,0 +1,48 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Bean Property Members](https://docs.micronaut.io/5.2.x/core/#core-propertyMembers)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/ioc/introspection/propertyMembers.adoc  upstream_commit: 701fae7b4620f1716fcce7b9e071137e9cf61fc8  upstream_hash: ef2a9d334b02d5c93d0bbf07320077c04f96b232  translated_at: 2026-11-21 -->
+
+[[propertyMembers]]
+bean 属性将其组成的字段、读方法和写方法合并为单个 api:core.beans.BeanProperty[]，带单一合并的 api:core.annotation.AnnotationMetadata[]；存在 getter 时通过 getter 读取。
+
+一些规范需要分别查看这些成员。例如，Jakarta Bean Validation 将字段和 getter 视为两个不同的约束元素：在字段上声明的约束针对字段所持有的值进行校验，而在 getter 上声明的约束针对 getter 返回的值进行校验，两者可能不同。
+
+将 ann:core.annotation.Introspected[] 注解的 `members` 成员设置为 `true`，即可通过 api:core.beans.BeanProperty[] 的 `getMembers()` 方法获取每个成员：
+
+[source,java]
+----
+@Introspected(accessKind = { Introspected.AccessKind.FIELD, Introspected.AccessKind.METHOD }, members = true)
+public class Person {
+    @NotNull
+    private String name = "Billy";
+
+    public String getName() {
+        return "Bob";
+    }
+}
+----
+
+[source,java]
+----
+BeanProperty<Person, String> property = introspection.getRequiredProperty("name", String.class);
+
+property.get(new Person());              // "Bob", read through the getter
+
+List<BeanPropertyMember<Person, ?>> members = property.getMembers();
+members.get(0).getElementType();         // ElementType.FIELD
+members.get(0).getAnnotationMetadata();  // carries @NotNull
+members.get(0).read(new Person());       // "Billy", read from the field
+----
+
+每个 api:core.beans.BeanPropertyMember[] 暴露：
+
+* `getElementType()` - `ElementType.FIELD` 或 `ElementType.METHOD`
+* `getDeclaringType()` - 声明该成员的类型，可以是内省 bean 的超类型
+* `getAnnotationMetadata()` - 仅该成员自身的注解，包括其类型的类型注解
+* `asArgument()` - 带有自身泛型类型信息和类型注解的成员类型
+* `read(bean)` - 直接读取该成员，对字段而言绕过 getter
+
+成员按字段、读方法、写方法的顺序列出。写方法不可读，因此其 `isReadable()` 返回 `false`，`read` 会抛出 `UnsupportedOperationException`。编译器生成的成员（例如 Groovy 为属性生成的访问器）不会列出。
+
+NOTE: 访问器是生成的，因此读取成员不使用反射——但对于无法从生成的内省中访问的字段（例如 private 字段），仍会回退到反射。
+
+IMPORTANT: `members` 默认为 `false`，因为额外的元数据会增大生成的内省体积。当 `annotationMetadata` 设置为 `false` 时，它也不生效。

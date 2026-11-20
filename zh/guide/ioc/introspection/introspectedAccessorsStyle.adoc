@@ -1,0 +1,13 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Use @Introspected with @AccessorsStyle](https://docs.micronaut.io/5.2.x/core/#core-introspectedAccessorsStyle)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/ioc/introspection/introspectedAccessorsStyle.adoc  upstream_commit: c2f666c042f4d793b74e381831c7c6fd9fb3b36e  upstream_hash: 868214a67d6bbd95eb06389fed40f4f324c54940  translated_at: 2026-11-21 -->
+
+可以将 <<configurationPropertiesAccessorsStyle, `@AccessorsStyle` 注解>> 与 `@Introspected` 配合使用：
+
+snippet::io.micronaut.docs.ioc.introspection.Person[tags="class"]
+
+<1> 用 `@AccessorsStyle` 标注该类，为 getter 与 setter 定义空的读写前缀。
+<2> 定义不带前缀的访问器。在 Python 中，使用普通的 dataclass 属性。
+
+现在可以使用 api:core.beans.BeanIntrospection[] API 获取编译期生成的内省：
+
+snippet::io.micronaut.docs.ioc.introspection.PersonSpec[tags="usage"]

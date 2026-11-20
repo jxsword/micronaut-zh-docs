@@ -10,7 +10,7 @@
 | B01 | 19 | 3347 | 3355 | current |
 | B02 | 12 | 3049 | 3082 | current |
 | B03 | 10 | 3443 | 3454 | current |
-| B04 | 19 | 2591 | 2604 | pending |
+| B04 | 19 | 2591 | 2604 | current |
 | B05 | 2 | 2138 | 2128 | pending |
 | B06 | 11 | 3454 | 3489 | pending |
 | B07 | 4 | 2507 | 2554 | pending |
@@ -49,6 +49,7 @@
 - B01（2026-11-20 完成）：validate 七项全绿 + 19/19 --mark-current 核销 + squash commit。实测修复 M1 缺陷 4 处（check_anchors http 前缀裸锚点误跳过 → registry 116→121；validate ⑤ 裸锚点误报 + reg_ids 放行收紧；禁繁体表简繁共用字误报）与 segment_adoc snippet:: 指令行补录；新增 scripts/assemble_zh.py（溯源投影装配）。官方站单页锚点实测为 core-<basename>；上游 httpServer/httpClient/certificates 三章未被官方站渲染（详见 reports/batch-B01.md）。冻结窗口遵守：批次期间未运行 sync --apply。
 - B02（2026-11-21 完成）：validate 全量 31 文件 PASSED + 12/12 --mark-current 核销 + squash commit；进度 31/388（8.0%）。锚点注入 4 处（types/qualifiers/scopes/refreshable，统一规则：basename 锚点 = 片段首内容之前）。术语转正 3 条（qualifier/eager initialization/meta annotation）；修复 validate ③ strip_code 指令行误报（snippet:: 宏参数触发必译术语，pytest 95 绿）。词数以批次实测为准（3055/2991，M1 报告值系 snippet:: 修复前口径）。⑤ 豁免警告 29 条（详见 reports/batch-B02.md）。冻结窗口遵守。
 - B03（2026-11-21 完成）：validate 全量 41 文件 PASSED + 10/10 --mark-current 核销 + squash commit；进度 41/388（10.6%）。锚点注入 5 处（factories/conditionalBeans/replaces/events/introspection，批内引用 conditionalBeans 闭环）。术语转正 3 条（factory/introspection/graceful shutdown）；dependency:: 宏与上游 TODO 注释按纪律处理。词数实测 3417/3377。⑤ 豁免警告 31 条（详见 reports/batch-B03.md）。冻结窗口遵守。
+- B04（2026-11-21 完成）：validate 全量 60 文件 PASSED + 19/19 --mark-current 核销 + squash commit；进度 60/388（15.5%）。锚点注入 4 处（staticAtCreator/introspectedAnnotationOnAConfigurationClass 批内闭环 + propertyMembers/beanValidation）。introspection→内省 全章一致命中（B03 提前转正得到验证）。restore 哈希门禁拦截 1 处占位符笔误（6232a110↔fbd67c3f），修正后 19/19 全过。词数实测 2588/2545。⑤ 豁免警告 34 条（详见 reports/batch-B04.md）。冻结窗口遵守。
 
 ## 硬性纪律（每批次必守）
 

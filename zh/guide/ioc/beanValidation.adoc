@@ -1,0 +1,5 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Bean Validation](https://docs.micronaut.io/5.2.x/core/#core-beanValidation)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/ioc/beanValidation.adoc  upstream_commit: 84852a75dc5bb9490d46aed90c92159cbfc391ef  upstream_hash: f36fd9577ec49d04157658b0c2b533ce04fe9a74  translated_at: 2026-11-21 -->
+
+[[beanValidation]]
+请参阅 link:{micronautvalidationdocs}[Micronaut Validation 文档]。

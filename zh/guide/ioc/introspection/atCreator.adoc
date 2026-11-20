@@ -1,0 +1,19 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Constructor Methods](https://docs.micronaut.io/5.2.x/core/#core-atCreator)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/ioc/introspection/atCreator.adoc  upstream_commit: 130cfede2d9a325faf7016bf10e0a2060c5a3cbd  upstream_hash: 9cc095baa236af22a9aca635226f80719de4ee6b  translated_at: 2026-11-21 -->
+
+[.lang-java.lang-groovy.lang-kotlin]
+--
+对于有多个构造器的类，请将 ann:core.annotation.Creator[] 注解应用于要使用的构造器。
+
+snippet::io.micronaut.docs.ioc.beans.Vehicle[tags="class"]
+
+<1> ann:core.annotation.Creator[] 注解标明要使用哪个构造器
+
+NOTE: 该类没有默认构造器，因此不带参数调用实例化会抛出 api:core.reflect.exception.InstantiationException[]。
+--
+
+[.lang-python]
+--
+NOTE: Python 类只声明一个 `__init__`，因此不存在需要消歧的构造器。若要提供构建实例的替代方式，请注解一个 `classmethod`，如 <<staticAtCreator, 静态创建器方法>> 所示。
+--
+

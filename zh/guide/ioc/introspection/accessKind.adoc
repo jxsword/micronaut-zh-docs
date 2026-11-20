@@ -1,0 +1,13 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Bean Fields](https://docs.micronaut.io/5.2.x/core/#core-accessKind)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/ioc/introspection/accessKind.adoc  upstream_commit: 130cfede2d9a325faf7016bf10e0a2060c5a3cbd  upstream_hash: d2783d04735c64f51e4a76bf057079cbe3a9ae6d  translated_at: 2026-11-21 -->
+
+默认情况下，Java 内省仅将 JavaBean getter/setter 或 Java 16 record 组件视为 bean 属性。不过，您可以使用 ann:core.annotation.Introspected[] 注解的 `accessKind` 成员在 Java 中定义带 public 或包级私有字段的类：
+
+snippet::io.micronaut.docs.ioc.beans.User[tags="class", indent=0]
+
+<1> final 字段被视为只读属性
+<2> 可变字段被视为可读可写属性
+
+NOTE: `accessKind` 接受数组，因此可以同时允许两种访问器类型，并根据它们在注解中出现的顺序决定优先使用哪一种。列表中的第一个具有优先权。
+
+IMPORTANT: 在 Kotlin 或 Python 中无法对字段进行内省，因为这两种语言都不允许直接声明字段。

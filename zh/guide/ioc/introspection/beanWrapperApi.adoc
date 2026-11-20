@@ -1,0 +1,14 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – The BeanWrapper API](https://docs.micronaut.io/5.2.x/core/#core-beanWrapperApi)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/ioc/introspection/beanWrapperApi.adoc  upstream_commit: 9c73f45b86c1558c73f1bd4cc34ee5282bc199bc  upstream_hash: f4bb372c6e879eef7537ed8663c9271a6a7453a8  translated_at: 2026-11-21 -->
+
+api:core.beans.BeanProperty[] 提供对给定类的属性值进行读写的原始访问，不提供任何自动类型转换。
+
+传递给 `set` 和 `get` 方法的值应与底层属性类型匹配，否则将发生异常。
+
+为了提供额外的类型转换能力，api:core.beans.BeanWrapper[] 接口允许包装已有的 bean 实例并对其属性进行设置和获取，并在必要时执行类型转换。
+
+snippet::io.micronaut.docs.ioc.beans.IntrospectionSpec[tags="wrapper", indent=0]
+
+<1> 使用静态 `getWrapper` 方法为 bean 实例获取 api:core.beans.BeanWrapper[]。
+<2> 您可以设置属性，api:core.beans.BeanWrapper[] 会执行类型转换；如果无法转换，则抛出 api:core.convert.exceptions.ConversionErrorException[]。
+<3> 您可以使用 `getRequiredProperty` 获取属性并请求所需的类型。如果属性不存在，将抛出 api:core.beans.exceptions.IntrospectionException[]；如果无法转换，将抛出 api:core.convert.exceptions.ConversionErrorException[]。

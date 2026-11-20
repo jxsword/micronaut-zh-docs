@@ -1,0 +1,10 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Merging Strategy](https://docs.micronaut.io/5.2.x/core/#core-beanMappersMergingStrategy)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/ioc/beanMappers/beanMappersMerging/beanMappersMergingStrategy.adoc  upstream_commit: c9d771fbf81ef9073eda010c4f969cb526bb7eb0  upstream_hash: ea57af5cd7ff2e8a207aa5c83ad20927a6c9779a  translated_at: 2026-11-21 -->
+
+还有更多可能！请查看以下片段中的更多映射示例。
+
+snippet::io.micronaut.docs.ioc.mappers.AdditionalMappers[tags="mapper", indent=0]
+
+<1> 合并三个或更多类型。
+<2> 创建以 `Map` 为参数的映射，并为该参数定义映射。
+<3> 将自定义合并策略定义为 singleton 并将其用于映射。

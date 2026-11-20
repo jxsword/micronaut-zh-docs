@@ -1,0 +1,11 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Static Creator Methods](https://docs.micronaut.io/5.2.x/core/#core-staticAtCreator)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/ioc/introspection/staticAtCreator.adoc  upstream_commit: 9c73f45b86c1558c73f1bd4cc34ee5282bc199bc  upstream_hash: 0bd831d7e7b11c2bc6c87bb99a450405590ec0f2  translated_at: 2026-11-21 -->
+
+[[staticAtCreator]]
+ann:core.annotation.Creator[] 注解可应用于创建类实例的静态方法。
+
+snippet::io.micronaut.docs.ioc.beans.Business[tags="class"]
+
+<1> ann:core.annotation.Creator[] 注解应用于实例化该类的静态方法
+
+TIP: 可以标注多个「创建器」方法。如果其中之一不带参数，它将成为默认构造方法。第一个带参数的方法将作为主要构造方法。

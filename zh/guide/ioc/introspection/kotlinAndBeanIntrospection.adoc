@@ -1,0 +1,20 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Kotlin and Bean Introspection](https://docs.micronaut.io/5.2.x/core/#core-kotlinAndBeanIntrospection)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/ioc/introspection/kotlinAndBeanIntrospection.adoc  upstream_commit: eea9f6c9b38656e40af35bcfecb823bc6c1d0b88  upstream_hash: f69e755494ed09efa1ba300bc30c3eed6ca6739a  translated_at: 2026-11-21 -->
+
+您可以用 ann:core.annotation.Introspected[] 注解 https://kotlinlang.org/docs/data-classes.html[Kotlin 数据类]：
+
+.标注了 @Introspected 的 Kotlin 数据类
+[source, kotlin]
+----
+include::{testsuitekotlin}/core/beans/UserDataClass.kt[tags="dataclass", indent=0]
+----
+
+并使用 BeanIntrospection API 实例化它：
+
+.通过 BeanIntrospection API 实例化的 Kotlin 数据类
+[source, kotlin]
+----
+include::{testsuitekotlin}/core/beans/UserDataClassTest.kt[tags="dataclassbeanintrospectioninstantiate", indent=0]
+----
+
+WARNING: api:core.beans.BeanIntrospection[] API 尚不支持 https://kotlinlang.org/docs/inline-classes.html[Kotlin 内联值类]。
