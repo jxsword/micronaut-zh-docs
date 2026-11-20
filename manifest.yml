@@ -119,10 +119,10 @@ files:
 - file: guide/appendix/architecture/aopArch.adoc
   blob_sha: 37756e2b2d7490ba0b834d69061512cc934de912
   size: 10711
-  status: missing
+  status: current
   zh: zh/guide/appendix/architecture/aopArch.adoc
   paragraphs: 50
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 33ce06cb263ce3717c83720e3b5830db99dfcf5d
 - file: guide/appendix/architecture/compilerArch.adoc
   blob_sha: 6d717b9dc8cb35ad9fdf1edd09af2bd7de85a42d
@@ -135,18 +135,18 @@ files:
 - file: guide/appendix/architecture/containerArch.adoc
   blob_sha: f7c85a60777dd47481a27a2c236a85f36a86a139
   size: 2656
-  status: missing
+  status: current
   zh: zh/guide/appendix/architecture/containerArch.adoc
   paragraphs: 13
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 8c82ee03540bc11bc707c777c7ff4aa00d5be9d7
 - file: guide/appendix/architecture/httpServerArch.adoc
   blob_sha: 055e2cf29c5d1565a361e50b9db2ca555073e930
   size: 10453
-  status: missing
+  status: current
   zh: zh/guide/appendix/architecture/httpServerArch.adoc
   paragraphs: 47
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 0f997ad7f340830adebe57f3885eebed4d9b1fe7
 - file: guide/appendix/architecture/introspectionArch.adoc
   blob_sha: b727a6cc2c95eaa79f530aa2d895888fc6c5ddc8
@@ -159,10 +159,10 @@ files:
 - file: guide/appendix/architecture/iocArch.adoc
   blob_sha: 44be74099248ef2662765655ea511ff0808dbd2b
   size: 7307
-  status: missing
+  status: current
   zh: zh/guide/appendix/architecture/iocArch.adoc
   paragraphs: 36
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 0f997ad7f340830adebe57f3885eebed4d9b1fe7
 - file: guide/appendix/breaks.adoc
   blob_sha: 0e1946d8bab7f181bf11b929de2a93688ac9ba09

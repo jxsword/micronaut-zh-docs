@@ -1,0 +1,147 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – AOP Proxies](https://docs.micronaut.io/5.2.x/core/#core-aopArch)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/appendix/architecture/aopArch.adoc  upstream_commit: 33ce06cb263ce3717c83720e3b5830db99dfcf5d  upstream_hash: 37756e2b2d7490ba0b834d69061512cc934de912  translated_at: 2026-11-21 -->
+
+
+Micronaut 支持基于注解的 <<aop,面向切面编程>>（AOP），它允许通过使用用户代码中定义的拦截器来装饰或引入类型行为。
+
+NOTE: https://en.wikipedia.org/wiki/Aspect-oriented_programming[AOP 术语] 的使用源自 AspectJ 以及其在 Spring 中的历史使用。
+
+框架定义的任何注解都可以用 ann:aop.InterceptorBinding[] 注解元标注，该注解支持多种拦截类型，包括：
+
+* `AROUND` - 可用注解来装饰现有的方法调用
+* `AROUND_CONSTRUCT` - 可用注解来拦截任意类型的构造
+* `INTRODUCTION` - 可用注解向抽象类型或接口类型「引入」新行为
+* `POST_CONSTRUCT` - 可用注解拦截在对象实例化之后调用的 `@PostConstruct` 调用。
+* `PRE_DESTROY` - 可用注解拦截在对象即将被销毁时调用的 `@PreDestroy` 调用。
+
+一个或多个 api:aop.Interceptor[] 实例可以与 ann:aop.InterceptorBinding[] 关联，让用户实现横切关注点的行为。
+
+在实现层面，<<compilerArch,Micronaut 编译器>> 会访问以 ann:aop.InterceptorBinding[] 元标注的类型，并构造一个新的 api:aop.writer.AopProxyWriter[] 实例，后者使用 ASM 字节码生成库生成被标注类型的子类（或接口情形下的实现）。
+
+[NOTE]
+====
+Micronaut 在任何情况下都不会修改现有的用户字节码；使用构建期生成的代理让 Micronaut 能够生成与用户代码并存、增强行为的附加代码。但这一方法有其局限：生成的代理必须继承或实现被标注的类型。因此被标注的类型必须：
+
+* 非 final。AOP 通知不能应用于 final 或有效 final 的类型，例如 Java 17 Records。
+* 非 sealed。sealed 类型只允许它列出的子类，生成的代理永远不可能成为其中之一。
+====
+
+例如，给定以下注解：
+
+snippet::io.micronaut.docs.aop.around.NotNull[tags="imports,annotation", indent=0, title="Around Advice Annotation Example"]
+
+<1> 注解的保留策略必须是 `RUNTIME`
+<2> 通常您希望能在类或方法级应用通知，因此目标类型为 `TYPE` 与 `METHOD`
+<3> 此处使用 ann:aop.Around[] 注解，它本身标注了 `@InterceptorBinding(kind=AROUND)`，可以视为为 `AROUND` 通知定义 ann:aop.InterceptorBinding[] 的一个简单捷径。
+
+当该注解用在类型或方法上时，例如：
+
+snippet::io.micronaut.docs.aop.around.NotNullExample[tags="example", indent=0, title="Around Advice Usage Example"]
+
+编译器会访问该类型，api:aop.writer.AopProxyWriter[] 会使用 ASM 字节码生成库生成附加字节码。
+
+编译期间，api:aop.writer.AopProxyWriter[] 实例本质上代理着 `BeanDefinitionWriter` （参见 <<iocArch,Bean 定义>>），在现有字节码生成之上装饰附加行为。下图对此进行了说明：
+
+image::arch/aop.png[]
+
+api:inject.writer.BeanDefinitionWriter[] 会生成每个 bean 都会生成的常规类，包括：
+
+* `$NotNullExample$Definition.class` - 原始未装饰的 bean 定义（参见 <<iocArch,Bean 定义>>）
+* `$NotNullExample$Definition$Exec.class` - api:inject.ExecutableMethodsDefinition[] 的实现，包含以免反射方式分发到每个被拦截方法的逻辑。
+
+而 api:aop.writer.AopProxyWriter[] 会装饰这一行为并生成 3 个附加类：
+
+* `$NotNullExample$Definition$Intercepted.class` - 被装饰类的子类，持有对已应用 api:aop.MethodInterceptor[] 实例的引用，重写所有被拦截的方法，构造 api:aop.chain.MethodInterceptorChain[] 实例并调用已应用的拦截器
+* `$NotNullExample$Definition$Intercepted$Definition.class` - 继承原始未装饰 bean 定义的 api:inject.BeanDefinition[]。（参见 <<iocArch,Bean 定义>>）
+* `$NotNullExample$Definition$Intercepted$Definition$Reference.class` - 能够软加载被拦截 api:inject.BeanDefinition[] 的 api:inject.BeanDefinitionReference[]。（参见 <<iocArch,Bean 定义>>）
+
+生成的类大多是用于加载与解析 api:inject.BeanDefinition[] 的元数据。实际的构建期代理是以 `$Intercepted` 结尾的类。该类实现 api:aop.Intercepted[] 接口并继承被代理类型，重写所有非 final、非私有方法以调用 api:aop.chain.MethodInterceptorChain[]。
+
+实现会创建一个构造器，用于向被拦截类型装配依赖，形如：
+
+.被拦截类型的构造器
+[source,java]
+----
+@Generated
+class $NotNullExample$Definition$Intercepted
+extends NotNullExample implements Intercepted { // <1>
+    private final Interceptor[][] $interceptors = new Interceptor[1][];
+    private final ExecutableMethod[] $proxyMethods = new ExecutableMethod[1];
+
+    public $NotNullExample$Definition$Intercepted(
+        BeanResolutionContext resolution,
+        BeanContext context,
+        Qualifier qualifier,
+        List<Interceptor> interceptors) {
+        Exec executableMethods = new Exec(true); // <2>
+        this.$proxyMethods[0] = executableMethods.getExecutableMethodByIndex(0); // <3>
+        this.$interceptors[0] = InterceptorChain
+            .resolveAroundInterceptors(
+                context,
+                this.$proxyMethods[0],
+                interceptors
+        );  // <4>
+    }
+}
+----
+
+<1> `@Generated` 子类继承被装饰的类型并实现 api:aop.Intercepted[] 接口
+<2> 构造一个 api:inject.ExecutableMethodsDefinition[] 实例，以解析到原始方法的免反射分发器。
+<3> 名为 `$proxyMethods` 的内部数组持有用于代理调用的每个 api:inject.ExecutableMethod[] 实例的引用。
+<4> 名为 `$interceptors` 的内部数组持有每个方法适用哪些 api:aop.Interceptor[] 实例的引用——由于 ann:aop.InterceptorBinding[] 可以是类型级或方法级，这些引用可能因方法而异。
+
+被代理类型中每个关联了 ann:aop.InterceptorBinding[]（类型级或方法级）的非 final、非私有方法都会被重写，加入代理原始方法的逻辑，例如：
+
+[source,java]
+----
+@Overrides
+public void doWork(String taskName) {
+    ExecutableMethod method = this.$proxyMethods[0];
+    Interceptor[] interceptors = this.$interceptors[0]; // <1>
+    MethodInterceptorChain chain = new MethodInterceptorChain( // <2>
+        interceptors,
+        this,
+        method,
+        new Object[]{taskName}
+    );
+    chain.proceed(); // <3>
+}
+----
+
+<1> 找到该方法的 api:inject.ExecutableMethod[] 与 api:aop.Interceptor[] 实例数组。
+<2> 用拦截器、对被拦截实例的引用、方法及实参构造一个新的 api:aop.chain.MethodInterceptorChain[]。
+<3> 在 api:aop.chain.MethodInterceptorChain[] 上调用 `proceed()` 方法。
+
+注意，ann:aop.Around[] 注解的默认行为是通过调用 super 实现来调用目标类型的原始重写方法——经由一个生成的合成桥方法获得对 super 实现的访问（上例中为 `NotNullExample`）。
+
+在这种安排下，代理与代理目标是同一个对象：拦截器被调用，而对 `proceed()` 的调用会在上例中通过调用 `super.doWork()` 触发原始实现。
+
+不过，这一行为可以使用 ann:aop.Around[] 注解定制。
+
+设置 `@Around(proxyTarget=true)` 后，生成的代码还会实现 api:aop.InterceptedProxy[] 接口，该接口定义了一个名为 `interceptedTarget()` 的方法，用于解析代理应把方法调用委托给的目标对象。
+
+NOTE: 默认行为（`proxyTarget=false`）在内存上更高效，因为只需要一个 api:inject.BeanDefinition[] 和被代理类型的一个实例。
+
+代理目标的求值是即时的，在代理首次创建时完成；不过可以通过设置 `@Around(lazy=true, proxyTarget=true)` 使其变为惰性，此时只有当被代理方法被调用时才会获取代理目标。
+
+使用 `proxyTarget=true` 代理目标时行为上的差异如下图所示：
+
+image::arch/aop-proxies.png[]
+
+图中左侧的时序（`proxyTarget=false`）通过调用 `super` 调用被代理方法，而右侧的时序从 api:context.BeanContext[] 查找代理目标并在目标上调用方法。
+
+最后一个定制选项是 `@Around(hotswap=true)`，它会触发编译器生成实现 api:aop.HotSwappableInterceptedProxy[] 的编译期代理，该接口定义了一个名为 `swap(..)` 的方法，允许把代理的目标换为新实例（为保证线程安全，生成的代码使用了 `ReentrantReadWriteLock`）。
+
+=== 安全考量
+
+通过 `AROUND` 通知进行方法拦截，通常用于定义处理横切关注点的逻辑，安全即是其中之一。
+
+当多个 api:aop.Interceptor[] 实例作用于同一个方法时，从安全角度看，这些拦截器按特定顺序执行可能很重要。
+
+api:aop.Interceptor[] 接口继承了 api:core.order.Ordered[] 接口，使开发者能够通过重写 `getOrder()` 方法控制拦截器顺序。
+
+构造 api:aop.chain.MethodInterceptorChain[] 且存在多个拦截器时，会以 `HIGHEST` 优先级的拦截器先执行的方式排序。
+
+为帮助定义自己的 <<aroundAdvice,环绕通知>> 的开发者，api:aop.InterceptPhase[] 枚举定义了若干常量，可用于正确声明 `getOrder()` 的值（例如安全通常落在 `VALIDATE` 阶段）。
+
+TIP: 可以为 `io.micronaut.aop.chain` 包启用 trace 级日志，以调试已解析的拦截器顺序。

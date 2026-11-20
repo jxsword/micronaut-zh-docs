@@ -1,0 +1,118 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Bean Definitions](https://docs.micronaut.io/5.2.x/core/#core-iocArch)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/appendix/architecture/iocArch.adoc  upstream_commit: 0f997ad7f340830adebe57f3885eebed4d9b1fe7  upstream_hash: 44be74099248ef2662765655ea511ff0808dbd2b  translated_at: 2026-11-21 -->
+
+Micronaut 框架是 JSR-330 依赖注入规范的一种实现。
+
+依赖注入（或控制反转）是 Java 中被广泛采用的常见模式，它允许松散地解耦组件，使应用易于扩展与测试。
+
+在这一模型中，对象的装配方式通过一个独立的编程模型与对象本身解耦。就 Micronaut 而言，该模型基于 JSR-330 规范中定义的注解，外加位于 link:../api/micronaut.context/annotation/package-summary.html[io.micronaut.context.annotation] 包中的一组扩展注解。
+
+这些注解由 <<compilerArch,Micronaut 编译器>> 访问，它遍历源码语言 AST 并构建一个用于在运行时装配对象的模型。
+
+NOTE: 需要注意的是，实际的对象装配被推迟到运行时进行。
+
+对 Java 代码而言，api:annotation.processing.BeanDefinitionInjectProcessor[]（一个 Java 注解 link:{jdkapi}/java.compiler/javax/annotation/processing/Processor.html[处理器]）会被 Java 编译器对每个标注了 bean 定义注解的类调用。
+
+NOTE: 何为「bean 定义注解」相当复杂，因为它要考虑元注解；但一般来说，任何被 JSR-330 bean `@Scope` 标注的注解都属于此类
+
+`BeanDefinitionInjectProcessor` 会访问用户代码源中的每个 bean，并使用 ASM 字节码生成库生成附加字节码，与被标注的类位于同一包中。
+
+NOTE: 出于历史原因，依赖注入处理器并未使用 api:inject.visitor.TypeElementVisitor[]（类型元素访问者）API，但将来很可能会使用
+
+字节码生成实现在 api:inject.writer.BeanDefinitionWriter[] 中，它包含用于「访问」bean 定义方式各个方面（即 api:inject.BeanDefinition[]）的方法。
+
+下图展示了该流程：
+
+image::arch/beanwriter.png[]
+
+例如，给定以下类型：
+
+snippet::io.micronaut.docs.inject.intro.Vehicle[tags="class",indent=0]
+
+会生成以下内容：
+
+* 一个实现 api:inject.BeanDefinitionReference[] 接口的 `example.$Vehicle$Definition$Reference` 类，允许应用软加载 bean 定义，而无需加载全部元数据或类本身（在被内省类本身不在类路径上的情况下）。由于引用经 link:{jdkapi}/java.base/java/util/ServiceLoader.html[ServiceLoader] 加载，编译期还会在生成的 `META-INF/services/io.micronaut.inject.BeanDefinitionReference` 中生成指向该类型的条目。
+* 一个包含实际 api:inject.BeanDefinition[] 信息的 `example.$Vehicle$Definition`。
+
+api:inject.BeanDefinition[] 是持有特定类型元数据的类型，包括：
+
+* 类级 <<annotationArch,AnnotationMetadata>>
+* 计算出的 JSR-330 `@Scope` 与 `@Qualifier`
+* 对可用 api:inject.InjectionPoint[] 实例的了解
+* 对已定义的任何 api:inject.ExecutableMethod[] 的引用
+
+此外，`BeanDefinition` 包含知晓 bean 如何装配的逻辑，包括类型如何构造、字段与/或方法如何注入。
+
+编译期间，ASM 字节码库用于填充 `BeanDefinition` 的细节，其中有一个 `build` 方法，就前例而言形如：
+
+[source,java]
+----
+public Vehicle build(
+    BeanResolutionContext resolution, // <1>
+    BeanContext context,
+    BeanDefinition definition) {
+    Vehicle bean = new Vehicle(
+        (Engine) super.getBeanForConstructorArgument( // <2>
+            resolution,
+            context,
+            0, // <3>
+            (Qualifier)null)
+    );
+    return bean;
+}
+----
+
+<1> 传入 `BeanResolutionContext` 以跟踪循环 bean 引用并改进错误报告。
+<2> 类型被实例化，每个构造器实参通过调用 api:context.AbstractInitializableBeanDefinition[] 的方法查找
+<3> 此例中跟踪的是构造器实参的索引
+
+NOTE: 当 Java 字段或方法具有 `private` 访问权限时需要特殊处理。此时 Micronaut 别无选择，只能退回使用 Java 反射来执行依赖注入。
+
+[[iocArch]]
+=== 配置属性处理（Configuration Properties Handling）
+
+<<compilerArch,Micronaut 编译器>> 对以元注解 ann:context.annotation.ConfigurationReader[] 声明的 bean（如 ann:context.annotation.ConfigurationProperties[] 与 ann:context.annotation.EachProperty[]）的处理方式不同于其他 bean。
+
+为了支持把 <<config,应用配置>> 绑定到以上述注解之一标注的类型上，每个发现的可变 bean 属性都会被动态标注 ann:context.annotation.Property[] 注解，注解值为计算并规范化后的属性名。
+
+例如，给定以下类型：
+
+snippet::io.micronaut.docs.config.properties.EngineConfig[tags="imports,class",indent=0,title="@ConfigurationProperties Example"]
+
+`setManufacturer(String)` 方法将被标注 `@Property(name="my.engine.manufacturer")`，其值将从已配置的 <<environments,Environment>> 中解析。
+
+随后 api:context.AbstractInitializableBeanDefinition[] 的 `injectBean` 方法被重写，加入从当前 api:context.BeanContext[] 查找规范化属性名 `my.engine.manufacturer` 并以免反射方式注入该值（若存在）的逻辑。
+
+NOTE: 属性名被规范化为 kebab case（小写短横线分隔）——这正是存储其值时使用的格式。
+
+.配置属性注入
+[source,java]
+----
+@Generated
+protected Object injectBean(
+    BeanResolutionContext resolution,
+    BeanContext context,
+    Object bean) {
+    if (this.containsProperties(resolution, context)) { // <1>
+        EngineConfig engineConfig = (EngineConfig) bean;
+        if (this.containsPropertyValue(resolution, context, "my.engine.manufacturer")) { // <2>
+            String value = (String) super.getPropertyValueForSetter( // <3>
+                resolution,
+                context,
+                "setManufacturer",
+                Argument.of(String.class, "manufacturer"), // <4>
+                "my.engine.manufacturer", // <5>
+                (String)null // <6>
+            )
+            engineConfig.setManufacturer(value);
+        }
+    }
+}
+----
+
+<1> 加入一个顶层检查，判断是否存在前缀为 ann:context.annotation.ConfigurationProperties[] 注解所定义前缀的属性。
+<2> 执行检查以确认属性确实存在
+<3> 若存在，则通过调用 api:context.AbstractInitializableBeanDefinition[] 的 `getPropertyValueForSetter` 方法查找该值
+<4> 创建 api:core.type.Argument[] 实例，用于向目标类型（此处为 `String`）转换。api:core.type.Argument[] 还可包含泛型信息。
+<5> 计算并规范化后的属性路径
+<6> 若使用 api:core.bind.annotation.Bindable[] 注解指定了默认值，则为该默认值。

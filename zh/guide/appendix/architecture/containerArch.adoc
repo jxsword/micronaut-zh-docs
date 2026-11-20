@@ -1,0 +1,34 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Application Context](https://docs.micronaut.io/5.2.x/core/#core-containerArch)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/appendix/architecture/containerArch.adoc  upstream_commit: 8c82ee03540bc11bc707c777c7ff4aa00d5be9d7  upstream_hash: f7c85a60777dd47481a27a2c236a85f36a86a139  translated_at: 2026-11-21 -->
+
+[[containerArch]]
+<<compilerArch,Micronaut 编译器>> 完成工作并生成所需类之后，就由 api:context.BeanContext[] 负责加载这些类以供运行时执行。
+
+虽然 link:{jdkapi}/java.base/java/util/ServiceLoader.html[标准 Java 服务加载器机制] 用于定义 api:inject.BeanDefinitionReference[] 的实例，但这些实例本身改用 api:core.io.service.SoftServiceLoader[] 加载——它是一种更宽松的实现，允许在加载前检查服务是否确实存在，并允许并行加载服务。
+
+api:context.BeanContext[] 执行以下步骤：
+
+1. 并行软加载所有 api:inject.BeanDefinitionReference[] 实例
+2. 实例化所有标注了 ann:context.annotation.Context[] 的 bean（作用于整个上下文作用域的 bean）
+3. 对每个发现的被处理 api:inject.ExecutableMethod[] 运行每个 api:context.processor.ExecutableMethodProcessor[]。若方法以 `@Executable(processOnStartup = true)` 元标注，则视为「被处理」
+4. 在上下文启动时发布类型为 api:context.event.StartupEvent[] 的事件。
+
+基本流程如下图所示：
+
+image::arch/beancontext.png[]
+
+api:context.ApplicationContext[] 是 api:context.BeanContext[] 的特化版本，它增加了「一个或多个活跃环境」（由 api:context.env.Environment[] 封装）以及基于该环境的 <<conditionalBeans,条件 bean 加载>> 的概念。
+
+api:context.env.Environment[] 从一个或多个已定义的 api:context.env.PropertySource[] 实例加载，这些实例通过 link:{jdkapi}/java.base/java/util/ServiceLoader.html[标准 Java 服务加载器机制] 加载 api:context.env.PropertySourceLoader[] 实例来发现。
+
+开发者可以通过添加另一个实现及引用该类的关联 `META-INF/services/io.micronaut.context.env.PropertySourceLoader` 文件，扩展 Micronaut 以完全自定义的机制加载 api:context.env.PropertySource[]。
+
+api:context.BeanContext[] 与 api:context.ApplicationContext[] 的高层差异如下图所示：
+
+image::arch/applicationcontext.png[]
+
+如上所示，api:context.ApplicationContext[] 加载 api:context.env.Environment[]，它有多种用途，包括：
+
+* 通过 <<conditionalBeans,Bean 要求>> 启用与禁用 bean
+* 通过 <<valueAnnotation,@Value>> 或 ann:context.annotation.Property[] 允许配置的依赖注入
+* 允许绑定 <<configurationProperties,配置属性>>

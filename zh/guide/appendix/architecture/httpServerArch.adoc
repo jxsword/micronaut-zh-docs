@@ -1,0 +1,105 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – HTTP Server](https://docs.micronaut.io/5.2.x/core/#core-httpServerArch)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/appendix/architecture/httpServerArch.adoc  upstream_commit: 0f997ad7f340830adebe57f3885eebed4d9b1fe7  upstream_hash: 055e2cf29c5d1565a361e50b9db2ca555073e930  translated_at: 2026-11-21 -->
+
+Micronaut HTTP 服务器可以视为一个 Micronaut 模块——即建立在<<iocArch,依赖注入>>与 <<containerArch,ApplicationContext>> 生命周期等基本构件之上的 Micronaut 组件。
+
+HTTP 服务器包含一组抽象接口与公共代码，分别包含在 `micronaut-http` 与 `micronaut-http-server` 模块中（前者包含客户端与服务器共享的 HTTP 原语）。
+
+这些接口的默认实现基于 https://netty.io/[Netty I/O 工具包] 提供，其架构如下图所示：
+
+image::https://netty.io/images/components.png[]
+
+Netty API 总体上是一个非常底层的 I/O 网络 API，设计供集成者使用，以构建呈现更高抽象层的客户端与服务器。Micronaut HTTP 服务器就是这样一层抽象。
+
+Micronaut HTTP 服务器及其实现所用组件的架构图如下：
+
+image::arch/httpserver.png[]
+
+运行服务器的主入口是 api:runtime.Micronaut[] 类，它实现了 api:context.ApplicationContextBuilder[]。通常，开发者会在应用的 `main` 入口中放置如下调用：
+
+.定义 `main` 入口
+[source,java]
+----
+public static void main(String[] args) {
+    Micronaut.run(Application.class, args);
+}
+----
+
+NOTE: 传入的实参被转换为 api:context.env.CommandLinePropertySource[]，并可通过 <<valueAnnotation,@Value>> 进行依赖注入。
+
+执行 `run` 将以默认设置启动 Micronaut <<containerArch,ApplicationContext>>，然后搜索类型为 api:runtime.server.EmbeddedServer[] 的 bean——该接口暴露可运行服务器的信息（包括主机与端口信息）。这一设计把 Micronaut 与实际服务器实现解耦：虽然默认服务器是 Netty（如上所述），第三方只需提供 api:runtime.server.EmbeddedServer[] 的实现即可实现其他服务器。
+
+服务器启动过程的时序图如下：
+
+image::arch/embeddedserver.png[]
+
+就 Netty 实现而言，api:runtime.server.EmbeddedServer[] 接口由 api:http.server.netty.NettyHttpServer[] 实现。
+
+=== 服务器配置
+
+api:http.server.netty.NettyHttpServer[] 读取 <<serverConfiguration,服务器配置>>，包括：
+
+* api:http.server.netty.configuration.NettyHttpServerConfiguration[] - api:http.server.HttpServerConfiguration[] 的扩展版本，在主机、端口等之外定义 Netty 特有的配置选项。
+* api:http.netty.channel.EventLoopGroupConfiguration[] - 配置一个或多个 Netty https://netty.io/4.1/api/io/netty/channel/EventLoopGroup.html[EventLoopGroup]，可配置为服务器独享，或与一个或多个 HTTP 客户端共享。
+* api:http.ssl.ServerSslConfiguration[] - 为 api:http.server.netty.ssl.ServerSslBuilder[] 提供配置，以配置用于 HTTPS 的 Netty https://netty.io/4.1/api/io/netty/handler/ssl/SslContext.html[SslContext]。
+
+=== 服务器配置的安全考量
+
+Netty 的 https://netty.io/4.1/api/io/netty/handler/ssl/SslContext.html[SslContext] 提供了一层抽象，允许使用 JDK 提供的 `javax.net.ssl.SSLContext` 或 https://netty.io/4.1/api/io/netty/handler/ssl/OpenSslEngine.html[OpenSslEngine]——后者需要开发者额外添加 https://netty.io/wiki/forked-tomcat-native.html[netty-tcnative] 作为依赖（`netty-tcnative` 是 https://tomcat.apache.org/native-doc/[Tomcat 的 OpenSSL 绑定] 的一个分支）。
+
+api:http.ssl.ServerSslConfiguration[] 允许把应用配置到磁盘上有效证书所在的安全可读位置，通过从磁盘加载配置来正确设置 `javax.net.ssl.TrustManagerFactory` 与 `javax.net.ssl.KeyManagerFactory`。
+
+=== Netty 服务器初始化
+
+当 api:http.server.netty.NettyHttpServer[] 执行 `start()` 序列时，它会执行以下步骤：
+
+1. 读取 api:http.netty.channel.EventLoopGroupConfiguration[] 并创建启动 Netty 服务器所需的父与 worker https://netty.io/4.1/api/io/netty/channel/EventLoopGroup.html[EventLoopGroup] 实例。
+2. 计算要使用的平台特定 https://netty.io/4.1/api/io/netty/channel/socket/ServerSocketChannel.html[ServerSocketChannel]（取决于操作系统，可能是 Epoll 或 KQueue，若无法使用原生绑定则回退到 Java NIO）
+3. 创建用于初始化 https://netty.io/4.1/api/io/netty/channel/socket/SocketChannel.html[SocketChannel]（客户端与服务器之间的连接）的 https://netty.io/4.1/api/io/netty/bootstrap/ServerBootstrap.html[ServerBootstrap] 实例。
+4. `SocketChannel` 由一个 Netty https://netty.io/4.1/api/io/netty/channel/ChannelInitializer.html[ChannelInitializer] 初始化，后者创建供 Micronaut 根据配置服务 HTTP/1.1 或 HTTP/2 请求的定制 Netty https://netty.io/4.1/api/io/netty/channel/ChannelPipeline.html[ChannelPipeline]。
+5. Netty https://netty.io/4.1/api/io/netty/bootstrap/ServerBootstrap.html[ServerBootstrap] 绑定到一个或多个已配置端口，使服务器可以接收请求。
+6. 触发两个 <<events,Bean 事件>>：先是 api:runtime.server.event.ServerStartupEvent[] 表示服务器已启动；最后在所有这些事件处理完毕后，仅当设置了 `micronaut.application.name` 属性时触发 api:discovery.event.ServiceReadyEvent[]。
+
+该启动序列如下图所示：
+
+image::arch/nettybootstrap.png[]
+
+用一个 `NettyHttpServerInitializer` 类初始化处理传入 HTTP/1.1 或 HTTP/2 请求的 https://netty.io/4.1/api/io/netty/channel/ChannelPipeline.html[ChannelPipeline]。
+
+=== ChannelPipeline 的安全考量
+
+用户可以通过实现 api:http.netty.channel.ChannelPipelineCustomizer[] 接口的 bean 并向管道添加新的 Netty https://netty.io/4.1/api/io/netty/channel/ChannelHandler.html[ChannelHandler] 来定制 `ChannelPipeline`。
+
+添加 `ChannelHandler` 可以执行诸如对传入与传出数据包做线路级日志记录之类的任务；当存在线路级安全需求（例如校验传入请求体或传出响应体的字节）时可以使用。
+
+=== Netty 服务器路由
+
+Micronaut 定义了一组 link:../api/io/micronaut/http/annotation/package-summary.html[HTTP 注解]，允许把用户代码绑定到传入的 api:http.HttpRequest[] 实例并定制产生的 api:http.HttpResponse[]。
+
+一个或多个已配置的 api:web.router.RouteBuilder[] 实现构造 api:web.router.UriRoute[] 实例，api:web.router.Router[] 组件用它们把传入请求路由到被标注类的方法，例如：
+
+snippet::io.micronaut.docs.server.intro.HelloController[tags="imports,class"]
+
+<<binding,请求绑定注解>> 可用于把方法参数绑定到 HTTP 请求体、请求头、参数等，框架会自动处理在数据传给接收方法之前的正确转义。
+
+传入请求由 Netty 接收，并由 `NettyHttpServerInitializer` 初始化一个 `ChannelPipeline`。原始传入数据包被转换为 Netty https://netty.io/4.1/api/io/netty/handler/codec/http/HttpRequest.html[HttpRequest]，随后被包装进抽象底层 Netty 请求的 Micronaut api:http.server.netty.NettyHttpRequest[]。
+
+`NettyHttpRequest` 依次穿过 Netty https://netty.io/4.1/api/io/netty/channel/ChannelHandler.html[ChannelHandler] 实例链，直至到达 `RoutingInBoundHandler`——它使用前述 api:web.router.Router[] 把请求匹配到标注了 ann:http.annotation.Controller[] 类型的方法。
+
+`RoutingInBoundHandler` 委托 api:http.server.RouteExecutor[] 实际执行路由，由它处理分发到标注了 ann:http.annotation.Controller[] 类型方法的全部逻辑。
+
+执行之后，若返回值不是 `null`，会从 api:http.codec.MediaTypeCodecRegistry[] 为响应 https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Type[Content-Type]（默认为 `application/json`）查找合适的 api:http.codec.MediaTypeCodec[]。`MediaTypeCodec` 用于把返回值编码为 `byte[]`，并作为产生的 api:http.HttpResponse[] 的主体。
+
+下图说明了传入请求的这一流程：
+
+image::arch/http-server-requestflow.png[]
+
+`RouteExecutor` 会构造一个 api:http.filter.FilterChain[]，在执行标注了 ann:http.annotation.Controller[] 类型的目标方法之前执行一个或多个 api:http.filter.HttpServerFilter[]。
+
+所有 api:http.filter.HttpServerFilter[] 实例执行完毕后，api:http.server.RouteExecutor[] 会尝试满足目标方法参数的要求，包括任何 <<binding,请求绑定注解>>。若参数无法满足，则向调用方客户端返回 `HTTP 400 - Bad Request` 的 api:http.HttpStatus[] 响应。
+
+=== Netty 服务器路由的安全考量
+
+开发者可以使用 api:http.filter.HttpServerFilter[] 实例控制对服务器资源的访问。通过不继续执行 api:http.filter.FilterChain[]，可以向客户端返回替代响应（如 `403 - Forbidden`），从而禁止访问敏感资源。
+
+注意，api:http.filter.HttpServerFilter[] 接口继承自 api:core.order.Ordered[] 接口，因为 api:http.filter.FilterChain[] 中常常存在多个过滤器。实现 `getOrder()` 方法后，开发者可以返回合适的优先级来控制排序。此外，api:http.filter.ServerFilterPhase[] 枚举提供了一组常量，开发者可用它们正确定位过滤器，其中 `SECURITY` 阶段是安全规则通常所处的位置。
