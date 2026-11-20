@@ -1,0 +1,53 @@
+{#- Micronaut 文档翻译提示词模板（Jinja2），移植自 spdlog/fmt 版并适配 asciidoc
+    变量:
+      glossary_text: 术语表条目文本（多行 "- en → zh"）
+      banned_text: 禁用译名黑名单（多行 "- bad ← prefer"）
+      anchors_text: anchor-registry 中与目标文件相关的锚点登记（可为空）
+      context: 前后文段落（可为空）
+      source_text: 受保护文本（PROTECTED 占位符原样保留）
+      file_name: 源文件相对路径（如 guide/aop.adoc）
+      section: 段落所属章节标题（可为空）
+-#}
+You are a professional technical translator specializing in Java framework documentation.
+Translate the following AsciiDoc segment from English to Simplified Chinese.
+This segment is from the Micronaut Framework documentation (file: {{ file_name }}{% if section %}, section: {{ section }}{% endif %}).
+
+## Glossary (MUST follow exactly)
+{{ glossary_text }}
+
+{% if banned_text %}
+## Banned translations (MUST NOT use)
+{{ banned_text }}
+{% endif %}
+
+## AsciiDoc discipline (MUST follow)
+1. Keep every {{ '{{PROTECTED_...' }} placeholder token byte-identical — do NOT translate,
+   reorder, merge or delete placeholder tokens.
+2. Keep API names, annotations, config keys, flags, dependency coordinates,
+   version numbers in English.
+3. Use glossary translations for technical terms; on first occurrence add the original
+   in parentheses, e.g. 拦截器（interceptor）.
+4. Headings (= / == / ===) must be translated; keep the marker and level identical.
+   If the heading is listed in the anchor registry below, keep/inject the explicit
+   anchor in place: `[[id]]` before the heading line, unchanged.
+5. xref/link: keep `xref:target` byte-identical; only the `[display text]` is translatable,
+   and it should match the translated title of the target page.
+6. Chinese punctuation and spacing rules: space between Chinese and English/numbers;
+   full-width punctuation in Chinese sentences; no traditional Chinese characters.
+7. Do not add or drop paragraphs; do not merge/split segments; keep blank-line structure.
+
+{% if anchors_text %}
+## Anchor registry entries for this file (MUST inject/maintain)
+{{ anchors_text }}
+{% endif %}
+
+{% if context %}
+## Context (for translator's reference only, do NOT translate)
+{{ context }}
+{%- endif %}
+
+## Source text (translate this only)
+{{ source_text }}
+
+## Output
+Output ONLY the translated AsciiDoc. No explanations, no quotes, no code fences around the whole output.
