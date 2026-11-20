@@ -1,0 +1,13 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Bind Errors](https://docs.micronaut.io/5.2.x/core/#core-bindErrors)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpClient/lowLevelHttpClient/bindErrors.adoc  upstream_commit: 461985c2db1cfad049219629d4d289da46fd34dd  upstream_hash: fc2d4ff70d9026c67298cd6ca6da3b78c21c7a35  translated_at: 2026-11-21 -->
+
+通常，您希望消费一个端点，在请求成功时绑定到一个 POJO，发生错误时绑定到另一个 POJO。下面的示例展示如何以成功类型与错误类型调用 `exchange`。
+
+snippet::io.micronaut.docs.httpclientexceptionbody.BooksController[tags="clazz", indent=0]
+
+'''
+
+snippet::io.micronaut.docs.httpclientexceptionbody.BindHttpClientExceptionBodySpec[tags="test", indent=0]
+
+<1> 成功类型
+<2> 错误类型

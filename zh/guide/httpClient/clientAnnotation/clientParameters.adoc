@@ -1,0 +1,204 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Customizing Parameter Binding](https://docs.micronaut.io/5.2.x/core/#core-clientParameters)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpClient/clientAnnotation/clientParameters.adoc  upstream_commit: 51650efcb97939ef02bf726bdcb28266b7ca20d1  upstream_hash: 90453d601e8e5f385501a73ca180a6be4a9798a3  translated_at: 2026-11-21 -->
+
+前面的示例展示了一个使用方法参数表示 `POST` 请求体的简单示例：
+
+.PetOperations.java
+[source,java]
+----
+include::{testsclient}/annotation/PetOperations.java[tags=save, indent=0]
+----
+
+////
+NOTE: for some weird reason every time I try to replace this with a snippet it creates the following error
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':publishGuide'.
+> org.jruby.exceptions.RaiseException: (TypeError) cannot convert instance of class org.jruby.RubyObject to interface org.asciidoctor.ast.DocumentRuby
+
+I found a closed issue on GitHub that sounds similar https://github.com/asciidoctor/asciidoctorj/issues/267 but not really certain
+////
+
+`save` 方法默认以下面的 JSON 执行 HTTP `POST`：
+
+.产生的 JSON 示例
+[source,json]
+----
+{"name":"Dino", "age":10}
+----
+
+不过，您可能希望自定义作为请求体发送的内容、参数、URI 变量等。ann:http.client.annotation.Client[] 注解在这方面非常灵活，支持与 Micronaut HTTP 服务器相同的 pkg:http.annotation[HTTP 注解]。
+
+例如，下面定义了一个 URI 模板，`name` 参数用作 URI 模板的一部分，而 ann:http.annotation.Body[] 声明发送到服务器的内容由 `Pet` POJO 表示：
+
+.PetOperations.java
+[source,java]
+----
+@Post("/{name}")
+Mono<Pet> save(
+    @NotBlank String name, // <1>
+    @Body @Valid Pet pet) // <2>
+----
+
+<1> name 参数作为 URI 的一部分，声明为 `@NotBlank`
+<2> `pet` 参数用于编码请求体，声明为 `@Valid`
+
+下表汇总了参数注解及其用途，并提供示例：
+
+.参数绑定注解
+|===
+|注解|说明 |示例
+
+|ann:http.annotation.Body[]
+|指定作为请求体的参数
+|`@Body String body`
+
+|ann:http.annotation.CookieValue[]
+|指定要作为 cookie 发送的参数
+|`@CookieValue String myCookie`
+
+|ann:http.annotation.Header[]
+|指定要作为 HTTP 请求头发送的参数
+|`@Header String requestId`
+
+|ann:http.annotation.QueryValue[]
+|自定义要绑定的 URI 参数名
+|`@QueryValue("userAge") Integer age`
+
+|ann:http.annotation.PathVariable[]
+|仅从 <<routing,路径变量>> 绑定参数。
+|`@PathVariable Long id`
+
+|ann:http.annotation.RequestAttribute[]
+|指定要设置为请求属性的参数
+|`@RequestAttribute Integer locationId`
+
+|===
+
+IMPORTANT: 对于 `Content-Type` 或 `Accept`，请始终使用 ann:http.annotation.Produces[] 或 ann:http.annotation.Consumes[]，而不要通过提供请求头实现。
+
+== 查询值格式化
+
+link:{api}/io/micronaut/core/convert/format/Format.html[Format] 注解可以与 `@QueryValue` 注解一起使用来格式化查询值。
+
+支持的值为：`"csv"`、`"ssv"`、`"pipes"`、`"multi"` 与 `"deep-object"`，含义与 https://swagger.io/docs/specification/serialization/[Open API v3] 查询参数的 `style` 属性类似。
+
+该格式只能应用于 `java.lang.Iterable`、`java.util.Map` 或带有 link:{api}/io/micronaut/core/annotation/Introspected.html[Introspected] 注解的 POJO。不同值的格式化效果见下表：
+
+|===
+| 格式 | 可迭代对象示例 | Map 或 POJO 示例
+
+| 原始值
+| `["Mike", "Adam", "Kate"]`
+| `{"name": "Mike", "age": 30"}`
+
+| `"CSV"`
+| `"param=Mike,Adam,Kate"`
+| `"param=name,Mike,age,30"`
+
+| `"SSV"`
+| `"param=Mike Adam Kate"`
+| `"param=name Mike age 30"`
+
+| `"PIPES"`
+| `"param=Mike\|Adam\|Kate"`
+| `"param=name\|Mike\|age\|30"`
+
+| `"MULTI"`
+| `"param=Mike&param=Adam&param=Kate"`
+| `"name=Mike&age=30"`
+
+| `"DEEP_OBJECT"`
+| `"param[0]=Mike&param[1]=Adam&param[2]=Kate"`
+| `"param[name]=Mike&param[age]=30"`
+
+|===
+
+==== 基于类型的绑定参数
+
+有些参数按其类型而非注解识别。下表汇总了这些参数类型及其用途，并提供示例：
+
+|===
+|类型 |说明 |示例
+
+|api:http.BasicAuth[]
+|设置 `Authorization` 头
+|`BasicAuth basicAuth`
+
+|api:http.HttpHeaders[]
+|向请求添加多个请求头
+|`HttpHeaders headers`
+
+|api:http.cookie.Cookies[]
+|向请求添加多个 cookie
+|`Cookies cookies`
+
+|api:http.cookie.Cookie[]
+|向请求添加一个 cookie
+|`Cookie cookie`
+
+|link:{jdkapi}/java.base/java/util/Locale.html[Locale]
+|设置 `Accept-Language` 头。用 ann:http.annotation.QueryValue[] 或 ann:http.annotation.PathVariable[] 标注可填充 URI 变量。
+|`Locale locale`
+
+|===
+
+==== 自定义绑定
+
+api:http.client.bind.ClientArgumentRequestBinder[] API 将客户端参数绑定到请求。注册为 bean 的自定义绑定器类会在绑定过程中自动使用。优先查找基于注解的绑定器，如果未找到则查找基于类型的绑定器。
+
+===== 按注解绑定
+
+要基于参数上的注解控制参数如何绑定到请求，创建类型为 api:http.client.bind.AnnotatedClientArgumentRequestBinder[] 的 bean。任何自定义注解必须以 ann:core.bind.annotation.Bindable[] 标注。
+
+在本示例中，请看以下客户端：
+
+snippet::io.micronaut.docs.http.client.bind.annotation.MetadataClient[tags="clazz", indent=0, title="Client With @Metadata Argument"]
+
+该参数以以下注解标注：
+
+snippet::io.micronaut.docs.http.client.bind.annotation.Metadata[tags="clazz", indent=0, title="@Metadata Annotation"]
+
+没有任何额外代码时，客户端会尝试将元数据转换为字符串并作为查询参数附加。这不是期望的效果，因此需要自定义绑定器。
+
+下面的绑定器处理传给以 `@Metadata` 注解标注的客户端的参数，并修改请求使其包含期望的请求头。该实现可以修改为接受 `Map` 以外的更多数据类型。
+
+snippet::io.micronaut.docs.http.client.bind.annotation.MetadataClientArgumentBinder[tags="clazz", indent=0, title="Annotation Argument Binder"]
+
+===== 按类型绑定
+
+要基于参数类型绑定到请求，创建类型为 api:http.client.bind.TypedClientArgumentRequestBinder[] 的 bean。
+
+在本示例中，请看以下客户端：
+
+snippet::io.micronaut.docs.http.client.bind.type.MetadataClient[tags="clazz", indent=0, title="Client With Metadata Argument"]
+
+没有任何额外代码时，客户端会尝试将元数据转换为字符串并作为查询参数附加。这不是期望的效果，因此需要自定义绑定器。
+
+下面的绑定器处理传给 `Metadata` 类型客户端的参数，并修改请求使其包含期望的请求头。
+
+snippet::io.micronaut.docs.http.client.bind.type.MetadataClientArgumentBinder[tags="clazz", indent=0, title="Typed Argument Binder"]
+
+=== 方法上的绑定
+
+也可以创建一个绑定器，通过方法上的注解变更请求。例如：
+
+snippet::io.micronaut.docs.http.client.bind.method.NameAuthorizedClient[tags="clazz", indent=0, title="Client With Annotated Method"]
+
+<1> `@NameAuthorization` 标注在一个方法上
+
+该注解定义如下：
+
+snippet::io.micronaut.docs.http.client.bind.method.NameAuthorization[tags="clazz", indent=0, title="Annotation Definition"]
+
+<1> 定义为用于方法
+
+下面的绑定器指定了该行为：
+
+snippet::io.micronaut.docs.http.client.bind.method.NameAuthorizationBinder[tags="clazz", indent=0, title="Annotation Definition"]
+
+<1> `@Singleton` 注解将其注册到 Micronaut 上下文
+<2> 它实现 `AnnotatedClientRequestBinder<NameAuthorization>`
+<3> 自定义 `bind` 方法用于实现绑定器的行为

@@ -1,0 +1,86 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Declarative HTTP Clients with @Client](https://docs.micronaut.io/5.2.x/core/#core-clientAnnotation)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpClient/clientAnnotation.adoc  upstream_commit: 8c82ee03540bc11bc707c777c7ff4aa00d5be9d7  upstream_hash: f85d8578e9974551ec610f1537d2cce46106e494  translated_at: 2026-11-21 -->
+
+[[clientAnnotation]]
+既然您已经了解了低层 HTTP 客户端的工作方式，接下来让我们看看 Micronaut 通过 api:http.client.annotation.Client[] 注解对声明式客户端的支持。
+
+本质上，`@Client` 注解可以声明在任何接口或抽象类上，通过使用 <<introductionAdvice,引入通知>>，抽象方法会在编译时为您实现，大大简化 HTTP 客户端的创建。
+
+让我们从一个简单的示例开始。给定以下类：
+
+snippet::io.micronaut.docs.annotation.Pet[tags="class", indent=0, title="Pet.java"]
+
+您可以定义一个保存新 `Pet` 实例的公共接口：
+
+snippet::io.micronaut.docs.annotation.PetOperations[tags="imports, class", indent=0, title="PetOperations.java"]
+
+注意，该接口使用的 Micronaut HTTP 注解在服务器端与客户端都可用。您还可以使用 `jakarta.validation` 约束来校验参数。
+
+TIP: 请注意，某些注解（例如 api:http.annotation.Produces[] 与 api:http.annotation.Consumes[]）在服务器端与客户端的语义不同。例如，控制器方法（服务器端）上的 `@Produces` 表示该方法的 *返回值* 如何格式化，而客户端上的 `@Produces` 表示该方法的 *参数* 发送到服务器时如何格式化。虽然这看起来有点令人困惑，但考虑到服务器生产/消费与客户端的不同语义，这是合理的：服务器消费参数并向客户端 *返回* 响应，而客户端消费参数并向服务器 *发送* 输出。
+
+此外，要使用 `jakarta.validation` 特性，请将 `validation` 模块添加到构建中：
+
+dependency:micronaut-validation[]
+
+在 Micronaut 框架的服务器端，您可以实现 `PetOperations` 接口：
+
+snippet::io.micronaut.docs.annotation.PetController[tags="imports, class", indent=0, title="PetController.java"]
+
+然后，您可以在 `src/test/java` 中定义一个声明式客户端，使用 `@Client` 在编译时自动实现客户端：
+
+snippet::io.micronaut.docs.annotation.PetClient[tags="imports, class", indent=0, title="PetClient.java"]
+
+<1> api:http.client.annotation.Client[] 注解使用相对于当前服务器的值，本例中为 `/pets`
+<2> 该接口扩展自 `PetOperations`
+<3> 覆写了 `save` 方法。参见下方警告。
+
+WARNING: 注意，在上面的示例中我们覆写了 `save` 方法。如果您在编译时未使用 `-parameters` 选项，这是必需的，因为 Java 不会在字节码中保留参数名。如果使用 `-parameters` 编译，则无需覆写。此外，覆写方法时应确保重新声明所有校验注解，因为它们不是 link:{jdkapi}/java.base/java/lang/annotation/Inherited.html[Inherited] 注解。
+
+定义客户端之后，您可以在任何需要的地方 `@Inject` 它。
+
+回想一下，`@Client` 的值可以是：
+
+* 绝对 URI，例如 `https://api.twitter.com/1.1`
+* 相对 URI——此时目标服务器是当前服务器（便于测试）
+* 服务标识符。有关该主题的更多信息，请参阅 <<serviceDiscovery,服务发现>> 一节。
+
+在生产环境中，您通常使用服务 ID 与 <<serviceDiscovery,服务发现>> 自动发现服务。
+
+关于上例中的 `save` 方法，另一个需要注意的重要事项是它返回 rx:Single[] 类型。
+
+这是一个非阻塞响应式类型——通常您希望 HTTP 客户端不阻塞。某些情况下您可能希望 HTTP 客户端阻塞（例如在单元测试中），但这很少见。
+
+下表展示了可用于 ann:http.client.annotation.Client[] 的常见返回类型：
+
+.Micronaut 响应类型
+|===
+|类型|说明|示例签名
+
+|rs:Publisher[]
+|任何实现 rs:Publisher[] 接口的类型
+|`Flux<String> hello()`
+
+|api:http.HttpResponse[]
+|一个 api:http.HttpResponse[] 与可选的响应体类型
+|`Mono<HttpResponse<String>> hello()`
+
+|rs:Publisher[]
+|发出 POJO 的 rs:Publisher[] 实现
+|`Mono<Book> hello()`
+
+|link:{jdkapi}/java.base/java/util/concurrent/CompletableFuture.html[CompletableFuture]
+|Java `CompletableFuture` 实例
+|`CompletableFuture<String> hello()`
+
+|link:{jdkapi}/java.base/java/lang/CharSequence.html[CharSequence]
+|阻塞原生类型。例如 `String`
+|`String hello()`
+
+|T
+|任何简单的 POJO 类型。
+|`Book show()`
+|===
+
+通常，任何可转换为 rs:Publisher[] 接口的响应式类型都支持作为返回类型，包括（但不限于）RxJava 1.x、RxJava 2.x 与 Reactor 3.x 定义的响应式类型。
+
+也支持返回 link:{jdkapi}/java.base/java/util/concurrent/CompletableFuture.html[CompletableFuture] 实例。注意，返回任何其他类型 _会导致阻塞请求_ ，除测试外不建议使用。

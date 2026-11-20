@@ -1,0 +1,91 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Streaming with @Client](https://docs.micronaut.io/5.2.x/core/#core-clientAnnotationStreaming)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpClient/clientAnnotation/clientAnnotationStreaming.adoc  upstream_commit: 51650efcb97939ef02bf726bdcb28266b7ca20d1  upstream_hash: 4788912468bc14e62ef986351c6056c8efeff6d0  translated_at: 2026-11-21 -->
+
+ann:http.client.annotation.Client[] 注解也可以处理流式 HTTP 响应。
+
+=== 使用 @Client 流式传输 JSON
+
+例如，要编写一个从文档 <<clientStreaming,JSON 流>> 一节定义的控制器流式读取数据的客户端，您可以定义一个返回无界 rs:Publisher[]（例如 Reactor 的 reactor:Flux[] 或 RxJava 的 rx:Flowable[]）的客户端：
+
+snippet::io.micronaut.docs.streaming.HeadlineClient[tags="imports, class, endclass", indent=0, title="HeadlineClient.java"]
+
+<1> `@Get` 方法处理类型为 `APPLICATION_JSON_STREAM` 的响应
+<2> 返回类型为 `Publisher`
+
+下面的示例展示如何从测试中调用之前定义的 `HeadlineClient`：
+
+snippet::io.micronaut.docs.streaming.HeadlineControllerSpec[tags="streamingClient", indent=0, title="Streaming HeadlineClient"]
+
+<1> 从 api:context.ApplicationContext[] 检索客户端
+<2> `next` 方法将 reactor:Flux[] 发出的第一个元素发射到 reactor:Mono[] 中。
+<3> `block()` 方法在测试中检索结果。
+
+=== 流式客户端与响应类型
+
+上一节定义的示例期望服务器以 JSON 对象流响应，且内容类型为 `application/x-json-stream`。例如：
+
+.一个 JSON 流
+[source,json]
+----
+{"title":"The Stand"}
+{"title":"The Shining"}
+----
+
+原因很简单：一系列 JSON 对象实际上并不是有效 JSON，因此响应内容类型不能是 `application/json`。要使 JSON 有效，它必须返回一个数组：
+
+.一个 JSON 数组
+[source,json]
+----
+[
+    {"title":"The Stand"},
+    {"title":"The Shining"}
+]
+----
+
+不过，Micronaut 客户端既支持通过 `application/x-json-stream` 流式传输单个 JSON 对象，也支持以 `application/json` 定义的 JSON 数组。
+
+如果服务器返回 `application/json` 且返回了非单一 rs:Publisher[]（例如 Reactor 的 reactor:Flux[] 或 RxJava 的 rx:Flowable[]），客户端会在数组元素可用时流式传输它们。
+
+=== 流式客户端与读取超时
+
+从服务器流式读取响应时，底层 HTTP 客户端不会应用 api:http.client.HttpClientConfiguration[] 的默认 `readTimeout` 设置（默认 10 秒），因为流式响应的读取间隔可能与普通读取不同。
+
+取而代之，由 `read-idle-timeout` 设置（默认 5 分钟）决定连接空闲多长时间后关闭。
+
+如果您从条目间隔超过 5 分钟的服务器流式读取数据，应调整 `readIdleTimeout`。配置文件（例如 `application.yml`）中的以下配置演示了做法：
+
+.调整 readIdleTimeout
+[configuration]
+----
+micronaut:
+  http:
+    client:
+      read-idle-timeout: 10m
+----
+
+上例将 `readIdleTimeout` 设置为 10 分钟。
+
+=== 流式服务器发送事件
+
+Micronaut 框架提供了由接口 api:http.client.sse.SseClient[] 定义的 Server Sent Events（SSE）原生客户端。
+
+您可以使用该客户端从任何发出 SSE 事件的服务器流式读取 SSE 事件。
+
+NOTE: 虽然 SSE 流通常由浏览器 `EventSource` 消费，但某些情况下您可能希望通过 api:http.client.sse.SseClient[] 消费 SSE 流，例如在单元测试中，或当 Micronaut 服务充当另一个服务的网关时。
+
+ann:http.client.annotation.Client[] 注解也支持消费 SSE 流。例如，考虑以下产生 SSE 事件流的控制器方法：
+
+snippet::io.micronaut.docs.sse.HeadlineController[tags="streaming", indent=0, title="SSE Controller"]
+
+<1> 控制器定义了一个产生 `MediaType.TEXT_EVENT_STREAM` 的 ann:http.annotation.Get[] 注解
+<2> 该方法使用 Reactor 发出一个 `Headline` 对象
+<3> `repeat` 方法将发射重复 100 次
+<4> 每次之间延迟一秒
+
+注意，控制器的返回类型同样是 api:http.sse.Event[]，并且 `Event.of` 方法创建要流式发送给客户端的事件。
+
+要定义消费这些事件的客户端，定义一个处理 `MediaType.TEXT_EVENT_STREAM` 的方法：
+
+snippet::io.micronaut.docs.sse.HeadlineClient[tags="class", indent=0, title="SSE Client"]
+
+`Flux` 的泛型类型可以是 api:http.sse.Event[]——此时您会收到完整的事件对象；也可以是 POJO——此时您只会收到事件中包含的、从 JSON 转换而来的数据。

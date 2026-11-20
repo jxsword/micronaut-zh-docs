@@ -1,0 +1,177 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Configuring HTTP clients](https://docs.micronaut.io/5.2.x/core/#core-clientConfiguration)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpClient/lowLevelHttpClient/clientConfiguration.adoc  upstream_commit: c7d277606d0198c1c5d3067f209600a65bdc03a6  upstream_hash: 7d71d03bcc665a660a71904bfab5b28699ac7ceb  translated_at: 2026-11-21 -->
+
+=== 所有客户端的全局配置
+
+Netty bean 默认启用。设置 `netty.enabled=false` 可禁用所有 Netty 集成，或设置 `micronaut.http.client.netty.enabled=false` 仅禁用 Netty 客户端。这些属性支撑 api:http.netty.RequiresNetty[] 与 api:http.client.netty.RequiresNettyClient[]。
+
+默认 HTTP 客户端配置是一个名为 api:http.client.DefaultHttpClientConfiguration[] 的 <<configurationProperties,配置属性>>，它允许为所有 HTTP 客户端配置默认行为。例如，在您的配置文件（例如 `application.yml`）中：
+
+.修改默认 HTTP 客户端配置
+[configuration]
+----
+micronaut:
+  http:
+    client:
+      read-timeout: 5s
+----
+
+上例设置了 api:http.client.HttpClientConfiguration[] 类的 `readTimeout` 属性。
+
+=== 客户端特定配置
+
+要为每个客户端进行单独配置，有几种方式。您可以在配置文件（例如 `application.yml`）中手动配置 <<serviceDiscoveryManual,服务发现>> 并应用每客户端配置：
+
+.手动配置 HTTP 服务
+[configuration]
+----
+micronaut:
+  http:
+    services:
+      foo:
+        urls:
+          - http://foo1
+          - http://foo2
+        read-timeout: 5s
+----
+
+- `read-timeout` 应用于 `foo` 客户端。
+
+对于 Netty HTTP 客户端，您还可以通过 `address-resolver-group-name` 属性引用一个具名的 Netty `AddressResolverGroup` bean 来接入自定义 DNS 解析器。当您需要为特定客户端自定义名称解析行为时，这很有用。
+
+snippet::io.micronaut.docs.client.resolver.CustomAddressResolverGroupFactory[tags="class", indent=0, title="Define a named `AddressResolverGroup` bean"]
+
+<1> 为解析器 bean 命名，以便客户端可以引用它。
+<2> 返回 Netty 客户端使用的 `AddressResolverGroup` 实例。
+
+在测试套件中，具名客户端使用相同属性以编程方式配置：
+
+snippet::io.micronaut.docs.client.resolver.AddressResolverClientConfiguration[tags="properties", indent=0, title="Programmatic client configuration example"]
+
+<1> 为具名客户端配置服务 URL。
+<2> 通过 `address-resolver-group-name` 引用具名解析器 bean。
+
+配置的名称必须与现有 bean 匹配。设置 `address-resolver-group-name` 时，`dns-resolution-mode` 会被忽略。
+
+WARN: 该客户端配置可与 `@Client` 注解结合使用——直接注入 `HttpClient`，或在客户端接口上使用。无论哪种方式，注解上除服务 id 外的所有其他属性 *都将被忽略* 。
+
+然后，注入具名客户端配置：
+
+.注入 HTTP 客户端
+[source,java]
+----
+@Client("foo") @Inject ReactorHttpClient httpClient;
+----
+
+您也可以定义一个扩展自 api:http.client.HttpClientConfiguration[] 的 bean，并确保 `jakarta.inject.Named` 注解恰当地命名它：
+
+.定义 HTTP 客户端配置 bean
+[source,java]
+----
+@Named("twitter")
+@Singleton
+class TwitterHttpClientConfiguration extends HttpClientConfiguration {
+   public TwitterHttpClientConfiguration(ApplicationConfiguration configuration) {
+        super(configuration);
+    }
+}
+----
+
+如果您通过 <<serviceDiscovery,服务发现>> 注入名为 `twitter` 且使用 `@Client` 的服务，该配置会被拾取：
+
+.注入 HTTP 客户端
+[source,java]
+----
+@Client("twitter") @Inject ReactorHttpClient httpClient;
+----
+
+或者，如果您不使用服务发现，可以使用 `@Client` 的 `configuration` 成员引用特定类型：
+
+.注入 HTTP 客户端
+[source,java]
+----
+@Client(value = "https://api.twitter.com/1.1",
+        configuration = TwitterHttpClientConfiguration.class)
+@Inject
+ReactorHttpClient httpClient;
+----
+
+=== 连接池与 HTTP/2
+
+使用普通 HTTP（无 TLS/SSL）的连接使用 HTTP/1.1。可通过 `plaintext-mode` 配置选项进行配置。
+
+安全连接（即 HTT**PS**，带 TLS/SSL）使用 TLS 中的「应用层协议协商」（ALPN）特性来选择 HTTP 版本。如果服务器支持 HTTP/2，Micronaut HTTP 客户端默认会使用该能力；如果不支持，仍支持 HTTP/1.1。这通过 `alpn-modes` 选项配置，它是一个受支持的 ALPN 协议 ID 列表（`"h2"` 与 `"http/1.1"`）。
+
+NOTE: HTTP/2 标准禁止在 HTTP/2 连接上使用某些安全性较低的 TLS 密码套件。当 HTTP 客户端支持 HTTP/2（默认如此）时，它不支持这些密码套件。从 `alpn-modes` 中移除 `"h2"` 将启用对所有密码套件的支持。
+
+每个 HTTP/1.1 连接一次只能支持一个请求，但可以通过 `keep-alive` 机制复用于后续请求。HTTP/2 连接可以支持任意数量的并发请求。
+
+为省去为每个请求打开新连接的开销，Micronaut HTTP 客户端会尽可能复用 HTTP 连接。它们在一个 _连接池_ 中管理。HTTP/1.1 连接通过 keep-alive 保留并用于新请求；对于 HTTP/2，所有请求使用单个连接。
+
+.手动配置 HTTP 服务
+[configuration]
+----
+micronaut:
+  http:
+    services:
+      foo:
+        urls:
+          - http://foo1
+          - http://foo2
+        pool:
+          max-concurrent-http1-connections: 50
+          enabled: true
+          max-connections: 50
+----
+- 限制最大并发 HTTP/1.1 连接数
+- `max-concurrent-http1-connections` 将最大并发 HTTP/1.1 连接数限制为 50。
+- `pool` 启用连接池并设置其最大连接数
+
+可用连接池配置选项的详情请参阅 link:{api}/io/micronaut/http/client/HttpClientConfiguration.ConnectionPoolConfiguration.html[ConnectionPoolConfiguration] 的 API。
+
+通过将 `pool.enabled` 属性设置为 `false`，可以禁用连接复用。连接池仍在使用，其他配置选项（例如并发 HTTP/1 连接数）仍然生效，但一个连接将只服务于一个请求。
+
+=== 配置事件循环组
+
+默认情况下，Micronaut 框架为工作线程与所有 HTTP 客户端线程共享一个公共的 Netty `EventLoopGroup`。
+
+该 `EventLoopGroup` 可以通过 `micronaut.netty.event-loops.default` 属性配置：
+
+.配置默认事件循环
+[configuration]
+----
+micronaut:
+  netty:
+    event-loops:
+      default:
+        num-threads: 10
+----
+
+您还可以使用 `micronaut.netty.event-loops` 设置配置一个或多个额外的事件循环。下表汇总了相关属性：
+
+include::{includedir}configurationProperties/io.micronaut.http.netty.channel.DefaultEventLoopGroupConfiguration.adoc[]
+
+例如，如果您与 HTTP 客户端的交互涉及 CPU 密集型工作，为其中一个或所有客户端配置单独的 `EventLoopGroup` 可能是值得的。
+
+下面的示例配置了一个名为 "other"、具有 10 个线程的额外事件循环组：
+
+.配置额外的事件循环
+[configuration]
+----
+micronaut:
+  netty:
+    event-loops:
+      other:
+        num-threads: 10
+----
+
+配置了额外事件循环后，您可以修改 HTTP 客户端配置来使用它：
+
+.修改客户端使用的事件循环组
+[configuration]
+----
+micronaut:
+  http:
+    client:
+      event-loop-group: other
+----

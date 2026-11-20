@@ -727,26 +727,26 @@ files:
 - file: guide/httpClient/clientAnnotation.adoc
   blob_sha: f85d8578e9974551ec610f1537d2cce46106e494
   size: 5076
-  status: missing
+  status: current
   zh: zh/guide/httpClient/clientAnnotation.adoc
   paragraphs: 27
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 8c82ee03540bc11bc707c777c7ff4aa00d5be9d7
 - file: guide/httpClient/clientAnnotation/clientAnnotationStreaming.adoc
   blob_sha: 4788912468bc14e62ef986351c6056c8efeff6d0
   size: 4595
-  status: missing
+  status: current
   zh: zh/guide/httpClient/clientAnnotation/clientAnnotationStreaming.adoc
   paragraphs: 38
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 51650efcb97939ef02bf726bdcb28266b7ca20d1
 - file: guide/httpClient/clientAnnotation/clientError.adoc
   blob_sha: 5843979b326a182daa7ca91596a5d84f77ee172c
   size: 1286
-  status: missing
+  status: current
   zh: zh/guide/httpClient/clientAnnotation/clientError.adoc
   paragraphs: 6
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: ed1b6b412483a05ce3def2e3ed6de041fef4c1dd
 - file: guide/httpClient/clientAnnotation/clientFallback.adoc
   blob_sha: 8f4bcf25ca0f06ae436364f5d0e0982b7c69910e
@@ -775,10 +775,10 @@ files:
 - file: guide/httpClient/clientAnnotation/clientParameters.adoc
   blob_sha: 90453d601e8e5f385501a73ca180a6be4a9798a3
   size: 7987
-  status: missing
+  status: current
   zh: zh/guide/httpClient/clientAnnotation/clientParameters.adoc
   paragraphs: 59
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 51650efcb97939ef02bf726bdcb28266b7ca20d1
 - file: guide/httpClient/clientAnnotation/clientRetry.adoc
   blob_sha: 5f3b96638eb3383a16af4b0de051b088d2625bf3
@@ -855,10 +855,10 @@ files:
 - file: guide/httpClient/lowLevelHttpClient/bindErrors.adoc
   blob_sha: fc2d4ff70d9026c67298cd6ca6da3b78c21c7a35
   size: 456
-  status: missing
+  status: current
   zh: zh/guide/httpClient/lowLevelHttpClient/bindErrors.adoc
   paragraphs: 5
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 461985c2db1cfad049219629d4d289da46fd34dd
 - file: guide/httpClient/lowLevelHttpClient/clientBasics.adoc
   blob_sha: 563af401f2c76d292efef14a963e39cf5a2a5ee2
@@ -871,10 +871,10 @@ files:
 - file: guide/httpClient/lowLevelHttpClient/clientConfiguration.adoc
   blob_sha: 7d71d03bcc665a660a71904bfab5b28699ac7ceb
   size: 7532
-  status: missing
+  status: current
   zh: zh/guide/httpClient/lowLevelHttpClient/clientConfiguration.adoc
   paragraphs: 66
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: c7d277606d0198c1c5d3067f209600a65bdc03a6
 - file: guide/httpClient/lowLevelHttpClient/clientPostRequests.adoc
   blob_sha: b1fd3fd078c8b38078ec62c7446195332fb17d35
@@ -903,10 +903,10 @@ files:
 - file: guide/httpClient/lowLevelHttpClient/lowLevelClientError.adoc
   blob_sha: 2ad6eba69160edb2b846d651f7e3b7a6a6d07b7a
   size: 429
-  status: missing
+  status: current
   zh: zh/guide/httpClient/lowLevelHttpClient/lowLevelClientError.adoc
   paragraphs: 2
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 461985c2db1cfad049219629d4d289da46fd34dd
 - file: guide/httpClient/lowLevelOrHighLevel.adoc
   blob_sha: a469afb7b3cc2b9c0e8080bf395590c2956d6a4b
@@ -927,10 +927,10 @@ files:
 - file: guide/httpClient/proxyClient.adoc
   blob_sha: 10297e4fbdf899f53c93e0ecd0bd3ed67457449c
   size: 1273
-  status: missing
+  status: current
   zh: zh/guide/httpClient/proxyClient.adoc
   paragraphs: 6
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 51650efcb97939ef02bf726bdcb28266b7ca20d1
 - file: guide/httpServer.adoc
   blob_sha: 4b54755e91404d6aba0e24af6b129244ac58a43d

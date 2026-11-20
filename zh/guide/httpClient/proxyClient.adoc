@@ -1,0 +1,20 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Proxying Requests with ProxyHttpClient](https://docs.micronaut.io/5.2.x/core/#core-proxyClient)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpClient/proxyClient.adoc  upstream_commit: 51650efcb97939ef02bf726bdcb28266b7ca20d1  upstream_hash: 10297e4fbdf899f53c93e0ecd0bd3ed67457449c  translated_at: 2026-11-21 -->
+
+[[proxyClient]]
+微服务环境中的一个常见需求是在网关微服务中将请求代理到其他后端微服务。
+
+常规的 api:http.client.HttpClient[] API 围绕简化消息交换设计，并非为代理请求而设计。对于这种情况，请使用 api:http.client.ProxyHttpClient[]，可以在 <<filters,HTTP 服务器过滤器>> 中使用它将请求代理到后端微服务。
+
+下面的示例演示将在 URI `/proxy` 下的请求重写到同一服务器上的 URI `/real` （尽管在真实环境中您通常代理到另一台服务器）：
+
+snippet::io.micronaut.docs.http.client.proxy.ProxyFilter[tags="imports,class", indent=0, title="Proxy filter that rewrites original requests"]
+
+<1> 该过滤器扩展 api:http.filter.HttpServerFilter[]
+<2> api:http.client.ProxyHttpClient[] 注入到构造器中。
+<3> `proxy` 方法代理该请求
+<4> 请求被修改以变更 URI 并包含额外的请求头
+<5> api:http.uri.UriBuilder[] API 重写 URI
+<6> 包含额外的请求与响应头
+
+NOTE: api:http.client.ProxyHttpClient[] API 是一个低层 API，可用于构建更高层的抽象，例如 API 网关。

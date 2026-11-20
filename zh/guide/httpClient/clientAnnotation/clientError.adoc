@@ -1,0 +1,15 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Error Responses](https://docs.micronaut.io/5.2.x/core/#core-clientError)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpClient/clientAnnotation/clientError.adoc  upstream_commit: ed1b6b412483a05ce3def2e3ed6de041fef4c1dd  upstream_hash: 5843979b326a182daa7ca91596a5d84f77ee172c  translated_at: 2026-11-21 -->
+
+如果返回的 HTTP 响应状态码为 400 或更高，会创建 api:http.client.exceptions.HttpClientResponseException[]。该异常包含原始响应。异常如何抛出取决于方法返回类型。
+
+* 对于响应式返回类型，异常作为错误通过发布者传递。
+* 对于阻塞返回类型，异常会被抛出，应由调用方捕获并处理。
+
+IMPORTANT: 该规则的一个例外是 HTTP Not Found（404）响应。此异常仅适用于声明式客户端。
+
+对于阻塞返回类型，HTTP Not Found（404）响应 *不被* 视为错误条件，客户端异常 *不会* 被抛出。该行为包括返回 `void` 的方法。
+
+如果方法返回 `HttpResponse`，将返回原始响应。如果返回类型为 `Optional`，返回空 Optional。对于所有其他类型，返回 `null`。
+
+当客户端调用与 api:retry.annotation.Retryable[] 结合时，默认会重试所有抛出的异常。这将包括所有 4XX 响应（如上所述，HTTP Not Found（404）除外）。可以使用 api:retry.annotation.RetryPredicate[] 配置具体的重试条件，过滤不应重试的响应。

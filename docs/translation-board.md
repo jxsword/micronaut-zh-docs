@@ -24,7 +24,7 @@
 | B15 | 13 | 3452 | 3485 | current |
 | B16 | 24 | 3223 | 3291 | current |
 | B17 | 15 | 3004 | 3008 | current |
-| B18 | 8 | 3379 | 3379 | pending |
+| B18 | 8 | 3379 | 3379 | current |
 | B19 | 14 | 3455 | 3491 | pending |
 | B20 | 21 | 3456 | 3512 | pending |
 | B21 | 35 | 2983 | 3078 | pending |
@@ -63,6 +63,7 @@
 - B15（2026-11-21 完成）：validate 全量 169 文件 PASSED + 13/13 --mark-current 核销 + squash commit；进度 169/388（43.6%）。锚点注入 2 处（sessions 批内 websocketServer 闭环 + http3Server 消解 whatsNew）；byteBodySplitting/websocketClient ⑦ 邻接 ×3（占位符后漏空格）修正。词数实测 3457/3416。⑤ 豁免警告 31 条（−1 消解 +6 新增，详见 reports/batch-B15.md）。冻结窗口遵守。httpServer 组 72/101（71%）；byteBody 与 websocket 子目录全组 current。
 - B16（2026-11-21 完成）：validate 全量 193 文件 PASSED + 24/24 --mark-current 核销 + squash commit；进度 193/388（49.7%）。锚点注入 8 处（threadPools/listener/cors/corsConfiguration/corsCrossOrigin* ×2/https/serverConfiguration，9 条豁免消解）；**回溯补注入 [[events]]**（B03 报告声称注入但实际缺失，本批 netty* 引用触发 validate ⑤ 硬拦后补齐）；⑦ 邻接 ×3 与 https ③ netty→Netty 修正。词数实测 3265/3193。⑤ 豁免警告 24 条（详见 reports/batch-B16.md）。冻结窗口遵守。httpServer 组 96/101（95%）；serverConfiguration 子目录全组 current。
 - B17（2026-11-21 完成）：validate 全量 208 文件 PASSED + 15/15 --mark-current 核销 + squash commit；进度 208/388（53.6%）**过半**。锚点注入 5 处（httpClient 批间消解 ×3 + nettyHttpClient/jdkHttpClient 批间+批内闭环 + lowLevelHttpClient 批间消解 + clientStreaming 承接）；restore 译丢段门禁拦截 clientBasics 漏 callout（补齐）；clientPostRequests ⑦ ×1 修正。词数实测 2893/2870。⑤ 豁免警告 21 条（−6 消解 +3 新增，详见 reports/batch-B17.md）。冻结窗口遵守。**httpServer 章 101/101 全章译出**（第六个全章）；httpClient 章 9/26 起步。
+- B18（2026-11-21 完成）：validate 全量 216 文件 PASSED + 8/8 --mark-current 核销 + squash commit；进度 216/388（55.7%）。锚点注入 2 处（clientAnnotation/proxyClient，4 条豁免消解）；**reviewer 段落对齐第三次拦截真缺陷**（proxyClient 尾段与 clientAnnotation 首段跨文件错位，互相归位）；clientParameters 上游 `////` 注释块逐字节保留（启发式 3 条误报已文档化）；proxyClient ⑦ ×1 修正。词数实测 3303/3282。⑤ 豁免警告 22 条（−4 消解 +5 新增，详见 reports/batch-B18.md）。冻结窗口遵守。httpClient 组 17/26（65%）。
 
 ## 硬性纪律（每批次必守）
 

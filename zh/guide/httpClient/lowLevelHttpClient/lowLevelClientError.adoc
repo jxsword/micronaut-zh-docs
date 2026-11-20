@@ -1,0 +1,6 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Error Responses](https://docs.micronaut.io/5.2.x/core/#core-lowLevelClientError)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpClient/lowLevelHttpClient/lowLevelClientError.adoc  upstream_commit: 461985c2db1cfad049219629d4d289da46fd34dd  upstream_hash: 2ad6eba69160edb2b846d651f7e3b7a6a6d07b7a  translated_at: 2026-11-21 -->
+
+如果返回的 HTTP 响应状态码为 400 或更高，会创建 api:http.client.exceptions.HttpClientResponseException[]。该异常包含原始响应。异常如何抛出取决于方法的返回类型。
+
+对于阻塞客户端，异常会被抛出，应由调用方捕获并处理。对于响应式客户端，异常作为错误通过发布者传递。
