@@ -1,0 +1,97 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Using @ServerWebSocket](https://docs.micronaut.io/5.2.x/core/#core-websocketServer)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/websocket/websocketServer.adoc  upstream_commit: 86914a70409a596fcfb425a6c0e0945337efb5af  upstream_hash: d310ccc41ba45287a5c98a4ff2bd2768eb331565  translated_at: 2026-11-21 -->
+
+ann:websocket.annotation.ServerWebSocket[] 注解可以应用于任何应映射到 WebSocket URI 的类。下面的示例是一个简单的聊天 WebSocket 实现：
+
+snippet::io.micronaut.docs.http.server.netty.websocket.ChatServerWebSocket[tags="clazz", indent=0,title="WebSocket Chat Example"]
+
+<1> ann:websocket.annotation.ServerWebSocket[] 注解定义 WebSocket 映射的路径。URI 可以是 URI 模板。
+<2> ann:websocket.annotation.OnOpen[] 注解声明 WebSocket 打开时要调用的方法。
+<3> ann:websocket.annotation.OnMessage[] 注解声明收到消息时要调用的方法。
+<4> 您可以使用 api:websocket.WebSocketBroadcaster[] 向每个 WebSocket 会话广播消息。您可以用 `Predicate` 过滤要发送到哪些会话。此外，您也可以使用 api:websocket.WebSocketSession[] 实例，通过 `WebSocketSession::send` 向它发送消息。
+<5> ann:websocket.annotation.OnClose[] 注解声明 WebSocket 关闭时要调用的方法。
+
+TIP: 可在 https://guides.micronaut.io/latest/micronaut-websocket.html[Micronaut Guides] 找到 WebSocket 实际运行的完整示例。
+
+关于绑定，每个 WebSocket 方法的参数可以是：
+
+* URI 模板中的变量（上例中 `topic` 与 `username` 是 URI 模板变量）
+* api:websocket.WebSocketSession[] 实例
+
+=== @OnClose 方法
+
+ann:websocket.annotation.OnClose[] 方法可以可选地接收 api:websocket.CloseReason[]。`@OnClose` 方法在会话关闭之前被调用。
+
+=== @OnMessage 方法
+
+ann:websocket.annotation.OnMessage[] 方法可以为消息体定义一个参数。该参数可以是以下之一：
+
+* Netty `WebSocketFrame`
+* 任何 Java 基本类型或简单类型（例如 `String`）。实际上，任何可以从 `ByteBuf` 转换的类型（您可以注册额外的 api:core.convert.TypeConverter[] bean 以支持自定义类型）。
+* `byte[]`、`ByteBuf` 或 Java NIO `ByteBuffer`。
+* POJO。此时默认使用 api:jackson.codec.JsonMediaTypeCodec[] 以 JSON 解码。您可以注册自定义编解码器，并使用 ann:http.annotation.Consumes[] 注解定义处理器的内容类型。
+* api:websocket.WebSocketPongMessage[]。这是一个特例：该方法不会接收常规消息，而是处理作为对发送到客户端的 ping 的回复而到达的 WebSocket pong。
+
+=== @OnError 方法
+
+可以添加以 ann:websocket.annotation.OnError[] 标注的方法来实现自定义错误处理。`@OnError` 方法可以定义一个接收要处理的异常类型的参数。如果不存在 `@OnError` 处理且发生不可恢复的异常，WebSocket 会自动关闭。
+
+=== 使用 @ExecuteOn 处理阻塞方法
+
+ann:websocket.annotation.ServerWebSocket[] 的回调方法默认在主 Netty 服务器事件循环上调用。如果您在 WebSocket 处理方法中执行任何阻塞 I/O 操作，则必须以与 HTTP 相同的方式将这些任务转移到单独的线程池。与 ann:http.annotation.Controller[] 或 ann:http.annotation.Filter[] 一样，ann:scheduling.annotation.ExecuteOn[] 注解可以在类型或方法级别应用于 ann:websocket.annotation.ServerWebSocket[] 处理器。
+
+=== 非阻塞消息处理
+
+前面的示例使用了 api:websocket.WebSocketBroadcaster[] 接口的 `broadcastSync` 方法，它会阻塞直到广播完成。api:websocket.WebSocketSession[] 中也有类似的 `sendSync` 方法，以阻塞方式向单个接收者发送消息。不过，您可以通过从每个 WebSocket 处理器方法返回 rs:Publisher[] 或 link:{jdkapi}/java.base/java/util/concurrent/Future.html[Future] 来实现非阻塞 WebSocket 服务器。例如：
+
+snippet::io.micronaut.docs.http.server.netty.websocket.ReactivePojoChatServerWebSocket[tags="onmessage", indent=0,title="WebSocket Chat Example"]
+
+上例使用了 `broadcast`，它创建一个 rs:Publisher[] 实例并将值返回给 Micronaut。Micronaut 框架基于 Publisher 接口异步发送消息。类似的 `send` 方法通过 Micronaut 返回值异步发送单条消息。
+
+要在 Micronaut 标注的处理器方法之外异步发送消息，您可以分别使用 api:websocket.WebSocketBroadcaster[] 与 api:websocket.WebSocketSession[] 接口中的 `broadcastAsync` 与 `sendAsync` 方法。对于阻塞发送，可以使用 `broadcastSync` 与 `sendSync` 方法。
+
+=== @ServerWebSocket 与作用域
+
+默认情况下，`@ServerWebSocket` 实例为所有 WebSocket 连接共享。必须格外注意同步本地状态以避免线程安全问题。
+
+如果您希望每个连接都有一个实例，请用 ann:context.annotation.Prototype[] 标注该类。这样您可以从 `@OnOpen` 处理器获取 api:websocket.WebSocketSession[] 并将其赋值给 `@ServerWebSocket` 实例的字段。
+
+=== 与 HTTP 会话共享会话
+
+api:websocket.WebSocketSession[] 默认由内存映射支持。如果您添加 `session` 模块，则可以在 HTTP 服务器与 WebSocket 服务器之间共享 <<sessions,会话>>。
+
+NOTE: 当会话由持久存储（例如 Redis）支持时，每条消息处理完成后，会话都会更新到后端存储。
+
+[TIP]
+.使用 CLI
+====
+如果您使用应用类型 `Micronaut Application` 创建项目，可以使用 Micronaut CLI 的 `create-websocket-server` 命令创建一个标注了 api:websocket.annotation.ServerWebSocket[] 的类。
+
+----
+$ mn create-websocket-server MyChat
+| Rendered template WebsocketServer.java to destination src/main/java/example/MyChatServer.java
+----
+====
+
+=== 连接超时
+
+默认情况下，Micronaut 框架会在空闲无活动的连接超过 5 分钟后使其超时。通常这不是问题，因为浏览器会自动重连 WebSocket 会话，不过您可以通过设置 `micronaut.server.idle-timeout` 来控制该行为（负值表示不超时）：
+
+.设置服务器的连接超时
+[configuration]
+----
+micronaut:
+  server:
+    idle-timeout: 30m
+----
+
+如果您使用 Micronaut 的 WebSocket 客户端，可能还希望在客户端上设置超时：
+
+.设置客户端的连接超时
+[configuration]
+----
+micronaut:
+  http:
+    client:
+      read-idle-timeout: 30m
+----

@@ -959,34 +959,34 @@ files:
 - file: guide/httpServer/byteBody.adoc
   blob_sha: 0f35af7cba94cf31d0f49ce9f5659e9cfe444a86
   size: 944
-  status: missing
+  status: current
   zh: zh/guide/httpServer/byteBody.adoc
   paragraphs: 3
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: c81e528d6cafb5080926e2c1c6784029ba022f00
 - file: guide/httpServer/byteBody/byteBodyExample.adoc
   blob_sha: 483889b2f093dc9288e97947f1751406188421a6
   size: 3082
-  status: missing
+  status: current
   zh: zh/guide/httpServer/byteBody/byteBodyExample.adoc
   paragraphs: 11
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 51fe0b42cf118c0d984f04f5ce5367446914b278
 - file: guide/httpServer/byteBody/byteBodyPrimary.adoc
   blob_sha: 9b295e021e6be54cb56b8e8fa1f3474d3f24580f
   size: 1150
-  status: missing
+  status: current
   zh: zh/guide/httpServer/byteBody/byteBodyPrimary.adoc
   paragraphs: 5
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 51fe0b42cf118c0d984f04f5ce5367446914b278
 - file: guide/httpServer/byteBody/byteBodySplitting.adoc
   blob_sha: 445f39704c8c7638c0ee3368df27751664ef3b4d
   size: 4258
-  status: missing
+  status: current
   zh: zh/guide/httpServer/byteBody/byteBodySplitting.adoc
   paragraphs: 14
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 51fe0b42cf118c0d984f04f5ce5367446914b278
 - file: guide/httpServer/clientIpAddress.adoc
   blob_sha: 781cce43e6f16f826b3258fe3d7b4bb598b8b831
@@ -1167,10 +1167,10 @@ files:
 - file: guide/httpServer/filters/httpServerFilter/httpServerFilterErrorStates.adoc
   blob_sha: b9b2aedc00f2b82c2d322f8eff3b3bded4804919
   size: 515
-  status: missing
+  status: current
   zh: zh/guide/httpServer/filters/httpServerFilter/httpServerFilterErrorStates.adoc
   paragraphs: 1
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 28c03b94f70c18a2a760248f27136d5320101144
 - file: guide/httpServer/filters/httpServerFilter/httpServerFilterExample.adoc
   blob_sha: abe38de566d2a961733eb8bac9d4f2c4dac4111f
@@ -1183,10 +1183,10 @@ files:
 - file: guide/httpServer/filters/responseHeaderPopulator.adoc
   blob_sha: 86dab2035f3e27b34c93095c65f987f42489ce87
   size: 1383
-  status: missing
+  status: current
   zh: zh/guide/httpServer/filters/responseHeaderPopulator.adoc
   paragraphs: 7
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 16a56976c7dc7abe5d5bdd22c63c7f5948150498
 - file: guide/httpServer/form.adoc
   blob_sha: d88d2036858cc3c073f3b1f34950fae7eb26958c
@@ -1239,18 +1239,18 @@ files:
 - file: guide/httpServer/http2Server.adoc
   blob_sha: 33c303d48aae1be9bed14348938ca4378572f5c8
   size: 2824
-  status: missing
+  status: current
   zh: zh/guide/httpServer/http2Server.adoc
   paragraphs: 25
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 51650efcb97939ef02bf726bdcb28266b7ca20d1
 - file: guide/httpServer/http3Server.adoc
   blob_sha: 44342079866c9a1cff60a408b1a2b7456373b62f
   size: 996
-  status: missing
+  status: current
   zh: zh/guide/httpServer/http3Server.adoc
   paragraphs: 10
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 65c241037edd6d5843c4f3356b33f67fe0f2d51c
 - file: guide/httpServer/jsonBinding.adoc
   blob_sha: b873e7cb501a06a876b33c20cde1db262e0c2091
@@ -1671,18 +1671,18 @@ files:
 - file: guide/httpServer/sessions.adoc
   blob_sha: 12cc50c1d3a19c81f0453f76cb9295fd4b3272f4
   size: 142
-  status: missing
+  status: current
   zh: zh/guide/httpServer/sessions.adoc
   paragraphs: 1
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: d72b31f5129030dcadfff4fc2827278bdfbe0a59
 - file: guide/httpServer/sse.adoc
   blob_sha: 77d5521d03d5ec55c5e949d67fa41237db6db899
   size: 2477
-  status: missing
+  status: current
   zh: zh/guide/httpServer/sse.adoc
   paragraphs: 14
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 51650efcb97939ef02bf726bdcb28266b7ca20d1
 - file: guide/httpServer/staticResources.adoc
   blob_sha: 74a8ee9ca6c54807773e22fb4255901550a68141
@@ -1727,26 +1727,26 @@ files:
 - file: guide/httpServer/websocket.adoc
   blob_sha: 927240b0baad3b85362b5ca86732a549d5981a5d
   size: 504
-  status: missing
+  status: current
   zh: zh/guide/httpServer/websocket.adoc
   paragraphs: 3
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/httpServer/websocket/websocketClient.adoc
   blob_sha: 5e579e43eaf7333a051a592ecd71a0519b25cbc0
   size: 3144
-  status: missing
+  status: current
   zh: zh/guide/httpServer/websocket/websocketClient.adoc
   paragraphs: 33
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 8c82ee03540bc11bc707c777c7ff4aa00d5be9d7
 - file: guide/httpServer/websocket/websocketServer.adoc
   blob_sha: d310ccc41ba45287a5c98a4ff2bd2768eb331565
   size: 6699
-  status: missing
+  status: current
   zh: zh/guide/httpServer/websocket/websocketServer.adoc
   paragraphs: 41
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 86914a70409a596fcfb425a6c0e0945337efb5af
 - file: guide/i18n.adoc
   blob_sha: e69de29bb2d1d6434b8b29ae775ad8c2e48c5391

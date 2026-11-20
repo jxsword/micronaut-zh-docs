@@ -1,0 +1,59 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – HTTP/2 Support](https://docs.micronaut.io/5.2.x/core/#core-http2Server)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/http2Server.adoc  upstream_commit: 51650efcb97939ef02bf726bdcb28266b7ca20d1  upstream_hash: 33c303d48aae1be9bed14348938ca4378572f5c8  translated_at: 2026-11-21 -->
+
+自 Micronaut framework 2.x 起，基于 Netty 的 Micronaut HTTP 服务器可以配置为支持 HTTP/2。
+
+==== 为 HTTP/2 配置服务器
+
+第一步是在服务器配置中设置支持的 HTTP 版本：
+
+.启用 HTTP/2 支持
+[configuration]
+----
+micronaut:
+  server:
+    http-version: 2.0
+----
+
+使用此配置，Micronaut 框架会启用对 `h2c` 协议的支持（参见 https://httpwg.org/specs/rfc7540.html#discover-http[HTTP/2 over cleartext]），这在开发环境中足够了。
+
+由于浏览器不支持 `h2c`，通常需要 https://httpwg.org/specs/rfc7540.html#discover-https[HTTP/2 over TLS]（即 `h2` 协议），因此建议在生产环境中启用 <<https,HTTPS 支持>>。在开发环境中可以这样配置：
+
+.启用 `h2` 协议支持
+[configuration]
+----
+micronaut:
+  server:
+    http-version: 2.0
+    ssl:
+      enabled: true
+      buildSelfSigned: true
+----
+
+生产环境请参阅文档的 <<https,配置 HTTPS>> 一节。
+
+注意，如果您的部署环境使用 JDK 8，或为了更好地支持 OpenSSL，请定义以下 Netty Tomcat Native 依赖：
+
+dependency:io.netty:netty-tcnative:2.0.58.Final[scope="runtimeOnly"]
+
+dependency:io.netty:netty-tcnative-boringssl-static:2.0.58.Final[scope="runtimeOnly"]
+
+此外还需要依赖适合您架构的原生库。例如：
+
+.配置 Tomcat Native
+[source,groovy]
+----
+runtimeOnly "io.netty:netty-tcnative-boringssl-static:2.0.58.Final:${Os.isFamily(Os.FAMILY_MAC) ? (Os.isArch("aarch64") ? "osx-aarch_64" : "osx-x86_64") : 'linux-x86_64'}"
+----
+
+更多信息请参阅 https://netty.io/wiki/forked-tomcat-native.html[Tomcat Native] 文档。
+
+==== HTTP/2 服务器推送支持
+
+对服务器推送的支持已在 Micronaut framework 3.2 中添加。服务器推送允许单个请求触发多个响应。这最常用于基于浏览器的资源场景。其目标是改善客户端延迟，因为客户端不再需要手动请求该资源，可以节省一个往返。
+
+为支持该特性，创建了一个新接口 api:http.PushCapableHttpRequest[]。只需向控制器方法添加一个 api:http.PushCapableHttpRequest[] 参数，并使用其 API 触发额外的请求。
+
+NOTE: api:http.PushCapableHttpRequest[] 扩展自 api:http.HttpRequest[]，因此控制器方法中无需同时将两者作为参数。
+
+在触发额外请求之前，应调用 `isServerPushSupported()` 方法以确保该特性可用。确认支持该特性后，使用 `serverPush(HttpRequest)` 方法触发额外请求。例如：`request.serverPush(HttpRequest.GET("/static/style.css"))`）。

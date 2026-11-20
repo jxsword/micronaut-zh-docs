@@ -1,0 +1,4 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – HttpServerFilter Error States](https://docs.micronaut.io/5.2.x/core/#core-httpServerFilterErrorStates)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/filters/httpServerFilter/httpServerFilterErrorStates.adoc  upstream_commit: 28c03b94f70c18a2a760248f27136d5320101144  upstream_hash: b9b2aedc00f2b82c2d322f8eff3b3bded4804919  translated_at: 2026-11-21 -->
+
+从 `chain.proceed` 返回的发布者不应发出错误。在上游过滤器发出错误或路由本身抛出异常的情况下，应发出错误响应而不是异常。某些情况下，您可能希望了解错误响应的原因；为此，如果响应是因异常被发出或抛出而创建的，响应上会存在一个属性。原始原因存储在属性 api:http.HttpAttributes#EXCEPTION[] 中。

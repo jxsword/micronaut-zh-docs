@@ -1,0 +1,35 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Server Sent Events](https://docs.micronaut.io/5.2.x/core/#core-sse)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/sse.adoc  upstream_commit: 51650efcb97939ef02bf726bdcb28266b7ca20d1  upstream_hash: 77d5521d03d5ec55c5e949d67fa41237db6db899  translated_at: 2026-11-21 -->
+
+Micronaut HTTP 服务器支持使用 api:http.sse.Event[] API 发送 https://en.wikipedia.org/wiki/Server-sent_events[服务器发送事件（SSE）]。
+
+要从服务器发送事件，返回一个发出 api:http.sse.Event[] 类型对象的 Reactive Streams rs:Publisher[]。
+
+rs:Publisher[] 本身可以从后台任务、事件系统等发布事件。
+
+例如，设想一个新闻标题的事件流；您可以像下面这样定义一个数据类：
+
+snippet::io.micronaut.docs.server.sse.Headline[tags="class", indent=0,title="Headline"]
+
+要发送新闻标题事件，编写一个返回 api:http.sse.Event[] 实例的 rs:Publisher[] 的控制器，使用您喜欢的任何响应式库。下面的示例通过 `generate` 方法使用 https://projectreactor.io[Project Reactor] 的 reactor:Flux[]：
+
+snippet::io.micronaut.docs.server.sse.HeadlineController[tags="imports,class", indent=0,title="Publishing Server Sent Events from a Controller"]
+
+<1> 控制器方法返回 api:http.sse.Event[] 的 rs:Publisher[]
+<2> 为 Micronaut 的每个版本发出一个标题
+<3> reactor:Flux[] 类型的 `generate` 方法生成一个 rs:Publisher[]。`generate` 方法接受一个初始值和一个接受该值与 rx:Emitter[] 的 lambda。注意，本示例在与控制器 action 相同的线程上执行，但您可以使用 `subscribeOn` 或映射一个已有的「热」reactor:Flux[]。
+<4> rx:Emitter[] 接口的 `onNext` 方法发出 api:http.sse.Event[] 类型的对象。api:http.sse.Event.of(ET)[] 工厂方法构造该事件。
+<5> rx:Emitter[] 接口的 `onComplete` 方法指示何时结束发送服务器发送事件。
+
+NOTE: 您通常希望将 SSE 事件流调度到单独的执行器上。前面的示例使用 ann:scheduling.annotation.ExecuteOn[] 在 I/O 执行器上执行该流。
+
+上例返回类型为 `text/event-stream` 的响应，并且对每个发出的 api:http.sse.Event[]，之前的 `Headline` 类型都会被转换为 JSON，产生如下响应：
+
+.服务器发送事件响应输出
+[source,json]
+----
+ data: {"title":"Micronaut 1.0 Released","description":"Come and get it"}
+ data: {"title":"Micronaut 2.0 Released","description":"Come and get it"}
+----
+
+您可以使用 api:http.sse.Event[] 接口的方法自定义发回的 Server Sent Event 数据，包括关联事件 ID、注释、重试超时等。

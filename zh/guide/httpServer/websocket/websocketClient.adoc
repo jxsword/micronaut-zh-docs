@@ -1,0 +1,76 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Using @ClientWebSocket](https://docs.micronaut.io/5.2.x/core/#core-websocketClient)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/websocket/websocketClient.adoc  upstream_commit: 8c82ee03540bc11bc707c777c7ff4aa00d5be9d7  upstream_hash: 5e579e43eaf7333a051a592ecd71a0519b25cbc0  translated_at: 2026-11-21 -->
+
+ann:websocket.annotation.ClientWebSocket[] 注解可以与 api:websocket.WebSocketClient[] 接口一起使用来定义 WebSocket 客户端。
+
+您可以使用 ann:http.client.annotation.Client[] 注解注入 api:websocket.WebSocketClient[] 的引用：
+
+[source,java]
+----
+@Inject
+@Client("http://localhost:8080")
+WebSocketClient webSocketClient;
+----
+
+这让您可以为 WebSocket 客户端使用相同的服务发现与负载均衡特性。
+
+获得 api:websocket.WebSocketClient[] 接口的引用后，您可以使用 `connect` 方法获得一个已连接的、以 ann:websocket.annotation.ClientWebSocket[] 标注的 bean 实例。
+
+例如，考虑以下实现：
+
+snippet::io.micronaut.docs.http.server.netty.websocket.ChatClientWebSocket[tags="imports,class", indent=0,title="WebSocket Chat Example"]
+
+<1> 该类是抽象的（稍后详述），并以 ann:websocket.annotation.ClientWebSocket[] 标注
+<2> 客户端必须实现 `AutoCloseable`，并且您应确保在某个时刻关闭连接。
+<3> 您可以使用与服务器上相同的注解，此例中用 `@OnOpen` 获取底层会话的引用。
+<4> `@OnMessage` 注解定义接收来自服务器响应的方法。
+
+您还可以定义以 `send` 或 `broadcast` 开头的抽象方法，这些方法会在编译时为您实现。例如：
+
+.WebSocket 发送方法
+[source,java]
+----
+public abstract void send(String message);
+----
+
+注意，返回 `void` 告诉 Micronaut 框架该方法是一个阻塞发送。您也可以定义返回 future 或 rs:Publisher[] 的方法：
+
+.WebSocket 发送方法
+[source,java]
+----
+public abstract reactor.core.publisher.Mono<String> send(String message);
+----
+
+上例定义了一个返回 reactor:Mono[] 的发送方法。
+
+.WebSocket 发送方法
+[source,java]
+----
+public abstract java.util.concurrent.Future<String> sendAsync(String message);
+----
+
+上例定义了一个异步执行并返回 link:{jdkapi}/java.base/java/util/concurrent/Future.html[Future] 以访问结果的发送方法。
+
+定义客户端类后，您可以连接客户端 socket 并开始发送消息：
+
+.连接客户端 WebSocket
+[source,java]
+----
+ChatClientWebSocket chatClient = webSocketClient
+    .connect(ChatClientWebSocket.class, "/chat/football/fred")
+    .blockFirst();
+chatClient.send("Hello World!");
+----
+
+NOTE: 为便于说明，我们使用 `blockFirst()` 获取客户端。不过也可以组合 `connect` （它返回 reactor:Flux[]）通过 WebSocket 进行非阻塞交互。
+
+[TIP]
+.使用 CLI
+====
+如果您使用 Micronaut CLI 和默认（`service`）profile 创建项目，可以使用 `create-websocket-client` 命令创建一个带 api:websocket.WebSocketClient[] 的抽象类。
+
+----
+$ mn create-websocket-client MyChat
+| Rendered template WebsocketClient.java to destination src/main/java/example/MyChatClient.java
+----
+====

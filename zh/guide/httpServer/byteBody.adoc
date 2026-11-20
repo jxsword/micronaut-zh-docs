@@ -1,0 +1,13 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Advanced body access](https://docs.micronaut.io/5.2.x/core/#core-byteBody)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/byteBody.adoc  upstream_commit: c81e528d6cafb5080926e2c1c6784029ba022f00  upstream_hash: 0f35af7cba94cf31d0f49ce9f5659e9cfe444a86  translated_at: 2026-11-21 -->
+
+Micronaut HTTP 服务器 4.5.0 版引入了一个更新、更高级的 API，用于访问传入请求的字节。
+当 api:io.micronaut.http.HttpRequest[] 实现 api:io.micronaut.http.ServerHttpRequest[] 时，新的 `byteBody()`
+方法会返回一个 api:io.micronaut.http.body.ByteBody[]，它带有缓冲、响应式与阻塞式 API。
+
+当 HTTP 请求进入时，它最初以一个未解析且未被认领的字节流作为其 `byteBody()`。在
+所有请求过滤器运行之后，通常与控制器的 `@Body` 参数匹配的参数绑定器会
+「认领」`byteBody()`，例如解析 JSON。最后，请求体在请求生命周期结束时关闭，
+如果尚未被参数绑定器认领，则丢弃其中的任何数据。
+
+NOTE: api:http.filter.FilterBodyParser[] API 允许您获得请求体的 Map 表示，请求体的内容类型为 application/x-www-form-urlencoded 或 application/json。

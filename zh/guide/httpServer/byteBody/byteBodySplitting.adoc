@@ -1,0 +1,34 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Splitting](https://docs.micronaut.io/5.2.x/core/#core-byteBodySplitting)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/byteBody/byteBodySplitting.adoc  upstream_commit: 51fe0b42cf118c0d984f04f5ce5367446914b278  upstream_hash: 445f39704c8c7638c0ee3368df27751664ef3b4d  translated_at: 2026-11-21 -->
+
+由于框架默认不会将整个请求体缓冲在内存中，在 ByteBody 被认领（已执行主操作）之后，数据就「消失」了，同一个 ByteBody 不能再次被认领。这意味着如果某个过滤器直接认领 `ServerHttpRequest.byteBody()` （例如打印到日志），控制器将无法再访问它。`@Body` 参数的参数绑定器会抛出异常。
+
+为解决这一独占问题，可以在认领之前对 `ByteBody` 进行 _拆分_。拆分操作本质上是复制请求体流，使两个消费者（日志与参数绑定）可以独立处理它。请求体可以被 `split` 任意次，但只能在主操作之前。
+
+虽然 `ServerHttpRequest.byteBody()` 返回普通 `ByteBody`——如果请求体未被消费，清理由 HTTP 服务器完成——但 `split` 返回的请求体是 `CloseableByteBody`。调用者 *必须* 确保关闭新实例，否则可能出现资源与内存泄漏、连接停滞或其他问题。
+
+==== 背压
+
+当同一个输入数据流有两个消费者时，必然会出现背压协调问题。
+
+HTTP 服务器中的背压描述的是「下游」消费者无法以「上游」供应方（即发送请求的 HTTP 客户端）发送数据的速度消费数据时的行为。为避免缓冲大量传入数据，当下游消费者跟不上时，服务器会施加背压（让客户端更慢地发送数据）。
+
+`split` 操作会引入两个消费者。根据用例，处理每个下游消费者背压的方式可能不同。例如，如果两个消费者同时将请求体数据写入两个不同的文件，最好使用最慢消费者的背压以避免缓冲数据。而在另一个例子中，一个消费者是需要访问全部请求体数据的过滤器，另一个消费者是控制器，过滤器需要在控制器读取任何数据之前完成，因此我们应该以两个消费者中最快的一个为准。
+
+这两种方式正是最重要的两种
+api:io.micronaut.http.body.ByteBody.SplitBackpressureMode[]。全部选项如下：
+
+* `SplitBackpressureMode.SLOWEST` 使用两个消费者中 _最慢者_ 的背压（第一个示例）
+* `SplitBackpressureMode.FASTEST` 使用两个消费者中 _最快者_ 的背压（第二个示例）
+* `SplitBackpressureMode.ORIGINAL` 使用原消费者的背压（调用 `split()` 的那个）
+* `SplitBackpressureMode.NEW` 使用新消费者的背压（`split()` 返回的那个）
+
+无参的 `split()` 方法使用 `SLOWEST`，但您应选择最适合您用例的模式。
+
+==== 丢弃
+
+某些消费者最终可能不需要请求体。例如，如果一个 `POST` 请求无法匹配到控制器路由，则不需要请求体，可以将其丢弃。服务器如何实现丢弃取决于 HTTP 版本。对于 HTTP/1，服务器可能关闭连接或直接丢弃数据（这仍可以节省一些解压开销）。对于 HTTP/2，服务器可以关闭请求流的输入，指示客户端不再发送数据。
+
+存在多个消费者时，丢弃行为取决于用例。在上面未匹配请求的场景中，如果有一个过滤器也订阅了请求体数据，某些情况下丢弃请求可能是合适的（例如用于日志），而其他情况下可能仍需要接收全部数据。
+
+要向上游发出可以丢弃请求体的信号，您可以调用 `ByteBody.allowDiscard()`。只有当所有消费者都调用 `allowDiscard()` （或在主操作之前调用 `close()`）时，剩余数据才会真正被丢弃。在此之前，_所有_ 消费者——甚至调用了 `allowDiscard()` 的那些——仍会收到全部数据。对于日志用例，您可以调用 `allowDiscard()` 并放心：如果控制器需要请求体，您仍会记录完整的请求体。

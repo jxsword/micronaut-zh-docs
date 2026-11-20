@@ -1,0 +1,29 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – HTTP/3 Support](https://docs.micronaut.io/5.2.x/core/#core-http3Server)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/http3Server.adoc  upstream_commit: 65c241037edd6d5843c4f3356b33f67fe0f2d51c  upstream_hash: 44342079866c9a1cff60a408b1a2b7456373b62f  translated_at: 2026-11-21 -->
+
+[[http3Server]]
+自 Micronaut framework 4.x 起，基于 Netty 的 Micronaut HTTP 服务器可以配置为支持 HTTP/3。
+
+==== 为 HTTP/3 配置服务器
+
+与 HTTP/1.1 与 HTTP/2 使用的 TCP 不同，HTTP/3 运行在 UDP 上。要暴露 HTTP/3 服务器，您需要使用特殊的 `QUIC` 协议族定义一个 <<listener,监听器>>：
+
+.启用 HTTP/3 支持
+[configuration]
+----
+micronaut:
+  server:
+    netty:
+      listeners:
+        http3Listener:
+          family: QUIC
+          port: 8443
+----
+
+NOTE: 定义该监听器会禁用隐式的 TCP 监听器。您可以按照 <<listener,监听器一节>> 的说明手动添加它们。
+
+`micronaut.server.idle-timeout` 设置同样适用于 HTTP/3 连接（即 QUIC 的最大空闲超时 `max_idle_timeout`）。空闲 QUIC 连接会在超时后关闭。负值将禁用空闲超时。
+
+此外，类路径上需要有 Netty 的 HTTP/3 编解码器：
+
+dependency:micronaut-http-netty-http3[]

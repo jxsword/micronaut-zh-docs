@@ -1,0 +1,18 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Response Header Populators](https://docs.micronaut.io/5.2.x/core/#core-responseHeaderPopulator)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/filters/responseHeaderPopulator.adoc  upstream_commit: 16a56976c7dc7abe5d5bdd22c63c7f5948150498  upstream_hash: 86dab2035f3e27b34c93095c65f987f42489ce87  translated_at: 2026-11-21 -->
+
+api:http.server.filter.ResponseHeaderPopulator[] 接口提供了一种轻量级方式，无需实现完整的 api:http.filter.HttpServerFilter[] 即可添加响应头。
+
+将实现注册为 bean。`findHttpHeaders` 方法接收当前的 api:http.HttpRequest[] 与 api:http.HttpResponse[]，并返回要添加的请求头：
+
+snippet::io.micronaut.docs.server.filters.SecurityHeaderPopulator[tags="imports,clazz", indent=0, title="A ResponseHeaderPopulator example"]
+
+<1> `@Singleton` 注解将该 populator 注册为 bean。
+<2> `findHttpHeaders` 接收当前的请求与响应。
+<3> 每个 api:http.HttpHeaderEntry[] 包含一个响应头名称与值。
+
+HTTP 服务器会为每个响应调用每个 `ResponseHeaderPopulator`。当没有适用于该请求与响应的请求头时，返回 `null`。如果响应已包含某个返回的请求头，其现有值优先。
+
+`ResponseHeaderPopulator` 扩展自 api:core.order.Ordered[]。如果注册了多个 populator，可实现 `getOrder()` 来控制它们的调用顺序。
+
+Micronaut 对 Cross-Origin-Embedder-Policy 与 Cross-Origin-Resource-Policy 响应头的内置支持使用了响应头 populator。参见 <<corsCrossOriginEmbedderPolicy, Cross-Origin-Embedder-Policy>> 与 <<corsCrossOriginResourcePolicy, Cross-Origin-Resource-Policy>>。

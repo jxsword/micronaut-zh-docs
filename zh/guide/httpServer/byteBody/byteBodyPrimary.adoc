@@ -1,0 +1,12 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Primary operations](https://docs.micronaut.io/5.2.x/core/#core-byteBodyPrimary)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/byteBody/byteBodyPrimary.adoc  upstream_commit: 51fe0b42cf118c0d984f04f5ce5367446914b278  upstream_hash: 9b295e021e6be54cb56b8e8fa1f3474d3f24580f  translated_at: 2026-11-21 -->
+
+`ByteBody` 本身不提供对数据的直接访问。要开始处理，必须有一个 _主操作（primary operation）_，将请求体转换为可在应用编程模型中使用的另一种形式。
+
+普通 `ByteBody` 有两组流式主操作。`toInputStream()` 以常规 `InputStream` 的形式访问请求体。`toByteArrayPublisher()` 与 `toByteBufferPublisher()` 方法返回字节数组或 `ByteBuffer` 的响应式流。
+
+WARNING: `InputStream` 是阻塞 API，而 Netty 事件循环绝不能被阻塞。如果您希望使用 `InputStream` 读取请求体，请务必只在另一个线程上进行，或用 `@ExecuteOn(TaskExecutors.BLOCKING)` 标注您的过滤器。
+
+如果您需要完整访问请求体，`buffer()` 方法返回一个 `CompletableFuture`，在完整请求体收到后以 `AvailableByteBody` 完成。`AvailableByteBody` 还有几个更便捷的主操作：`toByteArray()`、`toByteBuffer()` 与 `toString(Charset)`。
+
+缓冲上限由 `micronaut.server.max-request-buffer-size` 属性中配置的字节数限制。

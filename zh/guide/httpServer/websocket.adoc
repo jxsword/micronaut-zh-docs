@@ -1,0 +1,8 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – WebSocket Support](https://docs.micronaut.io/5.2.x/core/#core-websocket)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/websocket.adoc  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360  upstream_hash: 927240b0baad3b85362b5ca86732a549d5981a5d  translated_at: 2026-11-21 -->
+
+Micronaut 框架为创建 WebSocket 客户端与服务器提供了专门支持。pkg:websocket.annotation[] 包包含用于定义客户端与服务器的注解。
+
+WARNING: 自 Micronaut Framework 4.0 起，`io.micronaut:micronaut-http-server` 不再传递依赖 `micronaut-websocket`。要使用 ann:websocket.annotation.ServerWebSocket[] 等注解，请将 `micronaut-websocket` 依赖添加到应用类路径：
+
+dependency::micronaut-websocket[]

@@ -1,0 +1,5 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – HTTP Sessions](https://docs.micronaut.io/5.2.x/core/#core-sessions)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/sessions.adoc  upstream_commit: d72b31f5129030dcadfff4fc2827278bdfbe0a59  upstream_hash: 12cc50c1d3a19c81f0453f76cb9295fd4b3272f4  translated_at: 2026-11-21 -->
+
+[[sessions]]
+关于在应用中支持 HTTP 会话（session）的信息，请参阅 link:{micronautsessiondocs}[Micronaut Session] 文档。
