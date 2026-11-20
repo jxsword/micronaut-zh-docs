@@ -1,0 +1,42 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Customizing Jackson Settings](https://docs.micronaut.io/5.2.x/core/#core-clientJackson)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpClient/clientAnnotation/clientJackson.adoc  upstream_commit: 39c74acd625cd5264dad23ce05d78a59e4786006  upstream_hash: a1f46232be4eec7c58768c49d3ff826a2718ff0d  translated_at: 2026-11-21 -->
+
+如前所述，Jackson 用于向 JSON 的消息编码。Micronaut HTTP 客户端配置并使用一个默认的 Jackson `ObjectMapper`。
+
+本节介绍 Jackson 特有的配置。如果您的代码应保持跨 Micronaut JSON 实现的可移植性，建议依赖 api:json.JsonMapper[] 而不是 Jackson 的 `ObjectMapper`。
+
+您可以在配置文件（例如 `application.yml`）中用 api:jackson.JacksonConfiguration[] 类定义的属性覆盖用于构造 `ObjectMapper` 的设置。
+
+例如，以下配置为 Jackson 启用缩进输出：
+
+.Jackson 配置示例
+[configuration]
+----
+jackson:
+  serialization:
+    indentOutput: true
+----
+
+但是，这些设置全局生效，既影响 HTTP 服务器渲染 JSON 的方式，也影响 HTTP 客户端发送 JSON 的方式。有鉴于此，有时提供客户端特定的 Jackson 设置会很有用。您可以通过客户端上的 ann:jackson.annotation.JacksonFeatures[] 注解实现。
+
+例如，以下代码片段取自 Micronaut 的原生 Eureka 客户端（它当然使用 Micronaut 的 HTTP 客户端）：
+
+.JacksonFeatures 示例
+[source,java]
+----
+@Client(id = EurekaClient.SERVICE_ID,
+        path = "/eureka",
+        configuration = EurekaConfiguration.class)
+@JacksonFeatures(
+    enabledSerializationFeatures = WRAP_ROOT_VALUE,
+    disabledSerializationFeatures = WRITE_SINGLE_ELEM_ARRAYS_UNWRAPPED,
+    enabledDeserializationFeatures = {UNWRAP_ROOT_VALUE, ACCEPT_SINGLE_VALUE_AS_ARRAY}
+)
+public interface EurekaClient {
+    ...
+}
+----
+
+Eureka 的 JSON 序列化格式使用 Jackson 的 `WRAP_ROOT_VALUE` 序列化特性，因此仅为该客户端启用。
+
+TIP: 如果 `JacksonFeatures` 提供的自定义能力不够，您还可以为 `ObjectMapper` 编写一个 api:context.event.BeanCreatedEventListener[]，并添加您需要的任何自定义。

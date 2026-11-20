@@ -1,0 +1,20 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – HTTP/3 Support](https://docs.micronaut.io/5.2.x/core/#core-clientHttp3)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpClient/clientHttp3.adoc  upstream_commit: 6434999218d31e77996cd0532788a1106eb6069b  upstream_hash: 1994a56e2b86aef2efcd3cc3df39f7f84a8e9cea  translated_at: 2026-11-21 -->
+
+[[clientHttp3]]
+自 Micronaut framework 4.x 起，基于 Netty 的 Micronaut HTTP 客户端可以配置为支持 HTTP/3。
+
+与 HTTP/1.1 和 HTTP/2 使用的 TCP 不同，HTTP/3 运行在 UDP 上。如果客户端为 `alpn-modes` 属性配置了特殊的 `h3` 值，客户端将自动改用基于 UDP 的 HTTP/3 而不是基于 TCP 的 HTTP/1.1 或 HTTP/2。目前，如果服务器不支持 HTTP/3，客户端无法回退到 TCP。
+
+.在客户端中启用 HTTP/3
+[configuration]
+----
+micronaut:
+  http:
+    client:
+      alpn-modes: [h3]
+----
+
+此外，类路径上需要有 Netty 的 HTTP/3 编解码器：
+
+dependency:micronaut-http-netty-http3[]

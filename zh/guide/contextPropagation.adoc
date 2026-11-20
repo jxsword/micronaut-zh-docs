@@ -1,0 +1,223 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Context propagation](https://docs.micronaut.io/5.2.x/core/#core-contextPropagation)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/contextPropagation.adoc  upstream_commit: 6434999218d31e77996cd0532788a1106eb6069b  upstream_hash: d63ca8b2633b619a21e3ca2807498623418d1bb6  translated_at: 2026-11-21 -->
+
+[[contextPropagation]]
+Micronaut 的传播上下文（Propagated Context）API 提供了一种单一、一致的方式，跨线程、reactor 与协程传递请求作用域数据，而无需直接依赖 `ThreadLocal`。
+
+=== PropagatedContext 的构建块
+
+核心类型是 api:core.propagation.PropagatedContext[]。它是一个不可变容器，持有任意数量的 api:core.propagation.PropagatedContextElement[] 实例。元素是您希望在下游可用的数据的轻量级描述——例如追踪标识符、安全信息或日志 MDC 的副本。由于上下文不可变，每次添加或移除元素时都会构建一个新实例：
+
+[source,java]
+----
+PropagatedContext base = PropagatedContext.getOrEmpty();
+PropagatedContext enriched = base.plus(new TraceIdContextElement(traceId));
+----
+
+如果元素需要与线程本地状态交互（例如更新 MDC），它还可以实现 api:core.propagation.ThreadPropagatedContextElement[]，这让 Micronaut 能够捕获之前的线程本地状态并在稍后恢复。当您希望暴露 JDK `ScopedValue` 时，实现 api:core.propagation.ScopedValuePropagatedContextElement[]，Micronaut 将在上下文传播期间自动绑定提供的 `ScopedValue` 与值。
+
+.实现 `ThreadPropagatedContextElement` 的 MDC 元素示例
+[source,java]
+----
+include::{testsuitejava}/propagation/MdcPropagationContext.java[tags="class"]
+----
+<1> 接受应传播的 MDC 状态。
+<2> 在 `updateThreadContext` 中将 MDC 状态推入当前线程。
+<3> 捕获之前的 MDC 以便恢复。
+<4> 作用域退出时恢复之前的 MDC 状态。
+
+NOTE: api:core.propagation.ThreadPropagatedContextElement[] 镜像了 Kotlin 的 `kotlinx.coroutines.ThreadContextElement` 的行为，使其易于与协程集成。
+
+NOTE: api:core.propagation.ScopedValuePropagatedContextElement[] 让您暴露现有的 `ScopedValue` 键，Micronaut 会在执行您的代码之前为每个元素应用 `ScopedValue.where(key, value)`。
+
+链式绑定多个 Scoped Value 的示例：
+
+[source,java]
+----
+class UserContextElement implements ScopedValuePropagatedContextElement<String> {
+
+    static final ScopedValue<String> USER_ID = ScopedValue.newInstance();
+
+    private final String userId;
+
+    UserContextElement(String userId) {
+        this.userId = userId;
+    }
+
+    @Override
+    public ScopedValue<String> scopedValue() {
+        return USER_ID;
+    }
+
+    @Override
+    public String scopedValueValue() {
+        return userId;
+    }
+
+    String currentUserId() {
+        return USER_ID.isBound() ? USER_ID.get() : null;
+    }
+}
+----
+
+要纯粹使用 JDK `ScopedValue` API 绑定并读取值：
+
+[source,java]
+----
+PropagatedContext context = PropagatedContext.getOrEmpty()
+    .plus(new UserContextElement("42"));
+
+String userId = context.propagate(() -> {
+    if (UserContextElement.USER_ID.isBound()) {
+        return UserContextElement.USER_ID.get();
+    }
+    return null;
+});
+----
+
+==== 混合示例：默认线程本地，启用时 Scoped Value
+
+有时您需要一个在两种传播模式下都能工作的元素。同时实现两个接口，可以在默认模式下更新 `ThreadLocal`，并在启用 Scoped Value 模式时自动绑定 `ScopedValue`：
+
+[source,java]
+----
+class RequestContextElement implements ScopedValuePropagatedContextElement<String>,
+        ThreadPropagatedContextElement<String> {
+
+    private static final ScopedValue<String> REQUEST_ID = ScopedValue.newInstance();
+    private static final ThreadLocal<String> THREAD_REQUEST_ID = new ThreadLocal<>();
+
+    private final String requestId;
+
+    RequestContextElement(String requestId) {
+        this.requestId = requestId;
+    }
+
+    String currentRequestId() {
+        return REQUEST_ID.isBound() ? REQUEST_ID.get() : THREAD_REQUEST_ID.get();
+    }
+
+    @Override
+    public ScopedValue<String> scopedValue() {
+        return REQUEST_ID;
+    }
+
+    @Override
+    public String scopedValueValue() {
+        return requestId;
+    }
+
+    @Override
+    public @Nullable String updateThreadContext() {
+        if (REQUEST_ID.isBound()) {
+            return null; // scoped value already in place
+        }
+        String previous = THREAD_REQUEST_ID.get();
+        THREAD_REQUEST_ID.set(requestId);
+        return previous;
+    }
+
+    @Override
+    public void restoreThreadContext(@Nullable String previous) {
+        if (previous == null && REQUEST_ID.isBound()) {
+            return; // we skipped thread local updates
+        }
+        if (previous == null) {
+            THREAD_REQUEST_ID.remove();
+        } else {
+            THREAD_REQUEST_ID.set(previous);
+        }
+    }
+}
+----
+
+当 Micronaut 以线程本地模式运行时，该元素透明地更新 `ThreadLocal`，因此 `currentRequestId()` 与现有集成继续兼容。如果切换到 Scoped Value 模式，会先发生 `ScopedValue` 绑定，`updateThreadContext()` 返回 `null`，并完全跳过 `ThreadLocal` 分支。
+
+snippet::io.micronaut.docs.propagation.MdcService[tags="createUser", indent=0, title="MDC propagation example"]
+
+IMPORTANT: 自 Micronaut Framework 4 起，运行时不再「捕获作用域中恰好存在的内容」。您需要负责通过 `PropagatedContext.getOrEmpty()` 获取当前上下文，添加元素，并显式传播得到的实例。
+
+=== 使用 `propagate(…)` 辅助方法
+
+获得上下文后，您可以使用某个辅助方法在该上下文的作用域内执行工作。每个辅助方法返回您传入的 lambda 的结果，在该 lambda 内部 `PropagatedContext.get()` （或 `getOrEmpty()`）为您提供传播的元素：
+
+[source,java]
+----
+PropagatedContext context = PropagatedContext.getOrEmpty()
+    .plus(new TraceIdContextElement(traceId));
+
+String response = context.propagate(() -> {
+    // Inside the lambda the context is bound
+    TraceIdContextElement element = PropagatedContext.get().get(TraceIdContextElement.class);
+    return downstream.callWith(element.traceId());
+}); // Supplier<T>
+
+context.propagate(() -> {
+    TraceIdContextElement element = PropagatedContext.get().get(TraceIdContextElement.class);
+    logger.debug("executed with propagated state {}", element.traceId());
+}); // Runnable
+
+Integer status = context.propagateCall(() -> client.status()); // Callable<T>
+----
+
+对于需要交接工作的情况——例如交给执行器——您还可以通过 `PropagatedContext.wrap(…)` 预包装 `Runnable`、`Callable` 或 `Supplier`。
+
+=== 默认线程本地传播与可选的 Scoped Values
+
+Micronaut Framework 5 默认面向 Java 25。自 Java 21 起，JDK 提供了 *Scoped Values* （`java.lang.ScopedValue`）作为经典线程本地变量的结构化替代。尽管 Scoped Values 在 Java 25 上可用，Micronaut 仍将 `thread-local` 作为默认传播模式，使需要线程本地状态的现有集成无需额外配置即可继续工作。
+
+Scoped Values 仍参与虚拟线程、强制良好定义的生命周期，并避免长时间运行的线程池在直接使用 `ThreadLocal` 时经常出现的意外泄漏。当您需要这些语义时，请显式将传播模式设置为 `scoped-value`。
+
+=== 除非必须使用线程本地传播，否则避免 try-with-resources
+
+api:core.propagation.PropagatedContext[] 接口暴露了 `propagate()` 方法，它返回一个可自动关闭的作用域，以便您使用 Java 的 try-with-resources 语法。lambda 辅助方法仍是首选方式：
+
+[source,java]
+----
+PropagatedContext context = PropagatedContext.getOrEmpty().plus(new CustomElement());
+context.propagate(() -> {
+    // work that needs the propagated state
+});
+----
+
+try-with-resources 模式的存在主要是为了需要 `ThreadLocal` 传播的遗留集成。只要可以，请改为调用前面展示的基于 lambda 的 `propagate(…)` 辅助方法之一——它们在两种传播模式下都能工作。只有当周围代码期望存在 `ThreadLocal` 时才回退到作用域 API。由于该作用域依赖线程本地状态，在模式为 `scoped-value` 时调用 `propagate()` 会抛出 `IllegalStateException`，提示您切换回线程本地支持。
+
+要全局启用 Scoped Value 模式（默认：`thread-local`），请设置 `micronaut.propagation`：
+
+[configuration]
+----
+micronaut:
+  propagation: scoped-value
+----
+
+或在应用引导期间以编程方式更改：
+
+[source,java]
+----
+import io.micronaut.context.annotation.Context;
+import io.micronaut.context.event.ContextStartedEvent;
+import io.micronaut.context.event.ApplicationEventListener;
+import io.micronaut.core.propagation.PropagatedContextConfiguration;
+
+@Context
+class ScopedValuePropagationListener implements ApplicationEventListener<ContextStartedEvent> {
+
+    @Override
+    public void onApplicationEvent(ContextStartedEvent event) {
+        PropagatedContextConfiguration.set(PropagatedContextConfiguration.Mode.SCOPED_VALUE);
+    }
+}
+----
+
+之后切换回线程本地模式只需调用 `PropagatedContextConfiguration.set(PropagatedContextConfiguration.Mode.THREAD_LOCAL);`。
+
+NOTE: 当您的集成只需要基于 lambda 的传播时，首选 `scoped-value`。Scoped Values 与虚拟线程无缝集成，表达状态仅存在于结构化作用域内的意图，并消除在无关请求之间泄漏 `ThreadLocal` 数据的风险。
+
+=== Scoped Values 不够用时
+
+某些集成仍需要 `ThreadLocal` 语义，因为它们的 API 暴露显式的「更新」回调，而不是接受一个在上下文作用域内执行的 lambda。在这些场景中，请在调用相关库之前将 Micronaut 的传播模式切换为 `thread-local`。常见示例包括：
+
+* **Kotlin 协程**——在装配自定义协程调度器或使用 `withContext` 时，运行时期望 Micronaut 调用 `MicronautPropagatedContext.updateThreadContext`。该 API 假定存在 `ThreadLocal`，因此协程传播激活时您必须在线程本地模式下运行。如果您在运行基于协程的代码时看到 `Scope propagation requires thread-local support`，请启用线程本地模式。
+* **Reactor 插桩**——某些 Micrometer/`ContextView` 桥接暴露的回调会从 `ThreadLocal` 拉取数据而不是接受 lambda。如果您的响应式管道依赖该行为，请配置线程本地传播以使状态可见。
+
+在关键代码段完成后，您可以将传播模式切换回 `scoped-value`，以重新获得结构化生命周期的益处。

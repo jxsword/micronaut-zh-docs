@@ -1,0 +1,6 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – HTTP Client Sample](https://docs.micronaut.io/5.2.x/core/#core-clientSample)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpClient/clientSample.adoc  upstream_commit: eb891b91ca2ab6aa90a1dd6dde328e8c354bacdb  upstream_hash: 28d6b657d12140b197c9613e044a698c14bc134e  translated_at: 2026-11-21 -->
+
+TIP: 请阅读 HTTP 客户端指南（https://guides.micronaut.io/micronaut-http-client/guide/index.html[Java]、
+https://guides.micronaut.io/micronaut-http-client-groovy/guide/index.html[Groovy]、
+https://guides.micronaut.io/micronaut-http-client-kotlin/guide/index.html[Kotlin]）——一份分步教程，了解更多。

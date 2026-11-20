@@ -1,0 +1,14 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Retry and Circuit Breaker](https://docs.micronaut.io/5.2.x/core/#core-clientRetry)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpClient/clientAnnotation/clientRetry.adoc  upstream_commit: 101feb709aa8b6d596555d3594f47b2f4292ea13  upstream_hash: 5f3b96638eb3383a16af4b0de051b088d2625bf3  translated_at: 2026-11-21 -->
+
+从故障中恢复对 HTTP 客户端至关重要，这正是 Micronaut 集成的 <<retry,重试通知>> 的用武之地。
+
+NOTE: 自 Micronaut Framework 4.0 起，以 ann:http.client.annotation.Client[] 标注的声明式客户端默认不再调用 fallback。要恢复之前的行为，请添加以下依赖并为任何声明式客户端标注 ann:retry.annotation.Recoverable[]。
+
+dependency::micronaut-retry[]
+
+您可以在任何 ann:http.client.annotation.Client[] 接口上声明 ann:retry.annotation.Retryable[] 或 ann:retry.annotation.CircuitBreaker[] 注解，重试策略将被应用，例如：
+
+snippet::io.micronaut.docs.annotation.retry.PetClient[tags="class", indent=0, title="Declaring @Retryable"]
+
+有关自定义重试的更多信息，请参阅 <<retry,重试通知>> 一节。

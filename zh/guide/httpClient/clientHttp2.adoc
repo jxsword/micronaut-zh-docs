@@ -1,0 +1,23 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – HTTP/2 Support](https://docs.micronaut.io/5.2.x/core/#core-clientHttp2)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpClient/clientHttp2.adoc  upstream_commit: 51650efcb97939ef02bf726bdcb28266b7ca20d1  upstream_hash: 04a0759f40b71de823b63f9a0cc868a9d5fe67bd  translated_at: 2026-11-21 -->
+
+默认情况下，Micronaut 的 HTTP 客户端配置为支持 HTTP 1.1。要启用 HTTP/2 支持，请在配置中设置支持的 HTTP 版本：
+
+.在客户端中启用 HTTP/2
+[configuration]
+----
+micronaut:
+  http:
+    client:
+      http-version: 2.0
+----
+
+或者在注入客户端时指定要使用的 HTTP 版本：
+
+.注入 HTTP/2 客户端
+[source,java]
+----
+@Inject
+@Client(httpVersion=HttpVersion.HTTP_2_0)
+ReactorHttpClient client;
+----

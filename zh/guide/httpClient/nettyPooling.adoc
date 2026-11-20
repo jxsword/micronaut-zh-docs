@@ -1,0 +1,23 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Connection pooling in the netty client](https://docs.micronaut.io/5.2.x/core/#core-nettyPooling)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpClient/nettyPooling.adoc  upstream_commit: ab21d0f116c82d0a078d1287aff2ad5f27fd3546  upstream_hash: 98582849f1b6da4246ba080710b6f3b1a21b2af6  translated_at: 2026-11-21 -->
+
+Netty 客户端使用 _连接池_ 在请求之间共享 HTTP 连接以提高效率。连接池按服务（您可以在 `@Client` 注解中配置的服务 ID）与按授权（authority，主机与端口）划分作用域，因此如果您配置例如最大连接数，指的是 _每台主机_ 的连接数。
+
+您可以通过 `micronaut.http.client.pool.\*` 属性配置连接池，或对特定服务通过 `micronaut.http.services.*.pool.*` 配置。服务继承全局连接池设置，为该服务设置的任何值都会覆盖全局值。下文仅提及简单属性名。
+
+HTTP/1.1 与 HTTP/2.0 连接分别处理与配置，因为后者可以在同一连接上处理多个并发请求。就连接池而言，HTTP/3 连接被视为 HTTP/2.0 连接。
+
+当发起一个请求时，它会被加入 _待处理请求队列_。该队列的最大大小由 `max-pending-acquires` 配置，默认无限制。超过限制时，请求会被拒绝。您还可以配置 `acquire-timeout` （默认无超时）。
+
+请求进入待处理请求队列后，会被分派到现有连接。如果所有连接都繁忙但仍有待处理请求，会决定是否创建新连接：
+
+* 待处理连接（即仍在建立中的连接）的最大数量不得超过 `max-pending-connections` （默认：4）。
+* 对于 HTTP/1.1，最大连接数不得超过 `max-concurrent-http1-connections` （默认无限制）。
+* 对于 HTTP/2.0，最大连接数不得超过 `max-concurrent-http2-connections` （默认：1）。
+* 待处理连接的数量至多与待处理请求的数量相同。
+
+HTTP 版本由连接池中已有的连接决定。如果连接池为空，两个限制都适用，因此默认情况下最初只打开一个连接。对于 HTTP/2.0，还有一个 `max-concurrent-requests-per-http2-connection` 设置，控制同一 HTTP/2.0 连接上可以同时运行多少个请求。
+
+注意，待处理连接在完全建立之前实际上并未与请求关联。待处理请求可能超时，但为它创建的连接仍会进入连接池，并可能被另一个请求使用。
+
+连接进入连接池后，有多种方式可能终止并退出连接池。在请求期间，连接可能遇到 `read-timeout` 配置的读取超时。当连接空闲（无请求）时，可以通过 `connection-pool-idle-timeout` 配置类似的读取超时。可以使用 `connect-ttl` 配置固定的最大连接寿命，之后连接将逐步关闭（不会发送新请求，并且连接会在所有请求完成后终止）。某些 HTTP 错误也可能出于安全考虑导致连接关闭。

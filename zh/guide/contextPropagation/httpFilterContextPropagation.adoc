@@ -1,0 +1,27 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – HTTP filters context propagation](https://docs.micronaut.io/5.2.x/core/#core-httpFilterContextPropagation)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/contextPropagation/httpFilterContextPropagation.adoc  upstream_commit: d781f7aafb91cef137f7362cf7267f3c99755942  upstream_hash: 299ac3d540e5d226b633ad0537a8143c7e1aedd6  translated_at: 2026-11-21 -->
+
+修改传播上下文是一个常见场景。通常，您希望扩展上下文以包含与请求相关的值。
+
+要使用非响应式 HTTP 过滤器 API，您需要添加方法参数 api:core.propagation.MutablePropagatedContext[]，并通过添加或移除现有元素来修改传播的上下文元素：
+
+.添加新 MDC 传播上下文元素的示例
+[source,java]
+----
+include::{testsuitejava}/propagation/MdcFilter.java[tags="class", indent=0]
+----
+
+链中的下一个过滤器将可以使用新的传播上下文。所有线程本地上下文元素将为下一个过滤器或控制器方法调用设置。
+
+要使用遗留的响应式 HTTP 过滤器，只需修改并传播绑定到以下链调用的上下文：
+
+.为响应式过滤器添加新 MDC 传播上下文元素的示例：
+[source,java]
+----
+include::{testsuitejava}/propagation/MdcLegacyFilter.java[tags="class", indent=0]
+----
+
+NOTE: 过滤器添加的上下文只覆盖 *在该过滤器运行之后* 发生的工作。
+请求中更早发出的框架日志语句——例如收到请求时——看不到它。
+普通服务器过滤器也在路由匹配之后运行，因此路由匹配也不在其覆盖范围内。
+如果您需要在路由匹配时就位上下文，请从以 api:http.server.annotation.PreMatching[] 标注的过滤器添加它。

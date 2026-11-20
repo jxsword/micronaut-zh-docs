@@ -1,0 +1,22 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Client Fallbacks](https://docs.micronaut.io/5.2.x/core/#core-clientFallback)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpClient/clientAnnotation/clientFallback.adoc  upstream_commit: 51650efcb97939ef02bf726bdcb28266b7ca20d1  upstream_hash: 8f4bcf25ca0f06ae436364f5d0e0982b7c69910e  translated_at: 2026-11-21 -->
+
+在分布式系统中，故障在所难免，最好提前做好准备并优雅地处理它。
+
+此外，在开发微服务时，通常会在单个微服务上工作，而项目所需的其他微服务并不可用。
+
+有鉴于此，Micronaut 框架提供了一种集成到 <<retry,重试通知>> 中的原生 fallback 机制，允许在失败时回退到另一个实现。
+
+使用 ann:retry.annotation.Fallback[] 注解，您可以声明一个客户端的 fallback 实现，在所有可能的重试耗尽时使用。
+
+实际上，该机制并不严格绑定于重试；您可以将任何类声明为 ann:retry.annotation.Recoverable[]，如果方法调用失败（或对于响应式类型，发出错误），将搜索以 `@Fallback` 标注的类。
+
+为了说明这一点，再次考虑之前声明的 `PetOperations` 接口。您可以定义一个在失败时被调用的 `PetFallback` 类：
+
+snippet::io.micronaut.docs.annotation.retry.PetFallback[tags="class", indent=0, title="Defining a Fallback"]
+
+TIP: 如果您只需要 fallback 来辅助针对外部微服务的测试，可以在 `src/test/java` 目录中定义 fallback，这样它们不会包含在生产代码中。如果您在没有 hystrix 的情况下使用 fallback，则必须在声明式客户端上指定 `@Recoverable(api = PetOperations.class)`。
+
+如上所示，fallback 不执行任何网络操作且非常简单，因此在外部系统宕机时会提供成功的结果。
+
+当然，fallback 的实际行为由您决定。例如，您可以实现一个在真实数据不可用时从本地缓存拉取数据的 fallback，并向运维人员发送有关停机的告警邮件或其他通知。

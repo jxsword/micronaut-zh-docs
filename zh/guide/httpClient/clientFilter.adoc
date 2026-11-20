@@ -1,0 +1,61 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – HTTP Client Filters](https://docs.micronaut.io/5.2.x/core/#core-clientFilter)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpClient/clientFilter.adoc  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360  upstream_hash: 662a05a19a201b1c6403f7f8abc1fc02cec658b6  translated_at: 2026-11-21 -->
+
+[[clientFilter]]
+通常，您需要在针对第三方 API 或调用另一个微服务的一组请求中包含相同的 HTTP 请求头或 URL 参数。
+
+为简化这一点，您可以定义 api:http.annotation.ClientFilter[] 类，它们应用于所有匹配的 HTTP 客户端请求。过滤器工作方式的细节在 <<filters,服务器过滤器文档>> 中描述。这里我们只展示一些客户端过滤器。
+
+例如，假设您想构建一个与 https://bintray.com/docs/api/[Bintray REST API] 通信的客户端。为每一个 HTTP 调用指定认证信息将非常繁琐。
+
+要解决此问题，您可以定义一个过滤器。以下是一个 `BintrayService` 示例：
+
+snippet::io.micronaut.docs.client.ThirdPartyClientFilterSpec[tags="bintrayApiConstants, bintrayService", indent=0]
+
+
+<1> 为 Bintray API 注入一个 link:{micronautreactorapi}/io/micronaut/reactor/http/client/ReactorHttpClient.html[ReactorHttpClient]
+<2> 组织（organization）可通过配置进行配置
+
+Bintray API 受保护。要进行认证，您需要为每个请求添加 `Authorization` 请求头。您可以修改 `fetchRepositories` 与 `fetchPackages` 方法为每个请求包含必要的 HTTP 请求头，但使用过滤器要简单得多：
+
+snippet::io.micronaut.docs.client.ThirdPartyClientFilterSpec[tags="bintrayFilter", indent=0]
+
+<1> 客户端过滤器可以只匹配路径的子集。
+<2> `username` 与 `token` 通过配置注入
+<3> `basicAuth` 方法包含 HTTP Basic 凭据
+
+现在，当您调用 `bintrayService.fetchRepositories()` 方法时，请求中会包含 `Authorization` HTTP 请求头。
+
+=== 向 ClientFilter 注入另一个客户端
+
+要创建 link:{micronautreactorapi}/io/micronaut/reactor/http/client/ReactorHttpClient.html[ReactorHttpClient]，Micronaut 框架需要解析所有 `ClientFilter` bean，这会在向 `ClientFilter` 实例注入另一个 link:{micronautreactorapi}/io/micronaut/reactor/http/client/ReactorHttpClient.html[ReactorHttpClient] 或 `@Client` bean 时造成循环依赖。
+
+为解决此问题，请使用 api:context.BeanProvider[] 接口向 `ClientFilter` 实例注入另一个 link:{micronautreactorapi}/io/micronaut/reactor/http/client/ReactorHttpClient.html[ReactorHttpClient] 或 `@Client` bean。
+
+以下示例实现了一个允许 https://cloud.google.com/run/docs/authenticating/service-to-service[Google Cloud Run 上服务间认证] 的过滤器，演示了如何使用 api:context.BeanProvider[] 注入另一个客户端：
+
+snippet::io.micronaut.docs.client.filter.GoogleAuthFilter[tags="class"]
+
+<1> api:context.BeanProvider[] 接口用于注入另一个客户端，避免循环引用
+<2> 使用 `Provider` 接口的 `get()` 方法获取客户端实例。
+
+=== 按注解匹配过滤器
+
+对于过滤器应应用于某个客户端而不论 URL 的情况，过滤器可以通过同时应用于过滤器与客户端的注解的存在来匹配。给定以下客户端：
+
+snippet::io.micronaut.docs.client.filter.BasicAuthClient[tags="class"]
+
+<1> `@BasicAuth` 注解应用于该客户端
+
+下面的过滤器将过滤该客户端的请求：
+
+snippet::io.micronaut.docs.client.filter.BasicAuthClientFilter[tags="class"]
+
+<1> 同一个注解 `@BasicAuth` 应用于过滤器
+<2> 通常 `@Filter` 注解使过滤器默认为单例。由于未使用 `@Filter` 注解，必须应用所需的作用域
+
+`@BasicAuth` 注解只是一个示例，可以替换为您自己的注解。
+
+snippet::io.micronaut.docs.client.filter.BasicAuth[tags="class"]
+
+<1> 自定义注解的唯一要求是必须存在 ann:http.annotation.FilterMatcher[] 注解

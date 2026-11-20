@@ -199,10 +199,10 @@ files:
 - file: guide/certificates.adoc
   blob_sha: 230e3d8e0907a77ce30923e0cae05b7ca58e7877
   size: 2831
-  status: missing
+  status: current
   zh: zh/guide/certificates.adoc
   paragraphs: 20
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: ae09525c20868251edcc602b1aeee750a4eff458
 - file: guide/cli.adoc
   blob_sha: 2f0d44dc4af39a041381a5a87534744a12d5b76b
@@ -295,10 +295,10 @@ files:
 - file: guide/cloud.adoc
   blob_sha: 5ef3d008266958e61ae984d4eff30b60db172d29
   size: 1174
-  status: missing
+  status: current
   zh: zh/guide/cloud.adoc
   paragraphs: 6
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/cloud/clientSideLoadBalancing.adoc
   blob_sha: 647dbbc44a94dbd9597fa0e19f8720ff0247e7d2
@@ -695,26 +695,26 @@ files:
 - file: guide/contextPropagation.adoc
   blob_sha: d63ca8b2633b619a21e3ca2807498623418d1bb6
   size: 10860
-  status: missing
+  status: current
   zh: zh/guide/contextPropagation.adoc
   paragraphs: 50
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 6434999218d31e77996cd0532788a1106eb6069b
 - file: guide/contextPropagation/httpFilterContextPropagation.adoc
   blob_sha: 299ac3d540e5d226b633ad0537a8143c7e1aedd6
   size: 1452
-  status: missing
+  status: current
   zh: zh/guide/contextPropagation/httpFilterContextPropagation.adoc
   paragraphs: 11
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: d781f7aafb91cef137f7362cf7267f3c99755942
 - file: guide/contextPropagation/reactorContextPropagation.adoc
   blob_sha: 3c909f97aa9789b101b5467dbdb1a0cb3a10d17a
   size: 2172
-  status: missing
+  status: current
   zh: zh/guide/contextPropagation/reactorContextPropagation.adoc
   paragraphs: 17
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 15119ba9ee63100091348d40eaffe708155b53ae
 - file: guide/httpClient.adoc
   blob_sha: 55eabc3e3a984be0c3790d3b161ba8bfacd0a7d6
@@ -751,26 +751,26 @@ files:
 - file: guide/httpClient/clientAnnotation/clientFallback.adoc
   blob_sha: 8f4bcf25ca0f06ae436364f5d0e0982b7c69910e
   size: 1924
-  status: missing
+  status: current
   zh: zh/guide/httpClient/clientAnnotation/clientFallback.adoc
   paragraphs: 10
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 51650efcb97939ef02bf726bdcb28266b7ca20d1
 - file: guide/httpClient/clientAnnotation/clientHeaders.adoc
   blob_sha: 02b9a784c0a650155b94afec96c015204cbbeee4
   size: 1249
-  status: missing
+  status: current
   zh: zh/guide/httpClient/clientAnnotation/clientHeaders.adoc
   paragraphs: 14
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 51650efcb97939ef02bf726bdcb28266b7ca20d1
 - file: guide/httpClient/clientAnnotation/clientJackson.adoc
   blob_sha: a1f46232be4eec7c58768c49d3ff826a2718ff0d
   size: 1962
-  status: missing
+  status: current
   zh: zh/guide/httpClient/clientAnnotation/clientJackson.adoc
   paragraphs: 14
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 39c74acd625cd5264dad23ce05d78a59e4786006
 - file: guide/httpClient/clientAnnotation/clientParameters.adoc
   blob_sha: 90453d601e8e5f385501a73ca180a6be4a9798a3
@@ -783,42 +783,42 @@ files:
 - file: guide/httpClient/clientAnnotation/clientRetry.adoc
   blob_sha: 5f3b96638eb3383a16af4b0de051b088d2625bf3
   size: 863
-  status: missing
+  status: current
   zh: zh/guide/httpClient/clientAnnotation/clientRetry.adoc
   paragraphs: 6
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 101feb709aa8b6d596555d3594f47b2f4292ea13
 - file: guide/httpClient/clientFilter.adoc
   blob_sha: 662a05a19a201b1c6403f7f8abc1fc02cec658b6
   size: 3906
-  status: missing
+  status: current
   zh: zh/guide/httpClient/clientFilter.adoc
   paragraphs: 26
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/httpClient/clientHttp2.adoc
   blob_sha: 04a0759f40b71de823b63f9a0cc868a9d5fe67bd
   size: 458
-  status: missing
+  status: current
   zh: zh/guide/httpClient/clientHttp2.adoc
   paragraphs: 8
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 51650efcb97939ef02bf726bdcb28266b7ca20d1
 - file: guide/httpClient/clientHttp3.adoc
   blob_sha: 1994a56e2b86aef2efcd3cc3df39f7f84a8e9cea
   size: 665
-  status: missing
+  status: current
   zh: zh/guide/httpClient/clientHttp3.adoc
   paragraphs: 7
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 6434999218d31e77996cd0532788a1106eb6069b
 - file: guide/httpClient/clientSample.adoc
   blob_sha: 28d6b657d12140b197c9613e044a698c14bc134e
   size: 313
-  status: missing
+  status: current
   zh: zh/guide/httpClient/clientSample.adoc
   paragraphs: 1
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: eb891b91ca2ab6aa90a1dd6dde328e8c354bacdb
 - file: guide/httpClient/httpClientImplementations.adoc
   blob_sha: 1ca30803a798ceaa296c5efe90cdfcbc3dea7117
@@ -919,10 +919,10 @@ files:
 - file: guide/httpClient/nettyPooling.adoc
   blob_sha: 98582849f1b6da4246ba080710b6f3b1a21b2af6
   size: 3045
-  status: missing
+  status: current
   zh: zh/guide/httpClient/nettyPooling.adoc
   paragraphs: 9
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: ab21d0f116c82d0a078d1287aff2ad5f27fd3546
 - file: guide/httpClient/proxyClient.adoc
   blob_sha: 10297e4fbdf899f53c93e0ecd0bd3ed67457449c

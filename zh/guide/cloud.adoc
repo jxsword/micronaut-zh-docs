@@ -1,0 +1,18 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Cloud Native Features](https://docs.micronaut.io/5.2.x/core/#core-cloud)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/cloud.adoc  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360  upstream_hash: 5ef3d008266958e61ae984d4eff30b60db172d29  translated_at: 2026-11-21 -->
+
+当今使用的大多数 JVM 框架在设计时云部署与微服务架构尚未兴起。使用这些框架构建的应用原本打算部署到传统 Java 容器中。因此，这些框架的云支持通常以附加组件的形式出现，而不是核心设计特性。
+
+Micronaut 框架从零开始就为构建面向云的微服务而设计。因此，许多通常需要外部库或服务的关键特性直接在您的应用本身中即可获得。借用当前业界最流行的时髦词来说，Micronaut 应用是「原生云原生」的。
+
+以下是直接集成到 Micronaut 运行时中的一些云相关特性：
+
+* 分布式配置
+* 服务发现
+* 客户端侧负载均衡
+* 分布式追踪
+* Serverless 函数
+
+Micronaut 框架中的许多特性深受 Spring 与 Grails 特性的启发。这是有意为之，可以帮助已经熟悉 Spring Cloud 等系统的开发者。
+
+以下小节介绍这些特性及其使用方法。

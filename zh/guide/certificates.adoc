@@ -1,0 +1,102 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Certificate providers](https://docs.micronaut.io/5.2.x/core/#core-certificates)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/certificates.adoc  upstream_commit: ae09525c20868251edcc602b1aeee750a4eff458  upstream_hash: 230e3d8e0907a77ce30923e0cae05b7ca58e7877  translated_at: 2026-11-21 -->
+
+[[certificates]]
+== 证书提供者
+
+证书提供者让 TLS 密钥与信任材料如何提供给框架得以外部化。每个提供者都是一个具名 bean，可以从服务器与客户端 SSL 配置中引用，使用：
+
+- `micronaut.server.ssl.key-name` / `micronaut.server.ssl.trust-name`
+- `micronaut.http.client.ssl.key-name` / `micronaut.http.client.ssl.trust-name`
+
+Micronaut 自带三种提供者类型：
+- 基于文件：从磁盘上的文件加载，支持自动重载
+- 基于资源：从 Micronaut 资源加载类路径（classpath:）、文件（file:）、字符串（string:）与 base64: 等位置
+- 自签名：生成临时证书（测试/开发）
+
+== 基于文件的提供者（密钥与证书分离的 PEM，自动刷新）
+
+文件提供者从磁盘加载私钥与证书链，并可以在文件变化时自动重载。
+
+[configuration]
+----
+micronaut:
+  ssl:
+    enabled: true
+  server:
+    ssl:
+      # Use the named provider "cert-a" for the server's key/cert
+      key-name: cert-a
+      key:
+        password: ""
+  http:
+    client:
+      ssl:
+        # Trust the same material for the client
+        trust-name: cert-a
+
+  certificate:
+    file:
+      cert-a:
+        format: pem
+        path: /path/to/server.key.pem
+        certificate-path: /path/to/server.crt.pem
+----
+
+== 基于资源的提供者（内联 PEM 与仅证书信任库）
+
+资源提供者从任意 Micronaut 资源位置加载材料。
+
+[configuration]
+----
+micronaut:
+  ssl:
+    enabled: true
+  server:
+    ssl:
+      key-name: cert-a
+  http:
+    client:
+      ssl:
+        trust-name: trust-a
+  certificate:
+    resource:
+      cert-a:
+        resource: "string:-----BEGIN PRIVATE KEY-----\n...base64...\n-----END PRIVATE KEY-----\n-----BEGIN CERTIFICATE-----\n...base64...\n-----END CERTIFICATE-----\n"
+      trust-a:
+        resource: "string:-----BEGIN CERTIFICATE-----\n...base64...\n-----END CERTIFICATE-----\n"
+----
+
+对于 JKS/PKCS12，您可以通过 base64:... 内嵌二进制内容。例如：resource: "base64:<base64 编码的 .p12/.jks 字节>"，并按要求设置密码。
+
+== 自签名提供者
+
+自签名提供者生成临时证书。它需要 netty-pkitesting 依赖：
+
+dependency:io.netty:netty-pkitesting[scope="runtimeOnly"]
+
+[configuration]
+----
+micronaut:
+  ssl:
+    enabled: true
+  server:
+    ssl:
+      key-name: cert-server
+      trust-name: cert-client
+      client-authentication: need
+  http:
+    client:
+      ssl:
+        key-name: cert-client
+        trust-name: cert-server
+
+  certificate:
+    self-signed:
+      cert-server: {}
+      # Second provider with a custom subject
+      cert-client:
+        subject: "CN=foo"
+----
+
+对于 Netty 服务器的每监听器 SSL，您还可以在 `micronaut.server.netty.listeners.<listener>.ssl` 下设置 `key-name` 与 `trust-name`。

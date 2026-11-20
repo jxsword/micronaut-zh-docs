@@ -1,0 +1,32 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Customizing Request Headers](https://docs.micronaut.io/5.2.x/core/#core-clientHeaders)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpClient/clientAnnotation/clientHeaders.adoc  upstream_commit: 51650efcb97939ef02bf726bdcb28266b7ca20d1  upstream_hash: 02b9a784c0a650155b94afec96c015204cbbeee4  translated_at: 2026-11-21 -->
+
+自定义请求头值得特别一提，因为有多种方式可以实现。
+
+== 通过配置填充请求头
+
+ann:http.annotation.Header[] 注解可以声明在类型级别，并且是可重复的，因此可以通过注解元数据经由配置驱动发送的请求头。
+
+下面的示例用于说明这一点：
+
+snippet::io.micronaut.docs.annotation.headers.PetClient[tags="class", indent=0, title="Defining Headers via Configuration"]
+
+上例在 `PetClient` 接口上定义了一个 ann:http.annotation.Header[] 注解，它使用属性占位符配置读取 `pet.client.id` 属性。
+
+然后在配置文件（例如 `application.yml`）中设置以下内容来填充该值：
+
+.配置请求头
+[configuration]
+----
+pet:
+  client:
+    id: foo
+----
+
+或者，您也可以提供 `PET_CLIENT_ID` 环境变量，值将被填充。
+
+== 使用客户端过滤器填充请求头
+
+或者，要动态填充请求头，另一种选择是使用 <<clientFilter,客户端过滤器>>。
+
+有关编写客户端过滤器的更多信息，请参阅指南的 <<clientFilter,客户端过滤器>> 一节。
