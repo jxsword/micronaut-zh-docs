@@ -1,0 +1,476 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Breaking Changes](https://docs.micronaut.io/5.2.x/core/#core-breaks)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/appendix/breaks.adoc  upstream_commit: a581aacc9a1028be57776a3fb6a75071611e7b3c  upstream_hash: 0e1946d8bab7f181bf11b929de2a93688ac9ba09  translated_at: 2026-11-21 -->
+
+
+本节记录 Micronaut 各版本之间的破坏性变更。
+
+[[breaks]]
+=== 反射分发的可执行方法会传播方法自身的异常
+
+生成的代码无法直接调用的可执行方法——例如标注了 `@Executable` 与 `@ReflectiveAccess` 的 `private` 方法——会经由反射分发。此前，`ExecutableMethod.invoke` 会把这类方法抛出的任何异常包装进 api:core.reflect.exception.InvocationException[]（以 `java.lang.reflect.InvocationTargetException` 为其原因），而同一方法若声明为包私有或 public 则会抛出其自身的异常。
+
+现在，反射分发的方法会原样传播方法自身的异常（包括受检异常），与直接分发的方法一致。对调用自身某个私有可执行方法的拦截器，以及被拦截 bean 的私有 `@PostConstruct` 或 `@PreDestroy` 回调，同样如此。当反射调用本身在方法运行之前失败（例如非法访问）时，仍会抛出 `InvocationException`。bean 内省不受影响：经反射分发的私有属性访问器仍会把它抛出的内容包装进 `InvocationException`。
+
+此前捕获 `InvocationException` 以解包其原因的代码，应改为捕获方法自身的异常。普通可执行方法分发行为对以 Micronaut 5.2.1 或更高版本编译的类发生变化：用更早版本编译的 bean 定义在重新编译之前保持既有行为。被拦截的生命周期回调是例外，因为 AOP 运行时会自行解包异常：私有 `@PostConstruct` 或 `@PreDestroy` 回调的拦截器会看到回调自身的异常（包括受检异常），即使 bean 定义是用更早版本编译的。
+
+=== HTTP 客户端重定向转发默认不再跨源保留授权头
+
+Netty HTTP 客户端默认不再在跨源重定向时转发 `Authorization`、`Proxy-Authorization` 或 `Cookie` 头。
+这一变化同时适用于普通重定向与保留主体重定向（`307` 与 `308`）。
+
+如有需要，可以通过 `HttpClientConfiguration` 定制此行为。
+
+=== 头部值不再允许包含 U+00FF 以上的字符
+
+`SimpleHttpHeaders` （及其背后的 `CaseInsensitiveMutableHttpHeaders`，当 Netty 不在类路径上时使用）现在会对包含 `U+00FF` 以上字符的头部值抛出 `IllegalArgumentException` 而拒绝之。
+
+RFC 7230 将头部值定义在字节（octet）之上——即 `field-vchar = VCHAR / obs-text`，其中 `obs-text` 为 `%x80-FF`——因此无法表示为单个字节的字符不是合法的头部值。此前这类值会被接受，再由发送它的传输层以不一致的方式处理：Netty 会把每个违规字符替换为 `?`，而 JDK HTTP 客户端会从其自身的请求构建器抛出异常。现在该值会在设置处被拒绝，并指明头部名与违规索引。
+
+`%x80-FF` 中的字符不受影响、仍然合法，因此使用 Latin-1 带重音字符的 `Content-Disposition` 文件名可继续工作。只有 `U+00FF` 以上的字符——例如 CJK 文本或 emoji——才会被拒绝，而它们在线路上本来就已被替换为 `?`。
+
+== 5.0
+
+=== 核心变更
+
+==== 重复的配置资源默认快速失败
+
+在 Micronaut 框架 5 中，如果 `application.properties` 或 `application.yml` 之类的配置文件在类路径上出现多次，Micronaut 默认会快速失败，并抛出 api:io.micronaut.context.exceptions.ConfigurationException[] 描述冲突位置。
+
+更多选项（包括合并重复项）请参阅 <<duplicateConfigurationResources,重复配置资源>>。
+
+要恢复既有行为（首个匹配者胜出），请配置应用上下文构建器：
+
+snippet::io.micronaut.docs.context.env.ConfigurationLoadStrategySnippet[tags="restoreFirstMatch",indent=0,title="Restoring FIRST_MATCH behavior"]
+
+==== 采用 IANA 的 YAML 媒体类型标准
+
+Micronaut 现在对 YAML 格式使用官方的 **application/yaml** 媒体类型。此前为 **application/x-yaml**。
+详情参见 https://www.rfc-editor.org/rfc/rfc9512.html。
+
+==== 升级到 Jackson 3
+
+Micronaut Jackson Databind 使用 https://github.com/FasterXML/jackson/wiki/Jackson-Release-3.0[Jackson 3]。
+如果您使用 Micronaut Jackson Databind，请查阅 https://github.com/FasterXML/jackson/blob/main/jackson3/MIGRATING_TO_JACKSON_3.md[Jackson 3 迁移指南]。
+
+Micronaut 中各 Jackson 特性的配置属性已重命名。请查阅 https://docs.micronaut.io/latest/guide/configurationreference.html#io.micronaut.jackson.JacksonConfiguration[配置参考]。另请注意 Jackson 在上游重命名了一些特性，且多项默认值发生了变化。
+
+==== 升级到 Apache Groovy 5
+
+Micronaut 5 使用 http://groovy-lang.org/releasenotes/groovy-5.0.html[Apache Groovy 5]。
+请查阅 https://groovy-lang.org/releasenotes/groovy-5.0.html#Groovy5.0-breaking[Groovy 5 破坏性变更]。
+
+==== JSpecify 可空性注解
+
+Micronaut API 使用 https://jspecify.dev[JSpecify] 注解，我们建议用户拥抱 JSpecify 可空性注解。
+
+==== Bean 上下文变更
+
+api:context.BeanContext[BeanContext]、api:context.ApplicationContext[ApplicationContext] 与 api:context.env.Environment[Environment] 的默认实现不再是 public 且非 final 的。
+
+api:context.ApplicationContextBuilder[ApplicationContextBuilder] 新增了若干选项，可以在不重写 bean 上下文的情况下修改其行为：
+
+[source,java]
+----
+ApplicationContext myBootstrapContext = ApplicationContext.builder()
+    .deducePackage(false)
+    .deduceEnvironment(false)
+    .eventsEnabled(false)
+    .eagerBeansEnabled(false)
+    .beansPredicate(reference -> reference.isAnnotationPresent(BootstrapContextCompatible.class))
+    .build();
+----
+
+另外，还有一种创建 api:context.env.Environment[Environment] 的新方式：
+
+[source,java]
+----
+Environment myEnv = Environment.create(new ApplicationContextConfiguration() {
+    @Override
+    public List<String> getEnvironments() {
+        return List.of("foobar");
+    }
+});
+
+ApplicationContext customApplicationContext = ApplicationContext.create(myEnv);
+
+----
+
+==== Bean 上下文性能改进
+
+v5 中的 bean 上下文尽可能避免扫描全部可用 bean。
+现在生成的 bean 定义带有全部可能的暴露类型（除非通过 `@Bean(typed=..)` 显式定义）。
+
+在运行时添加的 bean 需要显式定义全部暴露类型（父类型与接口）：
+
+[source,java]
+----
+class FooBar extends Abc implements Resolver<String> {
+}
+
+// In v4 this registration will resolve beans by class FooBar, Abc and Resolver
+beanContext.registerSingleton(new FooBar());
+
+// In v5 it is necessary to register it in the following way:
+context.registerBeanDefinition(
+    RuntimeBeanDefinition.builder(new FooBar())
+        .singleton(true)
+        .exposedTypes(FooBar.class, Abc.class, Resolver.class)
+        .typeArguments(Resolver, Argument.of(String))
+        .build()
+);
+----
+
+==== 运行时注解处理器变更
+
+`@Executable` 方法处理器 api:context.processor[ExecutableMethodProcessor] 只应用于处理需要在启动时处理的可执行方法。该注解应以 `@Executable(processOnStartup = true)` 标注。其他用例（无论是否可执行）应使用 api:context.processor[BeanDefinitionProcessor]。
+
+错误使用将产生警告，并在下一个大版本中成为错误。
+
+两个接口都经过重新审视以获得更好的泛型，并且不再有已删除的 `AnnotationProcessor` 父类。
+
+以 `@Parallel` 标注的可执行方法不会再触发 api:context.processor[ExecutableMethodProcessor] 的并行执行。依赖该功能的用户应自行单独处理并行性。
+
+`@Scheduled` 不再被并行处理，这降低了方法处理器的复杂度并移除了不必要的开销。
+
+==== HTTP 服务器线程选择现适用于更多请求阶段
+
+Micronaut 5 扩展了服务器 `thread-selection` 处理的范围，使其不仅适用于路由执行，还适用于服务器过滤器与请求事件监听器。
+
+因此，以前在过滤器、事件监听器与控制器中观察到不同线程的应用，现在可能看到这些阶段在服务器配置所选的执行器上更加一致地执行。
+
+`micronaut.server.netty.redispatch-non-blocking-only` 设置现在控制：当请求处理已从初始的非阻塞事件循环线程转移到具备阻塞能力的线程之后，Micronaut 是否再次重新分发：
+
+* `true` 表示执行已在具备阻塞能力的线程上时跳过重复的重新分发。这减少了执行器跳转，避免为每个过滤器、事件监听器与控制器阶段创建额外的虚拟线程。
+* `false` 表示即使当前线程已具备阻塞能力，也在每个阶段应用已配置的执行器。这更接近既有行为，但可能引入更多线程跳转；使用虚拟线程时，单个请求期间会创建更多虚拟线程。
+
+如果您的应用依赖过滤器、事件监听器与路由处理器之间的特定线程流转，请在升级后检查此设置并测试请求处理行为。
+
+==== 移除 Jackson Bean 内省模块
+
+NOTE: 此变更只影响使用 <<serializationUsingJacksonDatabind,Micronaut Jackson Databind>> 的用户
+
+Micronaut Core 的先前版本包含一个所谓的「bean 内省模块」。该 Jackson 模块接入 jackson-databind，把反射式字段与方法访问替换为基于 Micronaut 内省的调用。性能差异可以忽略，但该模块让原生镜像中的序列化无需添加反射元数据。
+
+在版本 5 中，我们因维护困难移除了该模块。原生镜像用户现在有 https://micronaut-projects.github.io/micronaut-serialization/latest/guide[Micronaut Serialization] 作为 <<serializationUsingJacksonDatabind,Micronaut Jackson Databind>> 的良好替代。
+
+不愿使用 Micronaut Serialization 的用户需要为其序列化的对象添加反射元数据。
+
+如果您想继续使用 <<serializationUsingJacksonDatabind,Micronaut Jackson Databind>>，请注意：在 Micronaut 4 中，如下类的反序列化可以工作：
+
+[source, java]
+----
+package example;
+
+import java.util.Objects;
+
+public class Person {
+    private final String name;
+    private final int age;
+
+    public Person(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+}
+----
+
+在 Micronaut 5 中，您需要为构造器参数添加 `@JsonProperty` 注解。这是 Jackson databind 反序列化的标准行为。
+
+[source, java]
+----
+package example;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.util.Objects;
+
+public class Person {
+    private final String name;
+    private final int age;
+
+    public Person(@JsonProperty("name") String name,
+                  @JsonProperty("age") int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+}
+----
+
+要生成需要对此类进行反/序列化的 GraalVM Native Image，可以添加以下依赖：
+
+dependency:micronaut-graal[scope="annotationProcessor",groupId="io.micronaut.graal"]
+
+并用 api:core.annotation.ReflectiveAccess[] 标注它。请阅读 Micronaut core 文档的 <<graal,Graal>> 章节。
+
+
+[source, java]
+----
+package example;
+
+import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import io.micronaut.core.annotation.ReflectiveAccess;
+
+@ReflectiveAccess
+public class Person {
+    private final String name;
+    private final int age;
+
+    public Person(@JsonProperty("name") String name,
+                  @JsonProperty("age") int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+}
+----
+
+== 4.0.0
+
+=== 核心变更
+
+==== Micronaut 进一步模块化
+
+`micronaut-runtime` 模块已按应用用例拆分为独立模块：
+
+===== Micronaut Discovery Core（服务发现核心模块）
+
+`micronaut-discovery-core` - 基础服务发现特性现在是独立模块。如果您的应用监听 api:discovery.event.ServiceReadyEvent[] 或 api:health.HeartBeatEvent[] 等事件，应把该模块加入应用类路径。
+
+dependency::micronaut-discovery-core[]
+
+===== Micronaut Retry（重试模块）
+
+`micronaut-retry` - 包含 ann:retry.annotation.Retryable[] 等注解的重试实现现在是独立模块，可在 Micronaut 应用中选用。
+
+此外，由于 `micronaut-retry` 成为可选模块，以 ann:http.client.annotation.Client[] 标注的声明式客户端默认不再调用 fallback。要恢复既有行为，请把 `micronaut-retry` 加入类路径，并用 ann:retry.annotation.Recoverable[] 标注相应声明式客户端。
+
+要使用 Retry 功能，请添加以下依赖：
+
+dependency::micronaut-retry[]
+
+==== 调用 `registerSingleton(bean)` 不再覆盖既有 bean
+
+在 api:context.BeanContext[] 上调用 `registerSingleton(bean)` 时，如果类型与限定符匹配，它将不再覆盖既有 bean；取而代之的是两个 bean 同时存在，可能导致 api:context.exceptions.NonUniqueBeanException[]。
+
+如果您需要替换既有 bean，必须使用 api:context.RuntimeBeanDefinition[] API 正式声明替换，例如：
+
+[source,java]
+----
+context.registerBeanDefinition(
+    RuntimeBeanDefinition.builder(Codec.class, ()-> new OverridingCodec())
+            .singleton(true)
+            // the type of the bean to replace
+            .replaces(ToBeReplacedCodec.class)
+            .build()
+);
+----
+
+==== WebSocket 不再被传递引入
+
+`io.micronaut:micronaut-http-server` 不再传递暴露 `micronaut-websocket`。如果您使用 ann:websocket.annotation.ServerWebSocket[] 之类的注解，应把 `micronaut-websocket` 依赖加入应用类路径：
+
+dependency::micronaut-websocket[]
+
+==== Reactor 插桩移至 Reactor 模块
+
+Reactor 的插桩特性已移至 `micronaut-reactor` 模块。如果您需要对响应式代码路径的插桩（例如用于分布式追踪），请确保应用依赖 `micronaut-reactor`：
+
+dependency:micronaut-reactor[groupId="io.micronaut.reactor"]
+
+
+==== 校验支持移至 Validation 模块
+
+校验特性 link:{micronautvalidationdocs}[已移至独立模块]。此外，新的校验模块要求在注解处理器类路径中使用 `micronaut-validation-processor`。
+
+dependency:micronaut-validation-processor[groupId="io.micronaut.validation",scope="annotationProcessor"]
+
+dependency:micronaut-validation[groupId="io.micronaut.validation"]
+
+==== 会话支持移至 Session 模块
+
+会话处理特性 link:{micronautsessiondocs}[已移至其独立模块]。如果您使用 HTTP 会话模块，请把 Maven 坐标从 `io.micronaut:micronaut-session` 改为 `io.micronaut.session:micronaut-session`。
+
+dependency:micronaut-session[groupId="io.micronaut.session"]
+
+==== Kotlin Flow 支持移至 Kotlin 模块
+
+对 Kotlin `Flow` 类型的支持已移至 `micronaut-kotlin` 模块。如果您的应用使用 Kotlin `Flow`，应确保 `micronaut-kotlin-runtime` 模块在应用类路径上：
+
+dependency:micronaut-kotlin-runtime[groupId="io.micronaut.kotlin"]
+
+==== 编译期 API 拆分为新模块
+
+为了保持运行时精简，所有仅在编译期使用的类型与接口（如 `io.micronaut.inject.ast` API）已移入独立模块：
+
+dependency:micronaut-core-processor[]
+
+如果您使用了该模块中的类型与接口，应注意把模块的编译期逻辑与运行时逻辑拆分到独立模块中。
+
+==== ASM 不再被 shade
+
+https://asm.ow2.io/[ASM] 不再被 shade 进 `io.micronaut.asm` 包。如果您依赖该库，应直接依赖最新版本的 ASM。
+
+==== Caffeine 不再被 shade
+
+https://github.com/ben-manes/caffeine[Caffeine] 不再被 shade 进 `io.micronaut.caffeine` 包。如果您依赖该库，应直接依赖最新版本的 Caffeine。
+
+==== 环境推断默认禁用
+
+在 Micronaut 框架的先前版本中，框架使用探测来尝试推断运行环境并判断应用是否运行在云中。这些探测涉及网络调用，导致启动性能问题与安全隐患。这些探测默认禁用；如果应用仍需要该功能，可通过调用 `ApplicationContextBuilder.deduceCloudEnvironment(true)`、把系统属性 `micronaut.env.cloud-deduction` 设为 `true`，或把环境变量 `MICRONAUT_ENV_CLOUD_DEDUCTION` 设为 `true` 按需重新启用。
+
+==== 升级到 Groovy 4
+
+Micronaut 现在使用 Groovy 4。
+这意味着 Groovy 4 现在是运行 Groovy Micronaut 应用所需的最低版本。
+Groovy 在版本 4 的解析与行为上有若干核心差异，详见 https://groovy-lang.org/releasenotes/groovy-4.0.html[4.0.0 发布说明] 的破坏性变更章节。
+
+==== SnakeYAML 不再是直接依赖
+
+SnakeYAML 不再是直接依赖；如果需要 YAML 配置，应显式把 SnakeYAML 加入类路径
+
+==== `javax.annotation` 不再是目录依赖
+
+`javax.annotation` 库不再是目录依赖。对 `javax.anotation` 包中类型的任何引用都应改为 `jakarta.annotation`
+
+==== Kotlin 基础版本更新至 1.8.21
+
+Kotlin 已更新至 1.8.21，这可能在编译或链接 Kotlin 库时引发问题。
+
+==== Bean 内省变更
+
+此前当 METHOD 与 FIELD 同时设为访问类别时，bean 内省会用相同的访问类别获取与设置属性值。在 Micronaut 4 中，访问器可以是不同类别：用字段获取、用方法设置，反之亦然。
+
+==== 保留策略为 CLASS 的注解在运行时被排除
+
+保留策略为 CLASS 的注解在运行时的注解元数据中不可用。
+
+==== 带多个拦截器绑定注解的拦截器
+
+带多个拦截器绑定注解的拦截器现在要求被拦截点存在同一组注解。在 Micronaut 3 中，带多个绑定注解的拦截器只需其中至少一个绑定注解存在于被拦截点即可。
+
+==== `ConversionService` 与 `ConversionService.SHARED` 不再可变
+
+新的类型转换器可以添加到从 bean 上下文获取的 api:core.convert.MutableConversionService[]，或通过声明 api:core.convert.TypeConverter[] 类型的 bean 添加。
+要把类型转换器注册进 `ConversionService.SHARED`，需经服务加载器完成注册。
+
+==== 带有 POJO 响应类型的 `ExceptionHandler` 不再产生错误响应
+
+此前如果您有如下 ExceptionHandler：
+
+[source,java]
+----
+@Singleton
+public class MyExceptionHandler implements ExceptionHandler<MyException, String> {
+
+    @Override
+    public String handle(HttpRequest request, MyException exception) {
+        return "caught!";
+    }
+}
+----
+
+这会产生以 `caught!` 为主体（body）的内部服务器错误响应。
+现在它返回 OK 响应。
+如果想以 POJO 作为错误响应返回，应使用 `HttpResponse` 类型：
+
+[source,java]
+----
+@Singleton
+public class MyExceptionHandler implements ExceptionHandler<MyException, HttpResponse<String>> {
+
+    @Override
+    public HttpResponse<String> handle(HttpRequest request, MyException exception) {
+        return HttpResponse.badRequest("caught!");
+    }
+}
+----
+
+==== `HttpContentProcessor` 被 `MessageBodyHandler` API 取代
+
+Netty 特有的 `HttpContentProcessor` API 已被新的实验性 `MessageBodyHandler` API 取代——后者不依赖 Netty 且更强大。没有兼容层，因此旧的 `HttpContentProcessor` 将停止工作，需要重写。
+
+==== 控制器参数上的 `@Body` 注解
+
+4.0 之前，控制器参数的绑定逻辑较为宽松。裸参数（例如 `void test(String title)`）可以匹配请求体的一部分（若请求体为 `{"title":"foo"}` 则匹配 `foo`）、可以来自查询参数，也可以绑定整个请求体（若请求体为 `{"x":"y"}` 则绑定 `{"x":"y"}`）。
+
+不再支持从整个请求体绑定到这些裸参数。如果希望绑定整个请求体，参数 _必须_ 以 `@Body` 标注。
+
+此外，不再允许把主体组件绑定与整体主体绑定混用。例如，若 `title` 需要来自已绑定到 `bean` 的主体，`void test(@Body Bean bean, String title)` 将不再工作。
+
+这些变更同样适用于经 `micronaut-function-web` 暴露的函数。
+
+==== 延迟的主体访问
+
+当在两处访问请求体时——例如一次作为普通的控制器 `@Body` 参数，再一次在错误处理器中——Micronaut HTTP 现在对允许的类型更严格。如有疑问，第二次访问主体时请调用 `HttpRequest.getBody()`，您将得到与第一次访问所请求的相同的主体类型。
+
+==== `text/plain` 消息对允许的类型更加严格
+
+对 `text/plain` 请求与响应体的读写，3.x 中允许任意类型。写入时对象经 `toString` 转换，读取时对象经 `ConversionService` 转换。例如，若控制器返回 `text/plain` 形式的 `Instant`，会经 `toString` 写成 `2023-05-25T13:25:02.925Z` 这样的内容。反方向，若控制器的参数为 `@Body Instant instant`，同样的文本会经 `ConversionService` 转换为 `Instant`。
+
+4.x 中除少数受限类型外不再允许。推荐的修复是改用 `application/json` 作为内容类型。`toString` 不是稳定的序列化格式，JSON 更可靠。
+
+或者，您可以把 `micronaut.http.legacy-text-conversion` 配置选项设为 `true` 以恢复旧有行为。
+
+==== `OncePerRequestHttpServerFilter` 已移除
+
+自 Micronaut 3.0 起，`OncePerRequestHttpServerFilter` 类已被弃用并标记为待移除。该类现已移除。请改为实现 link:{api}/io/micronaut/http/filter/HttpServerFilter.html[HttpServerFilter]，并把 `micronaut.once` 属性的任何用法替换为自定义属性名。
+
+==== 使用 `@CrossOrigin` 注解的 CORS 支持
+
+Micronaut 框架 4 更改了 `@CrossOrigin` 的行为以与基于配置的 CORS 行为保持一致。以 `@CrossOrigin` 标注的方法，若未为 `allowedOrigins` 与 `allowedOriginsRegex` 成员指定任何值，则允许任何源。
+
+Micronaut 框架 5 将 `@CrossOrigin.allowCredentials` 的默认值从 `true` 改为 `false`。如果您的应用依赖带凭证的跨源请求，请显式设置 `allowCredentials = true`。
+
+==== `@EachBean` 需要 `@Named` 限定符
+
+若任一父 bean 缺少名称限定符，`@EachBean` 会抛出「multiple possible bean candidates found」异常。
+
+==== 手动上下文传播
+
+在 Micronaut 框架 4 中，用户需要手动扩展 <<contextPropagation,传播上下文>>。
+
+==== Micronaut 3 库与 Micronaut 4 应用不兼容
+
+要让 Micronaut 3 库的 bean 在运行 Micronaut 4 的应用中可被发现，必须用 Micronaut 4 重新编译该库——https://github.com/micronaut-projects/micronaut-core/discussions/9758
+
+==== @Retryable 默认异常类型
+
+`@Retryable` 使用的默认异常类型已变化。
+此前，`@Retryable` 只在抛出 `RuntimeException` （或其子类）时重试。
+在 Micronaut 5 中，默认值已改为 `Exception`。因此，受检异常现在也会触发重试行为。
+如果希望保持既有行为，请显式配置 retryable 注解：
+
+[source,java]
+----
+@Retryable(includes = RuntimeException.class)
+----
+
+==== Kotlin `suspend` 路由遵循所选执行器
+
+在 Micronaut 框架 4 中，Kotlin `suspend` 路由会忽略 ann:scheduling.annotation.ExecuteOn[] 与 `micronaut.server.thread-selection` 设置：路由在事件循环上运行，并在 `Dispatchers.Default` 上恢复。在 Micronaut 5 中，会应用所选执行器，它同时也是协程恢复时使用的分发器。
+
+对于以 ann:scheduling.annotation.ExecuteOn[] 标注某路由、或把 `micronaut.server.thread-selection` 设为 `AUTO`、`IO` 或 `BLOCKING` 的应用（默认值 `MANUAL` 不选择任何执行器，不受影响），此变更会改变 `suspend` 路由的运行线程。要在 `AUTO` 下让 `suspend` 路由保持在事件循环上，请以 ann:core.annotation.NonBlocking[] 标注它。

@@ -1,6 +1,6 @@
 # 交接文档（handoff-latest）
 
-> 更新：2026-11-21 ｜ 会话：M2 分批翻译（**B07–B30 共二十四批全部完成并提交**，进度 98.2%）｜ 下一会话任务：M2 收官（B31–B32 共 5 文件）+ M3 全量收尾
+> 更新：2026-11-21 ｜ 会话：M2 分批翻译（**B07–B32 共三十二批全部完成并提交——M2 全库 .adoc 初译完成**，386/386 current）｜ 下一会话任务：toc.yml 专项 + M3 全量收尾（sweep/抽检/sync drill/tag v1.0）
 
 ## 已完成清单（全部已提交，main 分支）
 
@@ -32,17 +32,19 @@
 | **B27 翻译批次** | `3546854` | 17 文件（kotlinContextPropagation + graal 组 3 + management 章 13）；词数 3469/段落 273；锚点 6 处（[[graal]] 标题锚消解既有豁免 + 5 处批内/半批内闭环；beansEndpoint/infoEndpoint 首轮误置文件首，自查 registry title 后纠正）；validate 首轮 13/17（⑦ ×5）修复后全绿；reviewer 17/17 首轮零缺陷；graalServices 78 段/761 词批次最重；**languageSupport 章 49/50（仅剩 overloads@B32）**；management 章 12/27 |
 | **B28 翻译批次** | `ec7b9be` | 21 文件（management 余 15 + security + multitenancy + cli 组 3）；词数 3023/段落 213；锚点 8 处（[[cli]] 标题锚消解既有豁免 ×2 + 7 处批内/半批内闭环）；validate 逐个 --file **首轮 21/21 全绿（与 B20 并列批次内零修正纪录）**；reviewer 21/21 首轮零缺陷；**management 章 27/27 全章译出（第十六个全章）**；**⑤ 豁免 11→7（−4 消解 +0 新增）——清零在射程内**；cli 章 3/10 起步 |
 | **B29 翻译批次** | `7baebf3` | 14 文件（cli 组 7 + i18n 组 2 + resources + architecture 组 4）；词数 3252/段落 191；锚点 5 处（[[proxy]] basename 锚消解既有豁免 + 4 处批内/半批内闭环；annotationArch 首轮漏注入，锚点 grep 核对发现后补齐——B16 教训复用）；validate 首轮 9/14（⑦ ×9 + ③ visitor ×3）修复后全绿；reviewer 13/14（唯一 FAIL 为 xref 顺序的合法语序重排，多重集一致非缺陷）；**cli 章 10/10 全章译出（第十七个全章）**；i18n 组 2/2；appendix 章 4/12；⑤ 豁免 7→6（−1 消解 +0 新增） |
-| **B30 翻译批次** | 本次提交 | 4 文件（appendix/architecture：iocArch/aopArch/containerArch/httpServerArch）；词数 3390/段落 146；锚点 2 处（containerArch basename 锚 + iocArch 标题锚批内闭环；**iocArch 首轮误置标题之后，reviewer 拦截后纠正——title 教训第三次生效**）；**⑤ 硬拦 1 处——[[config]] 锚点在 B09 已译 config.adoc 缺失，回溯补注入（B16 先例第 2 次）**；validate 首轮 ⑦ ×5 修复后全绿；reviewer 4/4 PASS；**architecture 组 6/6 译出**；appendix 章 8/12；⑤ 豁免维持 6 条 |
+| **B30 翻译批次** | `ac214bb` | 4 文件（appendix/architecture：iocArch/aopArch/containerArch/httpServerArch）；词数 3390/段落 146；锚点 2 处（containerArch basename 锚 + iocArch 标题锚批内闭环；**iocArch 首轮误置标题之后，reviewer 拦截后纠正——title 教训第三次生效**）；**⑤ 硬拦 1 处——[[config]] 锚点在 B09 已译 config.adoc 缺失，回溯补注入（B16 先例第 2 次）**；validate 首轮 ⑦ ×5 修复后全绿；reviewer 4/4 PASS；**architecture 组 6/6 译出**；appendix 章 8/12；⑤ 豁免维持 6 条 |
+| **B31 翻译批次** | 本次提交（与 B32 同批提交） | 3 文件（faq/usingsnapshots/problems）；词数 960/段落 44；锚点 0 处（languageSupport/serverlessFunctions 引用锚点在位，落盘即闭环）；faq 首轮 ⑦ ×1 修复后全绿；reviewer 3/3 PASS；appendix 11/12；⑤ 豁免维持 6 条 |
+| **B32 翻译批次（M2 收官）** | 本次提交（与 B31 同批提交） | 2 文件（appendix/breaks + languageSupport/python/overloads）；词数 3181/段落 181；锚点 1 处（[[breaks]] 标题锚）；breaks 首轮 ④ ×2（模块名标题补译名括注）+ ⑦ ×4 修复后全绿；reviewer 2/2 PASS（breaks 145 译段全对齐）；**breaks 129 占位符/2908 词/166 段为全库单文件之最，零花括号缺陷**；**⑤ 豁免 6→3：breaks ×3 随落盘消解，剩余 i18n（M3 专项）+ 裸锚点 ×2（M3）**；**386/386 .adoc 全部 current——M2 全库 .adoc 初译完成** |
 
-## 状态快照（2026-11-21，B30 收尾）
+## 状态快照（2026-11-21，B32 收尾——M2 全库 .adoc 处置完成）
 
-- 分支 main；基线 v5.2.25（`0b46d27afdfa`，快照日期 2026-11-20）；全部批次冻结窗口遵守（未跑 --apply）
-- manifest：388 条目 = 7 missing + 2 skipped + **379 current**（进度 98.2%，剔 skipped 口径）
-- 看板：B01–B30 = current，其余 2 批 pending（B31 3 文件 + B32 2 文件 = 5 文件后全库初译完成）
-- anchor-registry：121 条（不变）；validate 全量跑：PASSED（379 文件，⑤ 豁免警告 **6 条**——B30 0 新增 0 消解：剩余 i18n（M3 专项）、breaks ×3（B32 消解）、裸锚点 ×2（M3 跟踪））
+- 分支 main；基线 v5.2.25（`0b46d27afdfa`，快照日期 2026-11-20）；全部 32 批冻结窗口遵守（未跑 --apply）
+- manifest：388 条目 = **384 current + 2 skipped（appendix.adoc / i18n.adoc 纯 include 壳文件，无需翻译）+ 2 missing（guide/toc.yml 与 guide/toc-python.yml，YAML 导航文件，见待办 1）**；即 386 个 .adoc 全部处置完成（384 译出 + 2 skipped），全库仅剩 2 个 toc.yml 待 M3 专项
+- 看板：**B01–B32 全部 current（32/32）**——M2 完成
+- anchor-registry：121 条（不变）；validate 全量跑：PASSED（384 文件，⑤ 豁免警告 **3 条**——B32 breaks ×3 随落盘消解：剩余 i18n.adoc（skipped 壳文件，M3 专项）+ 裸锚点 ×2（clientBasics `_client_specific_configuration`、routing `_uri_path_variables`，M3 跟踪））
 - 页头溯源投影：页名=toc 英文原题、URL=`https://docs.micronaut.io/5.2.x/core/#core-<basename>`、基线锁定日期 2026-11-19、translated_at=2026-11-21
-- reports/progress.md 已重新生成（**十七个全章**：introduction、quickStart、IoC、config、aop、httpServer、httpClient、cloud、serverlessFunctions、messaging、commandLineApps、configurations、logging、languageSupport/python、languageSupport/kotlin、management、cli；**architecture 组 6/6**、appendix 8/12、guide 行 21/25、languageSupport 49/50）
-- **会话累计**：本会话完成 B07–B30 二十四批共 282 文件，进度 73→379（+306 文件，18.8%→98.2%）
+- reports/progress.md 已重新生成（**十七个全章全部 100%**：introduction、quickStart、IoC 55/55、config 15/15、aop 10/10、httpServer 101/101、httpClient 26/26、cloud 17/17、serverlessFunctions 4/4、messaging 3/3、commandLineApps 1/1、configurations 13/13、logging 4/4、languageSupport/python 24/24、languageSupport/kotlin 14/14、management 27/27、cli 10/10；languageSupport 50/50、appendix 12/12（含 skipped 的 appendix.adoc）、i18n 2/2、guide 行 21/25+2 skipped）
+- **会话累计**：本会话完成 B07–B32 二十六批共 311 文件，进度 73→384 current（+311 文件，18.8%→99.5%；386 个 .adoc 全部处置完成）
 
 ## 实测结论（累计，下一会话必读）
 
@@ -67,9 +69,10 @@
 
 ## 待办（下一会话）
 
-1. **M2 继续**：B28 起（21 文件：management 余 15 + security + multitenancy + cli 组 3，词数 3416/3439 双指标达标），看板改 in-progress 后按 §5.1 SOP + 固化校验链执行；启动提示词见 `docs/新会话启动提示词.md`（已更新至 B28 起）。**B28 需注入锚点 8 处**（registry 实测）：`[[cli]]`（title='Interactive Mode'——标题锚；被 groovy/kotlin 引用，已译——**落盘后消解既有豁免 ×2**）、`[[cachesEndpoint]]`（basename 锚，批内闭环）、`[[environmentEndpoint]]`（标题锚「Configuration」，批内闭环）、`[[loggersEndpoint]]`（标题锚，批内闭环）、`[[metricsEndpoint]]`（basename 锚，批内闭环）、`[[refreshEndpoint]]`/`[[routesEndpoint]]`/`[[stopEndpoint]]`（标题锚，批内闭环；stopEndpoint 消解 B27 新增豁免）；createProject→commandLineApps/serverlessFunctions、features→dataAccess 落盘即闭环（B20/B21 锚点在位）；cli→buildCLI 需核对 B01 时 buildCLI 锚点是否已注入
-2. 术语滚动：B05–B27 括注待复核（构造型 stereotype、可保留 retainable、别名 alias、属性源 property source、mixin、规范构造器 canonical constructor、类型使用注解 type-use annotation、可空性注解、banner、kebab case、驼峰式 camel-case、提供者 provider、默认环境 default environment、求值表达式 evaluated expressions、小驼峰式 lower camel case、通知 advice、切面 aspect、环绕通知/引入通知、存根值 stubbed value、校验通知 validation advice、缓存拦截器 CacheInterceptor、weigher 权重计算器、断路器 Circuit Breaker、规约 specification、展开操作符 exploded operator、编解码器 codec、事件循环 Event Loop、数据类 Data Classes、校验组 validation groups、局部/全局错误处理器、异常处理器 exception handler、背压 backpressure、流式上传/完成上传、部件 part、管道断裂 broken pipe、主操作 primary operation、拆分/认领 split/claim、服务器发送事件 SSE、原生传输 native transports、事件循环载体 event loop carrier、跨源资源共享 CORS、证书提供者、密钥库 key store、ACME、服务器端视图渲染、访问日志记录器、主机名验证、中间人攻击、连接池 connection pool、应用层协议协商 ALPN、声明式客户端 declarative client、绑定器 binder、传播上下文 Propagated Context、服务发现 Service Discovery、冷启动 cold start、轮询 Round Robin、心跳 pulsation、分布式追踪 distributed tracing、托管区域 hosted zone）；B21–B27 新收录已转正：消息代理（message broker）、发布者确认（publisher confirms）、访问者（visitor）、装饰器（decorator）、全局解释器锁（GIL）、上下文池（context pool）、虚拟线程（virtual thread）、仪表（gauge）；python/kotlin/graal/management 章新增首现待复核：外部 dict（foreign dict）、导入查找器（import finder）、宿主互操作（host interop）、直写（write-through）、朴素（naive）/带时区的（aware）、元数（arity）、宿主适配器（host adapter）、结构化并发（structured concurrency）、水位线（water mark）、健康指示器（health indicator）、原生镜像（native image）
-3. M3+：断链豁免清零（当前 11 条，其中 2 条裸锚点 M3 跟踪项 + errorFormatting→i18n.adoc（skipped 壳文件，M3 需专项处理））、抽检（含锚点注入报告与实际一致性专项）、sync drill、tag v1.0
+1. **toc.yml / toc-python.yml 翻译专项（M3 首项）**：两文件 status=missing（各 paragraphs=1），实测含 76 条英文导航标题（PLAN §1.2 M1 实测项），M1 批次切分未排批。处置：创建 zh/guide/toc.yml（及 toc-python.yml）镜像、翻译 title 值（对照 zh/ 各文件页头英文原题与各章标题译名），补充轻量 YAML 结构校验（键路径与 source 逐一对齐），manifest 核销。属轻量决策，无需 DR；若决定维持英文原样则需在 README 声明
+2. **M3 全量收尾（PLAN §8）**：全量 sweep（漏译检测：译文与源文逐字节相同且英文停用词 ≥3）；抽检 ≥10%（含锚点注入报告与实际一致性专项——对照 registry 121 条逐一 grep zh/）；sync 全链路演练（drill 八步，可安全跑 --check）；断链豁免 3 条收尾（i18n.adoc skipped 壳文件专项 + 裸锚点 clientBasics/routing ×2 处置）；补 README 在线结构；**tag v1.0**（初译期基线锁定解除开关，--apply 门控随之开放）
+3. 术语滚动复核：B05–B32 累计首现括注见各批次报告（构造型 stereotype、可保留 retainable、别名 alias、属性源 property source、mixin、规范构造器 canonical constructor、类型使用注解 type-use annotation、可空性注解、banner、kebab case、驼峰式 camel-case、提供者 provider、默认环境 default environment、求值表达式 evaluated expressions、小驼峰式 lower camel case、通知 advice、切面 aspect、环绕通知/引入通知、存根值 stubbed value、校验通知 validation advice、缓存拦截器 CacheInterceptor、weigher 权重计算器、断路器 Circuit Breaker、规约 specification、展开操作符 exploded operator、编解码器 codec、事件循环 Event Loop、数据类 Data Classes、校验组 validation groups、局部/全局错误处理器、异常处理器 exception handler、背压 backpressure、流式上传/完成上传、部件 part、管道断裂 broken pipe、主操作 primary operation、拆分/认领 split/claim、服务器发送事件 SSE、原生传输 native transports、事件循环载体 event loop carrier、跨源资源共享 CORS、证书提供者、密钥库 key store、ACME、服务器端视图渲染、访问日志记录器、主机名验证、中间人攻击、连接池 connection pool、应用层协议协商 ALPN、声明式客户端 declarative client、绑定器 binder、传播上下文 Propagated Context、服务发现 Service Discovery、冷启动 cold start、轮询 Round Robin、心跳 pulsation、分布式追踪 distributed tracing、托管区域 hosted zone、消息代理 message broker、发布者确认 publisher confirms、访问者 visitor、装饰器 decorator、全局解释器锁 GIL、上下文池 context pool、虚拟线程 virtual thread、仪表 gauge、外部 dict foreign dict、导入查找器 import finder、宿主互操作 host interop、直写 write-through、朴素 naive/带时区的 aware、元数 arity、宿主适配器 host adapter、结构化并发 structured concurrency、水位线 water mark、健康指示器 health indicator、原生镜像 native image 等）——复核后转正或修订
+4. 词数核对：B32 与 B08/B10 曾现 M1 值与实测微差（口径基数）；M3 抽检时以 word_counts 实测为准
 
 ## 调试经验与坑位（累计）
 

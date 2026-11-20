@@ -167,34 +167,34 @@ files:
 - file: guide/appendix/breaks.adoc
   blob_sha: 0e1946d8bab7f181bf11b929de2a93688ac9ba09
   size: 26130
-  status: missing
+  status: current
   zh: zh/guide/appendix/breaks.adoc
   paragraphs: 166
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: a581aacc9a1028be57776a3fb6a75071611e7b3c
 - file: guide/appendix/faq.adoc
   blob_sha: 25263f96fcf42eb9acd7e3e11ae1eea7d093884e
   size: 5015
-  status: missing
+  status: current
   zh: zh/guide/appendix/faq.adoc
   paragraphs: 26
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 51650efcb97939ef02bf726bdcb28266b7ca20d1
 - file: guide/appendix/problems.adoc
   blob_sha: d7737c4dbeeaab3b7d7f7ed1bdbce78dadabfe3f
   size: 1535
-  status: missing
+  status: current
   zh: zh/guide/appendix/problems.adoc
   paragraphs: 9
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 35c9dea50c0646a60f2935b02078253b06f2d4e0
 - file: guide/appendix/usingsnapshots.adoc
   blob_sha: 3dfca0978bf1a7601314b812ea34c9ea54380270
   size: 1414
-  status: missing
+  status: current
   zh: zh/guide/appendix/usingsnapshots.adoc
   paragraphs: 9
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 969681663645e3b29713938e7f7187a729cfa20f
 - file: guide/certificates.adoc
   blob_sha: 230e3d8e0907a77ce30923e0cae05b7ca58e7877
@@ -2591,10 +2591,10 @@ files:
 - file: guide/languageSupport/python/overloads.adoc
   blob_sha: 47656d65c012dfa31fd7470ce53431d5316d3207
   size: 2450
-  status: missing
+  status: current
   zh: zh/guide/languageSupport/python/overloads.adoc
   paragraphs: 15
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 7904c6703346b722221147590b248c42269eb6a4
 - file: guide/languageSupport/python/pythonExceptions.adoc
   blob_sha: 17e40cf47172c760add9ec86f9e0a6a8666fff07

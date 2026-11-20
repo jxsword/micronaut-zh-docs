@@ -37,8 +37,8 @@
 | B28 | 21 | 2955 | 3023 | current |
 | B29 | 14 | 3226 | 3257 | current |
 | B30 | 4 | 3387 | 3401 | current |
-| B31 | 3 | 955 | 960 | pending |
-| B32 | 2 | 3180 | 3183 | pending |
+| B31 | 3 | 955 | 960 | current |
+| B32 | 2 | 3180 | 3183 | current |
 
 ## 批次状态明细
 
@@ -76,6 +76,8 @@
 - B28（2026-11-21 完成）：validate 全量 361 文件 PASSED + 21/21 --mark-current 核销 + squash commit；进度 361/388（93.5%，剔 skipped 口径）。锚点注入 8 处（[[cli]] 标题锚消解既有豁免 ×2 + caches/metrics basename 锚 + environment/loggers/refresh/routes/stop 标题锚批内闭环）；validate 逐个 --file **首轮 21/21 全绿（与 B20 并列批次内零修正纪录）**；reviewer 21/21 PASS 首轮零缺陷；createProject 51 段/883 词批次最重（5×5 命令大表+单元格内嵌代码块）。词数实测 3023/2955（与 M1 inventory 一致）；段落 213。**⑤ 豁免 11→7（−4 消解 +0 新增）：剩余 proxy（B29）+ i18n（M3）+ breaks ×3（B32）+ 裸锚点 ×2（M3）——清零在射程内**。冻结窗口遵守。**management 章 27/27 全章译出（第十六个全章）**；cli 章 3/10 起步。
 - B29（2026-11-21 完成）：validate 全量 375 文件 PASSED + 14/14 --mark-current 核销 + squash commit；进度 375/388（97.0%，剔 skipped 口径）。锚点注入 5 处（[[proxy]] basename 锚消解既有豁免 jdkHttpClient→proxy + compilerArch/annotationArch/gradleReload basename 锚 + ideReload 标题锚批内闭环；**annotationArch 首轮漏注入，锚点 grep 核对环节发现后补齐**——B16 教训复用）；validate 首轮 9/14（⑦ ×9 + ③ visitor ×3——TypeElementVisitor 宏触发，补「类型元素访问者」括注）修复后全绿；reviewer 13/14——唯一 FAIL 为 xref 目标顺序的合法语序重排（多重集一致，按 B21 口径判定非缺陷）；commands 38 段/564 词批次最重（7 组命令表格）。词数实测 3252/3217（M1 值 3257/3226）；段落 191。⑤ 豁免 7→6（−1 消解 +0 新增）。冻结窗口遵守。**cli 章 10/10 全章译出（第十七个全章）**；i18n 组 2/2；appendix 章 4/12。
 - B30（2026-11-21 完成）：validate 全量 379 文件 PASSED + 4/4 --mark-current 核销 + squash commit；进度 379/388（98.2%，剔 skipped 口径）。锚点注入 2 处（[[containerArch]] basename 锚批内闭环 + [[iocArch]] 标题锚批内闭环；**iocArch 首轮误置标题之后段落前，reviewer 拦截后纠正——B23/B27 教训第三次生效**）；**⑤ 硬拦 1 处——[[config]] 锚点在 B09 已译 config.adoc 中缺失，首引即触发，回溯补注入（B16 [[events]] 先例第 2 次）**；validate 首轮 ⑦ ×5（URL/XREF 宏直贴汉字）修复后全绿；reviewer 4/4 PASS（xref 多重集口径）；aopArch 50 段/1212 词批次最重。词数实测 3390/3371（M1 值 3401/3387）；段落 146。⑤ 豁免维持 6 条（0 新增 0 消解）。冻结窗口遵守。**architecture 组 6/6 译出**；appendix 章 8/12。
+- B31（2026-11-21 完成）：validate 全量 382 文件 PASSED + 3/3 --mark-current 核销 + squash commit；进度 382/388。锚点 0 处（languageSupport/serverlessFunctions 引用锚点均在位，落盘即闭环）；faq 首轮 ⑦ ×1 修复后全绿；reviewer 3/3 PASS。词数实测 960/955（与 M1 inventory 一致）；段落 44。⑤ 豁免维持 6 条。冻结窗口遵守。appendix 章 11/12（仅剩 breaks）。
+- B32（2026-11-21 完成，**M2 收官**）：validate 全量 **384 文件 PASSED** + 2/2 --mark-current 核销 + squash commit；**386 个 .adoc 全部处置完成（384 译出 current + 2 skipped 纯 include 壳文件；manifest 388 = 384 current + 2 skipped + 2 missing toc.yml）——全库 .adoc 初译完成**。锚点注入 1 处（[[breaks]] 标题锚）；breaks 首轮 ④ ×2（模块名标题补译名括注）+ ⑦ ×4 修复后全绿；reviewer 2/2 PASS（breaks 145 译段全对齐）；breaks 129 占位符/2908 词/166 段为全库单文件之最。词数实测 3181/3177（M1 值 3183/3180）；段落 181。**⑤ 豁免 6→3 条：breaks ×3 随落盘消解；剩余 i18n（M3 专项）+ 裸锚点 ×2（M3）**。冻结窗口遵守。**唯一遗留：toc.yml/toc-python.yml（manifest missing，M1 切分未排批）——M3 专项翻译 76 条导航标题 + 结构校验**。十七个全章全部 100% 见 reports/progress.md。
 
 ## 硬性纪律（每批次必守）
 

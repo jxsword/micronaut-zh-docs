@@ -1,0 +1,57 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Using Snapshots](https://docs.micronaut.io/5.2.x/core/#core-usingsnapshots)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/appendix/usingsnapshots.adoc  upstream_commit: 969681663645e3b29713938e7f7187a729cfa20f  upstream_hash: 3dfca0978bf1a7601314b812ea34c9ea54380270  translated_at: 2026-11-21 -->
+
+Micronaut 的里程碑版本与稳定版本都发布到 Maven Central。
+
+以下代码片段展示如何在 Gradle 中使用 Micronaut `SNAPSHOT` 版本。最新快照始终是下一个补丁版本号加 1 并追加 `-SNAPSHOT`。例如，如果最新发布版是「1.0.1」，当前快照即为「1.0.2-SNAPSHOT」。
+
+[source, groovy]
+----
+ext {
+    micronautVersion = '4.10.0-SNAPSHOT'
+}
+repositories {
+    mavenCentral() // <1>
+    maven {
+      url = "https://central.sonatype.com/repository/maven-snapshots/" // <2>
+      mavenContent {
+        snapshotsOnly()
+      }
+    }
+}
+----
+
+<1> Micronaut 发布版可在 Maven Central 获取
+<2> Micronaut 快照可在 Central Sonatype 的 `maven-snapshots` 仓库获取。
+
+如果使用 Maven，请编辑 `pom.xml`：
+
+[source, xml]
+----
+<?xml version="1.0" encoding="UTF-8"?>
+  ...
+
+  <parent>
+    <groupId>io.micronaut.platform</groupId>
+    <artifactId>micronaut-parent</artifactId>
+    <version>4.10.0-SNAPSHOT</version>
+  </parent>
+
+  <properties>
+    <micronaut.version>4.10.0-SNAPSHOT</micronaut.version> <!--1-->
+    ...
+  </properties>
+
+  <repositories>
+    <repository>
+      <id>sonatype-snapshots</id>
+      <url>https://central.sonatype.com/repository/maven-snapshots/</url> <!--2-->
+    </repository>
+  </repositories>
+
+  ...
+</project>
+
+----
+<1> 设置快照版本。
+<2> Micronaut 快照可在 Sonatype 获取。

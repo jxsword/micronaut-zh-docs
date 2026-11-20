@@ -1,0 +1,53 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – overloads](https://docs.micronaut.io/5.2.x/core/#core-overloads)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/languageSupport/python/overloads.adoc  upstream_commit: 7904c6703346b722221147590b248c42269eb6a4  upstream_hash: 47656d65c012dfa31fd7470ce53431d5316d3207  translated_at: 2026-11-21 -->
+
+Python 没有方法重载，也没有自己的可变参数语法，而 Java API 两者都用。Python 编译器按如下方式在两者之间映射。
+
+=== 实现重载的 Java 方法
+
+实现带有若干同名同元数（arity）重载的 Java 接口的 Python 类，会用单个 Python 方法实现它们。生成的 Java 存根声明接口的每个重载，而每个重载都分发到该 Python 方法：
+
+[source,python]
+----
+from jakarta.inject import Singleton
+from micronaut.views.fields.elements import Option
+from micronaut.views.fields.fetchers import OptionFetcher
+
+@Singleton
+class AuthorFetcher(OptionFetcher[int]):
+
+    def generate(self, type_or_instance) -> list[Option]:  # <1>
+        ...
+----
+
+<1> 同时实现 `generate(Class<Integer>)` 与 `generate(Integer)`；Python 方法接收 `Class` 对象或 `int`。
+
+=== 可变参数
+
+`*args` 参数会向 Java 暴露为被标注元素类型的可变参数数组（未标注时为 `Object[]`），因此 Python 方法可以实现一个 Java 可变参数方法，也可以声明一个：
+
+[source,python]
+----
+from abc import ABC, abstractmethod
+from micronaut.configuration.kafka.annotation import KafkaClient, Topic
+
+@KafkaClient(batch=True)
+class BookClient(ABC):
+
+    @Topic("books")
+    @abstractmethod
+    def send_books(self, *books: Book) -> None:  # <1>
+        ...
+----
+
+<1> 生成的 Java 方法为 `send_books(Book[] books)`。Java 调用方传数组；Python 调用方按位置传书（`client.send_books(book1, book2)`）或传单个列表。
+
+当 Java 调用该方法时，数组的元素成为 Python 方法的位置实参。
+
+=== 从 Python 选择 Java 重载
+
+当 Python 代码调用重载的 Java 方法时，实参类型决定选择哪个重载：
+
+* `list` 或 `tuple` 会优先于 `Map` 参数选中 `List`、`Collection` 或 `Iterable` 参数（`AuthenticationResponse.success("user", ["ROLE_A"])`）；`set`、`frozenset` 或字典视图会被 `Collection` 与 `Iterable` 参数作为副本接受（对该集合的 Java 侧修改不会到达 Python 对象），而生成器与其他迭代器只被 `Iterable` 参数接受，它们会惰性读取；
+* `dict` 会选中 `Map` 参数；
+* `bytes` 与 `bytearray` 会优先于 `Object`、`String` 或流参数选中 `byte[]` 参数（`object_mapper.readValue(payload, Book)`）。

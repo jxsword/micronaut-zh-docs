@@ -1,0 +1,23 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Common Problems](https://docs.micronaut.io/5.2.x/core/#core-problems)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/appendix/problems.adoc  upstream_commit: 35c9dea50c0646a60f2935b02078253b06f2d4e0  upstream_hash: d7737c4dbeeaab3b7d7f7ed1bdbce78dadabfe3f  translated_at: 2026-11-21 -->
+
+本节涵盖开发者使用 Micronaut 时遇到的常见问题。
+
+==== 依赖注入不生效
+
+依赖注入失效最常见的原因是没有配置相应的注解处理器，或 IDE 配置不正确。如何在您的语言中完成设置，请参阅 <<languageSupport,语言支持>> 章节。
+
+==== 加载 bean 时出现 NoSuchMethodError（Groovy）
+
+默认情况下，Groovy 会导入 `groovy.lang` 包中的类，其中有一个名为 `Singleton` 的类。这是一个 AST 变换注解，通过添加私有构造器与静态获取方法使您的类成为单例。该注解容易与 Micronaut 中用于定义单例 bean 的 `jakarta.inject.Singleton` 注解混淆。请确保在 Groovy 类中使用正确的注解。
+
+==== 应用启动时间明显过长（*nix 操作系统）
+
+这很可能是由 `java.net.InetAddress.getLocalHost()` 调用相关的一个缺陷导致的长延迟。解决办法是编辑您的 `/etc/hosts` 文件，加入一条包含您主机名的条目。要查找主机名，请在终端运行 `hostname`。然后编辑 `/etc/hosts` 文件，参照下例添加或修改条目，把 `<hostname>` 替换为您的主机名。
+
+----
+127.0.0.1       localhost <hostname>
+::1             localhost <hostname>
+----
+
+要进一步了解此问题，请参阅这条 link:https://stackoverflow.com/a/39698914/1264846[stackoverflow 回答]

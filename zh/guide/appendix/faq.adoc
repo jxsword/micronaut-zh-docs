@@ -1,0 +1,56 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Frequently Asked Questions (FAQ)](https://docs.micronaut.io/5.2.x/core/#core-faq)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/appendix/faq.adoc  upstream_commit: 51650efcb97939ef02bf726bdcb28266b7ca20d1  upstream_hash: 25263f96fcf42eb9acd7e3e11ae1eea7d093884e  translated_at: 2026-11-21 -->
+
+本节涵盖您在考虑使用或正在使用 Micronaut 时可能提出的一些常见问题。
+
+==== Micronaut 会修改我的字节码吗？
+
+不会。您的类就是您的类。Micronaut 不会转换类或修改由您编写的代码生成的字节码。Micronaut 在编译期产出附加类，它们与您未修改的原始类位于同一个包中。
+
+==== Micronaut 为什么不使用 Spring？
+
+当问及 Micronaut 为什么不使用 Spring 时，通常指的是 Spring 的依赖注入容器。
+
+NOTE: Spring 生态非常庞大，许多 Spring 库无需 Spring 容器即可直接在 Micronaut 中使用。
+
+Micronaut 拥有自己的原生 https://www.jcp.org/en/jsr/detail?id=330[JSR-330] 兼容依赖注入，原因在于这些特性在 Spring（以及任何基于反射的 DI/AOP 容器）中的代价太高——体现在内存消耗与对启动时间的影响上。为了在运行时支持依赖注入，Spring 需要：
+
+* https://github.com/spring-projects/spring-framework/tree/master/spring-core/src/main/java/org/springframework/core/type/classreading[读取字节码]——在运行时读取它发现的每个 bean 的字节码。
+* https://github.com/spring-projects/spring-framework/blob/a691065d05741a4f1ca17925c8a5deec0f378c8b/spring-core/src/main/java/org/springframework/core/annotation/AnnotationUtils.java#L1465[合成新注解]——为每个 bean 方法、构造器、字段等上的每个注解合成新注解，以支持注解元数据。
+* https://github.com/spring-projects/spring-framework/blob/master/spring-beans/src/main/java/org/springframework/beans/CachedIntrospectionResults.java[构建反射元数据]——为每个 bean 的每个方法、构造器、字段等构建反射元数据。
+
+结果是：随着应用纳入更多特性，启动时间与内存消耗会渐进式恶化。
+
+对于启动时间与内存消耗必须保持低位的微服务与 Serverless 函数而言，上述行为是使用 Spring 容器不尽人意的现实，因此 Micronaut 的设计者选择不使用 Spring。
+
+==== Micronaut 支持 Scala 吗？
+
+Micronaut 支持任何支持注解处理器 API 的 JVM 语言。Scala 目前不支持该 API。不过 Groovy 同样不支持该 API，而框架为其构建了处理 Groovy AST 的专门支持。如果未来构建出类似 `inject-groovy` 的模块，在技术上支持 Scala 是可能的，但截至撰写本文时尚不支持 Scala。
+
+==== Micronaut 能用于微服务之外的用途吗？
+
+可以。Micronaut 非常模块化，您可以通过在应用中加入 `micronaut-inject-java` （Groovy 则为 `micronaut-inject-groovy`）依赖，只使用其依赖注入与 AOP 实现。
+
+事实上，Micronaut 对 <<serverlessFunctions,Serverless 计算>> 的支持正是采用这种方式。
+
+==== Micronaut 的依赖注入与 AOP 实现有哪些优势？
+
+Micronaut 处理您的类并在编译期产出全部元数据。这消除了反射、缓存的反射元数据以及在运行时分析类的需要——所有这些都会导致更慢的启动性能与更高的内存消耗。
+
+此外，Micronaut 在编译期构建免反射的 AOP 代理，从而提升性能、缩小堆栈跟踪体积并降低内存消耗。
+
+==== Micronaut 为什么自带 Consul 与 Eureka 客户端实现？
+
+现有的 Consul 与 Eureka 客户端大多是阻塞式的，且包含许多会让 JAR 文件膨胀的外部依赖。
+
+Micronaut 的 api:discovery.DiscoveryClient[] 使用 Micronaut 的原生 HTTP 客户端，大幅减少对外部依赖的需求，并为两种发现服务器提供响应式 API。
+
+==== 为什么在 Groovy 中加载 bean 时会出现 NoSuchMethodError？
+
+Groovy 默认导入 `groovy.lang` 包中的类，其中包括一个名为 `@Singleton` 的类——一个 AST 变换注解，它通过添加私有构造器与静态获取方法使您的类成为单例。该注解容易与 Micronaut 中用于定义单例 bean 的 `jakarta.inject.Singleton` 注解混淆。请确保在 Groovy 类中使用正确的注解。
+
+==== 为什么应用启动比预期慢得多？
+
+Micronaut 的启动时间通常非常快。但在应用层面，仍有可能影响启动时间。如果发现启动缓慢，请检查是否有拖慢启动的应用启动监听器或 `@Context` 作用域的 bean。
+
+某些网络问题也会导致启动缓慢。例如在 Mac 上，`/etc/hosts` 文件配置不当可能引发问题。参见这条 link:https://stackoverflow.com/a/39698914/1264846[stackoverflow 回答]。
