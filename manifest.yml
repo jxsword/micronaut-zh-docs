@@ -11,6 +11,7 @@ files:
   zh: zh/guide/aop.adoc
   paragraphs: 6
   updated_at: '2026-11-20'
+  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/aop/adapterAdvice.adoc
   blob_sha: 7dba9d597523e6eaff9907962eed70b8dbdee218
   size: 1810
@@ -18,6 +19,7 @@ files:
   zh: zh/guide/aop/adapterAdvice.adoc
   paragraphs: 11
   updated_at: '2026-11-20'
+  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/aop/aroundAdvice.adoc
   blob_sha: f0dda9beb85d85f4fdcc9adc2e784f4bb3ad671b
   size: 5669
@@ -25,6 +27,7 @@ files:
   zh: zh/guide/aop/aroundAdvice.adoc
   paragraphs: 29
   updated_at: '2026-11-20'
+  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/aop/caching.adoc
   blob_sha: b87ccd1483b5ee8b76d736d24e8cdb374c2cea1f
   size: 3952
@@ -32,6 +35,7 @@ files:
   zh: zh/guide/aop/caching.adoc
   paragraphs: 26
   updated_at: '2026-11-20'
+  upstream_commit: 400e272bf3fbf33a3489e17760ea3a590accf852
 - file: guide/aop/interceptorLifecycle.adoc
   blob_sha: cda02162f0338aeec5dbc42f35f68788292203a1
   size: 7291
@@ -39,6 +43,7 @@ files:
   zh: zh/guide/aop/interceptorLifecycle.adoc
   paragraphs: 26
   updated_at: '2026-11-20'
+  upstream_commit: d106b03832f54fd4f6129ce2c85dd4b6953e2ff7
 - file: guide/aop/introductionAdvice.adoc
   blob_sha: a10c67d786f4f97f4efc22bb5526e548d1ad0752
   size: 2851
@@ -46,6 +51,7 @@ files:
   zh: zh/guide/aop/introductionAdvice.adoc
   paragraphs: 19
   updated_at: '2026-11-20'
+  upstream_commit: 7dd6cb2ab4ab3a02c16fae3691798313b8a880fc
 - file: guide/aop/lifecycleAdvice.adoc
   blob_sha: 0d4adeff82620235fdbe1570ee54285d8d82f7cd
   size: 7966
@@ -53,6 +59,7 @@ files:
   zh: zh/guide/aop/lifecycleAdvice.adoc
   paragraphs: 31
   updated_at: '2026-11-20'
+  upstream_commit: db442e72ceb68a8d6db5fa3153c70ba65cc38dc0
 - file: guide/aop/retry.adoc
   blob_sha: 8a228a84376dd93aca7676cd5835f334527bfc77
   size: 6452
@@ -60,6 +67,7 @@ files:
   zh: zh/guide/aop/retry.adoc
   paragraphs: 49
   updated_at: '2026-11-20'
+  upstream_commit: c1733e1c5e6ce879a2a2d6acf05daeb717a5c451
 - file: guide/aop/scheduling.adoc
   blob_sha: 1f711edb538ae851e7ca7fb5b6278431a9c9f11a
   size: 4248
@@ -67,6 +75,7 @@ files:
   zh: zh/guide/aop/scheduling.adoc
   paragraphs: 39
   updated_at: '2026-11-20'
+  upstream_commit: 15119ba9ee63100091348d40eaffe708155b53ae
 - file: guide/aop/springAop.adoc
   blob_sha: 750b27949a28b6815c5fe944cae2a4aa6c29b32a
   size: 1657
@@ -74,6 +83,7 @@ files:
   zh: zh/guide/aop/springAop.adoc
   paragraphs: 13
   updated_at: '2026-11-20'
+  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/aop/validation.adoc
   blob_sha: 68c63c8e2eab54cf3b3da901818d6b55e4700770
   size: 1042
@@ -81,6 +91,7 @@ files:
   zh: zh/guide/aop/validation.adoc
   paragraphs: 8
   updated_at: '2026-11-20'
+  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/appendix.adoc
   blob_sha: e69de29bb2d1d6434b8b29ae775ad8c2e48c5391
   size: 0
@@ -88,6 +99,7 @@ files:
   zh: zh/guide/appendix.adoc
   paragraphs: 0
   updated_at: '2026-11-20'
+  upstream_commit: 916e7f5d8f196a091badc53075c214565bd8836a
 - file: guide/appendix/architecture.adoc
   blob_sha: 261cb9068fc2437c04c53b67a79da1e6e3fea00f
   size: 843
@@ -95,6 +107,7 @@ files:
   zh: zh/guide/appendix/architecture.adoc
   paragraphs: 3
   updated_at: '2026-11-20'
+  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/appendix/architecture/annotationArch.adoc
   blob_sha: 734cdc5b75a0173237349166819e53e51672961d
   size: 5273
@@ -102,6 +115,7 @@ files:
   zh: zh/guide/appendix/architecture/annotationArch.adoc
   paragraphs: 16
   updated_at: '2026-11-20'
+  upstream_commit: 130cfede2d9a325faf7016bf10e0a2060c5a3cbd
 - file: guide/appendix/architecture/aopArch.adoc
   blob_sha: 37756e2b2d7490ba0b834d69061512cc934de912
   size: 10711
@@ -109,6 +123,7 @@ files:
   zh: zh/guide/appendix/architecture/aopArch.adoc
   paragraphs: 50
   updated_at: '2026-11-20'
+  upstream_commit: 33ce06cb263ce3717c83720e3b5830db99dfcf5d
 - file: guide/appendix/architecture/compilerArch.adoc
   blob_sha: 6d717b9dc8cb35ad9fdf1edd09af2bd7de85a42d
   size: 1446
@@ -116,6 +131,7 @@ files:
   zh: zh/guide/appendix/architecture/compilerArch.adoc
   paragraphs: 7
   updated_at: '2026-11-20'
+  upstream_commit: 130cfede2d9a325faf7016bf10e0a2060c5a3cbd
 - file: guide/appendix/architecture/containerArch.adoc
   blob_sha: f7c85a60777dd47481a27a2c236a85f36a86a139
   size: 2656
@@ -123,6 +139,7 @@ files:
   zh: zh/guide/appendix/architecture/containerArch.adoc
   paragraphs: 13
   updated_at: '2026-11-20'
+  upstream_commit: 8c82ee03540bc11bc707c777c7ff4aa00d5be9d7
 - file: guide/appendix/architecture/httpServerArch.adoc
   blob_sha: 055e2cf29c5d1565a361e50b9db2ca555073e930
   size: 10453
@@ -130,6 +147,7 @@ files:
   zh: zh/guide/appendix/architecture/httpServerArch.adoc
   paragraphs: 47
   updated_at: '2026-11-20'
+  upstream_commit: 0f997ad7f340830adebe57f3885eebed4d9b1fe7
 - file: guide/appendix/architecture/introspectionArch.adoc
   blob_sha: b727a6cc2c95eaa79f530aa2d895888fc6c5ddc8
   size: 5049
@@ -137,6 +155,7 @@ files:
   zh: zh/guide/appendix/architecture/introspectionArch.adoc
   paragraphs: 22
   updated_at: '2026-11-20'
+  upstream_commit: b1bd3ffac1dd0c987769a0e4d0e0cb2f3ecd3349
 - file: guide/appendix/architecture/iocArch.adoc
   blob_sha: 44be74099248ef2662765655ea511ff0808dbd2b
   size: 7307
@@ -144,6 +163,7 @@ files:
   zh: zh/guide/appendix/architecture/iocArch.adoc
   paragraphs: 36
   updated_at: '2026-11-20'
+  upstream_commit: 0f997ad7f340830adebe57f3885eebed4d9b1fe7
 - file: guide/appendix/breaks.adoc
   blob_sha: 0e1946d8bab7f181bf11b929de2a93688ac9ba09
   size: 26130
@@ -151,6 +171,7 @@ files:
   zh: zh/guide/appendix/breaks.adoc
   paragraphs: 166
   updated_at: '2026-11-20'
+  upstream_commit: a581aacc9a1028be57776a3fb6a75071611e7b3c
 - file: guide/appendix/faq.adoc
   blob_sha: 25263f96fcf42eb9acd7e3e11ae1eea7d093884e
   size: 5015
@@ -158,6 +179,7 @@ files:
   zh: zh/guide/appendix/faq.adoc
   paragraphs: 26
   updated_at: '2026-11-20'
+  upstream_commit: 51650efcb97939ef02bf726bdcb28266b7ca20d1
 - file: guide/appendix/problems.adoc
   blob_sha: d7737c4dbeeaab3b7d7f7ed1bdbce78dadabfe3f
   size: 1535
@@ -165,6 +187,7 @@ files:
   zh: zh/guide/appendix/problems.adoc
   paragraphs: 9
   updated_at: '2026-11-20'
+  upstream_commit: 35c9dea50c0646a60f2935b02078253b06f2d4e0
 - file: guide/appendix/usingsnapshots.adoc
   blob_sha: 3dfca0978bf1a7601314b812ea34c9ea54380270
   size: 1414
@@ -172,6 +195,7 @@ files:
   zh: zh/guide/appendix/usingsnapshots.adoc
   paragraphs: 9
   updated_at: '2026-11-20'
+  upstream_commit: 969681663645e3b29713938e7f7187a729cfa20f
 - file: guide/certificates.adoc
   blob_sha: 230e3d8e0907a77ce30923e0cae05b7ca58e7877
   size: 2831
@@ -179,6 +203,7 @@ files:
   zh: zh/guide/certificates.adoc
   paragraphs: 20
   updated_at: '2026-11-20'
+  upstream_commit: ae09525c20868251edcc602b1aeee750a4eff458
 - file: guide/cli.adoc
   blob_sha: 2f0d44dc4af39a041381a5a87534744a12d5b76b
   size: 3782
@@ -186,6 +211,7 @@ files:
   zh: zh/guide/cli.adoc
   paragraphs: 24
   updated_at: '2026-11-20'
+  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/cli/commands.adoc
   blob_sha: 0bfc6a10ff87521823071e6f0f5f6b2ce97c7ad2
   size: 7211
@@ -193,6 +219,7 @@ files:
   zh: zh/guide/cli/commands.adoc
   paragraphs: 56
   updated_at: '2026-11-20'
+  upstream_commit: 400e272bf3fbf33a3489e17760ea3a590accf852
 - file: guide/cli/createProject.adoc
   blob_sha: bb228133847e294a2375cc2db9c1afa954a2e74a
   size: 7004
@@ -200,6 +227,7 @@ files:
   zh: zh/guide/cli/createProject.adoc
   paragraphs: 51
   updated_at: '2026-11-20'
+  upstream_commit: 7dd6cb2ab4ab3a02c16fae3691798313b8a880fc
 - file: guide/cli/createProject/comparingVersions.adoc
   blob_sha: 6767dcc2d477d56f0739ec3f9797642af06cb41b
   size: 250
@@ -207,6 +235,7 @@ files:
   zh: zh/guide/cli/createProject/comparingVersions.adoc
   paragraphs: 1
   updated_at: '2026-11-20'
+  upstream_commit: ede1891bd681062e0992d54fd437b71a40782343
 - file: guide/cli/features.adoc
   blob_sha: 16ed35485c244a34aa0ab09a74e3d19355f89a79
   size: 910
@@ -214,6 +243,7 @@ files:
   zh: zh/guide/cli/features.adoc
   paragraphs: 6
   updated_at: '2026-11-20'
+  upstream_commit: eb891b91ca2ab6aa90a1dd6dde328e8c354bacdb
 - file: guide/cli/proxy.adoc
   blob_sha: fed7f3dbc85856fb67a42161e10fbb384a0fc6ff
   size: 606
@@ -221,6 +251,7 @@ files:
   zh: zh/guide/cli/proxy.adoc
   paragraphs: 6
   updated_at: '2026-11-20'
+  upstream_commit: 9b6da4ec1602e499125970b1e7734a79a3a4782c
 - file: guide/cli/reloading.adoc
   blob_sha: e18d0bf171d3d6777fa0be3f739e42ee05dcc3aa
   size: 528
@@ -228,6 +259,7 @@ files:
   zh: zh/guide/cli/reloading.adoc
   paragraphs: 3
   updated_at: '2026-11-20'
+  upstream_commit: ede1891bd681062e0992d54fd437b71a40782343
 - file: guide/cli/reloading/automaticRestart.adoc
   blob_sha: 1a584cf2b0eba4acb0a5ba931fabf2ba5d3f5f69
   size: 1826
@@ -235,6 +267,7 @@ files:
   zh: zh/guide/cli/reloading/automaticRestart.adoc
   paragraphs: 16
   updated_at: '2026-11-20'
+  upstream_commit: ede1891bd681062e0992d54fd437b71a40782343
 - file: guide/cli/reloading/gradleReload.adoc
   blob_sha: 8afc2e87f0b15bf2d1b86b73214176fd635fdf45
   size: 650
@@ -242,6 +275,7 @@ files:
   zh: zh/guide/cli/reloading/gradleReload.adoc
   paragraphs: 8
   updated_at: '2026-11-20'
+  upstream_commit: ede1891bd681062e0992d54fd437b71a40782343
 - file: guide/cli/reloading/ideReload.adoc
   blob_sha: 77d7367ef33239dad12028c0aa46738e10ef5709
   size: 611
@@ -249,6 +283,7 @@ files:
   zh: zh/guide/cli/reloading/ideReload.adoc
   paragraphs: 5
   updated_at: '2026-11-20'
+  upstream_commit: ede1891bd681062e0992d54fd437b71a40782343
 - file: guide/cli/reloading/jrebel.adoc
   blob_sha: e20cdb0970f123c7846e477cdfbd27bc537ec0d1
   size: 3454
@@ -256,6 +291,7 @@ files:
   zh: zh/guide/cli/reloading/jrebel.adoc
   paragraphs: 26
   updated_at: '2026-11-20'
+  upstream_commit: e0bdce7561988da0c16da4ca21ff767d46004968
 - file: guide/cloud.adoc
   blob_sha: 5ef3d008266958e61ae984d4eff30b60db172d29
   size: 1174
@@ -263,6 +299,7 @@ files:
   zh: zh/guide/cloud.adoc
   paragraphs: 6
   updated_at: '2026-11-20'
+  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/cloud/clientSideLoadBalancing.adoc
   blob_sha: 647dbbc44a94dbd9597fa0e19f8720ff0247e7d2
   size: 1607
@@ -270,6 +307,7 @@ files:
   zh: zh/guide/cloud/clientSideLoadBalancing.adoc
   paragraphs: 8
   updated_at: '2026-11-20'
+  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/cloud/cloudConfiguration.adoc
   blob_sha: b0a55921ff6b5c84fcecec5db17616aa6395a82a
   size: 5959
@@ -277,6 +315,7 @@ files:
   zh: zh/guide/cloud/cloudConfiguration.adoc
   paragraphs: 30
   updated_at: '2026-11-20'
+  upstream_commit: 1db1fb2cca43ee8084305cb50c2bde86bb7443f2
 - file: guide/cloud/cloudConfiguration/distributedConfiguration.adoc
   blob_sha: f3cb1c98220a25eaeebf3d5e6df7633b8893db94
   size: 2169
@@ -284,6 +323,7 @@ files:
   zh: zh/guide/cloud/cloudConfiguration/distributedConfiguration.adoc
   paragraphs: 8
   updated_at: '2026-11-20'
+  upstream_commit: 851c00bd0149f7103a5b7a164d1ce6f8d27f0ade
 - file: guide/cloud/cloudConfiguration/distributedConfigurationAwsParameterStore.adoc
   blob_sha: 98fb0ba737debb202b4946ac1de31401e157605d
   size: 2638
@@ -291,6 +331,7 @@ files:
   zh: zh/guide/cloud/cloudConfiguration/distributedConfigurationAwsParameterStore.adoc
   paragraphs: 14
   updated_at: '2026-11-20'
+  upstream_commit: 51650efcb97939ef02bf726bdcb28266b7ca20d1
 - file: guide/cloud/cloudConfiguration/distributedConfigurationConsul.adoc
   blob_sha: 44c9839aa48099783baff388e644e9502844ff3f
   size: 4314
@@ -298,6 +339,7 @@ files:
   zh: zh/guide/cloud/cloudConfiguration/distributedConfigurationConsul.adoc
   paragraphs: 47
   updated_at: '2026-11-20'
+  upstream_commit: 8c82ee03540bc11bc707c777c7ff4aa00d5be9d7
 - file: guide/cloud/cloudConfiguration/distributedConfigurationGoogleCloudSecretManager.adoc
   blob_sha: e5f31830f8a93af77ab8f534fc8059d9e77ef862
   size: 155
@@ -305,6 +347,7 @@ files:
   zh: zh/guide/cloud/cloudConfiguration/distributedConfigurationGoogleCloudSecretManager.adoc
   paragraphs: 1
   updated_at: '2026-11-20'
+  upstream_commit: c1f9c0e5689d99f81ad7d06ace65f82206db590d
 - file: guide/cloud/cloudConfiguration/distributedConfigurationKubernetes.adoc
   blob_sha: 2fa7058e9679bd00a9921d6d33a1117a8aa250bd
   size: 148
@@ -312,6 +355,7 @@ files:
   zh: zh/guide/cloud/cloudConfiguration/distributedConfigurationKubernetes.adoc
   paragraphs: 1
   updated_at: '2026-11-20'
+  upstream_commit: 19afb561de3aff8b585f25d8fc110401a80bc93c
 - file: guide/cloud/cloudConfiguration/distributedConfigurationOracleCloudVault.adoc
   blob_sha: 328ed86829e8b39167aa622091b487f90d262e34
   size: 161
@@ -319,6 +363,7 @@ files:
   zh: zh/guide/cloud/cloudConfiguration/distributedConfigurationOracleCloudVault.adoc
   paragraphs: 1
   updated_at: '2026-11-20'
+  upstream_commit: 19afb561de3aff8b585f25d8fc110401a80bc93c
 - file: guide/cloud/cloudConfiguration/distributedConfigurationSpringCloud.adoc
   blob_sha: 5c0c5785ffb52f8735996d82b3fc5c84542f6ced
   size: 1167
@@ -326,6 +371,7 @@ files:
   zh: zh/guide/cloud/cloudConfiguration/distributedConfigurationSpringCloud.adoc
   paragraphs: 8
   updated_at: '2026-11-20'
+  upstream_commit: 8c82ee03540bc11bc707c777c7ff4aa00d5be9d7
 - file: guide/cloud/cloudConfiguration/distributedConfigurationVault.adoc
   blob_sha: 1e3af6c78cf2273931a9dcfac1ff52cbb255ff1f
   size: 1438
@@ -333,6 +379,7 @@ files:
   zh: zh/guide/cloud/cloudConfiguration/distributedConfigurationVault.adoc
   paragraphs: 10
   updated_at: '2026-11-20'
+  upstream_commit: ac5020fc8bdbc2bf07cb752928b92d6545dd76f6
 - file: guide/cloud/distributedTracing.adoc
   blob_sha: 6cdb0a8098ff91fd4413e48f90d3fd0cd56f04b1
   size: 189
@@ -340,6 +387,7 @@ files:
   zh: zh/guide/cloud/distributedTracing.adoc
   paragraphs: 1
   updated_at: '2026-11-20'
+  upstream_commit: f5a5ec642df98a6e16c2dc870b5e3cc273c4af2c
 - file: guide/cloud/serviceDiscovery.adoc
   blob_sha: 3506e2665ac0d627fb2e4f7c5c8014efb5a3ada0
   size: 349
@@ -347,6 +395,7 @@ files:
   zh: zh/guide/cloud/serviceDiscovery.adoc
   paragraphs: 2
   updated_at: '2026-11-20'
+  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/cloud/serviceDiscovery/serviceDiscoveryConsul.adoc
   blob_sha: 65e54d751f6db5beac9239ce138648961fb4eca0
   size: 152
@@ -354,6 +403,7 @@ files:
   zh: zh/guide/cloud/serviceDiscovery/serviceDiscoveryConsul.adoc
   paragraphs: 1
   updated_at: '2026-11-20'
+  upstream_commit: ede1891bd681062e0992d54fd437b71a40782343
 - file: guide/cloud/serviceDiscovery/serviceDiscoveryEureka.adoc
   blob_sha: e3f819802eb6cf25a372eae0119be699ee17f653
   size: 152
@@ -361,6 +411,7 @@ files:
   zh: zh/guide/cloud/serviceDiscovery/serviceDiscoveryEureka.adoc
   paragraphs: 1
   updated_at: '2026-11-20'
+  upstream_commit: ede1891bd681062e0992d54fd437b71a40782343
 - file: guide/cloud/serviceDiscovery/serviceDiscoveryKubernetes.adoc
   blob_sha: be9159e029d5f28345da24434a3fe5b4819379eb
   size: 342
@@ -368,6 +419,7 @@ files:
   zh: zh/guide/cloud/serviceDiscovery/serviceDiscoveryKubernetes.adoc
   paragraphs: 2
   updated_at: '2026-11-20'
+  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/cloud/serviceDiscovery/serviceDiscoveryManual.adoc
   blob_sha: f8217d2cdf8d487e9c48e32bbd49a93155b1cf7a
   size: 1798
@@ -375,6 +427,7 @@ files:
   zh: zh/guide/cloud/serviceDiscovery/serviceDiscoveryManual.adoc
   paragraphs: 14
   updated_at: '2026-11-20'
+  upstream_commit: 51650efcb97939ef02bf726bdcb28266b7ca20d1
 - file: guide/cloud/serviceDiscovery/serviceDiscoveryRoute53.adoc
   blob_sha: 8bad7c10cd313d3ee57c385656576345a1da3820
   size: 6291
@@ -382,6 +435,7 @@ files:
   zh: zh/guide/cloud/serviceDiscovery/serviceDiscoveryRoute53.adoc
   paragraphs: 60
   updated_at: '2026-11-20'
+  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/commandLineApps.adoc
   blob_sha: f88b4914ec588d407f343e90b0b0572aba32c4b6
   size: 359
@@ -389,6 +443,7 @@ files:
   zh: zh/guide/commandLineApps.adoc
   paragraphs: 3
   updated_at: '2026-11-20'
+  upstream_commit: 6750d82d163469ca4bef326dd67b7a5daa34a875
 - file: guide/commandLineApps/picocli.adoc
   blob_sha: e7f9d78bdc928e33e4788ad9f367f68a6b5bd9ad
   size: 456
@@ -396,6 +451,7 @@ files:
   zh: zh/guide/commandLineApps/picocli.adoc
   paragraphs: 2
   updated_at: '2026-11-20'
+  upstream_commit: 461985c2db1cfad049219629d4d289da46fd34dd
 - file: guide/config.adoc
   blob_sha: 7999fac82da143e0f16be8d135afb9f02b5abae0
   size: 1943
@@ -403,6 +459,7 @@ files:
   zh: zh/guide/config.adoc
   paragraphs: 7
   updated_at: '2026-11-20'
+  upstream_commit: 3db7caf1594e2ab430f1fd9fdfdc028beab0a29c
 - file: guide/config/banner.adoc
   blob_sha: e9f11f8fb12538b0994d74a00bdf5422c2fc109b
   size: 1034
@@ -410,6 +467,7 @@ files:
   zh: zh/guide/config/banner.adoc
   paragraphs: 8
   updated_at: '2026-11-20'
+  upstream_commit: 8b0864ad8f103900d8cd522704223d93d49edf43
 - file: guide/config/bootstrap.adoc
   blob_sha: c718890fd4ed679eff43f39400b544702ae1c41f
   size: 3517
@@ -417,6 +475,7 @@ files:
   zh: zh/guide/config/bootstrap.adoc
   paragraphs: 11
   updated_at: '2026-11-20'
+  upstream_commit: 53af04a2bdea87c92bfb9cc0a87241d21a79b574
 - file: guide/config/configurationProperties.adoc
   blob_sha: 39683df65243717e40697052860aa98baf82cf69
   size: 11949
@@ -424,6 +483,7 @@ files:
   zh: zh/guide/config/configurationProperties.adoc
   paragraphs: 93
   updated_at: '2026-11-20'
+  upstream_commit: 141801d51f78801de73ea33aab4592c00e79a3aa
 - file: guide/config/customTypeConverter.adoc
   blob_sha: a31c9f190d9ab2a42554eb82f75caa851d2a2b83
   size: 1891
@@ -431,6 +491,7 @@ files:
   zh: zh/guide/config/customTypeConverter.adoc
   paragraphs: 12
   updated_at: '2026-11-20'
+  upstream_commit: cd72cbf2bfa925c44026ed87fb2a96ce9611e73c
 - file: guide/config/eachBean.adoc
   blob_sha: 777cdddab8cb69a56c16642160fdf1d03cf308e9
   size: 1593
@@ -438,6 +499,7 @@ files:
   zh: zh/guide/config/eachBean.adoc
   paragraphs: 7
   updated_at: '2026-11-20'
+  upstream_commit: bfb3a1601298c19e037120bbdba9d1c722bd6d22
 - file: guide/config/eachProperty.adoc
   blob_sha: fa42f7d051445da837d0185f2293590eb937caf5
   size: 2793
@@ -445,6 +507,7 @@ files:
   zh: zh/guide/config/eachProperty.adoc
   paragraphs: 14
   updated_at: '2026-11-20'
+  upstream_commit: a15ac7b65796f4b93cd37e0293a2daf8fc3d6687
 - file: guide/config/environments.adoc
   blob_sha: 4c2d7a7792c4c680aa30004fba0afe2a20f2f3d6
   size: 1396
@@ -452,6 +515,7 @@ files:
   zh: zh/guide/config/environments.adoc
   paragraphs: 10
   updated_at: '2026-11-20'
+  upstream_commit: 8b0864ad8f103900d8cd522704223d93d49edf43
 - file: guide/config/environments/defaultEnvironment.adoc
   blob_sha: f4366a90fd03daf48189301bacbdc6c0b55e1ab8
   size: 1446
@@ -459,6 +523,7 @@ files:
   zh: zh/guide/config/environments/defaultEnvironment.adoc
   paragraphs: 5
   updated_at: '2026-11-20'
+  upstream_commit: 8b0864ad8f103900d8cd522704223d93d49edf43
 - file: guide/config/environments/disablingEnvironmentDetection.adoc
   blob_sha: 21fd83295b23480c5e7a8e98b0cef20d1ad2bbbd
   size: 804
@@ -466,6 +531,7 @@ files:
   zh: zh/guide/config/environments/disablingEnvironmentDetection.adoc
   paragraphs: 6
   updated_at: '2026-11-20'
+  upstream_commit: 8b0864ad8f103900d8cd522704223d93d49edf43
 - file: guide/config/environments/environmentPriority.adoc
   blob_sha: bd1cca10c3a06a56fb4b94b3efcfd9c347d9afec
   size: 644
@@ -473,6 +539,7 @@ files:
   zh: zh/guide/config/environments/environmentPriority.adoc
   paragraphs: 4
   updated_at: '2026-11-20'
+  upstream_commit: 8b0864ad8f103900d8cd522704223d93d49edf43
 - file: guide/config/evaluatedExpressions.adoc
   blob_sha: c7fc084c223c8f7b3dc9185fa2d53721145ea0db
   size: 15077
@@ -480,6 +547,7 @@ files:
   zh: zh/guide/config/evaluatedExpressions.adoc
   paragraphs: 141
   updated_at: '2026-11-20'
+  upstream_commit: 130cfede2d9a325faf7016bf10e0a2060c5a3cbd
 - file: guide/config/immutableConfig.adoc
   blob_sha: 3eef8aca10360c7600554f36a28f8351d3a6bdd8
   size: 8107
@@ -487,6 +555,7 @@ files:
   zh: zh/guide/config/immutableConfig.adoc
   paragraphs: 40
   updated_at: '2026-11-20'
+  upstream_commit: 9b98b3ee2c416a07f1a6d4af8d6ffb01233adda7
 - file: guide/config/jmx.adoc
   blob_sha: e924d0f15937ca951e2b9c0c00d75d3979e17c18
   size: 194
@@ -494,6 +563,7 @@ files:
   zh: zh/guide/config/jmx.adoc
   paragraphs: 2
   updated_at: '2026-11-20'
+  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/config/propertySource.adoc
   blob_sha: ae4b84c3d480f4154a3eb6b81e4a9d8738ff46af
   size: 16256
@@ -501,6 +571,7 @@ files:
   zh: zh/guide/config/propertySource.adoc
   paragraphs: 107
   updated_at: '2026-11-20'
+  upstream_commit: cf57233fbf01f04684b450c04ae371aaf246e5dd
 - file: guide/config/valueAnnotation.adoc
   blob_sha: edebfca76447c624bfb9232828cc7666957faadc
   size: 5069
@@ -508,6 +579,7 @@ files:
   zh: zh/guide/config/valueAnnotation.adoc
   paragraphs: 47
   updated_at: '2026-11-20'
+  upstream_commit: 8df8f983d510c789d46b953833ab46b442e150c4
 - file: guide/configurations.adoc
   blob_sha: e1021983277ae6a84378b8964f22c8f21b88d232
   size: 127
@@ -515,6 +587,7 @@ files:
   zh: zh/guide/configurations.adoc
   paragraphs: 1
   updated_at: '2026-11-20'
+  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/configurations/dataAccess.adoc
   blob_sha: 30121da3d58e6d3b5fd0181d6583374c73687f1f
   size: 2083
@@ -522,6 +595,7 @@ files:
   zh: zh/guide/configurations/dataAccess.adoc
   paragraphs: 8
   updated_at: '2026-11-20'
+  upstream_commit: 7dd6cb2ab4ab3a02c16fae3691798313b8a880fc
 - file: guide/configurations/dataAccess/cassandraSupport.adoc
   blob_sha: d4642b4f54ee55ad1c2eef91cbf8a7ee2c391ae8
   size: 364
@@ -529,6 +603,7 @@ files:
   zh: zh/guide/configurations/dataAccess/cassandraSupport.adoc
   paragraphs: 7
   updated_at: '2026-11-20'
+  upstream_commit: 461985c2db1cfad049219629d4d289da46fd34dd
 - file: guide/configurations/dataAccess/flywaySupport.adoc
   blob_sha: 5142bc03abaf19ca4afd69845e52775fc1ac06b9
   size: 187
@@ -536,6 +611,7 @@ files:
   zh: zh/guide/configurations/dataAccess/flywaySupport.adoc
   paragraphs: 1
   updated_at: '2026-11-20'
+  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/configurations/dataAccess/hibernateSupport.adoc
   blob_sha: 569fd66b5f1cbdb3e1f11a5bf92e2b1ec4f2aaed
   size: 882
@@ -543,6 +619,7 @@ files:
   zh: zh/guide/configurations/dataAccess/hibernateSupport.adoc
   paragraphs: 11
   updated_at: '2026-11-20'
+  upstream_commit: 7dd6cb2ab4ab3a02c16fae3691798313b8a880fc
 - file: guide/configurations/dataAccess/liquibaseSupport.adoc
   blob_sha: aa1f40282db2b77de2a8279e3d2ce0d4451755ea
   size: 198
@@ -550,6 +627,7 @@ files:
   zh: zh/guide/configurations/dataAccess/liquibaseSupport.adoc
   paragraphs: 1
   updated_at: '2026-11-20'
+  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/configurations/dataAccess/mongoSupport.adoc
   blob_sha: 64dcb1c708ab45a7513adb053e81e66c7382c255
   size: 1559
@@ -557,6 +635,7 @@ files:
   zh: zh/guide/configurations/dataAccess/mongoSupport.adoc
   paragraphs: 20
   updated_at: '2026-11-20'
+  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/configurations/dataAccess/neo4jSupport.adoc
   blob_sha: beae36049d327e4299f7c8cfe6d286deb8c17185
   size: 1392
@@ -564,6 +643,7 @@ files:
   zh: zh/guide/configurations/dataAccess/neo4jSupport.adoc
   paragraphs: 16
   updated_at: '2026-11-20'
+  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/configurations/dataAccess/postgresSupport.adoc
   blob_sha: 49d3357c59d6871be7333e72c8a99fa89dd2f213
   size: 971
@@ -571,6 +651,7 @@ files:
   zh: zh/guide/configurations/dataAccess/postgresSupport.adoc
   paragraphs: 13
   updated_at: '2026-11-20'
+  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/configurations/dataAccess/redisSupport.adoc
   blob_sha: a190ba1ed42ba7cecd2ee30b8bfbf42002378dd7
   size: 1239
@@ -578,6 +659,7 @@ files:
   zh: zh/guide/configurations/dataAccess/redisSupport.adoc
   paragraphs: 19
   updated_at: '2026-11-20'
+  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/configurations/dataAccess/sqlSupport.adoc
   blob_sha: c3045edd6a0f528a5fc0bd912e09c063dccc3f20
   size: 1378
@@ -585,6 +667,7 @@ files:
   zh: zh/guide/configurations/dataAccess/sqlSupport.adoc
   paragraphs: 16
   updated_at: '2026-11-20'
+  upstream_commit: 2cdec8a96d87c7538ac0a63cf9527dc06e827d3d
 - file: guide/configurations/reactiveConfigs.adoc
   blob_sha: f3c8a5515a52da5e3b7138e17c5ca35dfe54f870
   size: 228
@@ -592,6 +675,7 @@ files:
   zh: zh/guide/configurations/reactiveConfigs.adoc
   paragraphs: 1
   updated_at: '2026-11-20'
+  upstream_commit: 51650efcb97939ef02bf726bdcb28266b7ca20d1
 - file: guide/configurations/reactiveConfigs/reactor.adoc
   blob_sha: cb1e8e85867443e17e4d3a0c4b21d16265f16e58
   size: 424
@@ -599,6 +683,7 @@ files:
   zh: zh/guide/configurations/reactiveConfigs/reactor.adoc
   paragraphs: 5
   updated_at: '2026-11-20'
+  upstream_commit: eb891b91ca2ab6aa90a1dd6dde328e8c354bacdb
 - file: guide/configurations/reactiveConfigs/rxjava3.adoc
   blob_sha: 6cd7c641b9c0480507f6c35b5d3068f1a7c81861
   size: 405
@@ -606,6 +691,7 @@ files:
   zh: zh/guide/configurations/reactiveConfigs/rxjava3.adoc
   paragraphs: 5
   updated_at: '2026-11-20'
+  upstream_commit: 461985c2db1cfad049219629d4d289da46fd34dd
 - file: guide/contextPropagation.adoc
   blob_sha: d63ca8b2633b619a21e3ca2807498623418d1bb6
   size: 10860
@@ -613,6 +699,7 @@ files:
   zh: zh/guide/contextPropagation.adoc
   paragraphs: 50
   updated_at: '2026-11-20'
+  upstream_commit: 6434999218d31e77996cd0532788a1106eb6069b
 - file: guide/contextPropagation/httpFilterContextPropagation.adoc
   blob_sha: 299ac3d540e5d226b633ad0537a8143c7e1aedd6
   size: 1452
@@ -620,6 +707,7 @@ files:
   zh: zh/guide/contextPropagation/httpFilterContextPropagation.adoc
   paragraphs: 11
   updated_at: '2026-11-20'
+  upstream_commit: d781f7aafb91cef137f7362cf7267f3c99755942
 - file: guide/contextPropagation/reactorContextPropagation.adoc
   blob_sha: 3c909f97aa9789b101b5467dbdb1a0cb3a10d17a
   size: 2172
@@ -627,6 +715,7 @@ files:
   zh: zh/guide/contextPropagation/reactorContextPropagation.adoc
   paragraphs: 17
   updated_at: '2026-11-20'
+  upstream_commit: 15119ba9ee63100091348d40eaffe708155b53ae
 - file: guide/httpClient.adoc
   blob_sha: 55eabc3e3a984be0c3790d3b161ba8bfacd0a7d6
   size: 413
@@ -634,6 +723,7 @@ files:
   zh: zh/guide/httpClient.adoc
   paragraphs: 2
   updated_at: '2026-11-20'
+  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/httpClient/clientAnnotation.adoc
   blob_sha: f85d8578e9974551ec610f1537d2cce46106e494
   size: 5076
@@ -641,6 +731,7 @@ files:
   zh: zh/guide/httpClient/clientAnnotation.adoc
   paragraphs: 27
   updated_at: '2026-11-20'
+  upstream_commit: 8c82ee03540bc11bc707c777c7ff4aa00d5be9d7
 - file: guide/httpClient/clientAnnotation/clientAnnotationStreaming.adoc
   blob_sha: 4788912468bc14e62ef986351c6056c8efeff6d0
   size: 4595
@@ -648,6 +739,7 @@ files:
   zh: zh/guide/httpClient/clientAnnotation/clientAnnotationStreaming.adoc
   paragraphs: 38
   updated_at: '2026-11-20'
+  upstream_commit: 51650efcb97939ef02bf726bdcb28266b7ca20d1
 - file: guide/httpClient/clientAnnotation/clientError.adoc
   blob_sha: 5843979b326a182daa7ca91596a5d84f77ee172c
   size: 1286
@@ -655,6 +747,7 @@ files:
   zh: zh/guide/httpClient/clientAnnotation/clientError.adoc
   paragraphs: 6
   updated_at: '2026-11-20'
+  upstream_commit: ed1b6b412483a05ce3def2e3ed6de041fef4c1dd
 - file: guide/httpClient/clientAnnotation/clientFallback.adoc
   blob_sha: 8f4bcf25ca0f06ae436364f5d0e0982b7c69910e
   size: 1924
@@ -662,6 +755,7 @@ files:
   zh: zh/guide/httpClient/clientAnnotation/clientFallback.adoc
   paragraphs: 10
   updated_at: '2026-11-20'
+  upstream_commit: 51650efcb97939ef02bf726bdcb28266b7ca20d1
 - file: guide/httpClient/clientAnnotation/clientHeaders.adoc
   blob_sha: 02b9a784c0a650155b94afec96c015204cbbeee4
   size: 1249
@@ -669,6 +763,7 @@ files:
   zh: zh/guide/httpClient/clientAnnotation/clientHeaders.adoc
   paragraphs: 14
   updated_at: '2026-11-20'
+  upstream_commit: 51650efcb97939ef02bf726bdcb28266b7ca20d1
 - file: guide/httpClient/clientAnnotation/clientJackson.adoc
   blob_sha: a1f46232be4eec7c58768c49d3ff826a2718ff0d
   size: 1962
@@ -676,6 +771,7 @@ files:
   zh: zh/guide/httpClient/clientAnnotation/clientJackson.adoc
   paragraphs: 14
   updated_at: '2026-11-20'
+  upstream_commit: 39c74acd625cd5264dad23ce05d78a59e4786006
 - file: guide/httpClient/clientAnnotation/clientParameters.adoc
   blob_sha: 90453d601e8e5f385501a73ca180a6be4a9798a3
   size: 7987
@@ -683,6 +779,7 @@ files:
   zh: zh/guide/httpClient/clientAnnotation/clientParameters.adoc
   paragraphs: 59
   updated_at: '2026-11-20'
+  upstream_commit: 51650efcb97939ef02bf726bdcb28266b7ca20d1
 - file: guide/httpClient/clientAnnotation/clientRetry.adoc
   blob_sha: 5f3b96638eb3383a16af4b0de051b088d2625bf3
   size: 863
@@ -690,6 +787,7 @@ files:
   zh: zh/guide/httpClient/clientAnnotation/clientRetry.adoc
   paragraphs: 6
   updated_at: '2026-11-20'
+  upstream_commit: 101feb709aa8b6d596555d3594f47b2f4292ea13
 - file: guide/httpClient/clientFilter.adoc
   blob_sha: 662a05a19a201b1c6403f7f8abc1fc02cec658b6
   size: 3906
@@ -697,6 +795,7 @@ files:
   zh: zh/guide/httpClient/clientFilter.adoc
   paragraphs: 26
   updated_at: '2026-11-20'
+  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/httpClient/clientHttp2.adoc
   blob_sha: 04a0759f40b71de823b63f9a0cc868a9d5fe67bd
   size: 458
@@ -704,6 +803,7 @@ files:
   zh: zh/guide/httpClient/clientHttp2.adoc
   paragraphs: 8
   updated_at: '2026-11-20'
+  upstream_commit: 51650efcb97939ef02bf726bdcb28266b7ca20d1
 - file: guide/httpClient/clientHttp3.adoc
   blob_sha: 1994a56e2b86aef2efcd3cc3df39f7f84a8e9cea
   size: 665
@@ -711,6 +811,7 @@ files:
   zh: zh/guide/httpClient/clientHttp3.adoc
   paragraphs: 7
   updated_at: '2026-11-20'
+  upstream_commit: 6434999218d31e77996cd0532788a1106eb6069b
 - file: guide/httpClient/clientSample.adoc
   blob_sha: 28d6b657d12140b197c9613e044a698c14bc134e
   size: 313
@@ -718,6 +819,7 @@ files:
   zh: zh/guide/httpClient/clientSample.adoc
   paragraphs: 1
   updated_at: '2026-11-20'
+  upstream_commit: eb891b91ca2ab6aa90a1dd6dde328e8c354bacdb
 - file: guide/httpClient/httpClientImplementations.adoc
   blob_sha: 1ca30803a798ceaa296c5efe90cdfcbc3dea7117
   size: 64
@@ -725,6 +827,7 @@ files:
   zh: zh/guide/httpClient/httpClientImplementations.adoc
   paragraphs: 1
   updated_at: '2026-11-20'
+  upstream_commit: 96b31e99e0507ffbb2633a87a8c8660684da672e
 - file: guide/httpClient/httpClientImplementations/jdkHttpClient.adoc
   blob_sha: 0722f1928a2fe533d203ed5550b948444d530dee
   size: 732
@@ -732,6 +835,7 @@ files:
   zh: zh/guide/httpClient/httpClientImplementations/jdkHttpClient.adoc
   paragraphs: 6
   updated_at: '2026-11-20'
+  upstream_commit: dfc95c44e18513d331ca74fb3384074ee41fc974
 - file: guide/httpClient/httpClientImplementations/nettyHttpClient.adoc
   blob_sha: a5c1905e8c734622e41c4c811c5dfef6fa79dfe8
   size: 892
@@ -739,6 +843,7 @@ files:
   zh: zh/guide/httpClient/httpClientImplementations/nettyHttpClient.adoc
   paragraphs: 8
   updated_at: '2026-11-20'
+  upstream_commit: 8fbb1c848e5b3efa9cca6687546ec41a7a5fc9eb
 - file: guide/httpClient/lowLevelHttpClient.adoc
   blob_sha: 8d3aec5f453416debf9dc995c5803a6adbdd1d8f
   size: 817
@@ -746,6 +851,7 @@ files:
   zh: zh/guide/httpClient/lowLevelHttpClient.adoc
   paragraphs: 4
   updated_at: '2026-11-20'
+  upstream_commit: 15119ba9ee63100091348d40eaffe708155b53ae
 - file: guide/httpClient/lowLevelHttpClient/bindErrors.adoc
   blob_sha: fc2d4ff70d9026c67298cd6ca6da3b78c21c7a35
   size: 456
@@ -753,6 +859,7 @@ files:
   zh: zh/guide/httpClient/lowLevelHttpClient/bindErrors.adoc
   paragraphs: 5
   updated_at: '2026-11-20'
+  upstream_commit: 461985c2db1cfad049219629d4d289da46fd34dd
 - file: guide/httpClient/lowLevelHttpClient/clientBasics.adoc
   blob_sha: 563af401f2c76d292efef14a963e39cf5a2a5ee2
   size: 7580
@@ -760,6 +867,7 @@ files:
   zh: zh/guide/httpClient/lowLevelHttpClient/clientBasics.adoc
   paragraphs: 63
   updated_at: '2026-11-20'
+  upstream_commit: 8c82ee03540bc11bc707c777c7ff4aa00d5be9d7
 - file: guide/httpClient/lowLevelHttpClient/clientConfiguration.adoc
   blob_sha: 7d71d03bcc665a660a71904bfab5b28699ac7ceb
   size: 7532
@@ -767,6 +875,7 @@ files:
   zh: zh/guide/httpClient/lowLevelHttpClient/clientConfiguration.adoc
   paragraphs: 66
   updated_at: '2026-11-20'
+  upstream_commit: c7d277606d0198c1c5d3067f209600a65bdc03a6
 - file: guide/httpClient/lowLevelHttpClient/clientPostRequests.adoc
   blob_sha: b1fd3fd078c8b38078ec62c7446195332fb17d35
   size: 3252
@@ -774,6 +883,7 @@ files:
   zh: zh/guide/httpClient/lowLevelHttpClient/clientPostRequests.adoc
   paragraphs: 26
   updated_at: '2026-11-20'
+  upstream_commit: 461985c2db1cfad049219629d4d289da46fd34dd
 - file: guide/httpClient/lowLevelHttpClient/clientStreaming.adoc
   blob_sha: 473e2957ef249f8c5e971311fdaa647dee6ed86c
   size: 2273
@@ -781,6 +891,7 @@ files:
   zh: zh/guide/httpClient/lowLevelHttpClient/clientStreaming.adoc
   paragraphs: 11
   updated_at: '2026-11-20'
+  upstream_commit: e78e2b3f353f89c72d9de5f333d83ddcd10c6227
 - file: guide/httpClient/lowLevelHttpClient/clientUploads.adoc
   blob_sha: d1aeec3b6b876389248d99fcc615cb5743091740
   size: 1045
@@ -788,6 +899,7 @@ files:
   zh: zh/guide/httpClient/lowLevelHttpClient/clientUploads.adoc
   paragraphs: 7
   updated_at: '2026-11-20'
+  upstream_commit: 461985c2db1cfad049219629d4d289da46fd34dd
 - file: guide/httpClient/lowLevelHttpClient/lowLevelClientError.adoc
   blob_sha: 2ad6eba69160edb2b846d651f7e3b7a6a6d07b7a
   size: 429
@@ -795,6 +907,7 @@ files:
   zh: zh/guide/httpClient/lowLevelHttpClient/lowLevelClientError.adoc
   paragraphs: 2
   updated_at: '2026-11-20'
+  upstream_commit: 461985c2db1cfad049219629d4d289da46fd34dd
 - file: guide/httpClient/lowLevelOrHighLevel.adoc
   blob_sha: a469afb7b3cc2b9c0e8080bf395590c2956d6a4b
   size: 107
@@ -802,6 +915,7 @@ files:
   zh: zh/guide/httpClient/lowLevelOrHighLevel.adoc
   paragraphs: 1
   updated_at: '2026-11-20'
+  upstream_commit: 96b31e99e0507ffbb2633a87a8c8660684da672e
 - file: guide/httpClient/nettyPooling.adoc
   blob_sha: 98582849f1b6da4246ba080710b6f3b1a21b2af6
   size: 3045
@@ -809,6 +923,7 @@ files:
   zh: zh/guide/httpClient/nettyPooling.adoc
   paragraphs: 9
   updated_at: '2026-11-20'
+  upstream_commit: ab21d0f116c82d0a078d1287aff2ad5f27fd3546
 - file: guide/httpClient/proxyClient.adoc
   blob_sha: 10297e4fbdf899f53c93e0ecd0bd3ed67457449c
   size: 1273
@@ -816,6 +931,7 @@ files:
   zh: zh/guide/httpClient/proxyClient.adoc
   paragraphs: 6
   updated_at: '2026-11-20'
+  upstream_commit: 51650efcb97939ef02bf726bdcb28266b7ca20d1
 - file: guide/httpServer.adoc
   blob_sha: 4b54755e91404d6aba0e24af6b129244ac58a43d
   size: 1242
@@ -823,6 +939,7 @@ files:
   zh: zh/guide/httpServer.adoc
   paragraphs: 11
   updated_at: '2026-11-20'
+  upstream_commit: 81ce0379668d4989110a20d8b9adf924019c0170
 - file: guide/httpServer/apiVersioning.adoc
   blob_sha: 6ba6c817cf372d8711c29644b9338cbfcc2d7dc1
   size: 4058
@@ -830,6 +947,7 @@ files:
   zh: zh/guide/httpServer/apiVersioning.adoc
   paragraphs: 40
   updated_at: '2026-11-20'
+  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/httpServer/binding.adoc
   blob_sha: abbcdc2cdf1843f49eff55b350842cc3c0a20916
   size: 7188
@@ -837,6 +955,7 @@ files:
   zh: zh/guide/httpServer/binding.adoc
   paragraphs: 46
   updated_at: '2026-11-20'
+  upstream_commit: cd72cbf2bfa925c44026ed87fb2a96ce9611e73c
 - file: guide/httpServer/byteBody.adoc
   blob_sha: 0f35af7cba94cf31d0f49ce9f5659e9cfe444a86
   size: 944
@@ -844,6 +963,7 @@ files:
   zh: zh/guide/httpServer/byteBody.adoc
   paragraphs: 3
   updated_at: '2026-11-20'
+  upstream_commit: c81e528d6cafb5080926e2c1c6784029ba022f00
 - file: guide/httpServer/byteBody/byteBodyExample.adoc
   blob_sha: 483889b2f093dc9288e97947f1751406188421a6
   size: 3082
@@ -851,6 +971,7 @@ files:
   zh: zh/guide/httpServer/byteBody/byteBodyExample.adoc
   paragraphs: 11
   updated_at: '2026-11-20'
+  upstream_commit: 51fe0b42cf118c0d984f04f5ce5367446914b278
 - file: guide/httpServer/byteBody/byteBodyPrimary.adoc
   blob_sha: 9b295e021e6be54cb56b8e8fa1f3474d3f24580f
   size: 1150
@@ -858,6 +979,7 @@ files:
   zh: zh/guide/httpServer/byteBody/byteBodyPrimary.adoc
   paragraphs: 5
   updated_at: '2026-11-20'
+  upstream_commit: 51fe0b42cf118c0d984f04f5ce5367446914b278
 - file: guide/httpServer/byteBody/byteBodySplitting.adoc
   blob_sha: 445f39704c8c7638c0ee3368df27751664ef3b4d
   size: 4258
@@ -865,6 +987,7 @@ files:
   zh: zh/guide/httpServer/byteBody/byteBodySplitting.adoc
   paragraphs: 14
   updated_at: '2026-11-20'
+  upstream_commit: 51fe0b42cf118c0d984f04f5ce5367446914b278
 - file: guide/httpServer/clientIpAddress.adoc
   blob_sha: 781cce43e6f16f826b3258fe3d7b4bb598b8b831
   size: 479
@@ -872,6 +995,7 @@ files:
   zh: zh/guide/httpServer/clientIpAddress.adoc
   paragraphs: 4
   updated_at: '2026-11-20'
+  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/httpServer/consumesAnnotation.adoc
   blob_sha: 2d863afa816696dfb8b2745acec17ed605548daa
   size: 1235
@@ -879,6 +1003,7 @@ files:
   zh: zh/guide/httpServer/consumesAnnotation.adoc
   paragraphs: 8
   updated_at: '2026-11-20'
+  upstream_commit: 177ff8c487e6de7e344af9bb60696fe78e017557
 - file: guide/httpServer/customArgumentBinding.adoc
   blob_sha: 613c626a251550b92cef052760d3299b25157750
   size: 5030
@@ -886,6 +1011,7 @@ files:
   zh: zh/guide/httpServer/customArgumentBinding.adoc
   paragraphs: 24
   updated_at: '2026-11-20'
+  upstream_commit: 1db1fb2cca43ee8084305cb50c2bde86bb7443f2
 - file: guide/httpServer/datavalidation.adoc
   blob_sha: bbb644b9ed1f6c0ec201397bf01853600824a3cd
   size: 2272
@@ -893,6 +1019,7 @@ files:
   zh: zh/guide/httpServer/datavalidation.adoc
   paragraphs: 21
   updated_at: '2026-11-20'
+  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/httpServer/datavalidation/validationGroups.adoc
   blob_sha: 0675167f1a01b4a1e568cd69f120df83053c7a54
   size: 2478
@@ -900,6 +1027,7 @@ files:
   zh: zh/guide/httpServer/datavalidation/validationGroups.adoc
   paragraphs: 12
   updated_at: '2026-11-20'
+  upstream_commit: 0c3de5221574ed09f9f7e539c7a95dd8af1cc894
 - file: guide/httpServer/errorHandling.adoc
   blob_sha: fd305ab90f15086584cb65dac732a27329e0c4c3
   size: 109
@@ -907,6 +1035,7 @@ files:
   zh: zh/guide/httpServer/errorHandling.adoc
   paragraphs: 1
   updated_at: '2026-11-20'
+  upstream_commit: 2def91e9f5fa9ec97f0f69aee5b5397912657533
 - file: guide/httpServer/errorHandling/errorFormatting.adoc
   blob_sha: ff1f20be84cce6e365181eb113e34b92bdbe0d71
   size: 1825
@@ -914,6 +1043,7 @@ files:
   zh: zh/guide/httpServer/errorHandling/errorFormatting.adoc
   paragraphs: 9
   updated_at: '2026-11-20'
+  upstream_commit: 6434999218d31e77996cd0532788a1106eb6069b
 - file: guide/httpServer/errorHandling/exceptionHandler.adoc
   blob_sha: c6dfa0bfe8ae6f417d050e3bd642edfb9d76c6d9
   size: 318
@@ -921,6 +1051,7 @@ files:
   zh: zh/guide/httpServer/errorHandling/exceptionHandler.adoc
   paragraphs: 2
   updated_at: '2026-11-20'
+  upstream_commit: 2def91e9f5fa9ec97f0f69aee5b5397912657533
 - file: guide/httpServer/errorHandling/exceptionHandler/builtInExceptionHandlers.adoc
   blob_sha: d9676a5f062327eb4aa3ee8c8ee11c4df1687771
   size: 1566
@@ -928,6 +1059,7 @@ files:
   zh: zh/guide/httpServer/errorHandling/exceptionHandler/builtInExceptionHandlers.adoc
   paragraphs: 2
   updated_at: '2026-11-20'
+  upstream_commit: 8084660489a4d619f632105a2bc652dbd5c83b40
 - file: guide/httpServer/errorHandling/exceptionHandler/customExceptionHandler.adoc
   blob_sha: a72e831d4b18fb005b882ec8f9913fa7876d2edd
   size: 736
@@ -935,6 +1067,7 @@ files:
   zh: zh/guide/httpServer/errorHandling/exceptionHandler/customExceptionHandler.adoc
   paragraphs: 8
   updated_at: '2026-11-20'
+  upstream_commit: 31bdb72f837188d7432007bbee051eb47dd99561
 - file: guide/httpServer/errorHandling/globalErrorHandling.adoc
   blob_sha: 3c982ec79b456f097003fdb7edb0a191bb7b7546
   size: 1056
@@ -942,6 +1075,7 @@ files:
   zh: zh/guide/httpServer/errorHandling/globalErrorHandling.adoc
   paragraphs: 5
   updated_at: '2026-11-20'
+  upstream_commit: 2def91e9f5fa9ec97f0f69aee5b5397912657533
 - file: guide/httpServer/errorHandling/localErrorHandling.adoc
   blob_sha: cb0a27803f29645a0f94a602cd8e52f39295e9bb
   size: 1261
@@ -949,6 +1083,7 @@ files:
   zh: zh/guide/httpServer/errorHandling/localErrorHandling.adoc
   paragraphs: 6
   updated_at: '2026-11-20'
+  upstream_commit: 035bea06872bdd52ccbdbfa0d23f9d8ef7198e36
 - file: guide/httpServer/errorHandling/statusHandlers.adoc
   blob_sha: 9ebeb1a5c0fb5ea85170b2e0566a30ad3d4f4780
   size: 921
@@ -956,6 +1091,7 @@ files:
   zh: zh/guide/httpServer/errorHandling/statusHandlers.adoc
   paragraphs: 4
   updated_at: '2026-11-20'
+  upstream_commit: 15119ba9ee63100091348d40eaffe708155b53ae
 - file: guide/httpServer/filters.adoc
   blob_sha: e21f056a12dba55b6caecd280efd987907a4854e
   size: 786
@@ -963,6 +1099,7 @@ files:
   zh: zh/guide/httpServer/filters.adoc
   paragraphs: 6
   updated_at: '2026-11-20'
+  upstream_commit: 28c03b94f70c18a2a760248f27136d5320101144
 - file: guide/httpServer/filters/filterPatterns.adoc
   blob_sha: d3aaa285bfa1457ec0c3a2b6c8d163d341b73480
   size: 1582
@@ -970,6 +1107,7 @@ files:
   zh: zh/guide/httpServer/filters/filterPatterns.adoc
   paragraphs: 7
   updated_at: '2026-11-20'
+  upstream_commit: 98deb9ebdf280e267a9bb6fb7f64a43281184e15
 - file: guide/httpServer/filters/filtermethods.adoc
   blob_sha: eed401187e4c320a11bf25c57c230a04cf3e99cd
   size: 1852
@@ -977,6 +1115,7 @@ files:
   zh: zh/guide/httpServer/filters/filtermethods.adoc
   paragraphs: 9
   updated_at: '2026-11-20'
+  upstream_commit: 130cfede2d9a325faf7016bf10e0a2060c5a3cbd
 - file: guide/httpServer/filters/filtermethods/continuations.adoc
   blob_sha: 02f79919da537d383160c679925d02fa3a6bcc56
   size: 1309
@@ -984,6 +1123,7 @@ files:
   zh: zh/guide/httpServer/filters/filtermethods/continuations.adoc
   paragraphs: 4
   updated_at: '2026-11-20'
+  upstream_commit: 28c03b94f70c18a2a760248f27136d5320101144
 - file: guide/httpServer/filters/filtermethods/errorStates.adoc
   blob_sha: 1556a163c539d45ed65cc0cc346afbf9780178c6
   size: 1226
@@ -991,6 +1131,7 @@ files:
   zh: zh/guide/httpServer/filters/filtermethods/errorStates.adoc
   paragraphs: 4
   updated_at: '2026-11-20'
+  upstream_commit: 28c03b94f70c18a2a760248f27136d5320101144
 - file: guide/httpServer/filters/filtermethods/filtermethodproceed.adoc
   blob_sha: 0dfa2eaa95309b0fe38368e1ec754ee03d353719
   size: 467
@@ -998,6 +1139,7 @@ files:
   zh: zh/guide/httpServer/filters/filtermethods/filtermethodproceed.adoc
   paragraphs: 3
   updated_at: '2026-11-20'
+  upstream_commit: c233fcbaa9017c670deb5dc43454f671e03136df
 - file: guide/httpServer/filters/filtermethods/filtermethodsexample.adoc
   blob_sha: cb768594786065404021aae1db417ce8b53423a4
   size: 1475
@@ -1005,6 +1147,7 @@ files:
   zh: zh/guide/httpServer/filters/filtermethods/filtermethodsexample.adoc
   paragraphs: 9
   updated_at: '2026-11-20'
+  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/httpServer/filters/filtermethods/order.adoc
   blob_sha: 0721bc3cf34683ad8a27b9402e31581d6f18f6f9
   size: 1460
@@ -1012,6 +1155,7 @@ files:
   zh: zh/guide/httpServer/filters/filtermethods/order.adoc
   paragraphs: 6
   updated_at: '2026-11-20'
+  upstream_commit: cfa82d22642c6ea6f26b6ce2a869bee256d9f50a
 - file: guide/httpServer/filters/httpServerFilter.adoc
   blob_sha: 72c375c5ed68f2d6b721f2d909c8fb888113f4d9
   size: 1129
@@ -1019,6 +1163,7 @@ files:
   zh: zh/guide/httpServer/filters/httpServerFilter.adoc
   paragraphs: 7
   updated_at: '2026-11-20'
+  upstream_commit: 28c03b94f70c18a2a760248f27136d5320101144
 - file: guide/httpServer/filters/httpServerFilter/httpServerFilterErrorStates.adoc
   blob_sha: b9b2aedc00f2b82c2d322f8eff3b3bded4804919
   size: 515
@@ -1026,6 +1171,7 @@ files:
   zh: zh/guide/httpServer/filters/httpServerFilter/httpServerFilterErrorStates.adoc
   paragraphs: 1
   updated_at: '2026-11-20'
+  upstream_commit: 28c03b94f70c18a2a760248f27136d5320101144
 - file: guide/httpServer/filters/httpServerFilter/httpServerFilterExample.adoc
   blob_sha: abe38de566d2a961733eb8bac9d4f2c4dac4111f
   size: 2046
@@ -1033,6 +1179,7 @@ files:
   zh: zh/guide/httpServer/filters/httpServerFilter/httpServerFilterExample.adoc
   paragraphs: 10
   updated_at: '2026-11-20'
+  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/httpServer/filters/responseHeaderPopulator.adoc
   blob_sha: 86dab2035f3e27b34c93095c65f987f42489ce87
   size: 1383
@@ -1040,6 +1187,7 @@ files:
   zh: zh/guide/httpServer/filters/responseHeaderPopulator.adoc
   paragraphs: 7
   updated_at: '2026-11-20'
+  upstream_commit: 16a56976c7dc7abe5d5bdd22c63c7f5948150498
 - file: guide/httpServer/form.adoc
   blob_sha: d88d2036858cc3c073f3b1f34950fae7eb26958c
   size: 141
@@ -1047,6 +1195,7 @@ files:
   zh: zh/guide/httpServer/form.adoc
   paragraphs: 1
   updated_at: '2026-11-20'
+  upstream_commit: eaedb2b726f150450aed2e69bfa3ae939be8553b
 - file: guide/httpServer/form/formBinding.adoc
   blob_sha: 670096a68f8762aa3a078b271f4fc45553ff9a2d
   size: 7119
@@ -1054,6 +1203,7 @@ files:
   zh: zh/guide/httpServer/form/formBinding.adoc
   paragraphs: 43
   updated_at: '2026-11-20'
+  upstream_commit: 130cfede2d9a325faf7016bf10e0a2060c5a3cbd
 - file: guide/httpServer/form/formCapable.adoc
   blob_sha: 2f13b9c85eb73621e6844bb14f2f0755f6b9c0d0
   size: 1413
@@ -1061,6 +1211,7 @@ files:
   zh: zh/guide/httpServer/form/formCapable.adoc
   paragraphs: 8
   updated_at: '2026-11-20'
+  upstream_commit: eaedb2b726f150450aed2e69bfa3ae939be8553b
 - file: guide/httpServer/formData.adoc
   blob_sha: 5f37d6a2fd6f2ca949d4e9b810113130bc131f48
   size: 1693
@@ -1068,6 +1219,7 @@ files:
   zh: zh/guide/httpServer/formData.adoc
   paragraphs: 9
   updated_at: '2026-11-20'
+  upstream_commit: a9c9208e4abf8af75c7d4c75d17f42b0af85bdd8
 - file: guide/httpServer/graphql.adoc
   blob_sha: 56d83f3b00bc376a7ceb051bb00bcfd0d451e554
   size: 367
@@ -1075,6 +1227,7 @@ files:
   zh: zh/guide/httpServer/graphql.adoc
   paragraphs: 2
   updated_at: '2026-11-20'
+  upstream_commit: fef87bbe1d6aba475241386c1fc2f4fd3f2709a3
 - file: guide/httpServer/hostResolution.adoc
   blob_sha: db6c021659803c086e82c30c42ff58db779d6247
   size: 1028
@@ -1082,6 +1235,7 @@ files:
   zh: zh/guide/httpServer/hostResolution.adoc
   paragraphs: 6
   updated_at: '2026-11-20'
+  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/httpServer/http2Server.adoc
   blob_sha: 33c303d48aae1be9bed14348938ca4378572f5c8
   size: 2824
@@ -1089,6 +1243,7 @@ files:
   zh: zh/guide/httpServer/http2Server.adoc
   paragraphs: 25
   updated_at: '2026-11-20'
+  upstream_commit: 51650efcb97939ef02bf726bdcb28266b7ca20d1
 - file: guide/httpServer/http3Server.adoc
   blob_sha: 44342079866c9a1cff60a408b1a2b7456373b62f
   size: 996
@@ -1096,6 +1251,7 @@ files:
   zh: zh/guide/httpServer/http3Server.adoc
   paragraphs: 10
   updated_at: '2026-11-20'
+  upstream_commit: 65c241037edd6d5843c4f3356b33f67fe0f2d51c
 - file: guide/httpServer/jsonBinding.adoc
   blob_sha: b873e7cb501a06a876b33c20cde1db262e0c2091
   size: 588
@@ -1103,6 +1259,7 @@ files:
   zh: zh/guide/httpServer/jsonBinding.adoc
   paragraphs: 4
   updated_at: '2026-11-20'
+  upstream_commit: cfeff23c1cc4994af8b35a93d245ac72c4eab18f
 - file: guide/httpServer/jsonBinding/bindingUsingCompletableFuture.adoc
   blob_sha: 5577ea5e934a4612640f5a6d6a041f4ba524c0e0
   size: 408
@@ -1110,6 +1267,7 @@ files:
   zh: zh/guide/httpServer/jsonBinding/bindingUsingCompletableFuture.adoc
   paragraphs: 3
   updated_at: '2026-11-20'
+  upstream_commit: 444c5a1d04bf4d68b1790a78563e8e84393868da
 - file: guide/httpServer/jsonBinding/bindingUsingPOJOs.adoc
   blob_sha: 8abd54d69f124877267f0450424bd53ee4341a98
   size: 436
@@ -1117,6 +1275,7 @@ files:
   zh: zh/guide/httpServer/jsonBinding/bindingUsingPOJOs.adoc
   paragraphs: 4
   updated_at: '2026-11-20'
+  upstream_commit: 444c5a1d04bf4d68b1790a78563e8e84393868da
 - file: guide/httpServer/jsonBinding/bindingUsingReactiveFrameworks.adoc
   blob_sha: 74be1c1a8d9bdffe39d3286497485022ad2356e7
   size: 896
@@ -1124,6 +1283,7 @@ files:
   zh: zh/guide/httpServer/jsonBinding/bindingUsingReactiveFrameworks.adoc
   paragraphs: 6
   updated_at: '2026-11-20'
+  upstream_commit: 444c5a1d04bf4d68b1790a78563e8e84393868da
 - file: guide/httpServer/jsonBinding/jacksonConfiguration.adoc
   blob_sha: 03c473812a9d6f11a230403031ba1dc9bc35f8dc
   size: 1614
@@ -1131,6 +1291,7 @@ files:
   zh: zh/guide/httpServer/jsonBinding/jacksonConfiguration.adoc
   paragraphs: 9
   updated_at: '2026-11-20'
+  upstream_commit: 39c74acd625cd5264dad23ce05d78a59e4786006
 - file: guide/httpServer/jsonBinding/jacksonConfiguration/jacksonConfigurationBeans.adoc
   blob_sha: 5f128cb12ecf69043ab34f4c0e6434e7518d083d
   size: 891
@@ -1138,6 +1299,7 @@ files:
   zh: zh/guide/httpServer/jsonBinding/jacksonConfiguration/jacksonConfigurationBeans.adoc
   paragraphs: 3
   updated_at: '2026-11-20'
+  upstream_commit: cfeff23c1cc4994af8b35a93d245ac72c4eab18f
 - file: guide/httpServer/jsonBinding/jacksonConfiguration/jacksonConfigurationFeatures.adoc
   blob_sha: 092ad71578024d70591d886da7d351be60184cfb
   size: 608
@@ -1145,6 +1307,7 @@ files:
   zh: zh/guide/httpServer/jsonBinding/jacksonConfiguration/jacksonConfigurationFeatures.adoc
   paragraphs: 6
   updated_at: '2026-11-20'
+  upstream_commit: b01f693b42261f67d9dd6149095fcf41f3162581
 - file: guide/httpServer/jsonBinding/jacksonConfiguration/jacksonConfigurationFurtherCustomisingJsonFactory.adoc
   blob_sha: 21282d2c02974aef017616ed2a4acd7e60ac33e3
   size: 409
@@ -1152,6 +1315,7 @@ files:
   zh: zh/guide/httpServer/jsonBinding/jacksonConfiguration/jacksonConfigurationFurtherCustomisingJsonFactory.adoc
   paragraphs: 1
   updated_at: '2026-11-20'
+  upstream_commit: 444c5a1d04bf4d68b1790a78563e8e84393868da
 - file: guide/httpServer/jsonBinding/jacksonConfiguration/jacksonConfigurationNumberPrecision.adoc
   blob_sha: 178b83a0c7437a5a185a4d29d1f8210708805f13
   size: 763
@@ -1159,6 +1323,7 @@ files:
   zh: zh/guide/httpServer/jsonBinding/jacksonConfiguration/jacksonConfigurationNumberPrecision.adoc
   paragraphs: 4
   updated_at: '2026-11-20'
+  upstream_commit: 444c5a1d04bf4d68b1790a78563e8e84393868da
 - file: guide/httpServer/jsonBinding/jacksonConfiguration/jacksonConfigurationServiceLoader.adoc
   blob_sha: 863f4f8a30c5ad88eec586a0d3c9ee085c3f4ab3
   size: 91
@@ -1166,6 +1331,7 @@ files:
   zh: zh/guide/httpServer/jsonBinding/jacksonConfiguration/jacksonConfigurationServiceLoader.adoc
   paragraphs: 1
   updated_at: '2026-11-20'
+  upstream_commit: 444c5a1d04bf4d68b1790a78563e8e84393868da
 - file: guide/httpServer/jsonBinding/jacksonConfiguration/jacksonConfigurationSupportForJsonView.adoc
   blob_sha: 93cf7bb6fc553405cc984b89b4bcf2a21458c6b1
   size: 425
@@ -1173,6 +1339,7 @@ files:
   zh: zh/guide/httpServer/jsonBinding/jacksonConfiguration/jacksonConfigurationSupportForJsonView.adoc
   paragraphs: 2
   updated_at: '2026-11-20'
+  upstream_commit: 444c5a1d04bf4d68b1790a78563e8e84393868da
 - file: guide/httpServer/jsonBinding/jsonMapper.adoc
   blob_sha: 602c3ad0f8569a9b7029bd9c05628feb6881bc65
   size: 862
@@ -1180,6 +1347,7 @@ files:
   zh: zh/guide/httpServer/jsonBinding/jsonMapper.adoc
   paragraphs: 3
   updated_at: '2026-11-20'
+  upstream_commit: 39c74acd625cd5264dad23ce05d78a59e4786006
 - file: guide/httpServer/jsonBinding/serializationUsingJacksonDatabind.adoc
   blob_sha: ee9ee6cad9a2f2c107662a9b7abdc4238cca7e1b
   size: 764
@@ -1187,6 +1355,7 @@ files:
   zh: zh/guide/httpServer/jsonBinding/serializationUsingJacksonDatabind.adoc
   paragraphs: 6
   updated_at: '2026-11-20'
+  upstream_commit: 598f4bfa89de4d3b2c2afba99b57b57d4be905c4
 - file: guide/httpServer/jsonBinding/serializeUsingMicronautSerialization.adoc
   blob_sha: 4cd0f4dfbf267d210a1cd99e5d92c165b23f16e5
   size: 569
@@ -1194,6 +1363,7 @@ files:
   zh: zh/guide/httpServer/jsonBinding/serializeUsingMicronautSerialization.adoc
   paragraphs: 2
   updated_at: '2026-11-20'
+  upstream_commit: 444c5a1d04bf4d68b1790a78563e8e84393868da
 - file: guide/httpServer/localeResolution.adoc
   blob_sha: 8e5c2a7bfa8051833a359c4a1ab9302fe6126279
   size: 1293
@@ -1201,6 +1371,7 @@ files:
   zh: zh/guide/httpServer/localeResolution.adoc
   paragraphs: 6
   updated_at: '2026-11-20'
+  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/httpServer/openapi.adoc
   blob_sha: 8a2414f1a6af84b21afd78f932b691828a57dcee
   size: 220
@@ -1208,6 +1379,7 @@ files:
   zh: zh/guide/httpServer/openapi.adoc
   paragraphs: 1
   updated_at: '2026-11-20'
+  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/httpServer/plainTextResponses.adoc
   blob_sha: 8886cc12b00bf769fcc9e782d63a51da20211a09
   size: 1035
@@ -1215,6 +1387,7 @@ files:
   zh: zh/guide/httpServer/plainTextResponses.adoc
   paragraphs: 4
   updated_at: '2026-11-20'
+  upstream_commit: c953f5f0dcc7c55b4cfa27867c7408ba8ea8eef2
 - file: guide/httpServer/producesAnnotation.adoc
   blob_sha: bac33a7751f24e66eabdcf076c92fadad78ced26
   size: 528
@@ -1222,6 +1395,7 @@ files:
   zh: zh/guide/httpServer/producesAnnotation.adoc
   paragraphs: 3
   updated_at: '2026-11-20'
+  upstream_commit: 51650efcb97939ef02bf726bdcb28266b7ca20d1
 - file: guide/httpServer/reactiveServer.adoc
   blob_sha: 0346dc2e0e8fb3508aac599fa94473843c5e9f8e
   size: 3192
@@ -1229,6 +1403,7 @@ files:
   zh: zh/guide/httpServer/reactiveServer.adoc
   paragraphs: 16
   updated_at: '2026-11-20'
+  upstream_commit: d30693591dc1d05b57a85ccac2e0aad212e03d9b
 - file: guide/httpServer/reactiveServer/bodyAnnotation.adoc
   blob_sha: 18f4d7c4f5aa12d2326b6699c90809aff219979e
   size: 2465
@@ -1236,6 +1411,7 @@ files:
   zh: zh/guide/httpServer/reactiveServer/bodyAnnotation.adoc
   paragraphs: 10
   updated_at: '2026-11-20'
+  upstream_commit: 51650efcb97939ef02bf726bdcb28266b7ca20d1
 - file: guide/httpServer/reactiveServer/reactiveResponses.adoc
   blob_sha: ba0ba204b6785df9a19945a5c0e0a984fb3b2ed8
   size: 2743
@@ -1243,6 +1419,7 @@ files:
   zh: zh/guide/httpServer/reactiveServer/reactiveResponses.adoc
   paragraphs: 11
   updated_at: '2026-11-20'
+  upstream_commit: 8c82ee03540bc11bc707c777c7ff4aa00d5be9d7
 - file: guide/httpServer/requestResponse.adoc
   blob_sha: 3e299648c2820ead76677bdb1fd3895a60a8c4b6
   size: 3609
@@ -1250,6 +1427,7 @@ files:
   zh: zh/guide/httpServer/requestResponse.adoc
   paragraphs: 17
   updated_at: '2026-11-20'
+  upstream_commit: 1db1fb2cca43ee8084305cb50c2bde86bb7443f2
 - file: guide/httpServer/routing.adoc
   blob_sha: 5f079380a0de0f292b3e02df821cf876008187df
   size: 12814
@@ -1257,6 +1435,7 @@ files:
   zh: zh/guide/httpServer/routing.adoc
   paragraphs: 83
   updated_at: '2026-11-20'
+  upstream_commit: 130cfede2d9a325faf7016bf10e0a2060c5a3cbd
 - file: guide/httpServer/runningServer.adoc
   blob_sha: 6237609b8e8fe44e4dba201652569763a0994bb9
   size: 1117
@@ -1264,6 +1443,7 @@ files:
   zh: zh/guide/httpServer/runningServer.adoc
   paragraphs: 6
   updated_at: '2026-11-20'
+  upstream_commit: 52496518371db590c0a06457586d931823622ef8
 - file: guide/httpServer/runningSpecificPort.adoc
   blob_sha: c5ebb53643f1d76d50c4bdd94f1c965fa98671d2
   size: 539
@@ -1271,6 +1451,7 @@ files:
   zh: zh/guide/httpServer/runningSpecificPort.adoc
   paragraphs: 8
   updated_at: '2026-11-20'
+  upstream_commit: 51650efcb97939ef02bf726bdcb28266b7ca20d1
 - file: guide/httpServer/serverConfiguration.adoc
   blob_sha: d7ce888c69c8b896a6a3fac4c80bcb923e1bef5f
   size: 3051
@@ -1278,6 +1459,7 @@ files:
   zh: zh/guide/httpServer/serverConfiguration.adoc
   paragraphs: 29
   updated_at: '2026-11-20'
+  upstream_commit: c7d277606d0198c1c5d3067f209600a65bdc03a6
 - file: guide/httpServer/serverConfiguration/accessLogger.adoc
   blob_sha: 8633b373a1a59c763adc2c3faeb983ad15e35539
   size: 4608
@@ -1285,6 +1467,7 @@ files:
   zh: zh/guide/httpServer/serverConfiguration/accessLogger.adoc
   paragraphs: 24
   updated_at: '2026-11-20'
+  upstream_commit: a9c9208e4abf8af75c7d4c75d17f42b0af85bdd8
 - file: guide/httpServer/serverConfiguration/cors.adoc
   blob_sha: 6ef48df5e357f26a2109efd8067b72c28ee0a0fc
   size: 297
@@ -1292,6 +1475,7 @@ files:
   zh: zh/guide/httpServer/serverConfiguration/cors.adoc
   paragraphs: 2
   updated_at: '2026-11-20'
+  upstream_commit: 15119ba9ee63100091348d40eaffe708155b53ae
 - file: guide/httpServer/serverConfiguration/cors/annotationBasedCors.adoc
   blob_sha: 69962087550acc10bdb7b0cb33039a8ae750e2ff
   size: 2337
@@ -1299,6 +1483,7 @@ files:
   zh: zh/guide/httpServer/serverConfiguration/cors/annotationBasedCors.adoc
   paragraphs: 9
   updated_at: '2026-11-20'
+  upstream_commit: 47ee115f3816518db832989c8c78e7fd4f25ef24
 - file: guide/httpServer/serverConfiguration/cors/corsAllowCredentials.adoc
   blob_sha: ee01952771ebb4b101318582659ed9f704ad0452
   size: 298
@@ -1306,6 +1491,7 @@ files:
   zh: zh/guide/httpServer/serverConfiguration/cors/corsAllowCredentials.adoc
   paragraphs: 4
   updated_at: '2026-11-20'
+  upstream_commit: 6ec2e242eb3876bd80e128aa34034607afc552ce
 - file: guide/httpServer/serverConfiguration/cors/corsAllowPrivateNetwork.adoc
   blob_sha: 7528e6356bee691775e7b8fea9f4a49d5c5a87fb
   size: 406
@@ -1313,6 +1499,7 @@ files:
   zh: zh/guide/httpServer/serverConfiguration/cors/corsAllowPrivateNetwork.adoc
   paragraphs: 4
   updated_at: '2026-11-20'
+  upstream_commit: 47ee115f3816518db832989c8c78e7fd4f25ef24
 - file: guide/httpServer/serverConfiguration/cors/corsAllowedHeaders.adoc
   blob_sha: fb6e540e8a715dccb518110d51df6c08f3083672
   size: 445
@@ -1320,6 +1507,7 @@ files:
   zh: zh/guide/httpServer/serverConfiguration/cors/corsAllowedHeaders.adoc
   paragraphs: 5
   updated_at: '2026-11-20'
+  upstream_commit: bdf7b2ed69099fdff5cdacc09dcc2015504834b4
 - file: guide/httpServer/serverConfiguration/cors/corsAllowedMethods.adoc
   blob_sha: c34bc16f788f3fed6351db4fc11da971b60e5996
   size: 427
@@ -1327,6 +1515,7 @@ files:
   zh: zh/guide/httpServer/serverConfiguration/cors/corsAllowedMethods.adoc
   paragraphs: 5
   updated_at: '2026-11-20'
+  upstream_commit: bdf7b2ed69099fdff5cdacc09dcc2015504834b4
 - file: guide/httpServer/serverConfiguration/cors/corsAllowedOrigins.adoc
   blob_sha: f9cb137d8e486dd015e528067716bae9438c1ffa
   size: 1276
@@ -1334,6 +1523,7 @@ files:
   zh: zh/guide/httpServer/serverConfiguration/cors/corsAllowedOrigins.adoc
   paragraphs: 8
   updated_at: '2026-11-20'
+  upstream_commit: 8c82ee03540bc11bc707c777c7ff4aa00d5be9d7
 - file: guide/httpServer/serverConfiguration/cors/corsConfiguration.adoc
   blob_sha: 96862b8e19eb3219e7bbe1df89d8d0ec7834466d
   size: 1457
@@ -1341,6 +1531,7 @@ files:
   zh: zh/guide/httpServer/serverConfiguration/cors/corsConfiguration.adoc
   paragraphs: 12
   updated_at: '2026-11-20'
+  upstream_commit: e114ba068ff3ff1c69a22fef9b97a7be3a53d2be
 - file: guide/httpServer/serverConfiguration/cors/corsExposedHeaders.adoc
   blob_sha: 77bbf99c22609292dbd4efe679562df9e4b3f410
   size: 456
@@ -1348,6 +1539,7 @@ files:
   zh: zh/guide/httpServer/serverConfiguration/cors/corsExposedHeaders.adoc
   paragraphs: 4
   updated_at: '2026-11-20'
+  upstream_commit: bdf7b2ed69099fdff5cdacc09dcc2015504834b4
 - file: guide/httpServer/serverConfiguration/cors/corsMaxAge.adoc
   blob_sha: 34523504b66cd9cfae886488c878b1a72da0ce1b
   size: 304
@@ -1355,6 +1547,7 @@ files:
   zh: zh/guide/httpServer/serverConfiguration/cors/corsMaxAge.adoc
   paragraphs: 4
   updated_at: '2026-11-20'
+  upstream_commit: bdf7b2ed69099fdff5cdacc09dcc2015504834b4
 - file: guide/httpServer/serverConfiguration/cors/corsMultipleHeaderValues.adoc
   blob_sha: 81d929a8e18b541379799eee6639b3009db4ad00
   size: 319
@@ -1362,6 +1555,7 @@ files:
   zh: zh/guide/httpServer/serverConfiguration/cors/corsMultipleHeaderValues.adoc
   paragraphs: 3
   updated_at: '2026-11-20'
+  upstream_commit: e114ba068ff3ff1c69a22fef9b97a7be3a53d2be
 - file: guide/httpServer/serverConfiguration/corsCrossOriginEmbedderPolicy.adoc
   blob_sha: 84a9f7139343124d024573c5f3992abd5a63a9d5
   size: 500
@@ -1369,6 +1563,7 @@ files:
   zh: zh/guide/httpServer/serverConfiguration/corsCrossOriginEmbedderPolicy.adoc
   paragraphs: 5
   updated_at: '2026-11-20'
+  upstream_commit: 159bd3b9ae9f4c38afb2b619796afbd301c2a61b
 - file: guide/httpServer/serverConfiguration/corsCrossOriginResourcePolicy.adoc
   blob_sha: 986fbd74b8dfc117a915e27e51b28e21484ffeb0
   size: 494
@@ -1376,6 +1571,7 @@ files:
   zh: zh/guide/httpServer/serverConfiguration/corsCrossOriginResourcePolicy.adoc
   paragraphs: 5
   updated_at: '2026-11-20'
+  upstream_commit: 159bd3b9ae9f4c38afb2b619796afbd301c2a61b
 - file: guide/httpServer/serverConfiguration/dualProtocol.adoc
   blob_sha: fdf932f6b45b0ce8e8152a773cc1344eb955d5a7
   size: 1088
@@ -1383,6 +1579,7 @@ files:
   zh: zh/guide/httpServer/serverConfiguration/dualProtocol.adoc
   paragraphs: 10
   updated_at: '2026-11-20'
+  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/httpServer/serverConfiguration/https.adoc
   blob_sha: ace90f07b5a591b5d122612fd33056a2fee0b1cd
   size: 5158
@@ -1390,6 +1587,7 @@ files:
   zh: zh/guide/httpServer/serverConfiguration/https.adoc
   paragraphs: 45
   updated_at: '2026-11-20'
+  upstream_commit: ae09525c20868251edcc602b1aeee750a4eff458
 - file: guide/httpServer/serverConfiguration/listener.adoc
   blob_sha: 679261eb4eeaff7abea36a90e87abd2b20cd4db6
   size: 4189
@@ -1397,6 +1595,7 @@ files:
   zh: zh/guide/httpServer/serverConfiguration/listener.adoc
   paragraphs: 31
   updated_at: '2026-11-20'
+  upstream_commit: 67fd54d6794046a550dfc6fdf0df9524fc8109bb
 - file: guide/httpServer/serverConfiguration/nettyClientPipeline.adoc
   blob_sha: 8b94ac90a4c9018498c7dd9129363c829e290189
   size: 1216
@@ -1404,6 +1603,7 @@ files:
   zh: zh/guide/httpServer/serverConfiguration/nettyClientPipeline.adoc
   paragraphs: 5
   updated_at: '2026-11-20'
+  upstream_commit: 4236bf162a06cf8b51a4dc91eb222a0f85fc3e08
 - file: guide/httpServer/serverConfiguration/nettyServerPipeline.adoc
   blob_sha: dd482e1ce23e28b139bc0274220cee92261a317c
   size: 1541
@@ -1411,6 +1611,7 @@ files:
   zh: zh/guide/httpServer/serverConfiguration/nettyServerPipeline.adoc
   paragraphs: 6
   updated_at: '2026-11-20'
+  upstream_commit: a04877b58f5c4e98b91ffec498fa48b25c68785a
 - file: guide/httpServer/serverConfiguration/secondaryServers.adoc
   blob_sha: 15624a78719d6a69f47f3e17298fc3336957bb33
   size: 1997
@@ -1418,6 +1619,7 @@ files:
   zh: zh/guide/httpServer/serverConfiguration/secondaryServers.adoc
   paragraphs: 9
   updated_at: '2026-11-20'
+  upstream_commit: 1db1fb2cca43ee8084305cb50c2bde86bb7443f2
 - file: guide/httpServer/serverConfiguration/threadPools.adoc
   blob_sha: 7b2d3a11e329ea93f28b1e3a9212c34cecd9398a
   size: 1655
@@ -1425,6 +1627,7 @@ files:
   zh: zh/guide/httpServer/serverConfiguration/threadPools.adoc
   paragraphs: 12
   updated_at: '2026-11-20'
+  upstream_commit: 41131456aad0338e21715e5053d9ec7cc8da8e50
 - file: guide/httpServer/serverConfiguration/threadPools/atBlocking.adoc
   blob_sha: 027f1686e353c8dfb7573334d97a052655b37925
   size: 1536
@@ -1432,6 +1635,7 @@ files:
   zh: zh/guide/httpServer/serverConfiguration/threadPools/atBlocking.adoc
   paragraphs: 6
   updated_at: '2026-11-20'
+  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/httpServer/serverConfiguration/threadPools/blockingOperations.adoc
   blob_sha: ff3cbff3c1874605306e78696b65e59cadb48328
   size: 472
@@ -1439,6 +1643,7 @@ files:
   zh: zh/guide/httpServer/serverConfiguration/threadPools/blockingOperations.adoc
   paragraphs: 5
   updated_at: '2026-11-20'
+  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/httpServer/serverConfiguration/threadPools/virtualThreads.adoc
   blob_sha: 28ee22fe685ef18128f418fd1ba1d381a4c2a69a
   size: 1300
@@ -1446,6 +1651,7 @@ files:
   zh: zh/guide/httpServer/serverConfiguration/threadPools/virtualThreads.adoc
   paragraphs: 10
   updated_at: '2026-11-20'
+  upstream_commit: 69fa75ec5ab8d3854cf993cde254467f3d96f88b
 - file: guide/httpServer/serverEvents.adoc
   blob_sha: 695679e2bead72fbb0442388ffc88d5a6d922a49
   size: 3078
@@ -1453,6 +1659,7 @@ files:
   zh: zh/guide/httpServer/serverEvents.adoc
   paragraphs: 13
   updated_at: '2026-11-20'
+  upstream_commit: 81a969fe688bddb27d0b350d3814fd2e5b6deffd
 - file: guide/httpServer/serverIO.adoc
   blob_sha: f17ab1a25868056aa936211e3825e43d1fdf69e1
   size: 4313
@@ -1460,6 +1667,7 @@ files:
   zh: zh/guide/httpServer/serverIO.adoc
   paragraphs: 30
   updated_at: '2026-11-20'
+  upstream_commit: dd0b2892ce8fb77703fad18d5150d45d9874bc49
 - file: guide/httpServer/sessions.adoc
   blob_sha: 12cc50c1d3a19c81f0453f76cb9295fd4b3272f4
   size: 142
@@ -1467,6 +1675,7 @@ files:
   zh: zh/guide/httpServer/sessions.adoc
   paragraphs: 1
   updated_at: '2026-11-20'
+  upstream_commit: d72b31f5129030dcadfff4fc2827278bdfbe0a59
 - file: guide/httpServer/sse.adoc
   blob_sha: 77d5521d03d5ec55c5e949d67fa41237db6db899
   size: 2477
@@ -1474,6 +1683,7 @@ files:
   zh: zh/guide/httpServer/sse.adoc
   paragraphs: 14
   updated_at: '2026-11-20'
+  upstream_commit: 51650efcb97939ef02bf726bdcb28266b7ca20d1
 - file: guide/httpServer/staticResources.adoc
   blob_sha: 74a8ee9ca6c54807773e22fb4255901550a68141
   size: 586
@@ -1481,6 +1691,7 @@ files:
   zh: zh/guide/httpServer/staticResources.adoc
   paragraphs: 4
   updated_at: '2026-11-20'
+  upstream_commit: be413ff3e5bdfdfd4390db0dc5d44bd17baac069
 - file: guide/httpServer/statusAnnotation.adoc
   blob_sha: a6d6ce2006b303c6b934f396f884d85eb9404bd9
   size: 839
@@ -1488,6 +1699,7 @@ files:
   zh: zh/guide/httpServer/statusAnnotation.adoc
   paragraphs: 9
   updated_at: '2026-11-20'
+  upstream_commit: f423b790e9e1cb3fe0f6a1d97346e18dbcb97321
 - file: guide/httpServer/transfers.adoc
   blob_sha: 1e884487057ac3dcd5e754f99f85099777d98878
   size: 3865
@@ -1495,6 +1707,7 @@ files:
   zh: zh/guide/httpServer/transfers.adoc
   paragraphs: 23
   updated_at: '2026-11-20'
+  upstream_commit: 130cfede2d9a325faf7016bf10e0a2060c5a3cbd
 - file: guide/httpServer/uploads.adoc
   blob_sha: 7ec9d4a16cf4016ff6b027cf5ded51ca45e5e459
   size: 6790
@@ -1502,6 +1715,7 @@ files:
   zh: zh/guide/httpServer/uploads.adoc
   paragraphs: 42
   updated_at: '2026-11-20'
+  upstream_commit: a78be2fa265a697cafb29700333e836d0aa4ca6e
 - file: guide/httpServer/views.adoc
   blob_sha: 680dee54869b3efca92b9351463738a52a2cb593
   size: 198
@@ -1509,6 +1723,7 @@ files:
   zh: zh/guide/httpServer/views.adoc
   paragraphs: 2
   updated_at: '2026-11-20'
+  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/httpServer/websocket.adoc
   blob_sha: 927240b0baad3b85362b5ca86732a549d5981a5d
   size: 504
@@ -1516,6 +1731,7 @@ files:
   zh: zh/guide/httpServer/websocket.adoc
   paragraphs: 3
   updated_at: '2026-11-20'
+  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/httpServer/websocket/websocketClient.adoc
   blob_sha: 5e579e43eaf7333a051a592ecd71a0519b25cbc0
   size: 3144
@@ -1523,6 +1739,7 @@ files:
   zh: zh/guide/httpServer/websocket/websocketClient.adoc
   paragraphs: 33
   updated_at: '2026-11-20'
+  upstream_commit: 8c82ee03540bc11bc707c777c7ff4aa00d5be9d7
 - file: guide/httpServer/websocket/websocketServer.adoc
   blob_sha: d310ccc41ba45287a5c98a4ff2bd2768eb331565
   size: 6699
@@ -1530,6 +1747,7 @@ files:
   zh: zh/guide/httpServer/websocket/websocketServer.adoc
   paragraphs: 41
   updated_at: '2026-11-20'
+  upstream_commit: 86914a70409a596fcfb425a6c0e0945337efb5af
 - file: guide/i18n.adoc
   blob_sha: e69de29bb2d1d6434b8b29ae775ad8c2e48c5391
   size: 0
@@ -1537,6 +1755,7 @@ files:
   zh: zh/guide/i18n.adoc
   paragraphs: 0
   updated_at: '2026-11-20'
+  upstream_commit: 8b2d30813898ca1d6192f802333270cad6418948
 - file: guide/i18n/bundle.adoc
   blob_sha: bf9b081148ffedee1358d283e0e565708eaa419c
   size: 1190
@@ -1544,6 +1763,7 @@ files:
   zh: zh/guide/i18n/bundle.adoc
   paragraphs: 13
   updated_at: '2026-11-20'
+  upstream_commit: 556b9ef0bb0b04f1edcaa51934c1b91945ee68f2
 - file: guide/i18n/localizedMessageSource.adoc
   blob_sha: 86792941a25ded66724ca5e21e395e78e4ca8e1d
   size: 363
@@ -1551,6 +1771,7 @@ files:
   zh: zh/guide/i18n/localizedMessageSource.adoc
   paragraphs: 2
   updated_at: '2026-11-20'
+  upstream_commit: 15119ba9ee63100091348d40eaffe708155b53ae
 - file: guide/introduction.adoc
   blob_sha: c050e89f5eb8d222c5e5ac65af4639162d691c5c
   size: 2459
@@ -1558,6 +1779,7 @@ files:
   zh: zh/guide/introduction.adoc
   paragraphs: 11
   updated_at: '2026-11-20'
+  upstream_commit: b923377c5557e65395371815dd5f385193a63c84
 - file: guide/introduction/upgrading.adoc
   blob_sha: 87c63b0b218cc347f537733acdb68b8258c24d07
   size: 472
@@ -1565,6 +1787,7 @@ files:
   zh: zh/guide/introduction/upgrading.adoc
   paragraphs: 5
   updated_at: '2026-11-20'
+  upstream_commit: a2a522cc6dd46d4ed38e876e2ec8fb3d9f7246e4
 - file: guide/introduction/whatsNew.adoc
   blob_sha: c7ccfbff0dae838086982f05c70166ed69898975
   size: 4856
@@ -1572,6 +1795,7 @@ files:
   zh: zh/guide/introduction/whatsNew.adoc
   paragraphs: 20
   updated_at: '2026-11-20'
+  upstream_commit: 851c00bd0149f7103a5b7a164d1ce6f8d27f0ade
 - file: guide/ioc.adoc
   blob_sha: fd86d91a03310bd905115cbbf7c5bf5ac8885a7e
   size: 3053
@@ -1579,6 +1803,7 @@ files:
   zh: zh/guide/ioc.adoc
   paragraphs: 21
   updated_at: '2026-11-20'
+  upstream_commit: 3ef687b544a87f7458d428fab8b723f61a9dc870
 - file: guide/ioc/android.adoc
   blob_sha: fe6b934bb087e4a1392bf6353e5d0723c485be52
   size: 3002
@@ -1586,6 +1811,7 @@ files:
   zh: zh/guide/ioc/android.adoc
   paragraphs: 21
   updated_at: '2026-11-20'
+  upstream_commit: 35c9dea50c0646a60f2935b02078253b06f2d4e0
 - file: guide/ioc/annotationMetadata.adoc
   blob_sha: 53a6e57b20953cabbe648fabd2635d2d4957b189
   size: 16715
@@ -1593,6 +1819,7 @@ files:
   zh: zh/guide/ioc/annotationMetadata.adoc
   paragraphs: 77
   updated_at: '2026-11-20'
+  upstream_commit: 025ae13b07d45b26c0b0971923d0b828867452b2
 - file: guide/ioc/beanConfigurations.adoc
   blob_sha: e09ccd342e5eeb470203cb1f283ca8d4e4b2bd18
   size: 1167
@@ -1600,6 +1827,7 @@ files:
   zh: zh/guide/ioc/beanConfigurations.adoc
   paragraphs: 12
   updated_at: '2026-11-20'
+  upstream_commit: 51650efcb97939ef02bf726bdcb28266b7ca20d1
 - file: guide/ioc/beanContext.adoc
   blob_sha: e8a7e9f27f858d258423e02bfe9a78e8355a7563
   size: 579
@@ -1607,6 +1835,7 @@ files:
   zh: zh/guide/ioc/beanContext.adoc
   paragraphs: 2
   updated_at: '2026-11-20'
+  upstream_commit: 5b1500c6369253b4110f95b7c73f09b21735a255
 - file: guide/ioc/beanImport.adoc
   blob_sha: 5b50a5e7fef34b3da6cd9f2e9b0c15e976a58262
   size: 1383
@@ -1614,6 +1843,7 @@ files:
   zh: zh/guide/ioc/beanImport.adoc
   paragraphs: 9
   updated_at: '2026-11-20'
+  upstream_commit: 6b62d9ce07aae05cab1b252920d6513acaa6866d
 - file: guide/ioc/beanMappers.adoc
   blob_sha: e14ab1972f56e583f459ce2d278bbb97eabf081c
   size: 2751
@@ -1621,6 +1851,7 @@ files:
   zh: zh/guide/ioc/beanMappers.adoc
   paragraphs: 24
   updated_at: '2026-11-20'
+  upstream_commit: 130cfede2d9a325faf7016bf10e0a2060c5a3cbd
 - file: guide/ioc/beanMappers/beanMappersMerging.adoc
   blob_sha: ee5b30a06289cf7e4529328e7bd58c42b6937bb5
   size: 621
@@ -1628,6 +1859,7 @@ files:
   zh: zh/guide/ioc/beanMappers/beanMappersMerging.adoc
   paragraphs: 6
   updated_at: '2026-11-20'
+  upstream_commit: c9d771fbf81ef9073eda010c4f969cb526bb7eb0
 - file: guide/ioc/beanMappers/beanMappersMerging/beanMappersMergingStrategy.adoc
   blob_sha: ea57af5cd7ff2e8a207aa5c83ad20927a6c9779a
   size: 362
@@ -1635,6 +1867,7 @@ files:
   zh: zh/guide/ioc/beanMappers/beanMappersMerging/beanMappersMergingStrategy.adoc
   paragraphs: 3
   updated_at: '2026-11-20'
+  upstream_commit: c9d771fbf81ef9073eda010c4f969cb526bb7eb0
 - file: guide/ioc/beanValidation.adoc
   blob_sha: f36fd9577ec49d04157658b0c2b533ce04fe9a74
   size: 76
@@ -1642,6 +1875,7 @@ files:
   zh: zh/guide/ioc/beanValidation.adoc
   paragraphs: 1
   updated_at: '2026-11-20'
+  upstream_commit: 84852a75dc5bb9490d46aed90c92159cbfc391ef
 - file: guide/ioc/beans.adoc
   blob_sha: 39fb3c150b5f301119ea480bb46afd4203a51df8
   size: 1233
@@ -1649,6 +1883,7 @@ files:
   zh: zh/guide/ioc/beans.adoc
   paragraphs: 7
   updated_at: '2026-11-20'
+  upstream_commit: 34d2fcb3b9893d6174d3a7edd28a16cf77e15051
 - file: guide/ioc/classImport.adoc
   blob_sha: 9f694ec2dfd4f3e09bfff42ed62b3f9e620951ff
   size: 1867
@@ -1656,6 +1891,7 @@ files:
   zh: zh/guide/ioc/classImport.adoc
   paragraphs: 12
   updated_at: '2026-11-20'
+  upstream_commit: 77e0a29d7a2e866dcd42e2c0bd79d554c7fa4b2d
 - file: guide/ioc/conditionalBeans.adoc
   blob_sha: 0ba1d3d540388f9a07891b8343b0b8d245311025
   size: 5894
@@ -1663,6 +1899,7 @@ files:
   zh: zh/guide/ioc/conditionalBeans.adoc
   paragraphs: 36
   updated_at: '2026-11-20'
+  upstream_commit: 533a099abb19c41adf3518ad781cc041aca00f7d
 - file: guide/ioc/contextEvents.adoc
   blob_sha: a141e90caffc074762f78e229f70a145beae7951
   size: 3127
@@ -1670,6 +1907,7 @@ files:
   zh: zh/guide/ioc/contextEvents.adoc
   paragraphs: 20
   updated_at: '2026-11-20'
+  upstream_commit: 130cfede2d9a325faf7016bf10e0a2060c5a3cbd
 - file: guide/ioc/events.adoc
   blob_sha: bc6cd652b5959aa0b77ab3cbbac5a8d39822e22e
   size: 1811
@@ -1677,6 +1915,7 @@ files:
   zh: zh/guide/ioc/events.adoc
   paragraphs: 7
   updated_at: '2026-11-20'
+  upstream_commit: 52496518371db590c0a06457586d931823622ef8
 - file: guide/ioc/factories.adoc
   blob_sha: 2555bd62360ebdcbbd0912a911dcaa01d8e242db
   size: 5620
@@ -1684,6 +1923,7 @@ files:
   zh: zh/guide/ioc/factories.adoc
   paragraphs: 41
   updated_at: '2026-11-20'
+  upstream_commit: 51650efcb97939ef02bf726bdcb28266b7ca20d1
 - file: guide/ioc/gracefulShutdown.adoc
   blob_sha: 590c9d1bea599b438a1cb27e35a2ef6c4982044f
   size: 1377
@@ -1691,6 +1931,7 @@ files:
   zh: zh/guide/ioc/gracefulShutdown.adoc
   paragraphs: 5
   updated_at: '2026-11-20'
+  upstream_commit: ab7f7411ac458845a44cad05a44d155112f6a715
 - file: guide/ioc/how.adoc
   blob_sha: 17bd589deb88fd7e76df2773c0c9ea43c5dcd35e
   size: 1336
@@ -1698,6 +1939,7 @@ files:
   zh: zh/guide/ioc/how.adoc
   paragraphs: 5
   updated_at: '2026-11-20'
+  upstream_commit: 51650efcb97939ef02bf726bdcb28266b7ca20d1
 - file: guide/ioc/injection.adoc
   blob_sha: 52cecf03045ed8a1a910c9abba6c8797f9885db1
   size: 601
@@ -1705,6 +1947,7 @@ files:
   zh: zh/guide/ioc/injection.adoc
   paragraphs: 4
   updated_at: '2026-11-20'
+  upstream_commit: 94f089ad2675abd4ecd2ef5315ff602517d12e3c
 - file: guide/ioc/injection/constructorInjection.adoc
   blob_sha: b488d5b08d472500f4f7c66e1f61ca219971d6e0
   size: 2266
@@ -1712,6 +1955,7 @@ files:
   zh: zh/guide/ioc/injection/constructorInjection.adoc
   paragraphs: 10
   updated_at: '2026-11-20'
+  upstream_commit: dc62175fe6d4ea8e243d30b99badec90ffda330b
 - file: guide/ioc/injection/fieldInjection.adoc
   blob_sha: 69c555980fb0d167106ec9dad03b3e6ed96dd9d8
   size: 1022
@@ -1719,6 +1963,7 @@ files:
   zh: zh/guide/ioc/injection/fieldInjection.adoc
   paragraphs: 17
   updated_at: '2026-11-20'
+  upstream_commit: 130cfede2d9a325faf7016bf10e0a2060c5a3cbd
 - file: guide/ioc/injection/methodInjection.adoc
   blob_sha: 03fcffffe0369499d0c5dc0f05d367dd0e678744
   size: 821
@@ -1726,6 +1971,7 @@ files:
   zh: zh/guide/ioc/injection/methodInjection.adoc
   paragraphs: 7
   updated_at: '2026-11-20'
+  upstream_commit: 5b2e2bb6e6af14cdcb7ef0bcf4b1f363ccdae9df
 - file: guide/ioc/injection/nullableInjection.adoc
   blob_sha: e99993d695c4ab99e0051f8b3b224bbf5aa9ac66
   size: 2056
@@ -1733,6 +1979,7 @@ files:
   zh: zh/guide/ioc/injection/nullableInjection.adoc
   paragraphs: 29
   updated_at: '2026-11-20'
+  upstream_commit: 130cfede2d9a325faf7016bf10e0a2060c5a3cbd
 - file: guide/ioc/introspection.adoc
   blob_sha: 9003091558a43e0dba204d86b62abe7bd6870af1
   size: 444
@@ -1740,6 +1987,7 @@ files:
   zh: zh/guide/ioc/introspection.adoc
   paragraphs: 2
   updated_at: '2026-11-20'
+  upstream_commit: 8c82ee03540bc11bc707c777c7ff4aa00d5be9d7
 - file: guide/ioc/introspection/accessKind.adoc
   blob_sha: d2783d04735c64f51e4a76bf057079cbe3a9ae6d
   size: 813
@@ -1747,6 +1995,7 @@ files:
   zh: zh/guide/ioc/introspection/accessKind.adoc
   paragraphs: 5
   updated_at: '2026-11-20'
+  upstream_commit: 130cfede2d9a325faf7016bf10e0a2060c5a3cbd
 - file: guide/ioc/introspection/atCreator.adoc
   blob_sha: 9cc095baa236af22a9aca635226f80719de4ee6b
   size: 706
@@ -1754,6 +2003,7 @@ files:
   zh: zh/guide/ioc/introspection/atCreator.adoc
   paragraphs: 9
   updated_at: '2026-11-20'
+  upstream_commit: 130cfede2d9a325faf7016bf10e0a2060c5a3cbd
 - file: guide/ioc/introspection/atIntrospected.adoc
   blob_sha: 8ff795c4c72a2abd36c93990045f60368d7bc09d
   size: 1710
@@ -1761,6 +2011,7 @@ files:
   zh: zh/guide/ioc/introspection/atIntrospected.adoc
   paragraphs: 14
   updated_at: '2026-11-20'
+  upstream_commit: 130cfede2d9a325faf7016bf10e0a2060c5a3cbd
 - file: guide/ioc/introspection/beanWrapperApi.adoc
   blob_sha: f4bb372c6e879eef7537ed8663c9271a6a7453a8
   size: 1187
@@ -1768,6 +2019,7 @@ files:
   zh: zh/guide/ioc/introspection/beanWrapperApi.adoc
   paragraphs: 5
   updated_at: '2026-11-20'
+  upstream_commit: 9c73f45b86c1558c73f1bd4cc34ee5282bc199bc
 - file: guide/ioc/introspection/introspectExistingAnnotations.adoc
   blob_sha: 54727fc94b69d37fd7d1a3b51110d665793a9b47
   size: 534
@@ -1775,6 +2027,7 @@ files:
   zh: zh/guide/ioc/introspection/introspectExistingAnnotations.adoc
   paragraphs: 3
   updated_at: '2026-11-20'
+  upstream_commit: e7c661f2fdd0d01f955c8449e5af4ac7a883d50f
 - file: guide/ioc/introspection/introspectedAccessorsStyle.adoc
   blob_sha: 868214a67d6bbd95eb06389fed40f4f324c54940
   size: 580
@@ -1782,6 +2035,7 @@ files:
   zh: zh/guide/ioc/introspection/introspectedAccessorsStyle.adoc
   paragraphs: 5
   updated_at: '2026-11-20'
+  upstream_commit: c2f666c042f4d793b74e381831c7c6fd9fb3b36e
 - file: guide/ioc/introspection/introspectedAnnotationOnAConfigurationClass.adoc
   blob_sha: 1ecd64750b8a5e13e70457226e208cccb0bb16b2
   size: 643
@@ -1789,6 +2043,7 @@ files:
   zh: zh/guide/ioc/introspection/introspectedAnnotationOnAConfigurationClass.adoc
   paragraphs: 4
   updated_at: '2026-11-20'
+  upstream_commit: 9c73f45b86c1558c73f1bd4cc34ee5282bc199bc
 - file: guide/ioc/introspection/introspectedProperty.adoc
   blob_sha: 6d107943990de7be19c5427f7342dc89f57a5fbb
   size: 4301
@@ -1796,6 +2051,7 @@ files:
   zh: zh/guide/ioc/introspection/introspectedProperty.adoc
   paragraphs: 18
   updated_at: '2026-11-20'
+  upstream_commit: fa30d74f59340588f6f93fb0fe7737ea19371177
 - file: guide/ioc/introspection/introspectionBuilders.adoc
   blob_sha: 5c97bba19e9486c8728302a49280e82dade10eb2
   size: 944
@@ -1803,6 +2059,7 @@ files:
   zh: zh/guide/ioc/introspection/introspectionBuilders.adoc
   paragraphs: 6
   updated_at: '2026-11-20'
+  upstream_commit: 056c7bc89c3ce14ccab2c3c585f18b4a7d429673
 - file: guide/ioc/introspection/introspectionConstructors.adoc
   blob_sha: 2685ee333578482c2145c84e974098fee4c55650
   size: 1667
@@ -1810,6 +2067,7 @@ files:
   zh: zh/guide/ioc/introspection/introspectionConstructors.adoc
   paragraphs: 11
   updated_at: '2026-11-20'
+  upstream_commit: 469fd6a6789618074a27f1f463784d959e402b35
 - file: guide/ioc/introspection/introspectionEnums.adoc
   blob_sha: afeefd13dd01ed87d4954ae8b538bba8a73075c4
   size: 141
@@ -1817,6 +2075,7 @@ files:
   zh: zh/guide/ioc/introspection/introspectionEnums.adoc
   paragraphs: 1
   updated_at: '2026-11-20'
+  upstream_commit: 9c73f45b86c1558c73f1bd4cc34ee5282bc199bc
 - file: guide/ioc/introspection/introspectionTypeArguments.adoc
   blob_sha: 6efbe5632dc5105c81adbf044932459d86654973
   size: 1602
@@ -1824,6 +2083,7 @@ files:
   zh: zh/guide/ioc/introspection/introspectionTypeArguments.adoc
   paragraphs: 11
   updated_at: '2026-11-20'
+  upstream_commit: bff2ca174be33d95217ae9369048f5a46c7240b2
 - file: guide/ioc/introspection/kotlinAndBeanIntrospection.adoc
   blob_sha: f69e755494ed09efa1ba300bc30c3eed6ca6739a
   size: 693
@@ -1831,6 +2091,7 @@ files:
   zh: zh/guide/ioc/introspection/kotlinAndBeanIntrospection.adoc
   paragraphs: 9
   updated_at: '2026-11-20'
+  upstream_commit: eea9f6c9b38656e40af35bcfecb823bc6c1d0b88
 - file: guide/ioc/introspection/makingABeanAvailableForIntrospection.adoc
   blob_sha: df81b63ff867e4ca7200fcb6cc94d34226082a45
   size: 768
@@ -1838,6 +2099,7 @@ files:
   zh: zh/guide/ioc/introspection/makingABeanAvailableForIntrospection.adoc
   paragraphs: 5
   updated_at: '2026-11-20'
+  upstream_commit: 8c82ee03540bc11bc707c777c7ff4aa00d5be9d7
 - file: guide/ioc/introspection/propertyMembers.adoc
   blob_sha: ef2a9d334b02d5c93d0bbf07320077c04f96b232
   size: 2756
@@ -1845,6 +2107,7 @@ files:
   zh: zh/guide/ioc/introspection/propertyMembers.adoc
   paragraphs: 12
   updated_at: '2026-11-20'
+  upstream_commit: 701fae7b4620f1716fcce7b9e071137e9cf61fc8
 - file: guide/ioc/introspection/staticAtCreator.adoc
   blob_sha: 0bd831d7e7b11c2bc6c87bb99a450405590ec0f2
   size: 496
@@ -1852,6 +2115,7 @@ files:
   zh: zh/guide/ioc/introspection/staticAtCreator.adoc
   paragraphs: 4
   updated_at: '2026-11-20'
+  upstream_commit: 9c73f45b86c1558c73f1bd4cc34ee5282bc199bc
 - file: guide/ioc/iocDebugging.adoc
   blob_sha: 01f819a26d948ef64bf477d7e2dfad9a788b2ccd
   size: 892
@@ -1859,6 +2123,7 @@ files:
   zh: zh/guide/ioc/iocDebugging.adoc
   paragraphs: 11
   updated_at: '2026-11-20'
+  upstream_commit: 40f5e30ab6ec7ac3b353472007d29035fa1599bd
 - file: guide/ioc/lifecycle.adoc
   blob_sha: 8b5cb721635b3e256d8ca1f13fba249862844fa3
   size: 3579
@@ -1866,6 +2131,7 @@ files:
   zh: zh/guide/ioc/lifecycle.adoc
   paragraphs: 28
   updated_at: '2026-11-20'
+  upstream_commit: 6dc5efe9635874bfcce20a1332008f89d0fe1c70
 - file: guide/ioc/mixin.adoc
   blob_sha: 469ebffe3a24873063a49b9bb2d404d233181356
   size: 4060
@@ -1873,6 +2139,7 @@ files:
   zh: zh/guide/ioc/mixin.adoc
   paragraphs: 23
   updated_at: '2026-11-20'
+  upstream_commit: 77e0a29d7a2e866dcd42e2c0bd79d554c7fa4b2d
 - file: guide/ioc/nullabilityAnnotations.adoc
   blob_sha: 536e68c1bd9597666101eb186e7a761cb0b3c030
   size: 4273
@@ -1880,6 +2147,7 @@ files:
   zh: zh/guide/ioc/nullabilityAnnotations.adoc
   paragraphs: 21
   updated_at: '2026-11-20'
+  upstream_commit: cec2b9889871eabf0e2d95933b412f5a57cdca70
 - file: guide/ioc/nullabilityAnnotations/jspecify.adoc
   blob_sha: 496d4a31cd58997d4a22af9032a9d70ae539e331
   size: 1864
@@ -1887,6 +2155,7 @@ files:
   zh: zh/guide/ioc/nullabilityAnnotations/jspecify.adoc
   paragraphs: 8
   updated_at: '2026-11-20'
+  upstream_commit: 060ff25727271202d46d2d29c2433f6688dd6ca3
 - file: guide/ioc/qualifiers.adoc
   blob_sha: 2a2f7e0f4cdfc479ca41cde23b85c09fbf2284fa
   size: 7803
@@ -1894,6 +2163,7 @@ files:
   zh: zh/guide/ioc/qualifiers.adoc
   paragraphs: 67
   updated_at: '2026-11-20'
+  upstream_commit: 15119ba9ee63100091348d40eaffe708155b53ae
 - file: guide/ioc/reflection.adoc
   blob_sha: fee9571a39beabb43a51c19c6bb34f5777e9c541
   size: 13419
@@ -1901,6 +2171,7 @@ files:
   zh: zh/guide/ioc/reflection.adoc
   paragraphs: 50
   updated_at: '2026-11-20'
+  upstream_commit: 2c9161c43fc8ed4743dd637378eb9fc9d6f2047a
 - file: guide/ioc/replaces.adoc
   blob_sha: 9199fceb32c71cd02c1fa279f5d1bf09bac53c7b
   size: 4810
@@ -1908,6 +2179,7 @@ files:
   zh: zh/guide/ioc/replaces.adoc
   paragraphs: 36
   updated_at: '2026-11-20'
+  upstream_commit: c61386787e67fbb5438315d170efd47c44dc65d2
 - file: guide/ioc/scopes.adoc
   blob_sha: 8dee727e1e1655290c6972f12d2d43022064908c
   size: 128
@@ -1915,6 +2187,7 @@ files:
   zh: zh/guide/ioc/scopes.adoc
   paragraphs: 1
   updated_at: '2026-11-20'
+  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/ioc/scopes/builtInScopes.adoc
   blob_sha: e49e7b5571e3419491f615c256fa8d4ff3a1631d
   size: 2518
@@ -1922,6 +2195,7 @@ files:
   zh: zh/guide/ioc/scopes/builtInScopes.adoc
   paragraphs: 8
   updated_at: '2026-11-20'
+  upstream_commit: 400e272bf3fbf33a3489e17760ea3a590accf852
 - file: guide/ioc/scopes/builtInScopes/eagerInit.adoc
   blob_sha: 183ea26e38a51c31d0bf5eb769b49ca45e0df2ed
   size: 2155
@@ -1929,6 +2203,7 @@ files:
   zh: zh/guide/ioc/scopes/builtInScopes/eagerInit.adoc
   paragraphs: 15
   updated_at: '2026-11-20'
+  upstream_commit: 51650efcb97939ef02bf726bdcb28266b7ca20d1
 - file: guide/ioc/scopes/metaScopes.adoc
   blob_sha: 2e19faad8a8303c6651608b1b39104449acd1398
   size: 1863
@@ -1936,6 +2211,7 @@ files:
   zh: zh/guide/ioc/scopes/metaScopes.adoc
   paragraphs: 21
   updated_at: '2026-11-20'
+  upstream_commit: 92e1b442d416e561e4d0e18e6350176c69350263
 - file: guide/ioc/scopes/refreshable.adoc
   blob_sha: 5c4d18316d6b22d3f32f4ddc0ec0f01ce1197f96
   size: 1062
@@ -1943,6 +2219,7 @@ files:
   zh: zh/guide/ioc/scopes/refreshable.adoc
   paragraphs: 8
   updated_at: '2026-11-20'
+  upstream_commit: 5280436c47bbcd1a143801fcf266db27b3d6d758
 - file: guide/ioc/springBeans.adoc
   blob_sha: 8fd28e5d53d7956f23b290a2d63376ac460efa1b
   size: 196
@@ -1950,6 +2227,7 @@ files:
   zh: zh/guide/ioc/springBeans.adoc
   paragraphs: 1
   updated_at: '2026-11-20'
+  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/ioc/typed.adoc
   blob_sha: 925321454f881aec1d472a54fe86726be4fcbc75
   size: 1266
@@ -1957,6 +2235,7 @@ files:
   zh: zh/guide/ioc/typed.adoc
   paragraphs: 10
   updated_at: '2026-11-20'
+  upstream_commit: 51650efcb97939ef02bf726bdcb28266b7ca20d1
 - file: guide/ioc/types.adoc
   blob_sha: 7d4178cdb6eb3b0615ca3ce9017439f16bbc9d7a
   size: 4768
@@ -1964,6 +2243,7 @@ files:
   zh: zh/guide/ioc/types.adoc
   paragraphs: 14
   updated_at: '2026-11-20'
+  upstream_commit: b082149534e5c3d9c202d04380d63e8ef4158e4a
 - file: guide/languageSupport.adoc
   blob_sha: 01adae2cb38a495f5c8e321fa1576e86e989eb3a
   size: 732
@@ -1971,6 +2251,7 @@ files:
   zh: zh/guide/languageSupport.adoc
   paragraphs: 4
   updated_at: '2026-11-20'
+  upstream_commit: a3cd8c2bb12b566d82264ab110368eb63b78c285
 - file: guide/languageSupport/graal.adoc
   blob_sha: 9f24f73ebe8dca9d2f47afe9d84b3438949245a3
   size: 1365
@@ -1978,6 +2259,7 @@ files:
   zh: zh/guide/languageSupport/graal.adoc
   paragraphs: 7
   updated_at: '2026-11-20'
+  upstream_commit: 2069c06d4efb457624ecdd926fd30335e2d3e3d1
 - file: guide/languageSupport/graal/graalFAQ.adoc
   blob_sha: fd2ac7e10f9f6a8167e9525dc8575e68bf088216
   size: 3366
@@ -1985,6 +2267,7 @@ files:
   zh: zh/guide/languageSupport/graal/graalFAQ.adoc
   paragraphs: 25
   updated_at: '2026-11-20'
+  upstream_commit: 2069c06d4efb457624ecdd926fd30335e2d3e3d1
 - file: guide/languageSupport/graal/graalServices.adoc
   blob_sha: df3c05f4c2d06446bbd92e159d11298b935f11ea
   size: 7962
@@ -1992,6 +2275,7 @@ files:
   zh: zh/guide/languageSupport/graal/graalServices.adoc
   paragraphs: 78
   updated_at: '2026-11-20'
+  upstream_commit: 323b76904b8fe9060f347cffad02ce660b589a5f
 - file: guide/languageSupport/groovy.adoc
   blob_sha: 6994ce5e8af6d622ebbcd2a2fb8d5a0f7927d9ea
   size: 5304
@@ -1999,6 +2283,7 @@ files:
   zh: zh/guide/languageSupport/groovy.adoc
   paragraphs: 53
   updated_at: '2026-11-20'
+  upstream_commit: e71c488cf518aa2a41c1f3564ef0df656eec6772
 - file: guide/languageSupport/java.adoc
   blob_sha: 635177a5c51888b0d850452da1e70aaa3ce483e8
   size: 380
@@ -2006,6 +2291,7 @@ files:
   zh: zh/guide/languageSupport/java.adoc
   paragraphs: 2
   updated_at: '2026-11-20'
+  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/languageSupport/java/ide.adoc
   blob_sha: 1d9e821a3c940bba057cdc4308a13d4263f0b65f
   size: 407
@@ -2013,6 +2299,7 @@ files:
   zh: zh/guide/languageSupport/java/ide.adoc
   paragraphs: 3
   updated_at: '2026-11-20'
+  upstream_commit: 91d2b59dc99e78ca58af5af2ddc69ce8e58a3cb4
 - file: guide/languageSupport/java/incrementalannotationgradle.adoc
   blob_sha: c1dccef66695fa1f0860c706168a1d350e53e070
   size: 1041
@@ -2020,6 +2307,7 @@ files:
   zh: zh/guide/languageSupport/java/incrementalannotationgradle.adoc
   paragraphs: 7
   updated_at: '2026-11-20'
+  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/languageSupport/java/java9.adoc
   blob_sha: 44e84d8f38f815f79cde2e4674a93b6558f624d1
   size: 749
@@ -2027,6 +2315,7 @@ files:
   zh: zh/guide/languageSupport/java/java9.adoc
   paragraphs: 9
   updated_at: '2026-11-20'
+  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/languageSupport/java/lombok.adoc
   blob_sha: c5bec9fbeb0d5a0633cd9e32f10597fe2e533f18
   size: 1703
@@ -2034,6 +2323,7 @@ files:
   zh: zh/guide/languageSupport/java/lombok.adoc
   paragraphs: 11
   updated_at: '2026-11-20'
+  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/languageSupport/java/retainparameternames.adoc
   blob_sha: 46f4c622723cbefd91727d29a26465ac35813b06
   size: 1135
@@ -2041,6 +2331,7 @@ files:
   zh: zh/guide/languageSupport/java/retainparameternames.adoc
   paragraphs: 13
   updated_at: '2026-11-20'
+  upstream_commit: 51650efcb97939ef02bf726bdcb28266b7ca20d1
 - file: guide/languageSupport/kotlin.adoc
   blob_sha: a17ae9f2ece7c8832f57259e8ef19e3c970dd77a
   size: 493
@@ -2048,6 +2339,7 @@ files:
   zh: zh/guide/languageSupport/kotlin.adoc
   paragraphs: 5
   updated_at: '2026-11-20'
+  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/languageSupport/kotlin/controller.adoc
   blob_sha: 17e7c8a1cf970bd5ee04f5cb89ca095f0e507d9d
   size: 330
@@ -2055,6 +2347,7 @@ files:
   zh: zh/guide/languageSupport/kotlin/controller.adoc
   paragraphs: 4
   updated_at: '2026-11-20'
+  upstream_commit: 270734a035b8da357b2be9fb572466ac5eb208b0
 - file: guide/languageSupport/kotlin/coroutineTracingContextPropagation.adoc
   blob_sha: d881548a35d661ad6ce136d3092d6f5f381a3ab2
   size: 1264
@@ -2062,6 +2355,7 @@ files:
   zh: zh/guide/languageSupport/kotlin/coroutineTracingContextPropagation.adoc
   paragraphs: 4
   updated_at: '2026-11-20'
+  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/languageSupport/kotlin/coroutines.adoc
   blob_sha: 09c1dd05a4022a0122eb78ccb4c29ebf7595e9d6
   size: 2018
@@ -2069,6 +2363,7 @@ files:
   zh: zh/guide/languageSupport/kotlin/coroutines.adoc
   paragraphs: 26
   updated_at: '2026-11-20'
+  upstream_commit: 130cfede2d9a325faf7016bf10e0a2060c5a3cbd
 - file: guide/languageSupport/kotlin/gradlekapt.adoc
   blob_sha: 1f5cb63baf38d94910d5a16a633cb7aea623b9c2
   size: 757
@@ -2076,6 +2371,7 @@ files:
   zh: zh/guide/languageSupport/kotlin/gradlekapt.adoc
   paragraphs: 6
   updated_at: '2026-11-20'
+  upstream_commit: 5280436c47bbcd1a143801fcf266db27b3d6d758
 - file: guide/languageSupport/kotlin/kapt.adoc
   blob_sha: 985ef4c63dc55fd09746d7382a80acdb735b1d2e
   size: 1504
@@ -2083,6 +2379,7 @@ files:
   zh: zh/guide/languageSupport/kotlin/kapt.adoc
   paragraphs: 10
   updated_at: '2026-11-20'
+  upstream_commit: 270734a035b8da357b2be9fb572466ac5eb208b0
 - file: guide/languageSupport/kotlin/kaptOrKsp.adoc
   blob_sha: 8aa13a9094c662acd984e27ed41741ae70fefc8d
   size: 959
@@ -2090,6 +2387,7 @@ files:
   zh: zh/guide/languageSupport/kotlin/kaptOrKsp.adoc
   paragraphs: 10
   updated_at: '2026-11-20'
+  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/languageSupport/kotlin/kaptintellij.adoc
   blob_sha: 98e21ac514b4152575f2b882cb774696c08280d2
   size: 866
@@ -2097,6 +2395,7 @@ files:
   zh: zh/guide/languageSupport/kotlin/kaptintellij.adoc
   paragraphs: 8
   updated_at: '2026-11-20'
+  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/languageSupport/kotlin/kotlinContextPropagation.adoc
   blob_sha: c207cbae4a253677d1f4a250b8ade6afcfd52025
   size: 1542
@@ -2104,6 +2403,7 @@ files:
   zh: zh/guide/languageSupport/kotlin/kotlinContextPropagation.adoc
   paragraphs: 10
   updated_at: '2026-11-20'
+  upstream_commit: cc2f7604cfb5273d34854b2476a6335c07077b20
 - file: guide/languageSupport/kotlin/kotlinretainparamnames.adoc
   blob_sha: 963f6dea8e6b046482b0a85ce2cbf3269d8a608d
   size: 1386
@@ -2111,6 +2411,7 @@ files:
   zh: zh/guide/languageSupport/kotlin/kotlinretainparamnames.adoc
   paragraphs: 10
   updated_at: '2026-11-20'
+  upstream_commit: 17da29d2e04fc2fa6f8d6b53a00fd62d5372fa45
 - file: guide/languageSupport/kotlin/ksp.adoc
   blob_sha: 75e8179b319b035b9fa56eb5df3d05a4892e2d5e
   size: 3156
@@ -2118,6 +2419,7 @@ files:
   zh: zh/guide/languageSupport/kotlin/ksp.adoc
   paragraphs: 19
   updated_at: '2026-11-20'
+  upstream_commit: bf6df0c89f63556ea6e8e5948d77084a7c1989ae
 - file: guide/languageSupport/kotlin/openandaop.adoc
   blob_sha: dd298fa275436af7a846563c0c6088a7277a287d
   size: 1490
@@ -2125,6 +2427,7 @@ files:
   zh: zh/guide/languageSupport/kotlin/openandaop.adoc
   paragraphs: 6
   updated_at: '2026-11-20'
+  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/languageSupport/python.adoc
   blob_sha: 0cc7e20af81fc55eb33762a890e25e3fd715645a
   size: 218
@@ -2132,6 +2435,7 @@ files:
   zh: zh/guide/languageSupport/python.adoc
   paragraphs: 2
   updated_at: '2026-11-20'
+  upstream_commit: a2db693c33cea1aadfba9b4280da79283a641702
 - file: guide/languageSupport/python/aopProxies.adoc
   blob_sha: 5ce15ee8220f18e71405bb1768f06dcded52c6f9
   size: 5879
@@ -2139,6 +2443,7 @@ files:
   zh: zh/guide/languageSupport/python/aopProxies.adoc
   paragraphs: 20
   updated_at: '2026-11-20'
+  upstream_commit: 9675d1f4be8e9f00dd1a07be0ebc8cd9f68e6df1
 - file: guide/languageSupport/python/asyncAwait.adoc
   blob_sha: 21e464209e5a46c76d2a708985ca01858259b327
   size: 5309
@@ -2146,6 +2451,7 @@ files:
   zh: zh/guide/languageSupport/python/asyncAwait.adoc
   paragraphs: 28
   updated_at: '2026-11-20'
+  upstream_commit: d7013dd914463fbc9a63ffb82c45fe54ca2ce854
 - file: guide/languageSupport/python/asyncAwait/asyncioNetworking.adoc
   blob_sha: ce649255d4e0b4838de078798374ef43543711dc
   size: 9408
@@ -2153,6 +2459,7 @@ files:
   zh: zh/guide/languageSupport/python/asyncAwait/asyncioNetworking.adoc
   paragraphs: 25
   updated_at: '2026-11-20'
+  upstream_commit: dfface2cc2178afdc141f21258af9d09d271de3f
 - file: guide/languageSupport/python/asyncAwait/asyncioRuntime.adoc
   blob_sha: cb245f860384ac45338d01f3161639436720fccb
   size: 2166
@@ -2160,6 +2467,7 @@ files:
   zh: zh/guide/languageSupport/python/asyncAwait/asyncioRuntime.adoc
   paragraphs: 7
   updated_at: '2026-11-20'
+  upstream_commit: 57cb63d7baf8667cf7a7fba74bb0efc497184a98
 - file: guide/languageSupport/python/asyncAwait/asyncioStreaming.adoc
   blob_sha: 54b15b21881fd37bfad59d6f0320e9e087c17f0d
   size: 5527
@@ -2167,6 +2475,7 @@ files:
   zh: zh/guide/languageSupport/python/asyncAwait/asyncioStreaming.adoc
   paragraphs: 24
   updated_at: '2026-11-20'
+  upstream_commit: 57cb63d7baf8667cf7a7fba74bb0efc497184a98
 - file: guide/languageSupport/python/asyncAwait/asyncioUnsupported.adoc
   blob_sha: d62d4a768746c7c787afac078777ccb429b711ee
   size: 1483
@@ -2174,6 +2483,7 @@ files:
   zh: zh/guide/languageSupport/python/asyncAwait/asyncioUnsupported.adoc
   paragraphs: 3
   updated_at: '2026-11-20'
+  upstream_commit: 1dad7b4225fb4d2f03e6392bb4d1b404d31505d5
 - file: guide/languageSupport/python/decorators.adoc
   blob_sha: 4453593e2f779c24f1c91264e4d18b5218f5bff2
   size: 4242
@@ -2181,6 +2491,7 @@ files:
   zh: zh/guide/languageSupport/python/decorators.adoc
   paragraphs: 22
   updated_at: '2026-11-20'
+  upstream_commit: ee21ad6c6ba1b83be131af6dabff85327a23ada6
 - file: guide/languageSupport/python/extendingJavaClasses.adoc
   blob_sha: d8ec9e56fb490dd2a48562d7bb187dd8682804c1
   size: 7522
@@ -2188,6 +2499,7 @@ files:
   zh: zh/guide/languageSupport/python/extendingJavaClasses.adoc
   paragraphs: 21
   updated_at: '2026-11-20'
+  upstream_commit: 46a762b7346456a5bcaea9a20a842b2c095ac3ff
 - file: guide/languageSupport/python/functionalInterfaces.adoc
   blob_sha: 57de17a6220475adac34ee6448f8271e57f8d65f
   size: 5009
@@ -2195,6 +2507,7 @@ files:
   zh: zh/guide/languageSupport/python/functionalInterfaces.adoc
   paragraphs: 20
   updated_at: '2026-11-20'
+  upstream_commit: 9d8cb94499098faf2a2bbb9b76f26d7d23a8ca5e
 - file: guide/languageSupport/python/generatedClasses.adoc
   blob_sha: 8eda95db0a4e4c1830fb0cb991db7ffeb39e572a
   size: 9975
@@ -2202,6 +2515,7 @@ files:
   zh: zh/guide/languageSupport/python/generatedClasses.adoc
   paragraphs: 36
   updated_at: '2026-11-20'
+  upstream_commit: 32406cbe4031c62a1c5df1410f703cf31a499d93
 - file: guide/languageSupport/python/graalTools.adoc
   blob_sha: 10ab4ed57819e896200618be8f53b08cdf771288
   size: 2170
@@ -2209,6 +2523,7 @@ files:
   zh: zh/guide/languageSupport/python/graalTools.adoc
   paragraphs: 26
   updated_at: '2026-11-20'
+  upstream_commit: 6b95dcd6f7ba1101b4d78c61c6862e9ecab47a74
 - file: guide/languageSupport/python/interfaces.adoc
   blob_sha: b139ce5108a78de3b80747695747efa4c5a683a7
   size: 4970
@@ -2216,6 +2531,7 @@ files:
   zh: zh/guide/languageSupport/python/interfaces.adoc
   paragraphs: 20
   updated_at: '2026-11-20'
+  upstream_commit: 32406cbe4031c62a1c5df1410f703cf31a499d93
 - file: guide/languageSupport/python/javaCollections.adoc
   blob_sha: 060e834d11c4de6f8fd4173db508f681727e7682
   size: 6736
@@ -2223,6 +2539,7 @@ files:
   zh: zh/guide/languageSupport/python/javaCollections.adoc
   paragraphs: 16
   updated_at: '2026-11-20'
+  upstream_commit: 0ff0e4373074974878227fd73bb8e9f398e9cdc0
 - file: guide/languageSupport/python/javaImports.adoc
   blob_sha: 0ad591a064cdc834af8b3cde49cdddc48b278eea
   size: 3043
@@ -2230,6 +2547,7 @@ files:
   zh: zh/guide/languageSupport/python/javaImports.adoc
   paragraphs: 8
   updated_at: '2026-11-20'
+  upstream_commit: 20cf7e9b43033aae898f2922bbd4971359fbb3ed
 - file: guide/languageSupport/python/javaInterfaces.adoc
   blob_sha: bd681018980f12c842edfe7812258d3174cc37fd
   size: 4766
@@ -2237,6 +2555,7 @@ files:
   zh: zh/guide/languageSupport/python/javaInterfaces.adoc
   paragraphs: 17
   updated_at: '2026-11-20'
+  upstream_commit: 46a762b7346456a5bcaea9a20a842b2c095ac3ff
 - file: guide/languageSupport/python/keywords.adoc
   blob_sha: 4822ee5aa3a9c9d3db332df50b5ff59f54873b57
   size: 4480
@@ -2244,6 +2563,7 @@ files:
   zh: zh/guide/languageSupport/python/keywords.adoc
   paragraphs: 23
   updated_at: '2026-11-20'
+  upstream_commit: 20cf7e9b43033aae898f2922bbd4971359fbb3ed
 - file: guide/languageSupport/python/moduleScripts.adoc
   blob_sha: 0a72aa1ff8579ade67b0c2fd151138685f0e9842
   size: 832
@@ -2251,6 +2571,7 @@ files:
   zh: zh/guide/languageSupport/python/moduleScripts.adoc
   paragraphs: 5
   updated_at: '2026-11-20'
+  upstream_commit: ee76087d1a392696f3e92a6d3ed092b2ecfc44b1
 - file: guide/languageSupport/python/moduleScripts/testing.adoc
   blob_sha: 3e87c3e0af16bd1a4582769610797108f6d71fca
   size: 778
@@ -2258,6 +2579,7 @@ files:
   zh: zh/guide/languageSupport/python/moduleScripts/testing.adoc
   paragraphs: 4
   updated_at: '2026-11-20'
+  upstream_commit: ee76087d1a392696f3e92a6d3ed092b2ecfc44b1
 - file: guide/languageSupport/python/nestedTypes.adoc
   blob_sha: 039a1cf3a83c1f80bab1b802ca478826c7b5aecd
   size: 1538
@@ -2265,6 +2587,7 @@ files:
   zh: zh/guide/languageSupport/python/nestedTypes.adoc
   paragraphs: 9
   updated_at: '2026-11-20'
+  upstream_commit: 5b42af205d644fda591f84b5af01ad967f744913
 - file: guide/languageSupport/python/overloads.adoc
   blob_sha: 47656d65c012dfa31fd7470ce53431d5316d3207
   size: 2450
@@ -2272,6 +2595,7 @@ files:
   zh: zh/guide/languageSupport/python/overloads.adoc
   paragraphs: 15
   updated_at: '2026-11-20'
+  upstream_commit: 7904c6703346b722221147590b248c42269eb6a4
 - file: guide/languageSupport/python/pythonExceptions.adoc
   blob_sha: 17e40cf47172c760add9ec86f9e0a6a8666fff07
   size: 3303
@@ -2279,6 +2603,7 @@ files:
   zh: zh/guide/languageSupport/python/pythonExceptions.adoc
   paragraphs: 11
   updated_at: '2026-11-20'
+  upstream_commit: a247ada5327e0df9751f28b07d40c989a67075a6
 - file: guide/languageSupport/python/pythonRuntime.adoc
   blob_sha: 27ec64dec9a4680c96fef3738655132862dd60c8
   size: 3734
@@ -2286,6 +2611,7 @@ files:
   zh: zh/guide/languageSupport/python/pythonRuntime.adoc
   paragraphs: 23
   updated_at: '2026-11-20'
+  upstream_commit: 8b60f0c87c151d38a263beb644304638221567e6
 - file: guide/languageSupport/python/pythonThreading.adoc
   blob_sha: f44cea67f30e7c376443a70d7dddeff2fab3b8e0
   size: 10747
@@ -2293,6 +2619,7 @@ files:
   zh: zh/guide/languageSupport/python/pythonThreading.adoc
   paragraphs: 40
   updated_at: '2026-11-20'
+  upstream_commit: c1e1af9e15c2ba19d47cc460e2d18ca96f48e349
 - file: guide/languageSupport/python/runtimeTypes.adoc
   blob_sha: ef61df2c292e7b02bb1648e2964582228d03262c
   size: 3991
@@ -2300,6 +2627,7 @@ files:
   zh: zh/guide/languageSupport/python/runtimeTypes.adoc
   paragraphs: 15
   updated_at: '2026-11-20'
+  upstream_commit: 0ff0e4373074974878227fd73bb8e9f398e9cdc0
 - file: guide/languageSupport/python/sourceRoots.adoc
   blob_sha: 7e280e614b0db46e795020d5db03fbf4d291244f
   size: 2624
@@ -2307,6 +2635,7 @@ files:
   zh: zh/guide/languageSupport/python/sourceRoots.adoc
   paragraphs: 14
   updated_at: '2026-11-20'
+  upstream_commit: 2bc8e9632f05e332a2f1b982946c105870d7fb4c
 - file: guide/languageSupport/python/standardTypes.adoc
   blob_sha: c2583f0d6586c39e32d5b263ca318e9ad34b5dbf
   size: 4496
@@ -2314,6 +2643,7 @@ files:
   zh: zh/guide/languageSupport/python/standardTypes.adoc
   paragraphs: 21
   updated_at: '2026-11-20'
+  upstream_commit: f5fe0e901df2894640cbf80008dd43ad7f805c07
 - file: guide/languageSupport/python/typeOrdering.adoc
   blob_sha: 00c30477480230f695991c92788a3b5e90f98157
   size: 1000
@@ -2321,6 +2651,7 @@ files:
   zh: zh/guide/languageSupport/python/typeOrdering.adoc
   paragraphs: 5
   updated_at: '2026-11-20'
+  upstream_commit: a2db693c33cea1aadfba9b4280da79283a641702
 - file: guide/logging.adoc
   blob_sha: 740bba19a0ce8a03db2171f90af284df9695e4b2
   size: 240
@@ -2328,6 +2659,7 @@ files:
   zh: zh/guide/logging.adoc
   paragraphs: 1
   updated_at: '2026-11-20'
+  upstream_commit: 51650efcb97939ef02bf726bdcb28266b7ca20d1
 - file: guide/logging/logback.adoc
   blob_sha: 6bf1798a3dcb17301c4550002ddc5c8650445732
   size: 1230
@@ -2335,6 +2667,7 @@ files:
   zh: zh/guide/logging/logback.adoc
   paragraphs: 10
   updated_at: '2026-11-20'
+  upstream_commit: c8db8aed7351df08ab1779e0462b353a341722d3
 - file: guide/logging/loggingConfiguration.adoc
   blob_sha: ab5b023731ec43cd731ed57f98737f549f4682d6
   size: 1304
@@ -2342,6 +2675,7 @@ files:
   zh: zh/guide/logging/loggingConfiguration.adoc
   paragraphs: 14
   updated_at: '2026-11-20'
+  upstream_commit: a15ac7b65796f4b93cd37e0293a2daf8fc3d6687
 - file: guide/logging/loggingMessages.adoc
   blob_sha: 199af28c8f8564779e65f25fb6b3f7dc53ebfe3a
   size: 443
@@ -2349,6 +2683,7 @@ files:
   zh: zh/guide/logging/loggingMessages.adoc
   paragraphs: 3
   updated_at: '2026-11-20'
+  upstream_commit: 4c2b2588a167c61aa85c01e23da2ead48a9e6db3
 - file: guide/logging/loggingSystem.adoc
   blob_sha: d1141da764416687ba1be860fc8a1faf20a4956c
   size: 436
@@ -2356,6 +2691,7 @@ files:
   zh: zh/guide/logging/loggingSystem.adoc
   paragraphs: 1
   updated_at: '2026-11-20'
+  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/management.adoc
   blob_sha: 3784a11ca7e95f06c09ef27dcd5a3f508bdef90e
   size: 912
@@ -2363,6 +2699,7 @@ files:
   zh: zh/guide/management.adoc
   paragraphs: 9
   updated_at: '2026-11-20'
+  upstream_commit: 5015e80a675e9df9caf2a9304717d02be8f79a08
 - file: guide/management/buildingEndpoints.adoc
   blob_sha: 2b0b993c0fe54f4229bc26c79e07a43ebf3ff98d
   size: 286
@@ -2370,6 +2707,7 @@ files:
   zh: zh/guide/management/buildingEndpoints.adoc
   paragraphs: 1
   updated_at: '2026-11-20'
+  upstream_commit: 5280436c47bbcd1a143801fcf266db27b3d6d758
 - file: guide/management/buildingEndpoints/endpointAnnotation.adoc
   blob_sha: 4910b307262692997d437d12f229e1fb7ddf66e6
   size: 1485
@@ -2377,6 +2715,7 @@ files:
   zh: zh/guide/management/buildingEndpoints/endpointAnnotation.adoc
   paragraphs: 11
   updated_at: '2026-11-20'
+  upstream_commit: 31bdb72f837188d7432007bbee051eb47dd99561
 - file: guide/management/buildingEndpoints/endpointConfiguration.adoc
   blob_sha: 63e4b7dbe4a129fa4af6de4b5dc482880e4566fd
   size: 1406
@@ -2384,6 +2723,7 @@ files:
   zh: zh/guide/management/buildingEndpoints/endpointConfiguration.adoc
   paragraphs: 11
   updated_at: '2026-11-20'
+  upstream_commit: 51650efcb97939ef02bf726bdcb28266b7ca20d1
 - file: guide/management/buildingEndpoints/endpointMethod.adoc
   blob_sha: fb09276c88bfc026026d8aaa4e14a07d0903ff7c
   size: 3179
@@ -2391,6 +2731,7 @@ files:
   zh: zh/guide/management/buildingEndpoints/endpointMethod.adoc
   paragraphs: 32
   updated_at: '2026-11-20'
+  upstream_commit: 31bdb72f837188d7432007bbee051eb47dd99561
 - file: guide/management/buildingEndpoints/endpointSensitivity.adoc
   blob_sha: 228fee2888617923cfba0de80ff947d0ea884b3e
   size: 1301
@@ -2398,6 +2739,7 @@ files:
   zh: zh/guide/management/buildingEndpoints/endpointSensitivity.adoc
   paragraphs: 6
   updated_at: '2026-11-20'
+  upstream_commit: 51650efcb97939ef02bf726bdcb28266b7ca20d1
 - file: guide/management/providedEndpoints.adoc
   blob_sha: d73eec92e24a4866f3bf31a47c64d65db8baf74f
   size: 2821
@@ -2405,6 +2747,7 @@ files:
   zh: zh/guide/management/providedEndpoints.adoc
   paragraphs: 14
   updated_at: '2026-11-20'
+  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/management/providedEndpoints/beansEndpoint.adoc
   blob_sha: 8a44c6989391ab31dbc822a9091a2eaf7f1ccd10
   size: 1696
@@ -2412,6 +2755,7 @@ files:
   zh: zh/guide/management/providedEndpoints/beansEndpoint.adoc
   paragraphs: 10
   updated_at: '2026-11-20'
+  upstream_commit: 41131456aad0338e21715e5053d9ec7cc8da8e50
 - file: guide/management/providedEndpoints/cachesEndpoint.adoc
   blob_sha: 135d44be0fcfb5de3865efb837c097465b689cc2
   size: 168
@@ -2419,6 +2763,7 @@ files:
   zh: zh/guide/management/providedEndpoints/cachesEndpoint.adoc
   paragraphs: 1
   updated_at: '2026-11-20'
+  upstream_commit: 50eee0a3161e6395029dab343477e01c676d2d03
 - file: guide/management/providedEndpoints/environmentEndpoint.adoc
   blob_sha: 35aa042e0d6242b5c67d4960c9cb11fbb876c144
   size: 3504
@@ -2426,6 +2771,7 @@ files:
   zh: zh/guide/management/providedEndpoints/environmentEndpoint.adoc
   paragraphs: 28
   updated_at: '2026-11-20'
+  upstream_commit: 5042be620a2299b382a7d4bdaad2adb1438093bd
 - file: guide/management/providedEndpoints/healthEndpoint.adoc
   blob_sha: 1d912a24d379d21ab9caff41a4bef3b1505a6cb9
   size: 746
@@ -2433,6 +2779,7 @@ files:
   zh: zh/guide/management/providedEndpoints/healthEndpoint.adoc
   paragraphs: 5
   updated_at: '2026-11-20'
+  upstream_commit: f9e87c976ffc7236c409cd7fcc929be553c92a98
 - file: guide/management/providedEndpoints/healthEndpoint/healthEndpointConfiguration.adoc
   blob_sha: e681925e8ffbb9890cd38108c995929265e1a383
   size: 915
@@ -2440,6 +2787,7 @@ files:
   zh: zh/guide/management/providedEndpoints/healthEndpoint/healthEndpointConfiguration.adoc
   paragraphs: 11
   updated_at: '2026-11-20'
+  upstream_commit: 74ae026c5db6ae318349dc3013ac6c9a3fbe95a8
 - file: guide/management/providedEndpoints/healthEndpoint/healthEndpointCustomization.adoc
   blob_sha: a60684f9a46d28fcb8583f4a43a4ec19a51f2e0e
   size: 1947
@@ -2447,6 +2795,7 @@ files:
   zh: zh/guide/management/providedEndpoints/healthEndpoint/healthEndpointCustomization.adoc
   paragraphs: 6
   updated_at: '2026-11-20'
+  upstream_commit: 74ae026c5db6ae318349dc3013ac6c9a3fbe95a8
 - file: guide/management/providedEndpoints/healthEndpoint/healthEndpointStatusCode.adoc
   blob_sha: 58295ee825b1dfd0776b4e2b1e4e53b5717b01c0
   size: 741
@@ -2454,6 +2803,7 @@ files:
   zh: zh/guide/management/providedEndpoints/healthEndpoint/healthEndpointStatusCode.adoc
   paragraphs: 7
   updated_at: '2026-11-20'
+  upstream_commit: 74ae026c5db6ae318349dc3013ac6c9a3fbe95a8
 - file: guide/management/providedEndpoints/healthEndpoint/healthLogging.adoc
   blob_sha: 269b4653d5ba6ec4b30d0ff3418e72afea63fcc5
   size: 501
@@ -2461,6 +2811,7 @@ files:
   zh: zh/guide/management/providedEndpoints/healthEndpoint/healthLogging.adoc
   paragraphs: 4
   updated_at: '2026-11-20'
+  upstream_commit: 74ae026c5db6ae318349dc3013ac6c9a3fbe95a8
 - file: guide/management/providedEndpoints/healthEndpoint/healthMonitoringTask.adoc
   blob_sha: 72a5999a72534c879a0f818c44d879961e8ce30b
   size: 678
@@ -2468,6 +2819,7 @@ files:
   zh: zh/guide/management/providedEndpoints/healthEndpoint/healthMonitoringTask.adoc
   paragraphs: 7
   updated_at: '2026-11-20'
+  upstream_commit: 74ae026c5db6ae318349dc3013ac6c9a3fbe95a8
 - file: guide/management/providedEndpoints/healthEndpoint/healthProvidedIndicators.adoc
   blob_sha: 48213dc55139fcabbd29ee65a58f846de981524f
   size: 1114
@@ -2475,6 +2827,7 @@ files:
   zh: zh/guide/management/providedEndpoints/healthEndpoint/healthProvidedIndicators.adoc
   paragraphs: 2
   updated_at: '2026-11-20'
+  upstream_commit: 130cfede2d9a325faf7016bf10e0a2060c5a3cbd
 - file: guide/management/providedEndpoints/healthEndpoint/healthProvidedIndicators/deadlockedThreads.adoc
   blob_sha: 0ae42547b6b61209e064f3db0ff8a01fe3a2f310
   size: 2771
@@ -2482,6 +2835,7 @@ files:
   zh: zh/guide/management/providedEndpoints/healthEndpoint/healthProvidedIndicators/deadlockedThreads.adoc
   paragraphs: 6
   updated_at: '2026-11-20'
+  upstream_commit: 130cfede2d9a325faf7016bf10e0a2060c5a3cbd
 - file: guide/management/providedEndpoints/healthEndpoint/healthProvidedIndicators/discoveryClientHealthIndicator.adoc
   blob_sha: 094368b60d9e10353f529ff4167d38dcda3337c9
   size: 186
@@ -2489,6 +2843,7 @@ files:
   zh: zh/guide/management/providedEndpoints/healthEndpoint/healthProvidedIndicators/discoveryClientHealthIndicator.adoc
   paragraphs: 1
   updated_at: '2026-11-20'
+  upstream_commit: 74ae026c5db6ae318349dc3013ac6c9a3fbe95a8
 - file: guide/management/providedEndpoints/healthEndpoint/healthProvidedIndicators/diskSpaceHealthIndicator.adoc
   blob_sha: be0a2c5ac032addedc4d3e5f1d17ee75d3b5feba
   size: 619
@@ -2496,6 +2851,7 @@ files:
   zh: zh/guide/management/providedEndpoints/healthEndpoint/healthProvidedIndicators/diskSpaceHealthIndicator.adoc
   paragraphs: 6
   updated_at: '2026-11-20'
+  upstream_commit: 74ae026c5db6ae318349dc3013ac6c9a3fbe95a8
 - file: guide/management/providedEndpoints/healthEndpoint/healthProvidedIndicators/jdbcHealthIndicator.adoc
   blob_sha: 3a3af9414648261bedfe67ac8402c884ed929215
   size: 289
@@ -2503,6 +2859,7 @@ files:
   zh: zh/guide/management/providedEndpoints/healthEndpoint/healthProvidedIndicators/jdbcHealthIndicator.adoc
   paragraphs: 1
   updated_at: '2026-11-20'
+  upstream_commit: 74ae026c5db6ae318349dc3013ac6c9a3fbe95a8
 - file: guide/management/providedEndpoints/infoEndpoint.adoc
   blob_sha: 4c7f14f6de74416191f69907eb2a990748c49b79
   size: 4226
@@ -2510,6 +2867,7 @@ files:
   zh: zh/guide/management/providedEndpoints/infoEndpoint.adoc
   paragraphs: 32
   updated_at: '2026-11-20'
+  upstream_commit: 41131456aad0338e21715e5053d9ec7cc8da8e50
 - file: guide/management/providedEndpoints/loggersEndpoint.adoc
   blob_sha: c4062c4796aa4770d32e0fa95f970f34d2d27f9f
   size: 3024
@@ -2517,6 +2875,7 @@ files:
   zh: zh/guide/management/providedEndpoints/loggersEndpoint.adoc
   paragraphs: 21
   updated_at: '2026-11-20'
+  upstream_commit: 41131456aad0338e21715e5053d9ec7cc8da8e50
 - file: guide/management/providedEndpoints/metricsEndpoint.adoc
   blob_sha: 2ef310bd9e33ab3caa667e949479e4142371b590
   size: 890
@@ -2524,6 +2883,7 @@ files:
   zh: zh/guide/management/providedEndpoints/metricsEndpoint.adoc
   paragraphs: 10
   updated_at: '2026-11-20'
+  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/management/providedEndpoints/refreshEndpoint.adoc
   blob_sha: 4f8b1a661d0f11d6e08ddda9032b04d37b16b3f6
   size: 1279
@@ -2531,6 +2891,7 @@ files:
   zh: zh/guide/management/providedEndpoints/refreshEndpoint.adoc
   paragraphs: 12
   updated_at: '2026-11-20'
+  upstream_commit: 41131456aad0338e21715e5053d9ec7cc8da8e50
 - file: guide/management/providedEndpoints/routesEndpoint.adoc
   blob_sha: 91446de6ab684ee0398998983bdd457e73bc6503
   size: 1592
@@ -2538,6 +2899,7 @@ files:
   zh: zh/guide/management/providedEndpoints/routesEndpoint.adoc
   paragraphs: 10
   updated_at: '2026-11-20'
+  upstream_commit: 51650efcb97939ef02bf726bdcb28266b7ca20d1
 - file: guide/management/providedEndpoints/stopEndpoint.adoc
   blob_sha: c61d9efbd3d27c88fa4875db64803aa86c4a7db2
   size: 431
@@ -2545,6 +2907,7 @@ files:
   zh: zh/guide/management/providedEndpoints/stopEndpoint.adoc
   paragraphs: 8
   updated_at: '2026-11-20'
+  upstream_commit: 41131456aad0338e21715e5053d9ec7cc8da8e50
 - file: guide/management/providedEndpoints/threadDumpEndpoint.adoc
   blob_sha: fa1804aaeae226df89df1f57424c60058d18a4e4
   size: 692
@@ -2552,6 +2915,7 @@ files:
   zh: zh/guide/management/providedEndpoints/threadDumpEndpoint.adoc
   paragraphs: 9
   updated_at: '2026-11-20'
+  upstream_commit: 41131456aad0338e21715e5053d9ec7cc8da8e50
 - file: guide/messaging.adoc
   blob_sha: e3384517ab466e5256bba5d9a05f230a049f4745
   size: 493
@@ -2559,6 +2923,7 @@ files:
   zh: zh/guide/messaging.adoc
   paragraphs: 3
   updated_at: '2026-11-20'
+  upstream_commit: 9b6da4ec1602e499125970b1e7734a79a3a4782c
 - file: guide/messaging/kafka.adoc
   blob_sha: bdf63a8e87defc9076f5c12d6ccc60f5d7084b29
   size: 761
@@ -2566,6 +2931,7 @@ files:
   zh: zh/guide/messaging/kafka.adoc
   paragraphs: 4
   updated_at: '2026-11-20'
+  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/messaging/nats.adoc
   blob_sha: 78f5428ef91757edf218111f2db1bb2e3510646f
   size: 716
@@ -2573,6 +2939,7 @@ files:
   zh: zh/guide/messaging/nats.adoc
   paragraphs: 4
   updated_at: '2026-11-20'
+  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/messaging/rabbitmq.adoc
   blob_sha: 36a73dbe68a8364f6f5049869c0c676d219c92ed
   size: 652
@@ -2580,6 +2947,7 @@ files:
   zh: zh/guide/messaging/rabbitmq.adoc
   paragraphs: 4
   updated_at: '2026-11-20'
+  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/multitenancy.adoc
   blob_sha: ff7c36fdaf2daa7a37c0c38d57a1d325e68dda9a
   size: 250
@@ -2587,6 +2955,7 @@ files:
   zh: zh/guide/multitenancy.adoc
   paragraphs: 1
   updated_at: '2026-11-20'
+  upstream_commit: ede1891bd681062e0992d54fd437b71a40782343
 - file: guide/quickStart.adoc
   blob_sha: 8fab74330fc808213d37650483f2636e143534ec
   size: 463
@@ -2594,6 +2963,7 @@ files:
   zh: zh/guide/quickStart.adoc
   paragraphs: 10
   updated_at: '2026-11-20'
+  upstream_commit: 130cfede2d9a325faf7016bf10e0a2060c5a3cbd
 - file: guide/quickStart/buildCLI.adoc
   blob_sha: 2a75c6d0b107cd6bc1c83c5ba68e7c582f22c10e
   size: 423
@@ -2601,6 +2971,7 @@ files:
   zh: zh/guide/quickStart/buildCLI.adoc
   paragraphs: 2
   updated_at: '2026-11-20'
+  upstream_commit: 1fcfbd95ae7aa98e423b66dfa6b657503c02d075
 - file: guide/quickStart/creatingClient.adoc
   blob_sha: 12a3d900c645f1e41404b933e120b08bcd6471e5
   size: 2148
@@ -2608,6 +2979,7 @@ files:
   zh: zh/guide/quickStart/creatingClient.adoc
   paragraphs: 15
   updated_at: '2026-11-20'
+  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/quickStart/creatingServer.adoc
   blob_sha: 9fb540b2695ec30a944d6b570fc8ca8f928761a3
   size: 2797
@@ -2615,6 +2987,7 @@ files:
   zh: zh/guide/quickStart/creatingServer.adoc
   paragraphs: 25
   updated_at: '2026-11-20'
+  upstream_commit: 15119ba9ee63100091348d40eaffe708155b53ae
 - file: guide/quickStart/deployingApp.adoc
   blob_sha: 3f980f709509de2ca615122a274463f7435d7946
   size: 1806
@@ -2622,6 +2995,7 @@ files:
   zh: zh/guide/quickStart/deployingApp.adoc
   paragraphs: 24
   updated_at: '2026-11-20'
+  upstream_commit: 15119ba9ee63100091348d40eaffe708155b53ae
 - file: guide/quickStart/ideSetup.adoc
   blob_sha: ede8a32d1e123f39f19f8560d11074c106c19b61
   size: 358
@@ -2629,6 +3003,7 @@ files:
   zh: zh/guide/quickStart/ideSetup.adoc
   paragraphs: 3
   updated_at: '2026-11-20'
+  upstream_commit: 5280436c47bbcd1a143801fcf266db27b3d6d758
 - file: guide/quickStart/ideSetup/eclipseSetup.adoc
   blob_sha: 373bc17e971a76b258138cb0ca1e8eced696a8b7
   size: 1370
@@ -2636,6 +3011,7 @@ files:
   zh: zh/guide/quickStart/ideSetup/eclipseSetup.adoc
   paragraphs: 9
   updated_at: '2026-11-20'
+  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/quickStart/ideSetup/ideaSetup.adoc
   blob_sha: 572c334721f83a64c54202321075672e05882d58
   size: 791
@@ -2643,6 +3019,7 @@ files:
   zh: zh/guide/quickStart/ideSetup/ideaSetup.adoc
   paragraphs: 5
   updated_at: '2026-11-20'
+  upstream_commit: 15119ba9ee63100091348d40eaffe708155b53ae
 - file: guide/quickStart/ideSetup/netbeansSetup.adoc
   blob_sha: d4cc75b59f5312513578e64673f87f121639a129
   size: 336
@@ -2650,6 +3027,7 @@ files:
   zh: zh/guide/quickStart/ideSetup/netbeansSetup.adoc
   paragraphs: 3
   updated_at: '2026-11-20'
+  upstream_commit: a501e97f05414797e2873c63ca015035f392a868
 - file: guide/quickStart/ideSetup/vsCodeSetup.adoc
   blob_sha: dee1f9dfdb3708f6f2ad96a194819c8db20ecb27
   size: 3290
@@ -2657,6 +3035,7 @@ files:
   zh: zh/guide/quickStart/ideSetup/vsCodeSetup.adoc
   paragraphs: 8
   updated_at: '2026-11-20'
+  upstream_commit: c1d011a56d02b683a04aff5b06762e169b3a6edd
 - file: guide/resources.adoc
   blob_sha: 69032a640497b2b86728521c1d696571c7777e8a
   size: 1387
@@ -2664,6 +3043,7 @@ files:
   zh: zh/guide/resources.adoc
   paragraphs: 8
   updated_at: '2026-11-20'
+  upstream_commit: 130cfede2d9a325faf7016bf10e0a2060c5a3cbd
 - file: guide/security.adoc
   blob_sha: a2e6045108330d7e09bf04f56702f732e2354b97
   size: 275
@@ -2671,6 +3051,7 @@ files:
   zh: zh/guide/security.adoc
   paragraphs: 2
   updated_at: '2026-11-20'
+  upstream_commit: 51650efcb97939ef02bf726bdcb28266b7ca20d1
 - file: guide/serverlessFunctions.adoc
   blob_sha: c72bd65275aaa45fc6467b5ac9e735f7e14484b3
   size: 1567
@@ -2678,6 +3059,7 @@ files:
   zh: zh/guide/serverlessFunctions.adoc
   paragraphs: 7
   updated_at: '2026-11-20'
+  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/serverlessFunctions/awsLambda.adoc
   blob_sha: c118e62b3f78483dee673c5b2fee87cec37ed48a
   size: 1415
@@ -2685,6 +3067,7 @@ files:
   zh: zh/guide/serverlessFunctions/awsLambda.adoc
   paragraphs: 21
   updated_at: '2026-11-20'
+  upstream_commit: bbfd2621eba567f97318b10e7bcbf0a6f8507bbd
 - file: guide/serverlessFunctions/azureFunction.adoc
   blob_sha: a7bd0d9ae45a98e7f7962b22e7a5cfb1dbca62c4
   size: 1500
@@ -2692,6 +3075,7 @@ files:
   zh: zh/guide/serverlessFunctions/azureFunction.adoc
   paragraphs: 21
   updated_at: '2026-11-20'
+  upstream_commit: 51650efcb97939ef02bf726bdcb28266b7ca20d1
 - file: guide/serverlessFunctions/gcpCloudRun.adoc
   blob_sha: 99b9bd967b0ccef7b283cbe11f4f4789f5685744
   size: 1275
@@ -2699,6 +3083,7 @@ files:
   zh: zh/guide/serverlessFunctions/gcpCloudRun.adoc
   paragraphs: 19
   updated_at: '2026-11-20'
+  upstream_commit: 5280436c47bbcd1a143801fcf266db27b3d6d758
 - file: guide/serverlessFunctions/gcpFunction.adoc
   blob_sha: 61f78eee3a893eda671410bba368bcdaf89efcd9
   size: 1488
@@ -2706,6 +3091,7 @@ files:
   zh: zh/guide/serverlessFunctions/gcpFunction.adoc
   paragraphs: 21
   updated_at: '2026-11-20'
+  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/toc-python.yml
   blob_sha: c5dc674a85c3f9c4beb9ef6125165a785a5cbb28
   size: 13465
@@ -2713,6 +3099,7 @@ files:
   zh: zh/guide/toc-python.yml
   paragraphs: 1
   updated_at: '2026-11-20'
+  upstream_commit: 4213e5848517ee4d8e80fe665a848ce870beb45c
 - file: guide/toc.yml
   blob_sha: 4d4f822f053423c3311a29d6d9d5da443e569ddd
   size: 17177
@@ -2720,3 +3107,4 @@ files:
   zh: zh/guide/toc.yml
   paragraphs: 1
   updated_at: '2026-11-20'
+  upstream_commit: 1dad7b4225fb4d2f03e6392bb4d1b404d31505d5
