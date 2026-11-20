@@ -1,0 +1,97 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Form Data Binding](https://docs.micronaut.io/5.2.x/core/#core-formBinding)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/form/formBinding.adoc  upstream_commit: 130cfede2d9a325faf7016bf10e0a2060c5a3cbd  upstream_hash: 670096a68f8762aa3a078b271f4fc45553ff9a2d  translated_at: 2026-11-21 -->
+
+对于典型的 Web 应用，低层表单 API 并非必需。相反，您会将各个表单字段 _绑定_ 到不同类型的控制器参数。
+
+当您将至少一个表单字段绑定到控制器参数时，框架将接管 FormCapableHttpRequest，使请求体只能通过控制器参数绑定来使用。
+
+有多种缓冲与流式类型可以将表单字段绑定到它们。
+
+=== 标准类型
+
+最简单的绑定是 `String`。框架会等待表单字段到达，然后用表单字段的完整值调用您的控制器。
+
+snippet::io.micronaut.docs.server.form.FormController[tags="imports,class,String,endclass", title="String controller example"]
+
+也可以绑定到其他简单类型，例如 `int` 或 `byte[]`。
+
+注意，如果存在多个同名的表单字段，只会绑定第一个。后续的字段将被丢弃。
+
+=== CompletedFileUpload
+
+api:io.micronaut.http.multipart.CompletedFileUpload[] 类似于 `byte[]` 参数，区别在于上传内容可以缓冲到磁盘而不是内存。这样即使接收大文件也不会占用大量内存。不过，该行为需要配置。
+
+[configuration]
+----
+micronaut:
+  server:
+    multipart:
+      mixed: true
+      # Default threshold to transfer data to disk is 10MB
+      threshold: 10MB
+----
+
+如果不配置该值，文件将保留在内存中。整个文件上传完成后才会调用控制器。
+
+NOTE: 上传的文件会在控制器终止时自动删除，因此如果您想保留它，需要提前将其移动或复制到其他位置。您也可以调用 `CompletedFileUpload.moveResource()` 获取一个新的 `CompletedFileUpload` 实例，它在控制器生命周期之后仍然存在。
+
+snippet::io.micronaut.docs.server.form.FormController[tags="imports,class,CompletedFileUpload,endclass", title="CompletedFileUpload controller example"]
+
+<1> `transferTo` 可能阻塞，因此我们需要在 IO 线程上运行该控制器
+<2> 将上传内容转移到临时文件。如果该上传已经在磁盘上（取决于配置），这是一个简单的移动操作。如果上传仍在内存中，这会将数据写入磁盘
+
+=== StreamingFileUpload
+
+api:io.micronaut.http.multipart.StreamingFileUpload[] 会 _惰性地_ 流式传输表单字段。您的控制器可能在完整内容收到之前被调用。与 `RawFormField` 类似，您必须消费输入数据，以免上传停滞。
+
+`StreamingFileUpload` 相比 `CompletedFileUpload` 的优势在于：您不需要任何磁盘空间，并且可以立即开始流式传输数据，例如将其转发给后端服务。如果后端接收上传数据的速度较慢，这种背压也会作用于浏览器上传，使上传变慢——与 `CompletedFileUpload` 不同，Micronaut 服务中没有（明显的）缓冲。
+
+snippet::io.micronaut.docs.server.form.FormController[tags="imports,class,StreamingFileUpload,endclass", title="StreamingFileUpload controller example"]
+
+<1> 从 `InputStream` 读取可能阻塞，因此我们需要在 IO 线程上运行。`StreamingFileUpload` 还提供异步操作的方法
+<2> 必须正确关闭 `InputStream`，这里我们使用 try-with-resources 来实现
+<3> 这只是一个示例，在实际应用中您不应一次性读取所有字节
+
+注意，将 `StreamingFileUpload` 与其他表单字段结合使用可能比较棘手。要运行您的控制器，所有「普通」表单字段参数必须已经收到，但 `StreamingFileUpload` 会暂停请求，直到您在控制器中消费它。如果普通参数实际上在请求中位于文件上传 _之后_，这会造成「死锁」。在这种情况下，Micronaut HTTP 服务器会产生一个错误。一种可行的解决方案是将「普通」表单参数替换为基于发布者（publisher）的参数，使控制器可以在这些字段收到之前执行。
+
+=== Publisher
+
+Publisher 参数让您可以处理各种特殊场景，例如异步绑定或处理多个同名的表单字段。
+
+==== … 已完成部分组成的 Publisher
+
+api:io.micronaut.http.multipart.CompletedPart[]、api:io.micronaut.http.multipart.CompletedAttribute[] 或 api:io.micronaut.http.multipart.CompletedFileUpload[] 的发布者包含表单字段的缓冲内容。如果同一字段名有多个值，发布者可以产生多个条目。
+
+注意，该发布者 _没有背压_。为避免与其他参数死锁，字段会立即完整读取，即使您尚未订阅该发布者。配置的表单字段数量与大小限制仍然适用。
+
+snippet::io.micronaut.docs.server.form.FormController[tags="imports,class,PublisherCompletedFileUpload,endclass", title="Publisher<CompletedFileUpload> controller example"]
+
+<1> 如果您预期有多个同名的表单字段，这里可以使用 `Flux` 而不是 `Mono`
+
+==== … StreamingFileUpload 组成的 Publisher
+
+与上述 `StreamingFileUpload` 参数类似，区别在于控制器可以在 `StreamingFileUpload` 收到之前被调用，且发布者可以包含多个同名的上传。
+
+同样，`StreamingFileUpload` 实例会对请求施加背压，因此您必须完整消费它们，其他字段才能被处理。
+
+snippet::io.micronaut.docs.server.form.FormController[tags="imports,class,PublisherStreamingFileUpload,endclass", title="Publisher<StreamingFileUpload> controller example"]
+
+<1> 调用 `Files` 是阻塞操作，您应该异步执行。为简单起见，这里以同步方式完成
+
+==== … Publisher 组成的 Publisher
+
+`Publisher<Publisher<…>>>` 的行为与上述 `Publisher<StreamingFileUpload>` 类似，允许您流式传输单个字段。
+
+snippet::io.micronaut.docs.server.form.FormController[tags="imports,class,PublisherPublisherBytes,endclass", title="Publisher<Publisher<byte[]>> controller example"]
+
+==== … PartData 组成的 Publisher
+
+api:io.micronaut.http.multipart.PartData[] 对象表示表单字段的一 _部分_，包含字段元数据与缓冲在内存中的字段值片段。对于大字段与文件上传，单个字段可能产生多个 `PartData` 对象。如果存在多个同名字段，它们也会产生多个 `PartData` 实例。
+
+如 `StreamingFileUpload` 所述，该发布者会施加背压。
+
+snippet::io.micronaut.docs.server.form.FormController[tags="imports,class,PublisherPartData,endclass", title="Publisher<PartData> controller example"]
+
+==== … 其他任何类型组成的 Publisher
+
+任何其他类型的发布者会通过取得如上所述的已完成部分的发布者，并将各部分转换为目标类型来创建。对于指定了媒体类型的文件上传，这可能包括从例如 JSON 的转换。

@@ -1,0 +1,32 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Error Formatting](https://docs.micronaut.io/5.2.x/core/#core-errorFormatting)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/errorHandling/errorFormatting.adoc  upstream_commit: 6434999218d31e77996cd0532788a1106eb6069b  upstream_hash: ff1f20be84cce6e365181eb113e34b92bdbe0d71  translated_at: 2026-11-21 -->
+
+Micronaut 框架通过类型为 api:http.server.exceptions.response.ErrorResponseProcessor[] 的 bean 产生错误响应。
+
+JSON 错误响应由类型为 api:http.server.exceptions.response.JsonErrorResponseBodyProvider[] 的 bean 提供。
+默认实现输出 link:https://github.com/blongden/vnd.error[vnd.error] 响应。
+
+HTML 错误响应由类型为 api:http.server.exceptions.response.HtmlErrorResponseBodyProvider[] 的 bean 提供。
+默认实现输出的 HTML 可以使用诸如 `<status>.error.bold`、`<status>.error.title`、`<status>.error` 等代码进行 <<i18n,本地化>>。例如，您可以将默认的 404 错误页面本地化为西班牙语：
+
+[source,properties]
+----
+404.error.bold=La página que buscabas no existe
+404.error.title=No encontrado
+404.error=Es posible que haya escrito mal la dirección o que la página se haya movido.
+----
+
+对于未处理的异常，默认错误响应不包含异常消息。
+这避免了向 HTTP 客户端暴露实现细节，同时异常仍可在服务器日志中查看。
+出于兼容性或调试目的需要包含这些消息时，请将 `micronaut.server.error-response-include-message` 设置为 `always`。
+支持的值为 `never` （默认）、`always` 与 `on-param`。`on-param` 值会在请求包含值不为 `false` 的 `message` 查询参数时包含消息。
+启用该选项可能暴露敏感的实现细节，不建议在生产环境中使用。
+
+[configuration]
+----
+micronaut:
+  server:
+    error-response-include-message: always
+----
+
+如果希望自定义与错误无关的响应内容，需要重写正在处理该异常的 <<exceptionHandler,异常处理器>>。

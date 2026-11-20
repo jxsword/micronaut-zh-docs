@@ -1,6 +1,6 @@
 # 交接文档（handoff-latest）
 
-> 更新：2026-11-21 ｜ 会话：M2 分批翻译（B07–B12 完成，进度破 30%）｜ 下一会话任务：M2 继续分批翻译（B13 起）
+> 更新：2026-11-21 ｜ 会话：M2 分批翻译（B07–B13 完成，进度 36.9%）｜ 下一会话任务：M2 继续分批翻译（B14 起）
 
 ## 已完成清单（全部已提交，main 分支）
 
@@ -19,38 +19,39 @@
 | **B09 翻译批次** | `a18c135` | 8 文件（config 收尾 4：jmx/eachBean/bootstrap/immutableConfig + AOP 开头 4：aop/aroundAdvice/introductionAdvice/adapterAdvice）全绿核销；词数 2852（实测）/段落 125；报告见 `reports/batch-B09.md`；锚点注入 5 处（aop/aroundAdvice/introductionAdvice/bootstrap/jmx），aop ×3 豁免消解；reviewer 术语检查改为复用 validate ③ check_terms；**config 章 15/15 全章译出**；AOP 章 3/10 起步 |
 | **B10 翻译批次** | `cb89326` | 5 文件（AOP：lifecycleAdvice + interceptorLifecycle + validation + caching + retry）全绿核销；词数 3022（实测）/段落 140；报告见 `reports/batch-B10.md`；锚点注入 4 处（lifecycleAdvice↔interceptorLifecycle 批内互引 + retry/validation）；**retry 首轮漏锚点被 reviewer 抓出补齐**；豁免 25→23；AOP 章 8/10（80%） |
 | **B11 翻译批次** | `ca907e4` | 7 文件（AOP 收尾 2：scheduling/springAop + httpServer 章页与前 4 节）全绿核销；词数 3270（实测）/段落 206；报告见 `reports/batch-B11.md`；锚点注入 4 处 + **页内标题锚 [[_uri_path_variables]] 原位注入首实践**；httpServer ③ netty→Netty 修正；**AOP 章 10/10 全章译出** |
-| **B12 翻译批次** | 本次提交 | 25 文件（httpServer：customArgumentBinding…reactiveServer 组 11 + jsonBinding 组 14，本工程最大批次）全绿核销；词数 3363（实测）/段落 168；报告见 `reports/batch-B12.md`；锚点注入 4 处（jsonBinding 批内 5 文件闭环 + 3 个豁免承接）；jsonBinding 漏锚点被 validate ⑤ 门禁抓出补齐；大批次工作法验证（先全量 protect 207 占位符再分文件翻译） |
+| **B12 翻译批次** | `d1dbc49` | 25 文件（httpServer：customArgumentBinding…reactiveServer 组 11 + jsonBinding 组 14，本工程最大批次）全绿核销；词数 3363（实测）/段落 168；报告见 `reports/batch-B12.md`；锚点注入 4 处（jsonBinding 批内 5 文件闭环 + 3 个豁免承接）；jsonBinding 漏锚点被 validate ⑤ 门禁抓出补齐；大批次工作法验证（先全量 protect 207 占位符再分文件翻译） |
+| **B13 翻译批次** | 本次提交 | 17 文件（httpServer：plainTextResponses/datavalidation 组 2/staticResources/errorHandling 组 8/apiVersioning/formData/form 组 3）全绿核销；词数 3122（实测）/段落 179；报告见 `reports/batch-B13.md`；锚点注入 3 处（exceptionHandler 批内 errorFormatting 闭环 + form/formCapable 消解 whatsNew ×2）；validate 首轮 ⑦×1 与 ③×1 修正；errorHandling 组与 form 组全组 current |
 
-## 状态快照（2026-11-21，B12 收尾）
+## 状态快照（2026-11-21，B13 收尾）
 
 - 分支 main；基线 v5.2.25（`0b46d27afdfa`，快照日期 2026-11-20）；批次期间冻结窗口遵守（未跑 --apply）
-- manifest：388 条目 = 260 missing + 2 skipped + **126 current**（进度 32.5%）
-- 看板：B01–B12 = current，其余 20 批 pending
-- anchor-registry：121 条（不变）；validate 全量跑：PASSED（126 文件，⑤ 豁免警告 26 条，M3 清零）
+- manifest：388 条目 = 243 missing + 2 skipped + **143 current**（进度 36.9%）
+- 看板：B01–B13 = current，其余 19 批 pending
+- anchor-registry：121 条（不变）；validate 全量跑：PASSED（143 文件，⑤ 豁免警告 27 条，M3 清零）
 - 页头溯源投影：页名=toc 英文原题、URL=`https://docs.micronaut.io/5.2.x/core/#core-<basename>`（复用 B01 实测格式）、基线锁定日期 2026-11-19、translated_at=2026-11-21
-- reports/progress.md 已重新生成（IoC 55/55、introduction 2/2、quickStart 9/9、config 15/15、aop 10/10、**httpServer 29/101**）
-- 里程碑：已全章译出 introduction、quickStart、IoC、config、AOP 五个章；httpServer 组 29/101（29%），下批 B13 继续（errorHandling/form 组）
+- reports/progress.md 已重新生成（IoC 55/55、introduction 2/2、quickStart 9/9、config 15/15、aop 10/10、**httpServer 55/101**）
+- 里程碑：已全章译出 introduction、quickStart、IoC、config、AOP 五个章；httpServer 组 55/101（55%），下批 B14 继续（serverIO/uploads/transfers/filters 组）
 
 ## 实测结论（本会话新增/沿用）
 
-1. **锚点注入位置规则（B02 精化，B07–B12 复用验证）**：basename 约定锚点 = 官方站 `core-<basename>` = 片段首内容之前的块锚——对正文先行的文件注入于第一段之前。B07–B12 共 21 处注入；页内标题锚（如 routing 的 `<<_uri_path_variables,…>>`）按 PLAN §5.6 原位注入于标题行之前（B11 首实践）。
-2. **词数口径差异**：M1 inventory 报告值生成于 B01 snippet:: 保护修复之前；后续批次词数以批次执行时实测为准（B02 3055/2991、B03 3417/3377、B04 2588/2545、B05 2074/2076、B06 3482/3445、B07 2540/2484、B08 3400/3336、B09 2852/2835、B10 3022/3002、B11 3270/3240、B12 3363/3336），M1 报告值仅作切分参考。
-3. **批间前向引用消解模式**：先行文件对未译目标的 xref 记为 ⑤ 豁免；后续批次落盘目标文件后豁免自动消解。B07 −5、B08 −5、B09 净 −2、B10 −2、B11 净 −1、B12 净 +2（introspection 消解 −1；graal/threadPools/formData 新增 +3）；批次报告须核对豁免增减明细。
-4. **reviewer 术语检查自 B09 起与 validate ③ 同源**：直接 `import validate_translation as vt` 复用 `vt.check_terms`（含 banned）；/tmp/b12_reviewer.py 为当前模板（临时不入库，逐批复制改 FILES/NEED_ANCHOR/INNER_HEADING_ANCHOR）。
-5. **锚点漏注入的两道防线（B10/B12 双验证）**：批内互引目标（B10 retry→…、B12 jsonBinding）漏注入时，validate ⑤ 会以「锚点在已译目标的译文中不存在」**直接报错拦截**（比跨页引用的豁免警告更硬）；跨页前向引用仍靠 reviewer 清单自查。补救链路（补注入 → restore → assemble → validate/mark-current 重跑）顺畅；mark-current 对已核销文件可幂等重跑。
-6. **③ 必译术语的两类误触与修法**：(a) 宏路径命中（B10：`…/interceptor/CacheInterceptor` → 补首现括注「缓存拦截器」）；(b) 指令行未被 strip 命中小写 API 名而 zh 侧链接 label 被 RE_URL 连带剥除（B11：`dependency:…-netty[]` → 正文普通词物化）——均以正确译法过门禁，不绕过机检。
+1. **锚点注入位置规则（B02 精化，B07–B13 复用验证）**：basename 约定锚点 = 官方站 `core-<basename>` = 片段首内容之前的块锚——对正文先行的文件注入于第一段之前。B07–B13 共 24 处注入；页内标题锚（如 routing 的 `<<_uri_path_variables,…>>`）按 PLAN §5.6 原位注入于标题行之前（B11 首实践）。
+2. **词数口径差异**：M1 inventory 报告值生成于 B01 snippet:: 保护修复之前；后续批次词数以批次执行时实测为准（B02 3055/2991、B03 3417/3377、B04 2588/2545、B05 2074/2076、B06 3482/3445、B07 2540/2484、B08 3400/3336、B09 2852/2835、B10 3022/3002、B11 3270/3240、B12 3363/3336、B13 3122/3076），M1 报告值仅作切分参考。
+3. **批间前向引用消解模式**：先行文件对未译目标的 xref 记为 ⑤ 豁免；后续批次落盘目标文件后豁免自动消解。B07 −5、B08 −5、B09 净 −2、B10 −2、B11 净 −1、B12 净 +2、B13 净 +1（form/formCapable 消解 −2；clientAnnotation/i18n/httpClient 新增 +3）；批次报告须核对豁免增减明细。
+4. **reviewer 术语检查自 B09 起与 validate ③ 同源**：直接 `import validate_translation as vt` 复用 `vt.check_terms`（含 banned）；/tmp/b13_reviewer.py 为当前模板（临时不入库，逐批复制改 FILES/NEED_ANCHOR/INNER_HEADING_ANCHOR）。
+5. **锚点漏注入的两道防线（B10/B12 双验证）**：批内互引目标漏注入时，validate ⑤ 会以「锚点在已译目标的译文中不存在」**直接报错拦截**（B13 的 exceptionHandler 批内闭环同样靠清单前置）；跨页前向引用仍靠 reviewer 清单自查。补救链路（补注入 → restore → assemble → validate/mark-current 重跑）顺畅；mark-current 对已核销文件可幂等重跑。
+6. **③ 必译术语的三类误触与修法**：(a) 宏路径命中（B10：`…/interceptor/CacheInterceptor` → 补首现括注「缓存拦截器」；B13：`api:http.client.interceptor.configuration.…` → 补「（客户端拦截器配置）」括注）；(b) 指令行未被 strip 命中小写 API 名而 zh 侧链接 label 被 RE_URL 连带剥除（B11：`dependency:…-netty[]` → 正文普通词物化）——均以正确译法过门禁，不绕过机检。
 7. **advice 译法自 B09 统一为「通知（advice）」**（承 B06 reflection 先例）；eagerly initialize/eager initialization 命中 approved 术语「饿汉式初始化」。
-8. **源内已有显式锚点（ANCLINE 占位符）与 shorthand xref（`<<target,label>>`，未被 protect 捕获）均按纪律手保**：锚点行逐字节保留；xref target 逐字节保留、label 译出（产品名/规范链接 label 保留）。**复合 xref（label 内嵌行内码占位符，如 jacksonConfiguration 组的 `<<jsonBinding,`micronaut-jackson-databind`>>`）同样逐字节保留**。
-9. **validate ⑦ 邻接规则（B08/B10/B12 三次踩坑）**：占位符/行内码后紧跟全角开括号必拒；宏 `[]` 后接全角开括号不在机检范围。占位符后接 `（` 一律预留空格必须作为翻译期硬习惯。
-10. **大批次工作法（B12 验证）**：25 文件先全量 protect（核对占位符总数 207）→ 逐文件写译文 → 批量 restore（29=25+4 残留无害）→ 批量 assemble → 逐文件 validate。protect 输出目录含子目录（reactiveServer/、jsonBinding/、jacksonConfiguration/），restore 时用 find 通配全量匹配。
-11. `[NOTE] ====` 嵌套块、`[.lang-…]`+`--` 开放块、`{blank}` 列表项（ATTRREF 占位符）、块标题、原生表格（`\|=======` 无占位符）结构保持、标题文本译出；裸代码行与 `dependency:…`/`dependency::…` 宏逐字节保留；validate ④ 仅拦「≥2 英文词且未翻译」的标题。
-12. restore 后必须核对 restored 文件数与输入数一致（B04 教训沿用）；B07–B12 占位符笔误 0。
+8. **源内已有显式锚点（ANCLINE 占位符）与 shorthand xref（`<<target,label>>`，未被 protect 捕获）均按纪律手保**：锚点行逐字节保留；xref target 逐字节保留、label 译出（产品名/规范链接 label 保留）。**复合 xref（label 内嵌行内码占位符）与未保护 `snippet::` 指令行（title 含泛型）同样逐字节保留**。
+9. **validate ⑦ 邻接规则（B08/B10/B12/B13 四次踩坑）**：占位符/行内码后紧跟全角开括号必拒；宏 `[]` 后接全角开括号不在机检范围。占位符后接 `（` 一律预留空格必须作为翻译期硬习惯。
+10. **大批次工作法（B12/B13 验证）**：先全量 protect（核对占位符总数）→ 逐文件写译文 → 批量 restore → 批量 assemble → 逐文件 validate。protect 输出目录含子目录，restore 时显式列全路径。
+11. `[NOTE] ====` 嵌套块、`[.lang-…]`+`--` 开放块、`{blank}` 列表项（ATTRREF 占位符）、块标题、原生表格（`\|=======` 与 `\|===`）结构保持、标题文本译出；裸代码行与 `dependency:…`/`dependency::…` 宏逐字节保留；validate ④ 仅拦「≥2 英文词且未翻译」的标题。
+12. restore 后必须核对 restored 文件数与输入数一致（B04 教训沿用）；B07–B13 占位符笔误 0。
 
 ## 待办（下一会话）
 
-1. **M2 继续**：B13 起（17 文件：plainTextResponses/datavalidation+validationGroups/staticResources/errorHandling 组 8/apiVersioning/formData/form 组 3，双指标达标），看板改 in-progress 后按 §5.1 SOP + 固化校验链执行；启动提示词需更新至 B13 起（`docs/新会话启动提示词.md`）。注意：errorHandling 组含 localErrorHandling（registry 引用 binding）与 errorHandling 组多个锚点（exceptionHandler/globalErrorHandling 等在 registry）——落盘后预计消解 routing→form/formCapable（B11 新增豁免中 whatsNew→form、whatsNew→formCapable 两条也由 form 组消解）。
-2. 术语滚动：B05–B12 括注待复核（构造型 stereotype、可保留 retainable、别名 alias、属性源 property source、mixin、规范构造器 canonical constructor、类型使用注解 type-use annotation、可空性注解、banner、kebab case、驼峰式 camel-case、提供者 provider、默认环境 default environment、求值表达式 evaluated expressions、小驼峰式 lower camel case、通知 advice、切面 aspect、环绕通知/引入通知、存根值 stubbed value、校验通知 validation advice、缓存拦截器 CacheInterceptor、weigher 权重计算器、断路器 Circuit Breaker、规约 specification、展开操作符 exploded operator、编解码器 codec、事件循环 Event Loop、数据类 Data Classes）；context propagation（B01 括注）继续待复核
-3. M3+：断链豁免清零（当前 26 条）、抽检、sync drill、tag v1.0
+1. **M2 继续**：B14 起（13 文件：serverIO/uploads/transfers/filters 组 10，双指标达标），看板改 in-progress 后按 §5.1 SOP + 固化校验链执行；启动提示词需更新至 B14 起（`docs/新会话启动提示词.md`）。注意：order（filters/filtermethods/order.adoc）在 registry 被 whatsNew 引用——落盘后预计消解 1 条豁免。
+2. 术语滚动：B05–B13 括注待复核（构造型 stereotype、可保留 retainable、别名 alias、属性源 property source、mixin、规范构造器 canonical constructor、类型使用注解 type-use annotation、可空性注解、banner、kebab case、驼峰式 camel-case、提供者 provider、默认环境 default environment、求值表达式 evaluated expressions、小驼峰式 lower camel case、通知 advice、切面 aspect、环绕通知/引入通知、存根值 stubbed value、校验通知 validation advice、缓存拦截器 CacheInterceptor、weigher 权重计算器、断路器 Circuit Breaker、规约 specification、展开操作符 exploded operator、编解码器 codec、事件循环 Event Loop、数据类 Data Classes、校验组 validation groups、局部/全局错误处理器、异常处理器 exception handler、背压 backpressure）；context propagation（B01 括注）继续待复核
+3. M3+：断链豁免清零（当前 27 条）、抽检、sync drill、tag v1.0
 
 ## 调试经验与坑位（累计）
 

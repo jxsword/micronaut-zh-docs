@@ -1,0 +1,46 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Data Validation](https://docs.micronaut.io/5.2.x/core/#core-datavalidation)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/datavalidation.adoc  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360  upstream_hash: bbb644b9ed1f6c0ec201397bf01853600824a3cd  translated_at: 2026-11-21 -->
+
+使用 <<validation,校验通知>>，可以轻松地在 Micronaut 控制器中对传入数据进行校验。
+
+Micronaut 框架通过 `micronaut-validation` 依赖为 `jakarta.validation` 注解提供原生支持：
+
+dependency:micronaut-validation-processor[groupId="io.micronaut.validation",scope="annotationProcessor"]
+
+dependency:micronaut-validation[groupId="io.micronaut.validation"]
+
+或者通过 `micronaut-hibernate-validator` 依赖获得完整的 https://beanvalidation.org/2.0/spec/[JSR 380] 兼容性：
+
+dependency:micronaut-hibernate-validator[groupId="io.micronaut.beanvalidation"]
+
+我们可以使用 `jakarta.validation` 注解与类级别的 api:validation.Validated[] 注解来校验参数。
+
+snippet::io.micronaut.docs.datavalidation.params.EmailController[tags="imports,clazz", indent=0,title="Example"]
+
+<1> 用 api:validation.Validated[] 标注控制器
+<2> `subject` 与 `recipient` 不能为空。
+
+如果发生校验错误，将抛出 `jakarta.validation.ConstraintViolationException`。默认情况下，内置的 `io.micronaut.validation.exception.ConstraintExceptionHandler` 会处理该异常，行为如下面的测试所示：
+
+snippet::io.micronaut.docs.datavalidation.params.EmailControllerSpec[tags="paramsvalidated",indent=0,title="Example Test"]
+
+要使用自己的 `ExceptionHandler` 处理约束异常，请为其标注 `@Replaces(ConstraintExceptionHandler.class)`
+
+通常您可能希望使用 POJO 作为控制器方法参数。
+
+snippet::io.micronaut.docs.datavalidation.pogo.Email[tags="clazz", indent=0]
+
+<1> 您可以在 POJO 中使用 `jakarta.validation` 注解。
+
+用 api:validation.Validated[] 标注控制器，并用 `@Valid` 标注绑定 POJO。
+
+snippet::io.micronaut.docs.datavalidation.pogo.EmailController[tags="imports,clazz", indent=0,title="Example"]
+
+<1> 用 api:validation.Validated[] 标注控制器
+<2> 用 `@Valid` 标注要校验的 POJO
+
+POJO 的校验如下面的测试所示：
+
+snippet::io.micronaut.docs.datavalidation.pogo.EmailControllerSpec[tags="pojovalidated",indent=0]
+
+NOTE: 自定义约束支持 bean 注入（使用 Hibernate Validator 配置）。

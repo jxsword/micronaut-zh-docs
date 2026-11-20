@@ -1,0 +1,18 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Local Error Handling](https://docs.micronaut.io/5.2.x/core/#core-localErrorHandling)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/errorHandling/localErrorHandling.adoc  upstream_commit: 035bea06872bdd52ccbdbfa0d23f9d8ef7198e36  upstream_hash: cb0a27803f29645a0f94a602cd8e52f39295e9bb  translated_at: 2026-11-21 -->
+
+例如，下面的方法在声明它的控制器作用域内处理 Jackson 的 JSON 解析异常：
+
+snippet::io.micronaut.docs.server.json.PersonController[tags="localError", indent=0, title="Local exception handler"]
+
+<1> 声明了一个显式处理 `JsonSyntaxException` 的方法
+<2> 返回一个 api:http.hateoas.JsonError[] 实例。
+<3> 返回一个自定义响应来处理该错误
+
+snippet::io.micronaut.docs.server.json.PersonController[tags="statusError", indent=0, title="Local status handler"]
+
+<1> api:http.annotation.Error[] 声明要处理哪个 api:http.HttpStatus[] 错误码（此处为 404）
+<2> 对所有 404 响应返回一个 api:http.hateoas.JsonError[] 实例
+<3> 返回一个 api:http.HttpStatus#NOT_FOUND[] 响应
+
+与其他控制器方法类似，错误处理器可以在参数上使用 <<binding,请求绑定注解>>，例如访问请求头的值。但是，绑定请求体会带来额外限制，具体取决于所使用的 HTTP 服务器实现。如果请求体已经绑定到原控制器方法的某个参数，可能无法再将请求体绑定到不同类型，因为原始字节可能已经被丢弃。

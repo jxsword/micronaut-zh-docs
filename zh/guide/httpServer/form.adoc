@@ -1,0 +1,5 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Forms](https://docs.micronaut.io/5.2.x/core/#core-form)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/form.adoc  upstream_commit: eaedb2b726f150450aed2e69bfa3ae939be8553b  upstream_hash: d88d2036858cc3c073f3b1f34950fae7eb26958c  translated_at: 2026-11-21 -->
+
+[[form]]
+Micronaut HTTP 服务器提供对表单的支持，既支持使用 `multipart/form-data`，也支持使用 `application/x-www-form-urlencoded` 格式。

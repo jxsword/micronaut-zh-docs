@@ -1,0 +1,123 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – API Versioning](https://docs.micronaut.io/5.2.x/core/#core-apiVersioning)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/apiVersioning.adoc  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360  upstream_hash: 6ba6c817cf372d8711c29644b9338cbfcc2d7dc1  translated_at: 2026-11-21 -->
+
+自 1.1.x 起，Micronaut 框架通过专用的 ann:core.version.annotation.Version[] 注解支持 API 版本控制。
+
+下面的示例演示如何对 API 进行版本控制：
+
+snippet::io.micronaut.docs.web.router.version.VersionedController[tags="imports,clazz", indent=0, title="Versioning an API"]
+
+<1> `helloV1` 方法声明为版本 `1`
+<2> `helloV2` 方法声明为版本 `2`
+
+然后在配置文件（例如 `application.yml`）中将 `micronaut.router.versioning.enabled` 设置为 `true` 来启用版本控制：
+
+.启用版本控制
+[configuration]
+----
+micronaut:
+  router:
+    versioning:
+      enabled: true
+----
+
+默认情况下，Micronaut 框架有两种解析版本的策略：基于名为 `X-API-VERSION` 的 HTTP 请求头，或基于名为 `api-version` 的请求参数，不过这是可配置的。完整配置示例见下：
+
+.配置版本控制
+[configuration]
+----
+micronaut:
+  router:
+    versioning:
+      enabled: true
+      parameter:
+        enabled: false
+        names: 'v,api-version'
+      header:
+        enabled: true
+        names:
+          - 'X-API-VERSION'
+          - 'Accept-Version'
+----
+
+- 本示例启用版本控制
+- `parameter.enabled` 启用或禁用基于参数的版本控制
+- `parameter.names` 以逗号分隔的列表形式指定参数名
+- `header.enabled` 启用或禁用基于请求头的版本控制
+- `header.names` 以列表形式指定请求头名称
+
+如果这还不够，您还可以实现 api:web.router.version.resolution.RequestVersionResolver[] 接口，它接收 api:http.HttpRequest[] 并可以实现您选择的任何策略。
+
+=== 默认版本
+
+可以通过配置提供默认版本。
+
+.配置默认版本
+[configuration]
+----
+micronaut:
+  router:
+    versioning:
+      enabled: true
+      default-version: 3
+----
+
+- 本示例启用版本控制并设置默认版本
+
+如果满足以下条件，路由将 *不会* 被匹配：
+
+* 配置了默认版本
+* 请求中未找到版本
+* 路由定义了版本
+* 路由版本与默认版本不匹配
+
+如果传入请求指定了版本，默认版本不生效。
+
+=== 客户端请求的版本控制
+
+Micronaut 的 <<clientAnnotation,声明式 HTTP 客户端>> 也通过 ann:core.version.annotation.Version[] 注解支持对发出请求的自动版本控制。
+
+默认情况下，如果您用 ann:core.version.annotation.Version[] 标注客户端接口，提供给注解的值将通过 `X-API-VERSION` 请求头包含。
+
+例如：
+
+snippet::io.micronaut.docs.client.versioning.HelloClient[tags="imports,clazz"]
+
+<1> ann:core.version.annotation.Version[] 注解可以在类型级别使用，为所有方法指定要使用的版本
+<2> 在方法级别定义时，仅用于该方法
+
+每次调用如何发送版本的默认行为可以通过 api:http.client.interceptor.configuration.DefaultClientVersioningConfiguration[] （客户端拦截器配置）进行配置：
+
+include::{includedir}configurationProperties/io.micronaut.http.client.interceptor.configuration.DefaultClientVersioningConfiguration.adoc[]
+
+例如，使用 `Accept-Version` 作为请求头名称：
+
+.配置客户端版本控制
+[configuration]
+----
+micronaut:
+  http:
+    client:
+      versioning:
+        default:
+          headers:
+            - 'Accept-Version'
+            - 'X-API-VERSION'
+----
+
+`default` 键指默认配置。您可以通过传递给 `@Client` 的值（通常是服务 ID）指定客户端特定的配置。例如：
+
+.配置版本控制
+[configuration]
+----
+micronaut:
+  http:
+    client:
+      versioning:
+        greeting-service:
+          headers:
+            - 'Accept-Version'
+            - 'X-API-VERSION'
+----
+
+上例使用名为 `greeting-service` 的键，可用于配置以 `@Client('greeting-service')` 标注的客户端。

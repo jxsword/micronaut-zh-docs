@@ -1,0 +1,16 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Global Error Handling](https://docs.micronaut.io/5.2.x/core/#core-globalErrorHandling)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/errorHandling/globalErrorHandling.adoc  upstream_commit: 2def91e9f5fa9ec97f0f69aee5b5397912657533  upstream_hash: 3c982ec79b456f097003fdb7edb0a191bb7b7546  translated_at: 2026-11-21 -->
+
+snippet::io.micronaut.docs.server.json.PersonController[tags="globalError", indent=0, title="Global error handler"]
+
+<1> ann:http.annotation.Error[] 将该方法声明为全局错误处理器
+<2> 对所有错误返回一个 api:http.hateoas.JsonError[] 实例
+<3> 返回一个 api:http.HttpStatus#INTERNAL_SERVER_ERROR[] 响应
+
+snippet::io.micronaut.docs.server.json.PersonController[tags="statusError", indent=0, title="Global status handler"]
+
+<1> api:http.annotation.Error[] 声明要处理哪个 api:http.HttpStatus[] 错误码（此处为 404）
+<2> 对所有 404 响应返回一个 api:http.hateoas.JsonError[] 实例
+<3> 返回一个 api:http.HttpStatus#NOT_FOUND[] 响应
+
+IMPORTANT: 关于 ann:http.annotation.Error[] 注解的几点说明。您不能声明相同的全局 `@Error` 注解。相同的非全局 `@Error` 注解不能在同一个控制器中声明。如果同一个参数的 `@Error` 注解同时存在全局与局部版本，局部版本优先。

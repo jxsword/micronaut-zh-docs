@@ -943,10 +943,10 @@ files:
 - file: guide/httpServer/apiVersioning.adoc
   blob_sha: 6ba6c817cf372d8711c29644b9338cbfcc2d7dc1
   size: 4058
-  status: missing
+  status: current
   zh: zh/guide/httpServer/apiVersioning.adoc
   paragraphs: 40
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/httpServer/binding.adoc
   blob_sha: abbcdc2cdf1843f49eff55b350842cc3c0a20916
@@ -1015,82 +1015,82 @@ files:
 - file: guide/httpServer/datavalidation.adoc
   blob_sha: bbb644b9ed1f6c0ec201397bf01853600824a3cd
   size: 2272
-  status: missing
+  status: current
   zh: zh/guide/httpServer/datavalidation.adoc
   paragraphs: 21
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/httpServer/datavalidation/validationGroups.adoc
   blob_sha: 0675167f1a01b4a1e568cd69f120df83053c7a54
   size: 2478
-  status: missing
+  status: current
   zh: zh/guide/httpServer/datavalidation/validationGroups.adoc
   paragraphs: 12
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 0c3de5221574ed09f9f7e539c7a95dd8af1cc894
 - file: guide/httpServer/errorHandling.adoc
   blob_sha: fd305ab90f15086584cb65dac732a27329e0c4c3
   size: 109
-  status: missing
+  status: current
   zh: zh/guide/httpServer/errorHandling.adoc
   paragraphs: 1
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 2def91e9f5fa9ec97f0f69aee5b5397912657533
 - file: guide/httpServer/errorHandling/errorFormatting.adoc
   blob_sha: ff1f20be84cce6e365181eb113e34b92bdbe0d71
   size: 1825
-  status: missing
+  status: current
   zh: zh/guide/httpServer/errorHandling/errorFormatting.adoc
   paragraphs: 9
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 6434999218d31e77996cd0532788a1106eb6069b
 - file: guide/httpServer/errorHandling/exceptionHandler.adoc
   blob_sha: c6dfa0bfe8ae6f417d050e3bd642edfb9d76c6d9
   size: 318
-  status: missing
+  status: current
   zh: zh/guide/httpServer/errorHandling/exceptionHandler.adoc
   paragraphs: 2
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 2def91e9f5fa9ec97f0f69aee5b5397912657533
 - file: guide/httpServer/errorHandling/exceptionHandler/builtInExceptionHandlers.adoc
   blob_sha: d9676a5f062327eb4aa3ee8c8ee11c4df1687771
   size: 1566
-  status: missing
+  status: current
   zh: zh/guide/httpServer/errorHandling/exceptionHandler/builtInExceptionHandlers.adoc
   paragraphs: 2
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 8084660489a4d619f632105a2bc652dbd5c83b40
 - file: guide/httpServer/errorHandling/exceptionHandler/customExceptionHandler.adoc
   blob_sha: a72e831d4b18fb005b882ec8f9913fa7876d2edd
   size: 736
-  status: missing
+  status: current
   zh: zh/guide/httpServer/errorHandling/exceptionHandler/customExceptionHandler.adoc
   paragraphs: 8
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 31bdb72f837188d7432007bbee051eb47dd99561
 - file: guide/httpServer/errorHandling/globalErrorHandling.adoc
   blob_sha: 3c982ec79b456f097003fdb7edb0a191bb7b7546
   size: 1056
-  status: missing
+  status: current
   zh: zh/guide/httpServer/errorHandling/globalErrorHandling.adoc
   paragraphs: 5
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 2def91e9f5fa9ec97f0f69aee5b5397912657533
 - file: guide/httpServer/errorHandling/localErrorHandling.adoc
   blob_sha: cb0a27803f29645a0f94a602cd8e52f39295e9bb
   size: 1261
-  status: missing
+  status: current
   zh: zh/guide/httpServer/errorHandling/localErrorHandling.adoc
   paragraphs: 6
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 035bea06872bdd52ccbdbfa0d23f9d8ef7198e36
 - file: guide/httpServer/errorHandling/statusHandlers.adoc
   blob_sha: 9ebeb1a5c0fb5ea85170b2e0566a30ad3d4f4780
   size: 921
-  status: missing
+  status: current
   zh: zh/guide/httpServer/errorHandling/statusHandlers.adoc
   paragraphs: 4
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 15119ba9ee63100091348d40eaffe708155b53ae
 - file: guide/httpServer/filters.adoc
   blob_sha: e21f056a12dba55b6caecd280efd987907a4854e
@@ -1191,34 +1191,34 @@ files:
 - file: guide/httpServer/form.adoc
   blob_sha: d88d2036858cc3c073f3b1f34950fae7eb26958c
   size: 141
-  status: missing
+  status: current
   zh: zh/guide/httpServer/form.adoc
   paragraphs: 1
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: eaedb2b726f150450aed2e69bfa3ae939be8553b
 - file: guide/httpServer/form/formBinding.adoc
   blob_sha: 670096a68f8762aa3a078b271f4fc45553ff9a2d
   size: 7119
-  status: missing
+  status: current
   zh: zh/guide/httpServer/form/formBinding.adoc
   paragraphs: 43
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 130cfede2d9a325faf7016bf10e0a2060c5a3cbd
 - file: guide/httpServer/form/formCapable.adoc
   blob_sha: 2f13b9c85eb73621e6844bb14f2f0755f6b9c0d0
   size: 1413
-  status: missing
+  status: current
   zh: zh/guide/httpServer/form/formCapable.adoc
   paragraphs: 8
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: eaedb2b726f150450aed2e69bfa3ae939be8553b
 - file: guide/httpServer/formData.adoc
   blob_sha: 5f37d6a2fd6f2ca949d4e9b810113130bc131f48
   size: 1693
-  status: missing
+  status: current
   zh: zh/guide/httpServer/formData.adoc
   paragraphs: 9
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: a9c9208e4abf8af75c7d4c75d17f42b0af85bdd8
 - file: guide/httpServer/graphql.adoc
   blob_sha: 56d83f3b00bc376a7ceb051bb00bcfd0d451e554
@@ -1383,10 +1383,10 @@ files:
 - file: guide/httpServer/plainTextResponses.adoc
   blob_sha: 8886cc12b00bf769fcc9e782d63a51da20211a09
   size: 1035
-  status: missing
+  status: current
   zh: zh/guide/httpServer/plainTextResponses.adoc
   paragraphs: 4
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: c953f5f0dcc7c55b4cfa27867c7408ba8ea8eef2
 - file: guide/httpServer/producesAnnotation.adoc
   blob_sha: bac33a7751f24e66eabdcf076c92fadad78ced26
@@ -1687,10 +1687,10 @@ files:
 - file: guide/httpServer/staticResources.adoc
   blob_sha: 74a8ee9ca6c54807773e22fb4255901550a68141
   size: 586
-  status: missing
+  status: current
   zh: zh/guide/httpServer/staticResources.adoc
   paragraphs: 4
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: be413ff3e5bdfdfd4390db0dc5d44bd17baac069
 - file: guide/httpServer/statusAnnotation.adoc
   blob_sha: a6d6ce2006b303c6b934f396f884d85eb9404bd9

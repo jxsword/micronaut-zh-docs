@@ -1,0 +1,34 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Built-In Exception Handlers](https://docs.micronaut.io/5.2.x/core/#core-builtInExceptionHandlers)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/errorHandling/exceptionHandler/builtInExceptionHandlers.adoc  upstream_commit: 8084660489a4d619f632105a2bc652dbd5c83b40  upstream_hash: d9676a5f062327eb4aa3ee8c8ee11c4df1687771  translated_at: 2026-11-21 -->
+
+Micronaut 框架自带以下几个内置处理器：
+
+|===
+|异常|处理器
+| `jakarta.validation.ConstraintViolationException`
+| https://micronaut-projects.github.io/micronaut-validation/latest/api/io/micronaut/validation/exceptions/ConstraintExceptionHandler.html[ConstraintExceptionHandler]
+| api:http.exceptions.ContentLengthExceededException[]
+| api:http.server.exceptions.ContentLengthExceededHandler[]
+| api:core.convert.exceptions.ConversionErrorException[]
+| api:http.server.exceptions.ConversionErrorHandler[]
+| api:web.router.exceptions.DuplicateRouteException[]
+| api:http.server.exceptions.DuplicateRouteHandler[]
+| api:http.exceptions.HttpStatusException[]
+| api:http.server.exceptions.HttpStatusHandler[]
+| api:http.server.exceptions.UnsupportedMediaException[]
+| api:http.server.exceptions.HttpStatusHandler[]
+| api:http.server.exceptions.NotFoundException[]
+| api:http.server.exceptions.HttpStatusHandler[]
+| api:http.server.exceptions.NotAcceptableException[]
+| api:http.server.exceptions.HttpStatusHandler[]
+| api:http.server.exceptions.NotAllowedException[]
+| api:http.server.exceptions.NotAllowedExceptionHandler[]
+| `com.fasterxml.jackson.core.JsonProcessingException`
+| api:http.server.exceptions.JsonExceptionHandler[]
+| `java.net.URISyntaxException`
+| api:http.server.exceptions.URISyntaxHandler[]
+| api:core.bind.exceptions.UnsatisfiedArgumentException[]
+| api:http.server.exceptions.UnsatisfiedArgumentHandler[]
+| api:web.router.exceptions.UnsatisfiedRouteException[]
+| api:http.server.exceptions.UnsatisfiedRouteHandler[]
+|===

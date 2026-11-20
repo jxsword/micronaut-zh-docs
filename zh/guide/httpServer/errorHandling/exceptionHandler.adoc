@@ -1,0 +1,7 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – ExceptionHandler](https://docs.micronaut.io/5.2.x/core/#core-exceptionHandler)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/errorHandling/exceptionHandler.adoc  upstream_commit: 2def91e9f5fa9ec97f0f69aee5b5397912657533  upstream_hash: c6dfa0bfe8ae6f417d050e3bd642edfb9d76c6d9  translated_at: 2026-11-21 -->
+
+[[exceptionHandler]]
+或者，您可以实现 api:http.server.exceptions.ExceptionHandler[]——一个用于处理 HTTP 请求执行期间发生异常的通用钩子。
+
+IMPORTANT: 捕获某个异常的 `@Error` 注解优先于捕获同一异常的 `ExceptionHandler` 实现。

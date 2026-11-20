@@ -1,0 +1,18 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Custom Exception Handler](https://docs.micronaut.io/5.2.x/core/#core-customExceptionHandler)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/errorHandling/exceptionHandler/customExceptionHandler.adoc  upstream_commit: 31bdb72f837188d7432007bbee051eb47dd99561  upstream_hash: a72e831d4b18fb005b882ec8f9913fa7876d2edd  translated_at: 2026-11-21 -->
+
+想象一下，您的电子商务应用在书籍缺货时抛出 `OutOfStockException`：
+
+snippet::io.micronaut.docs.server.exception.OutOfStockException[tags="clazz", indent=0]
+
+以及 `BookController`：
+
+snippet::io.micronaut.docs.server.exception.BookController[tags="clazz", indent=0]
+
+如果您不处理该异常，服务器将返回 500（Internal Server Error）状态码。
+
+要在抛出 `OutOfStockException` 时以 400 Bad Request 作为响应，您可以注册一个 `ExceptionHandler`：
+
+snippet::io.micronaut.docs.server.exception.OutOfStockExceptionHandler[tags="clazz", indent=0]
+
+<1> 使用默认的 api:http.server.exceptions.response.ErrorResponseProcessor[] 创建响应体

@@ -1,0 +1,4 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Error Handling](https://docs.micronaut.io/5.2.x/core/#core-errorHandling)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/errorHandling.adoc  upstream_commit: 2def91e9f5fa9ec97f0f69aee5b5397912657533  upstream_hash: fd305ab90f15086584cb65dac732a27329e0c4c3  translated_at: 2026-11-21 -->
+
+在分布式应用中，难免会出现问题。拥有良好的错误处理方式非常重要。

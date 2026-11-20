@@ -1,0 +1,30 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Validation Groups](https://docs.micronaut.io/5.2.x/core/#core-validationGroups)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/datavalidation/validationGroups.adoc  upstream_commit: 0c3de5221574ed09f9f7e539c7a95dd8af1cc894  upstream_hash: 0675167f1a01b4a1e568cd69f120df83053c7a54  translated_at: 2026-11-21 -->
+
+您可以使用 `groups` 在 api:validation.Validated[] 上使用 https://beanvalidation.org/2.0/spec/#validationapi-validatorapi-groups[校验组] 来强制执行约束的子集。更多信息请参阅 https://beanvalidation.org/2.0/spec/#constraintdeclarationvalidationprocess-groupsequence[Bean Validation 规范]
+
+snippet::io.micronaut.docs.datavalidation.groups.FinalValidation[tags="clazz", indent=0]
+
+<1> 定义一个自定义校验组。该组扩展了 `Default`，因此使用该组进行的任何校验都将包含 `Default` 组中的约束。
+
+snippet::io.micronaut.docs.datavalidation.groups.Email[tags="clazz", indent=0]
+
+<1> 使用 Default 校验组指定一个约束。只有当 `Default` 激活时才会强制执行该约束。
+<2> 使用自定义 `FinalValidation` 校验组指定一个约束。只有当 `FinalValidation` 激活时才会强制执行该约束。
+
+用 api:validation.Validated[] 标注控制器，指定将激活的校验组或让其默认为 `Default`。同时用 `@Valid` 标注绑定 POJO。
+
+snippet::io.micronaut.docs.datavalidation.groups.EmailController[tags="imports,clazz", indent=0,title="Example"]
+
+<1> 标注 api:validation.Validated[] 而不指定组，意味着 `Default` 组将激活。由于它定义在类上，将应用于所有方法。
+<2> `Default` 校验组中的约束将被强制执行（从类继承）。效果是调用该方法时，`email.recipient` 上的 `@NotBlank` 不会被强制执行。
+<3> 指定 `groups` 意味着调用该方法时将强制执行这些校验组。注意 `FinalValidation` 扩展了 `Default`，因此两个组的约束都会被强制执行。
+<4> `Default` 与 `FinalValidation` 校验组中的约束都将被强制执行，因为 `FinalValidation` 扩展了 `Default`。效果是调用该方法时，`email` 中的两个 `@NotBlank` 约束都会被强制执行。
+
+使用默认校验组的 POJO 校验如下面的测试所示：
+
+snippet::io.micronaut.docs.datavalidation.groups.EmailControllerSpec[tags="pojovalidateddefault",indent=0]
+
+使用自定义 `FinalValidation` 校验组的 POJO 校验如下面的测试所示：
+
+snippet::io.micronaut.docs.datavalidation.groups.EmailControllerSpec[tags="pojovalidatedfinal",indent=0]

@@ -1,0 +1,20 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Handling Form Data](https://docs.micronaut.io/5.2.x/core/#core-formData)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/formData.adoc  upstream_commit: a9c9208e4abf8af75c7d4c75d17f42b0af85bdd8  upstream_hash: 5f37d6a2fd6f2ca949d4e9b810113130bc131f48  translated_at: 2026-11-21 -->
+
+为了使表单数据与 JSON 之间的数据绑定模型定制保持一致，Micronaut 框架使用 Jackson 实现表单提交的数据绑定。
+
+这种方式的优点是，用于定制 JSON 绑定的相同 Jackson 注解也可用于表单提交。
+
+IMPORTANT: <<httpClient,Micronaut HTTP 客户端>> 不支持表单 URL 编码内容类型与 Jackson 注解。
+
+在实践中，这意味着要绑定常规表单数据，对 <<bindingUsingPOJOs,前面的 JSON 绑定代码>> 唯一需要修改的地方是更新所消费的 api:http.MediaType[]：
+
+snippet::io.micronaut.docs.server.form.PersonController[tags="class,formbinding,endclass", title="Binding Form Data to POJOs"]
+
+TIP: 为避免拒绝服务（denial-of-service）攻击，绑定期间创建的集合类型与数组受配置文件（例如 `application.yml`）中 `jackson.arraySizeThreshold` 设置的限制。表单键的嵌套深度限制为 100 层，请求的总数组填充限制为该阈值加上其键的长度。
+
+或者，您也可以不使用 POJO，而将表单数据直接绑定到方法参数（这也适用于 JSON！）：
+
+snippet::io.micronaut.docs.server.form.PersonController[tags="class,formsaveWithArgs,endclass", title="Binding Form Data to Parameters"]
+
+从上例可以看出，这种方式让您可以使用 `@Nullable` 或 link:{jdkapi}/java.base/java/util/Optional.html[Optional] 类型支持等特性，并限制要绑定的参数。使用 POJO 时必须小心，要使用 Jackson 注解排除不应绑定的属性。

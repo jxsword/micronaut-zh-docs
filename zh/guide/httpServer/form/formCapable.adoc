@@ -1,0 +1,19 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Detailed Form API](https://docs.micronaut.io/5.2.x/core/#core-formCapable)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/form/formCapable.adoc  upstream_commit: eaedb2b726f150450aed2e69bfa3ae939be8553b  upstream_hash: 2f13b9c85eb73621e6844bb14f2f0755f6b9c0d0  translated_at: 2026-11-21 -->
+
+[[formCapable]]
+Micronaut HTTP 服务器中最低层的表单 API 是 api:io.micronaut.http.form.FormCapableHttpRequest[]。它提供表单字段的响应式 Publisher。该发布者最多只能被订阅一次。每个字段由一个 api:io.micronaut.http.multipart.RawFormField[] 表示，包含字段元数据与以 api:io.micronaut.http.body.ByteBody[] 形式存在的字段体。
+
+=== 字段元数据
+
+字段元数据中最重要的信息是字段名。它对应表单 `input` 元素上的 `name` 属性。
+
+文件上传包含额外的元数据：文件名，以及可选的文件内容类型。
+
+注意，对元数据没有任何限制。多个字段可以有相同的名称（上传多个文件时浏览器会这样做），并且任何元数据字段都可能完全缺失。
+
+=== 字段体
+
+字段体由 api:io.micronaut.http.body.ByteBody[] 表示，这是一个异步的流式 API。大型表单字段可以惰性处理：只要您不从 `ByteBody` 消费数据，表单数据就不会从客户端读取，例如上传可能会停滞。您也不会在主发布者上看到任何其他字段，因为只有当前表单字段的所有数据到达后才能接收它们。
+
+对于较短的表单字段，`ByteBody` 可能会在内部完全缓冲，但您不应依赖这一点。

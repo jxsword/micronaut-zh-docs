@@ -1,0 +1,11 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Plain Text Responses](https://docs.micronaut.io/5.2.x/core/#core-plainTextResponses)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/plainTextResponses.adoc  upstream_commit: c953f5f0dcc7c55b4cfa27867c7408ba8ea8eef2  upstream_hash: 8886cc12b00bf769fcc9e782d63a51da20211a09  translated_at: 2026-11-21 -->
+
+默认情况下，Micronaut 控制器以内容类型 `application/json` 响应。不过，通过用 ann:http.annotation.Produces[] 注解标注控制器方法，您可以以内容类型 `text/plain` 响应。
+
+snippet::io.micronaut.docs.http.server.response.textplain.TextPlainController[tags="classopening,method,classclosing", title="HTTP Response with text/plain Content-Type"]
+
+<1> 控制器端点指定响应的 Content-Type 为 `text/plain`。
+<2> 端点返回类型 `String`，实现中使用 `toString()` 方法显式将数据转换为字符串。
+
+NOTE: Micronaut Framework 4.x 对 `text/plain` 响应允许的类型比 Micronaut Framework 3.x 更严格。要为 `java.lang.String` 之外的答案返回纯文本响应，请手动调用对象的 `toString()` 方法。或者，将 `micronaut.http.legacy-text-conversion` 配置选项设置为 `true`，以恢复旧的（但不推荐的）Micronaut Framework 3.x 行为。

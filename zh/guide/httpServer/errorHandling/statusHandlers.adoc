@@ -1,0 +1,10 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Status Handlers](https://docs.micronaut.io/5.2.x/core/#core-statusHandlers)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/errorHandling/statusHandlers.adoc  upstream_commit: 15119ba9ee63100091348d40eaffe708155b53ae  upstream_hash: 9ebeb1a5c0fb5ea85170b2e0566a30ad3d4f4780  translated_at: 2026-11-21 -->
+
+ann:http.annotation.Error[] 注解支持定义异常类或 HTTP 状态。标注了 ann:http.annotation.Error[] 的方法必须定义在以 ann:http.annotation.Controller[] 标注的类中。该注解还支持全局与局部（local，默认）的概念。
+
+局部错误处理器只响应因路由匹配到同一控制器中的另一个方法而抛出的异常。全局错误处理器可以因任何抛出的异常而被调用。在解析要执行的处理器时，总是先查找局部错误处理器。
+
+TIP: 定义异常的错误处理器时，可以将异常实例作为方法参数指定，并省略注解的 exception 属性。
+
+TIP: 更多信息请参阅 https://guides.micronaut.io/latest/micronaut-error-handling.html[错误处理] 指南。

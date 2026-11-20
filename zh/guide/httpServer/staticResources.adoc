@@ -1,0 +1,10 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Serving Static Resources](https://docs.micronaut.io/5.2.x/core/#core-staticResources)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/staticResources.adoc  upstream_commit: be413ff3e5bdfdfd4390db0dc5d44bd17baac069  upstream_hash: 74a8ee9ca6c54807773e22fb4255901550a68141  translated_at: 2026-11-21 -->
+
+静态资源解析默认启用。Micronaut 框架支持从类路径或文件系统解析资源。
+
+可用配置选项参见以下信息：
+
+include::{includedir}configurationProperties/io.micronaut.web.router.resource.StaticResourceConfiguration.adoc[]
+
+TIP: 请阅读 https://guides.micronaut.io/latest/micronaut-static-resources.html[在 Micronaut 应用中提供静态资源] 指南——一份分步教程，了解如何在 Micronaut Framework 应用中暴露 CSS 或图片等静态资源。
