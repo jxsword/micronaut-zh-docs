@@ -1,0 +1,14 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Environment Priority](https://docs.micronaut.io/5.2.x/core/#core-environmentPriority)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/config/environments/environmentPriority.adoc  upstream_commit: 8b0864ad8f103900d8cd522704223d93d49edf43  upstream_hash: bd1cca10c3a06a56fb4b94b3efcfd9c347d9afec  translated_at: 2026-11-21 -->
+
+Micronaut 框架根据指定的环境加载属性源（property source）；若同一个属性键存在于多个特定于环境的属性源中，则环境顺序决定使用哪个值。
+
+Micronaut 框架使用以下层次结构处理环境（优先级从低到高）：
+
+* 推断的环境
+* 来自 `micronaut.environments` 系统属性的环境
+* 来自 `MICRONAUT_ENVIRONMENTS` 环境变量的环境
+* 通过应用上下文构建器显式指定的环境
++
+NOTE: 这同样适用于 `@MicronautTest(environments = ...)`
++

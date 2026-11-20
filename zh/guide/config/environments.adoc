@@ -1,0 +1,23 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – The Environment](https://docs.micronaut.io/5.2.x/core/#core-environments)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/config/environments.adoc  upstream_commit: 8b0864ad8f103900d8cd522704223d93d49edf43  upstream_hash: 4c2d7a7792c4c680aa30004fba0afe2a20f2f3d6  translated_at: 2026-11-21 -->
+
+[[environments]]
+应用环境由 api:context.env.Environment[] 接口建模，在创建 api:context.ApplicationContext[] 时可以指定一个或多个唯一的环境名称。
+
+snippet::io.micronaut.docs.context.env.EnvironmentSpec[tags="env",indent=0,title="Initializing the Environment"]
+
+激活的环境名称允许根据环境加载不同的配置文件，还可以使用 ann:context.annotation.Requires[] 注解按条件加载 bean 或 bean 的 ann:context.annotation.Configuration[] 包。
+
+此外，Micronaut 框架会尝试检测当前的环境。例如，在 Spock 或 JUnit 测试中，api:context.env.Environment#TEST[] 环境会自动激活。
+
+其他需要激活的环境可以用 `micronaut.environments` 系统属性或 `MICRONAUT_ENVIRONMENTS` 环境变量指定，取值为逗号分隔的列表。例如：
+
+.指定环境
+[source,bash]
+----
+$ java -Dmicronaut.environments=foo,bar -jar myapp.jar
+----
+
+上面的命令会激活名为 `foo` 与 `bar` 的环境。
+
+也可以启用对应用所部署 Cloud 环境的检测（自 Micronaut 框架 4 起该功能默认禁用）。更多信息请参阅 <<cloudConfiguration,云配置>> 一节。

@@ -455,10 +455,10 @@ files:
 - file: guide/config.adoc
   blob_sha: 7999fac82da143e0f16be8d135afb9f02b5abae0
   size: 1943
-  status: missing
+  status: current
   zh: zh/guide/config.adoc
   paragraphs: 7
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 3db7caf1594e2ab430f1fd9fdfdc028beab0a29c
 - file: guide/config/banner.adoc
   blob_sha: e9f11f8fb12538b0994d74a00bdf5422c2fc109b
@@ -511,10 +511,10 @@ files:
 - file: guide/config/environments.adoc
   blob_sha: 4c2d7a7792c4c680aa30004fba0afe2a20f2f3d6
   size: 1396
-  status: missing
+  status: current
   zh: zh/guide/config/environments.adoc
   paragraphs: 10
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 8b0864ad8f103900d8cd522704223d93d49edf43
 - file: guide/config/environments/defaultEnvironment.adoc
   blob_sha: f4366a90fd03daf48189301bacbdc6c0b55e1ab8
@@ -527,18 +527,18 @@ files:
 - file: guide/config/environments/disablingEnvironmentDetection.adoc
   blob_sha: 21fd83295b23480c5e7a8e98b0cef20d1ad2bbbd
   size: 804
-  status: missing
+  status: current
   zh: zh/guide/config/environments/disablingEnvironmentDetection.adoc
   paragraphs: 6
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 8b0864ad8f103900d8cd522704223d93d49edf43
 - file: guide/config/environments/environmentPriority.adoc
   blob_sha: bd1cca10c3a06a56fb4b94b3efcfd9c347d9afec
   size: 644
-  status: missing
+  status: current
   zh: zh/guide/config/environments/environmentPriority.adoc
   paragraphs: 4
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 8b0864ad8f103900d8cd522704223d93d49edf43
 - file: guide/config/evaluatedExpressions.adoc
   blob_sha: c7fc084c223c8f7b3dc9185fa2d53721145ea0db
@@ -1807,10 +1807,10 @@ files:
 - file: guide/ioc/android.adoc
   blob_sha: fe6b934bb087e4a1392bf6353e5d0723c485be52
   size: 3002
-  status: missing
+  status: current
   zh: zh/guide/ioc/android.adoc
   paragraphs: 21
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 35c9dea50c0646a60f2935b02078253b06f2d4e0
 - file: guide/ioc/annotationMetadata.adoc
   blob_sha: 53a6e57b20953cabbe648fabd2635d2d4957b189
@@ -1887,10 +1887,10 @@ files:
 - file: guide/ioc/classImport.adoc
   blob_sha: 9f694ec2dfd4f3e09bfff42ed62b3f9e620951ff
   size: 1867
-  status: missing
+  status: current
   zh: zh/guide/ioc/classImport.adoc
   paragraphs: 12
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 77e0a29d7a2e866dcd42e2c0bd79d554c7fa4b2d
 - file: guide/ioc/conditionalBeans.adoc
   blob_sha: 0ba1d3d540388f9a07891b8343b0b8d245311025
@@ -2135,26 +2135,26 @@ files:
 - file: guide/ioc/mixin.adoc
   blob_sha: 469ebffe3a24873063a49b9bb2d404d233181356
   size: 4060
-  status: missing
+  status: current
   zh: zh/guide/ioc/mixin.adoc
   paragraphs: 23
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 77e0a29d7a2e866dcd42e2c0bd79d554c7fa4b2d
 - file: guide/ioc/nullabilityAnnotations.adoc
   blob_sha: 536e68c1bd9597666101eb186e7a761cb0b3c030
   size: 4273
-  status: missing
+  status: current
   zh: zh/guide/ioc/nullabilityAnnotations.adoc
   paragraphs: 21
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: cec2b9889871eabf0e2d95933b412f5a57cdca70
 - file: guide/ioc/nullabilityAnnotations/jspecify.adoc
   blob_sha: 496d4a31cd58997d4a22af9032a9d70ae539e331
   size: 1864
-  status: missing
+  status: current
   zh: zh/guide/ioc/nullabilityAnnotations/jspecify.adoc
   paragraphs: 8
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 060ff25727271202d46d2d29c2433f6688dd6ca3
 - file: guide/ioc/qualifiers.adoc
   blob_sha: 2a2f7e0f4cdfc479ca41cde23b85c09fbf2284fa
@@ -2167,10 +2167,10 @@ files:
 - file: guide/ioc/reflection.adoc
   blob_sha: fee9571a39beabb43a51c19c6bb34f5777e9c541
   size: 13419
-  status: missing
+  status: current
   zh: zh/guide/ioc/reflection.adoc
   paragraphs: 50
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 2c9161c43fc8ed4743dd637378eb9fc9d6f2047a
 - file: guide/ioc/replaces.adoc
   blob_sha: 9199fceb32c71cd02c1fa279f5d1bf09bac53c7b
@@ -2223,10 +2223,10 @@ files:
 - file: guide/ioc/springBeans.adoc
   blob_sha: 8fd28e5d53d7956f23b290a2d63376ac460efa1b
   size: 196
-  status: missing
+  status: current
   zh: zh/guide/ioc/springBeans.adoc
   paragraphs: 1
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/ioc/typed.adoc
   blob_sha: 925321454f881aec1d472a54fe86726be4fcbc75

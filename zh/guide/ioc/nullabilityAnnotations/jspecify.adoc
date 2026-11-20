@@ -1,0 +1,45 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – JSpecify Nullability Annotations](https://docs.micronaut.io/5.2.x/core/#core-jspecify)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/ioc/nullabilityAnnotations/jspecify.adoc  upstream_commit: 060ff25727271202d46d2d29c2433f6688dd6ca3  upstream_hash: 496d4a31cd58997d4a22af9032a9d70ae539e331  translated_at: 2026-11-21 -->
+
+[[jspecify]]
+Micronaut 支持 https://jspecify.dev/[JSpecify] 注解作为自身可空性注解的替代。在内部，它们只是被简单重映射为 Micronaut 的注解。
+
+- `org.jspecify.annotations.Nullable` — 被注解的值可以为 null。
+- `org.jspecify.annotations.NonNull` — 表达被注解元素的非空（not-null）契约。
+- `org.jspecify.annotations.NullMarked` — 在被注解的作用域（包、类型或方法）内设置默认的非空策略，除非被覆盖。
+
+WARNING: 注解在数组字段上的放置方式存在差异。Micronaut 支持 `@io.micronaut.core.annotation.Nullable String[] myField`，而 JSpecify 的正确语法是 `String @org.jspecify.annotations.Nullable [] myField`；反过来写只会把数组组件标记为可空。
+
+NOTE: 可以将 JSpecify 与 Micronaut 的可空性注解混用；但在一个模块或包内，建议采用单一、一致的方式，以保持意图清晰、减少歧义。
+
+TIP: 在包或类型上采用 `@NullMarked`，使非空成为默认，然后仅对例外情况标注 `@Nullable`。
+
+下面的类使用 JSpecify，通过 `@NullMarked` 声明默认非空，仅对少数可空情形标注注解：
+
+[source,java]
+----
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import jakarta.inject.Singleton;
+
+@Singleton
+@NullMarked
+final class AccountService {
+
+    // Non-null by default due to @NullMarked
+    String greet(String name) {
+        return "Hello, " + name;
+    }
+
+    // Nullable return and parameter explicitly marked
+    @Nullable
+    String findNickname(@Nullable String userId) {
+        if (userId == null) {
+            return null;
+        }
+        // Lookup may return null if not found
+        return null;
+    }
+}
+----

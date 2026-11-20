@@ -1,0 +1,103 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Modifying Class Annotations With A Mixin](https://docs.micronaut.io/5.2.x/core/#core-mixin)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/ioc/mixin.adoc  upstream_commit: 77e0a29d7a2e866dcd42e2c0bd79d554c7fa4b2d  upstream_hash: 469ebffe3a24873063a49b9bb2d404d233181356  translated_at: 2026-11-21 -->
+
+存在这样的场景：无法访问某个类，因而无法为它添加或移除注解处理器所需的注解。
+
+最常见的场景是：当类通过 ann:context.annotation.ClassImport[] 导入时修改其注解，或者类是生成产物、无法修改的场景。
+
+可以定义一个 mixin（混入）类：用 ann:context.annotation.Mixin[] 标注它，并指定它引用哪个类。
+
+mixin 上的所有注解都会被复制到原类；构造器（参数须匹配）、同名字段以及同名且参数匹配的方法上的所有注解也会被复制。
+
+本例中，外部库里有一个简单的 bean 类，我们希望对它应用 Micronaut Serialization：
+
+[source,java]
+----
+package my.external.library;
+
+class MyBean {
+    String name;
+}
+----
+
+要添加序列化注解，可以创建一个引用原类的 mixin：
+
+[source,java]
+----
+package example;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import io.micronaut.context.annotation.Mixin;
+import io.micronaut.core.annotation.Introspected;
+
+@Mixin(my.external.library.MyBean.class) <1>
+@Introspected(accessKind = Introspected.AccessKind.FIELD) <2>
+class MyBeanMixin {
+    @JsonProperty("hello") <3>
+    String name; <4>
+}
+----
+<1> 定义了 ann:context.annotation.Mixin[]，引用外部库中的 bean
+<2> 将被复制到被引用类的额外注解
+<3> 字段 `name` 上的额外注解，将被复制到被引用类的同名字段
+<4> 字段名必须与被引用类的字段名一致
+
+NOTE: 目前 mixin 仅支持 Java 语言。
+
+沿用 <<classImport,从库导入类>> 一节导入 Jakarta Inject TCK 的例子：TCK 中的大多数 bean 都带有正确的 Jakarta Inject 注解，只有一个 bean 完全没有注解。为修复这一点，可以创建一个 mixin：
+
+[source,java]
+----
+package example;
+
+import io.micronaut.context.annotation.Bean;
+import io.micronaut.context.annotation.ClassImport;
+import io.micronaut.context.annotation.Mixin;
+import org.atinject.tck.auto.FuelTank;
+
+@Mixin(FuelTank.class)
+@Bean
+class FuelTankMixin {
+}
+
+@ClassImport(packages = {"org.atinject.tck.auto", "org.atinject.tck.auto.accessories"})
+class BeanImportTest {
+}
+----
+
+mixin 支持只复制特定的注解：定义 `includeAnnotations`，即应复制的注解或包的集合。另外还有 `excludeAnnotation`，它只复制未被排除的注解。
+
+每个 mixin 点（构造器、方法、字段、参数）都可以用 ann:context.annotation.Mixin.Filter[] 定义专门的复制规则。
+
+ann:context.annotation.Mixin.Filter[] 注解还支持移除原类上已有的注解。
+
+本例中，mixin 所引用的原方法上的所有 Jakarta Validation 注解都被移除：
+
+[source,java]
+----
+package example;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import io.micronaut.context.annotation.Executable;
+import io.micronaut.context.annotation.Mixin;
+import io.micronaut.core.annotation.Introspected;
+
+@Mixin(MyBean.class) <1>
+@Introspected(accessKind = Introspected.AccessKind.FIELD) <2>
+class MyBeanMixin {
+    String name;
+
+    @Executable
+    @JsonProperty("hello") <3>
+    @Mixin.Filter(removeAnnotations = "jakarta.validation") <4>
+    public String getXyz() {
+        return name;
+    }
+}
+----
+<1> 定义了 ann:context.annotation.Mixin[]，引用外部库中的 bean
+<2> 将被复制到被引用类的额外注解
+<3> 方法 `getXyz` 上的额外注解，将被复制到被引用类的同名方法
+<4> 移除全名以 `jakarta.validation` 为前缀的所有注解的定义
+
+NOTE: mixin 只修改 Micronaut 注解元数据模型，不会以任何方式修改原类。

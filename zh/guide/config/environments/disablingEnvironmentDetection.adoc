@@ -1,0 +1,15 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Disabling Environment Detection](https://docs.micronaut.io/5.2.x/core/#core-disablingEnvironmentDetection)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/config/environments/disablingEnvironmentDetection.adoc  upstream_commit: 8b0864ad8f103900d8cd522704223d93d49edf43  upstream_hash: 21fd83295b23480c5e7a8e98b0cef20d1ad2bbbd  translated_at: 2026-11-21 -->
+
+将 `micronaut.env.deduction` 系统属性或 `MICRONAUT_ENV_DEDUCTION` 环境变量设置为 `false`，即可禁用环境的自动检测。这会阻止 Micronaut 框架检测当前环境，但仍会使用如上所示显式提供的环境。
+
+.通过系统属性禁用环境检测
+[source,bash]
+----
+$  java -Dmicronaut.env.deduction=false -jar myapp.jar
+----
+
+另外，也可以在设置应用时，使用 api:context.ApplicationContextBuilder[] 的 `deduceEnvironment` 方法禁用环境推断。
+
+snippet::io.micronaut.docs.context.env.DefaultEnvironmentSpec[tags="disableEnvDeduction",indent=0,title="Using ApplicationContextBuilder to disable environment deduction"]
+

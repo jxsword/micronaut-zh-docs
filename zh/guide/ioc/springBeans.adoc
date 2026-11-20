@@ -1,0 +1,4 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Micronaut Beans And Spring](https://docs.micronaut.io/5.2.x/core/#core-springBeans)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/ioc/springBeans.adoc  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360  upstream_hash: 8fd28e5d53d7956f23b290a2d63376ac460efa1b  translated_at: 2026-11-21 -->
+
+Micronaut 框架以多种形式与 Spring 集成。更多信息请参阅 https://micronaut-projects.github.io/micronaut-spring/latest/guide[Micronaut Spring 文档]。

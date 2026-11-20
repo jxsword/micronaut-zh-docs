@@ -1,0 +1,148 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Reflection Based Metadata](https://docs.micronaut.io/5.2.x/core/#core-reflection)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/ioc/reflection.adoc  upstream_commit: 2c9161c43fc8ed4743dd637378eb9fc9d6f2047a  upstream_hash: fee9571a39beabb43a51c19c6bb34f5777e9c541  translated_at: 2026-11-21 -->
+
+[[reflection]]
+框架通过注解处理器在类型编译时生成的元数据来描述一个类型：api:core.annotation.AnnotationMetadata[]、api:core.type.Argument[]、api:inject.ExecutableMethod[]、api:core.beans.BeanIntrospection[] 与 api:inject.BeanDefinition[]。未经这些处理器编译的类型没有任何此类元数据，而必须处理任意类的规范（specification）——Jakarta Validation、Jakarta REST、CDI——则只能退而通过 `java.lang.reflect` 来描述它。
+
+`micronaut-reflection` 模块通过反射构建同样的元数据，其形态与处理器给出的完全一致，因此面向生成元数据编写的代码在处理没有此类元数据的类型时无需任何改动。读回类文件正是框架刻意避免的事情，所以应用若需要这一能力，必须通过添加依赖显式声明：
+
+dependency:micronaut-reflection[]
+
+WARNING: 该模块中的每个类型都是实验性的，且反射元数据比生成元数据构建更慢、占用更大。请将它用于无法用处理器编译的类型，而不是作为它们的替代品。
+
+只有使用 `-parameters` 编译的类，反射才能报告出参数名，否则只能得到 `arg0`、`arg1` 之类的名字。因此，凡是按名称读取参数的机制——具名注入点、`@Property`、把构造器参数绑定到同名属性——都要求它所描述的类带有参数名。record 的规范构造器（canonical constructor）总是带有参数名，因为编译器会记录组件（component）的名字。
+
+=== 注解元数据与参数
+
+api:reflection.ReflectionAnnotations[] 为 `AnnotatedElement` 构建元数据，其中包含处理器记录的构造型（stereotype）、可重复注解容器（repeatable container）、默认值与非绑定成员，并可在注解实例与 api:core.annotation.AnnotationValue[] 之间双向转换。api:reflection.ReflectionArguments[] 为参数、字段与返回类型构建 Argument，并保留其类型每一层级上的类型使用注解（type-use annotation），解析一个类型赋予某个父类型的类型实参，还可将一个 Argument 渲染为 `java.lang.reflect.Type`。
+
+[source,java]
+----
+AnnotationMetadata metadata = ReflectionAnnotations.metadataOf(Order.class);
+Argument<?>[] arguments = ReflectionArguments.argumentsOf(Order.class.getDeclaredConstructors()[0]);
+Argument<?> argument = ReflectionArguments.of(Order.class.getDeclaredField("lines"));
+----
+
+一个组合了其他注解的注解会把它们作为其保留的构造型携带，方式与处理器的记录一致：既包括元注解标注到它身上的注解，也包括其成员上的 `@AliasFor` 所能到达但并未组合的注解——`@A` 通过 `@B` 设置 `@C` 的一个成员时，会携带 `@C` 本身，且位于被组合的 `@B` 之前——每一项都把覆盖值逐级应用到叶子。
+
+NOTE: 有一类描述有所不同：*类型使用注解*中恰好以默认值书写的成员。注解实例会回答全部成员，因此与默认值相等的成员会被丢弃，因为处理器只记录源码实际书写的内容；对于写在类、字段、方法或参数上的注解，源码写了哪些成员可以从类文件中读回，而写在类型使用处的成员则保存在一个不会被读取的属性里。于是，在处理器保留该成员的地方，反射元数据将其丢弃。
+
+`ReflectionAnnotations.synthesize` 则反其道而行之：从 api:core.annotation.AnnotationValue[] 构建注解实例。有框架生成的代理时它使用该代理，否则使用 JDK 代理，因此非 public 的注解类型——规范常把它嵌在自己的类中——同样可以被合成。
+
+`ReflectionArguments.toType` 把一个 Argument 渲染回 `java.lang.reflect.Type`。未解析的类型变量（type variable）会变成 `TypeVariable`，这正是描述声明的 API 所需要的；传入 `false` 则把它渲染为其受限类型，这正是按可赋值性比较类型的 API 所需要的。
+
+处理器的映射器（mapper）、变换器（transformer）与重映射器（remapper）在运行期不可用。依赖它们的库可以改为注册一个 api:reflection.ReflectionAnnotationCustomizer[] 服务，该服务会收到本模块转换的每一个注解的值。
+
+=== 可执行方法
+
+api:reflection.ReflectionExecutableMethod[] 是基于 `java.lang.reflect.Method` 的 api:inject.ExecutableMethod[]，api:reflection.ReflectionBeanConstructor[] 是基于 `Constructor` 的 api:core.beans.BeanConstructor[]。api:reflection.ReflectionExecutables[] 会把规范 API 所指名的 `Method` 解析为可用的最佳元数据：若声明类型是 bean，则取其 bean 定义的 executable method；否则取其 bean 内省的方法——生成的或反射的；再否则取反射可执行方法。
+
+[source,java]
+----
+ExecutableMethod<Order, Object> method = ReflectionExecutables.executableMethod(beanContext, Order.class.getMethod("total"));
+----
+
+api:reflection.MethodHierarchy[] 为那些对「哪一层可以声明什么」有规则的规范，解析方法继承层级中每一层各自声明的内容，既可分层解析，也可合并解析。
+
+=== Bean 内省
+
+api:reflection.ReflectionBeanIntrospection[] 是基于某个类的 api:core.beans.BeanIntrospection[]，拥有生成的内省会有的属性、构造器与方法。它还实现了 api:reflection.ReflectiveIntrospection[]，后者描述生成内省所合并的内容：该类型的每一个构造器，以及该类型自身声明的方法。
+
+构成属性的各个成员——字段、getter 与 setter，各自带有自己的元数据、自己的 Argument 与自己的访问器（accessor）——通过 `BeanProperty.getMembers()` 报告，方式与 <<propertyMembers,生成的内省报告它们的方式>> 相同。生成的内省只有在 ann:core.annotation.Introspected[] 将 `members` 设为 `true` 时才携带这些成员，因为它们会让处理器写出的类变大；而反射式描述不写任何代码，只在被问到某个成员时才去描述它，因此总是报告这些成员——这正是处理器从未见过的类型所需要的，因为它没有携带任何可以用来询问的注解。每个成员都是一个 api:reflection.ReflectiveIntrospection.ReflectivePropertyMember[]，它还会报告该成员读自哪个 `java.lang.reflect` 字段或方法。当声明被遮蔽（shadow）时——字段被子类的同名字段隐藏、getter 被覆写——反射会报告每一个声明，把遮蔽其他声明的那个放在最前，因为所有声明的约束都会生效。
+
+api:reflection.ReflectionBeanIntrospector[] 是一个 api:core.beans.BeanIntrospector[]，它优先提供其他内省器（introspector）的生成内省，仅对没有生成内省的类型进行反射。它还可以用处理器略去的可执行成员补全一个生成内省，形成 api:reflection.SupplementedBeanIntrospection[]。
+
+[source,java]
+----
+BeanIntrospector introspector = new ReflectionBeanIntrospector(BeanIntrospector.SHARED);
+BeanIntrospection<Order> introspection = introspector.getIntrospection(Order.class);
+----
+
+`ReflectionBeanIntrospection.of` 还接受调用方希望该类型携带的注解，以支持这样的场景：某个规范被告知要处理一个类，而该类自身对此毫无声明。
+
+==== 在共享内省器中允许反射
+
+框架使用的共享 api:core.beans.BeanIntrospector[]——连同依赖它的 `BeanIntrospection.getIntrospection(Class)`、序列化以及其他构建在内省之上的功能——默认从不反射任何类型。当该模块在类路径上时，对没有生成内省的类型，它会向 api:reflection.ReflectionBeanIntrospectionFallback[] 询问，而回退（fallback）只描述应用明确允许的类型。允许方式是通过 `micronaut.introspection.allow-reflection` 属性——系统属性或应用配置皆可：
+
+[configuration]
+----
+micronaut:
+  introspection:
+    allow-reflection:
+      - com.example.model.*
+      - com.example.legacy.Order
+----
+
+模式（pattern）是一个类名，其中 `*` 代表任意字符序列；仅写 `*` 即允许所有类。同样的模式也可以通过 api:reflection.ReflectionIntrospectionPolicy[] 以编程方式允许。该策略只守护共享内省器：通过上述类型显式对某个类型进行反射的代码，本就是它自己的选择。
+
+该属性只允许类型，不涉及其他方面。经处理器编译的类型通过 ann:core.annotation.Introspected[] 中的声明来描述自己应如何被内省——什么构成属性、可见性要求如何、要排除哪些属性——而库中的类型，或未经处理器编译的类型，无法做出任何此类声明。此时可按模式为匹配的类型配置这些成员：
+
+[configuration]
+----
+micronaut:
+  introspection:
+    reflective:
+      - types: com.example.model.*
+        access-kind: FIELD
+        visibility: ANY
+        excludes: password
+      - types: com.example.api.*
+        excluded-annotations: com.example.Internal
+        indexed:
+          - annotation: com.fasterxml.jackson.annotation.JsonProperty
+            member: value
+----
+
+每个条目允许其 `types` 模式匹配的类型，与 `allow-reflection` 一样，并用它设置的成员描述这些类型：`access-kind`、`visibility`、`includes`、`excludes`、`excluded-annotations`、`annotation-metadata` 与 `indexed`，各自对应 ann:core.annotation.Introspected[] 中的同名成员。未设置的成员保持默认值。
+
+模式是批量指名类型的，因此不会取代其中某个类型对自身的描述：若类型自带 ann:core.annotation.Introspected[]，则它声明的成员优先，配置补足其余。若两个条目同时匹配一个类型，第一个条目设置它能设置的，第二个条目补足它没有设置的。
+
+同样的能力也可以通过 `ReflectionIntrospectionPolicy.configure(patterns, description)` 以编程方式使用，其中的描述就是 `ReflectionAnnotations.declaring(Introspected.class, values)` 构建的元数据。
+
+该策略与共享内省器一样是每个 JVM 一个，而每个上下文（context）配置的内容是它自己的贡献：多个上下文同时运行时允许的模式是它们的并集，某个上下文停止时会恰好撤回它所贡献的部分。`ReflectionIntrospectionPolicy.configure` 会返回这份贡献，供应用了自有配置的代码稍后撤回之用；`reset` 则忘记所有贡献。
+
+于是，构建在内省之上的一切都能看到该类型。以序列化为例：它先向共享内省器索取内省，同时要求自己的显式启用（opt-in）也得到满足，因此一个未经注解也要能被它读取的类需要两者兼备：
+
+[configuration]
+----
+micronaut:
+  introspection:
+    allow-reflection:
+      - com.example.model.*
+  serde:
+    included-introspection-packages:
+      - com.example.model
+----
+
+=== Bean 定义
+
+api:reflection.ReflectionBeanDefinition[] 是基于某个类的 api:inject.BeanDefinition[]，在运行期注册到 bean 上下文，拥有生成的定义会有的注入点、可执行方法与生命周期：处理器会选中的构造器、`@Inject`、`@Value` 与 `@Property` 标注的字段和方法、`@PostConstruct` 与 `@PreDestroy` 方法、`@Executable` 方法，以及该类的作用域、限定符、顺序与条件。
+
+[source,java]
+----
+beanContext.registerBeanDefinition(ReflectionBeanDefinition.of(OrderService.class));
+
+beanContext.registerBeanDefinition(
+    ReflectionBeanDefinition.builder(OrderService.class)
+        .named("legacy")
+        .singleton(true)
+        .build()
+);
+----
+
+每个注入参数都按生成定义的方式解析，包括 bean 的集合、数组、流、Optional 与 Map，api:context.BeanRegistration[] 与配置值；父类型声明的、由该 bean 赋值的某个变量的成员，会以该值注入。bean 的构建方式与处理器构建它时一致：若类声明了静态 `@Creator` 工厂则用它，否则用唯一可访问的构造器，否则用标注了 `@Inject` 或 `@Creator` 的构造器，否则用 record 的规范构造器，再否则用第一个 public 构造器。依赖处理器的特性——`@ConfigurationProperties` 绑定、`@EachProperty` 与 `@EachBean`、`@Parameter` 参数以及 AOP 通知（advice）——反射定义均不可用。
+
+适配其他容器的代码还有两个需求，由构建器（builder）覆盖。`additionalAnnotationMetadata` 可以添加该容器希望 bean 携带的注解，同时不丢失其类自身声明的注解，两者都算作已声明——框架正是这样读取作用域、限定符或 primary 标记的。`postConstruct` 与 `preDestroy` 则接受方法名，服务于用方法名而非注解指明生命周期方法的容器：
+
+[source,java]
+----
+beanContext.registerBeanDefinition(
+    ReflectionBeanDefinition.builder(OrderService.class)
+        .additionalAnnotationMetadata(ReflectionAnnotations.declaring(Primary.class))
+        .postConstruct("start")
+        .preDestroy("stop")
+        .build()
+);
+----
+
+`ReflectionAnnotations.declaring` 构建某个注解类型的元数据，包含其默认值与构造型——仅按名称声明会丢失这些；`ReflectionAnnotations.merge` 则把两份元数据合并在一起。

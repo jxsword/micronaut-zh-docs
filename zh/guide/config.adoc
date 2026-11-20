@@ -1,0 +1,36 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Application Configuration](https://docs.micronaut.io/5.2.x/core/#core-config)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/config.adoc  upstream_commit: 3db7caf1594e2ab430f1fd9fdfdc028beab0a29c  upstream_hash: 7999fac82da143e0f16be8d135afb9f02b5abae0  translated_at: 2026-11-21 -->
+
+Micronaut 具有灵活的配置机制，可以从多种来源读取配置并归入统一模型，再绑定到标注了 <<configurationProperties, @ConfigurationProperties>> 的 Java 类型。
+
+默认情况下，配置可以通过 Java properties 文件或 https://www.json.org/json-en.html[JSON] 提供；向类路径添加额外的第三方库即可支持更多格式（例如 YAML 或 Groovy 配置）。约定是搜索名为 `application.properties` 或 `application.json` 的文件，其他格式需要额外依赖，如下表所示：
+
+.支持的配置格式
+|===
+|格式|文件|所需依赖
+
+| https://yaml.org[YAML]
+|`application.yml`
+|`org.yaml:snakeyaml`
+
+| https://micronaut-projects.github.io/micronaut-groovy/latest/guide/#config[Groovy Config]
+|`application.groovy`
+|`io.micronaut.groovy:micronaut-runtime-groovy`
+
+|https://github.com/lightbend/config/blob/main/HOCON.md[HOCON]
+|`application.conf`
+|`io.micronaut.kotlin:micronaut-kotlin-runtime`
+
+|https://toml.io/en/[TOML]
+|`application.toml`
+|`io.micronaut.toml:micronaut-toml`
+
+|===
+
+
+此外，Micronaut 框架允许通过系统属性或环境变量覆盖任意属性。
+
+每个配置来源都用 link:{api}/io/micronaut/context/env/PropertySource.html[PropertySource] 接口建模；该机制是可扩展的，允许实现更多的 link:{api}/io/micronaut/context/env/PropertySourceLoader.html[PropertySourceLoader] 实现。
+
+Micronaut 还支持通过 `micronaut.config.import` 进行文件内配置导入，允许一个配置来源递归地加载其他来源。
+各协议的专用语法（`file`、`classpath`、`env`、`configtree`）与可选导入行为，请参阅 <<propertySource,属性源>>。

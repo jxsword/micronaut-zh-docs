@@ -1,0 +1,93 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Nullability Annotations](https://docs.micronaut.io/5.2.x/core/#core-nullabilityAnnotations)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/ioc/nullabilityAnnotations.adoc  upstream_commit: cec2b9889871eabf0e2d95933b412f5a57cdca70  upstream_hash: 536e68c1bd9597666101eb186e7a761cb0b3c030  translated_at: 2026-11-21 -->
+
+[[nullabilityAnnotations]]
+在 Java 中，可以使用注解来表明一个变量能否为 null。这类注解并不属于标准库。
+
+NOTE: 自 Micronaut Framework 5 起，我们建议使用 <<jspecify,JSpecify 注解>> 来替代 Micronaut 可空性注解（Nullability Annotations），以获得更好的 [Kotlin 互操作性](https://kotlinlang.org/docs/whatsnew21.html#change-of-jspecify-nullability-mismatch-diagnostics-severity-to-strict) 与 [IDE](https://www.jetbrains.com/idea/whatsnew/#page__content-jspecify-support)/工具链支持。事实上，自 5.0 起 Micronaut 的 API 已使用 JSpecify 注解。
+
+== Micronaut 的可空性注解
+
+Micronaut 框架提供一流的可空性注解：
+
+- ann:core.annotation.NonNull[] — 被注解的元素绝不能为 null。
+- ann:core.annotation.Nullable[] — 被注解的元素可以为 null。
+- ann:core.annotation.NullMarked[] — 在被注解的作用域（包、类型或方法）内设置默认的非空（non-null）策略，除非被覆盖。
+
+这些注解设计用于参数、返回值、字段以及类型使用位置（type-use position，例如泛型类型实参）。
+
+NOTE: 如果未显式声明为可空（nullable），Micronaut 在大多数位置会默认采用非空策略
+
+.控制器中的可选请求参数
+[source,java]
+----
+package example;
+
+import org.jspecify.annotations.Nullable;
+import io.micronaut.http.annotation.Controller;
+import io.micronaut.http.annotation.Get;
+import io.micronaut.http.annotation.QueryValue;
+
+@Controller("/greet") // <1>
+class GreetingController {
+
+    @Get // <2>
+    String hello(@QueryValue @Nullable String nickname) { // <3>
+        return nickname == null ? "Hello" : "Hello, " + nickname; // <4>
+    }
+}
+----
+<1> 定义了一个映射到 /greet 路径的控制器。
+<2> 暴露一个 HTTP GET 端点。
+<3> 用 `org.jspecify.annotations.Nullable[]` 将查询参数标记为可选，请求可以省略它。
+<4> 未提供该参数时的空安全（null-safe）处理。
+
+.工厂生产的 bean 中的可选依赖
+[source,java]
+----
+package example;
+
+import io.micronaut.context.annotation.Factory;
+import org.jspecify.annotations.Nullable;
+import jakarta.inject.Singleton;
+
+@Factory // <1>
+class ClientFactory {
+
+    @Singleton // <2>
+    Client client(@Nullable OptionalDependency optional) { // <3>
+        return new Client(optional); // <4>
+    }
+}
+
+final class Client {
+    private final OptionalDependency optional;
+
+    Client(@Nullable OptionalDependency optional) { // <5>
+        this.optional = optional;
+    }
+
+    String description() {
+        return optional == null ? "No optional dependency" : "Has optional dependency";
+    }
+}
+
+interface OptionalDependency {}
+----
+<1> 声明一个生产 bean 的工厂类。
+<2> 定义一个以 singleton 作用域产出 bean 的方法。
+<3> 该依赖是可选的，并标注了 `org.jspecify.annotations.Nullable`；若不存在该类型的 bean，注入不会失败，而是注入 null。
+<4> 无论可选依赖是否存在，产出的 bean 都会被创建。
+<5> 消费方显式将构造器参数声明为可空，并处理可能出现的 null 值。
+
+**Micronaut 框架为什么要在现有众多可空性注解库之外，增加自己的一套可空性注解？**
+
+在框架的发展历程中，我们曾使用其他可空性注解库。然而，许可问题迫使我们数次更换可空性注解。为了避免将来再次更换，我们在 Micronaut 框架 2.4 中加入了自己的一套可空性注解。
+
+**Kotlin 能识别 Micronaut 可空性注解吗？**
+
+Kotlin 不能识别 Micronaut 框架的可空性注解。不过，Micronaut 通过 api:inject.annotation.AnnotationMapper[注解映射] 支持其他可空性注解。
+
+NOTE: Micronaut 框架支持来自以下来源的其他已知可空性注解：Android、FindBugs、Javax、Eclipse、JetBrains、https://jspecify.dev/[JSpecify]
+
+为了更好地支持 Kotlin，我们建议使用 https://jspecify.dev/[JSpecify] 或任何其他 https://kotlinlang.org/docs/java-interop.html#nullability-annotations:[Kotlin 可识别的可空性注解]。

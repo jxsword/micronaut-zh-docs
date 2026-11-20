@@ -12,7 +12,7 @@
 | B03 | 10 | 3443 | 3454 | current |
 | B04 | 19 | 2591 | 2604 | current |
 | B05 | 2 | 2138 | 2128 | current |
-| B06 | 11 | 3454 | 3489 | pending |
+| B06 | 11 | 3454 | 3489 | current |
 | B07 | 4 | 2507 | 2554 | pending |
 | B08 | 4 | 3397 | 3442 | pending |
 | B09 | 8 | 2915 | 2915 | pending |
@@ -51,6 +51,7 @@
 - B03（2026-11-21 完成）：validate 全量 41 文件 PASSED + 10/10 --mark-current 核销 + squash commit；进度 41/388（10.6%）。锚点注入 5 处（factories/conditionalBeans/replaces/events/introspection，批内引用 conditionalBeans 闭环）。术语转正 3 条（factory/introspection/graceful shutdown）；dependency:: 宏与上游 TODO 注释按纪律处理。词数实测 3417/3377。⑤ 豁免警告 31 条（详见 reports/batch-B03.md）。冻结窗口遵守。
 - B04（2026-11-21 完成）：validate 全量 60 文件 PASSED + 19/19 --mark-current 核销 + squash commit；进度 60/388（15.5%）。锚点注入 4 处（staticAtCreator/introspectedAnnotationOnAConfigurationClass 批内闭环 + propertyMembers/beanValidation）。introspection→内省 全章一致命中（B03 提前转正得到验证）。restore 哈希门禁拦截 1 处占位符笔误（6232a110↔fbd67c3f），修正后 19/19 全过。词数实测 2588/2545。⑤ 豁免警告 34 条（详见 reports/batch-B04.md）。冻结窗口遵守。
 - B05（2026-11-21 完成）：validate 全量 62 文件 PASSED + 2/2 --mark-current 核销 + squash commit；进度 62/388（16.0%）。锚点注入 1 处（[[annotationMetadata]]，B01 ioc.adoc 引用闭环）。reviewer 脚本收紧（代码块段不计停用词漏译检测）；validate ⑦ 邻接违规 3 处修正后全绿。词数实测 2074/2076。⑤ 豁免警告 35 条（详见 reports/batch-B05.md）。冻结窗口遵守。B02–B05 完成后 IoC 章核心（注入/限定符/作用域/生命周期/事件/内省/元数据）已全部译出。
+- B06（2026-11-21 完成）：validate 全量 73 文件 PASSED + 11/11 --mark-current 核销 + squash commit；进度 73/388（18.8%）。锚点注入 5 处（reflection/classImport/nullabilityAnnotations/jspecify/environments；classImport 批内 mixin 引用闭环、nullabilityAnnotations+jspecify 与 whatsNew 批间闭环）。对译 reviewer 11/11 PASS。词数实测 3482/3445（总词/非代码）。⑤ 豁免警告 36 条（+3 新增 −2 消解，详见 reports/batch-B06.md）。冻结窗口遵守。**IoC 章 55 文件全部 current——IoC 全章译出。**
 
 ## 硬性纪律（每批次必守）
 

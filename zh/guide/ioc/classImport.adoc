@@ -1,0 +1,51 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Importing Classes from Libraries](https://docs.micronaut.io/5.2.x/core/#core-classImport)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/ioc/classImport.adoc  upstream_commit: 77e0a29d7a2e866dcd42e2c0bd79d554c7fa4b2d  upstream_hash: 9f694ec2dfd4f3e09bfff42ed62b3f9e620951ff  translated_at: 2026-11-21 -->
+
+[[classImport]]
+作为 ann:context.annotation.Import[] 注解的替代方案，ann:context.annotation.ClassImport[] 注解允许像处理普通未编译类一样处理已编译的类。其内部会运行所有类型访问器（type visitor），从而创建必要的元数据。
+
+NOTE: 目前仅支持在 Java 语言中使用类导入，因为其他语言在源码处理期间的类路径扫描存在限制。
+
+例如，要将 JSR-330 TCK 导入应用程序，请添加对 TCK 的依赖：
+
+dependency::jakarta.inject-tck[groupId="jakarta.inject", version="2.0.1"]
+
+然后在 `Application` 类上定义 `@ClassImport` 注解：
+
+[source,java]
+----
+package example;
+
+import io.micronaut.context.annotation.ClassImport;
+import io.micronaut.context.annotation.Bean;
+
+@ClassImport( // <1>
+        packages = { // <2>
+                "org.atinject.tck.auto",
+                "org.atinject.tck.auto.accessories"},
+        annotate = Bean.class) // <3>
+public class Application {
+}
+----
+
+<1> 定义了 ann:context.annotation.ClassImport[]
+<2> 定义了要导入的 `packages`。注意，Micronaut 框架不会递归子包，因此需要显式列出子包
+<3> `annotate` 允许指定应添加到这些包中所有类上的注解。
+
+同样，也可以导入 Micronaut Serialization 或 Micronaut Validation 所需的类。
+
+[source,java]
+----
+package example;
+
+import io.micronaut.context.annotation.ClassImport;
+import io.micronaut.serde.annotation.Serdeable;
+
+@ClassImport(
+        packages = "my.external.library",
+        annotate = Serdeable.class)
+public class Application {
+}
+----
+
+NOTE: 目前，Micronaut 不支持重新导入已被 Micronaut 注解处理器处理过的类。
