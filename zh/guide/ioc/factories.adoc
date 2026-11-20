@@ -1,0 +1,91 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Bean Factories](https://docs.micronaut.io/5.2.x/core/#core-factories)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/ioc/factories.adoc  upstream_commit: 51650efcb97939ef02bf726bdcb28266b7ca20d1  upstream_hash: 2555bd62360ebdcbbd0912a911dcaa01d8e242db  translated_at: 2026-11-21 -->
+
+[[factories]]
+很多情况下，您可能希望将不属于您代码库的类（例如第三方库提供的类）作为 bean 提供。此时您无法注解已编译的类，正确的做法是实现一个 ann:context.annotation.Factory[]。
+
+工厂（factory）是一个用 link:{api}/io/micronaut/context/annotation/Factory.html[Factory] 注解标注的类，它提供一个或多个用 bean 作用域注解标注的方法。使用哪个注解取决于您希望 bean 处于何种作用域。更多信息请参阅 <<scopes, bean 作用域>> 一节。
+
+NOTE: 工厂具有默认作用域 singleton，并将随上下文一起销毁。如果您想在工厂产出 bean 之后将其丢弃，请使用 @Prototype 作用域。
+
+用 bean 作用域注解标注的方法的返回类型就是 bean 类型。以下示例最能说明这一点：
+
+snippet::io.micronaut.docs.factories.CrankShaft,io.micronaut.docs.factories.V8Engine,io.micronaut.docs.factories.EngineFactory[tags="class",indent=0]
+
+在此示例中，`V8Engine` 由 `EngineFactory` 类的 `v8Engine` 方法创建。请注意，您可以向该方法注入参数，它们将作为 bean 解析。生成的 `V8Engine` bean 将是 singleton。
+
+一个工厂可以有多个用 bean 作用域注解标注的方法，每个方法返回不同的 bean 类型。
+
+NOTE: 如果采用这种方式，不应在类内部调用其他 bean 方法，而应通过参数注入类型。
+
+TIP: 为了让生成的 bean 参与应用上下文的关闭过程，请用 link:{api}/io/micronaut/context/annotation/Bean.html[@Bean] 注解该方法，并将 `preDestroy` 参数设置为关闭该 bean 时要调用的方法名。
+
+=== 从字段产出 bean
+
+从 Micronaut 框架 3.0 起，还可以通过在字段上声明 ann:context.annotation.Bean[] 注解来从字段产出 bean。
+
+虽然通常不鼓励使用这种方式（工厂方法提供了更大的灵活性），但它确实能简化测试代码。例如，使用 bean 字段可以轻松地在测试代码中生成 mock：
+
+snippet::io.micronaut.docs.factories.VehicleMockSpec[tags="imports, class",indent=0]
+
+<1> 由一个字段定义的 bean 替换了已有的 `Engine`。
+<2> 注入了 `Vehicle`。
+<3> 代码断言 mock 实现被调用。
+
+请注意，非基本类型只支持 public 或包级私有（package protected）字段。如果字段是 `static`、`private` 或 `protected`，将发生编译错误。
+
+NOTE: 如果 bean 方法/字段包含作用域或限定符，则该类型上的任何作用域或限定符都将被忽略。
+
+NOTE: 工厂实例上的限定符不会被继承到 bean。
+
+==== 基本类型 bean 与数组
+
+自 Micronaut 框架 3.1 起，可以从工厂定义并注入基本类型和数组类型。
+
+例如：
+
+snippet::io.micronaut.docs.factories.primitive.CylinderFactory[tags="imports, class",indent=0]
+
+<1> 以不同名称定义了两个基本整数类型 bean
+
+基本 bean 可以像任何其他 bean 一样注入：
+
+snippet::io.micronaut.docs.factories.primitive.V8Engine[tags="imports, class",indent=0]
+
+请注意，基本 bean 和基本数组 bean 有以下限制：
+
+* <<aop, AOP advice>> 不能应用于基本类型或包装类型
+* 由于上述原因，不支持使用代理的自定义作用域
+* 不支持 `@Bean(preDestroy=..)` 成员
+
+=== 以编程方式禁用 bean
+
+工厂方法可以抛出 api:context.exceptions.DisabledBeanException[] 来按条件禁用 bean。使用 ann:context.annotation.Requires[] 应始终是按条件创建 bean 的首选方式；只有在无法使用 ann:context.annotation.Requires[] 时，才应在工厂方法中抛出异常。
+
+例如：
+
+snippet::io.micronaut.docs.factories.nullable.Engine,io.micronaut.docs.factories.nullable.EngineConfiguration,io.micronaut.docs.factories.nullable.EngineFactory[tags="class",indent=0]
+
+=== 注入点
+
+工厂的一个常见用例是利用对象注入点处的注解元数据，从而基于所述元数据修改行为。
+
+考虑如下注解：
+
+snippet::io.micronaut.docs.injectionpoint.Cylinders[tags="class",indent=0]
+
+上面的注解可用于在定义注入点之处自定义我们想要注入到 vehicle 中的引擎类型：
+
+snippet::io.micronaut.docs.injectionpoint.Vehicle[tags="class",indent=0]
+
+上面的 `Vehicle` 类指定了注解值 `@Cylinders(6)`，表明需要一个六缸的 `Engine`。
+
+要实现这一用例，请定义一个接受 api:inject.InjectionPoint[] 实例的工厂，以分析所定义的注解值：
+
+snippet::io.micronaut.docs.injectionpoint.EngineFactory[tags="class",indent=0]
+
+<1> 工厂方法定义了一个 api:inject.InjectionPoint[] 类型的参数。
+<2> 注解元数据用于获取 `@Cylinder` 注解的值
+<3> 该值用于构造引擎，若无法构造引擎则抛出异常。
+
+NOTE: 需要注意，工厂被声明为 ann:context.annotation.Prototype[] 作用域，因此该方法会为每个注入点调用。如果 `V8Engine` 和 `V6Engine` 类型需要是 singleton，工厂应使用 Map 来确保对象只构造一次。

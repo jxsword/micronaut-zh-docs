@@ -1,0 +1,31 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Bean Configurations](https://docs.micronaut.io/5.2.x/core/#core-beanConfigurations)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/ioc/beanConfigurations.adoc  upstream_commit: 51650efcb97939ef02bf726bdcb28266b7ca20d1  upstream_hash: e09ccd342e5eeb470203cb1f283ca8d4e4b2bd18  translated_at: 2026-11-21 -->
+
+bean link:{api}/io/micronaut/context/annotation/Configuration.html[@Configuration] 是一个包内多个 bean 定义的分组。
+
+`@Configuration` 注解应用于包级别，告知 Micronaut 框架：在该包中定义的 bean 构成一个逻辑分组。
+
+`@Configuration` 注解通常应用于 `package-info` 类。例如：
+
+.package-info.groovy
+[source,groovy]
+----
+@Configuration
+package my.package
+
+import io.micronaut.context.annotation.Configuration
+----
+
+这种分组在通过 `@Requires` 注解使 bean 配置变为条件化时非常有用。例如：
+
+.package-info.groovy
+[source,groovy]
+----
+@Configuration
+@Requires(beans = javax.sql.DataSource)
+package my.package
+----
+
+在上面的示例中，被注解包内的所有 bean 定义只有在存在 `javax.sql.DataSource` bean 时才会被加载并提供。这使您能够实现 bean 定义的按条件自动配置。
+
+NOTE: Java 和 Kotlin 也可以通过 `package-info.java` 支持此功能。截至 1.3 版本，Kotlin 尚不支持 `package-info.kt`。

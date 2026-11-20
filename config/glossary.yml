@@ -127,6 +127,24 @@ terms:
     context: "IoC/Scopes 章节（B02 转正：metaScopes.adoc）"
     aliases: ["meta-annotation"]
 
+  - en: "factory"
+    zh: "工厂"
+    status: "approved"
+    context: "IoC/Factories 章节（B03 转正：Factory 注解/工厂方法高频）"
+    aliases: ["factories"]
+
+  - en: "introspection"
+    zh: "内省"
+    status: "approved"
+    context: "IoC/Introspection 章节（B03 转正；B04 全章高频，提前锁定译名）"
+    aliases: []
+
+  - en: "graceful shutdown"
+    zh: "优雅关闭"
+    status: "approved"
+    context: "IoC/Lifecycle 章节（B03 转正：gracefulShutdown.adoc）"
+    aliases: []
+
 banned:
   - bad: "编译时间"
     prefer: "编译期"

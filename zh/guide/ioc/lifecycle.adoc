@@ -1,0 +1,66 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Life-Cycle Methods](https://docs.micronaut.io/5.2.x/core/#core-lifecycle)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/ioc/lifecycle.adoc  upstream_commit: 6dc5efe9635874bfcce20a1332008f89d0fe1c70  upstream_hash: 8b5cb721635b3e256d8ca1f13fba249862844fa3  translated_at: 2026-11-21 -->
+
+== bean 何时被构造
+
+要在 bean 被构造时调用一个方法，请使用 `jakarta.annotation.PostConstruct` 注解：
+
+snippet::io.micronaut.docs.lifecycle.V8Engine[tags="imports, class", indent=0]
+
+<1> 导入了 `PostConstruct` 注解
+<2> 定义了一个需要初始化的字段
+<3> 一个方法标注了 `@PostConstruct`，将在对象构造完成且完全注入后被调用。
+
+要管理 bean 的构造时机，请参阅 <<scopes, bean 作用域>> 一节。
+
+== bean 何时被销毁
+
+要在 bean 被销毁时调用一个方法，请使用 `jakarta.annotation.PreDestroy` 注解：
+
+snippet::io.micronaut.docs.lifecycle.PreDestroyBean[tags="class", indent=0]
+
+<1> 导入了 `PreDestroy` 注解
+<2> 一个方法标注了 `@PreDestroy`，将在上下文关闭时被调用。
+
+api:context.annotation.Bean[] 注解中的 `preDestroy` 值直接指名要调用的方法，而无需注解该方法。它可以声明在 bean 类本身上：
+
+snippet::io.micronaut.docs.lifecycle.Cache[tags="class", indent=0]
+
+<1> 在类上声明的注解中设置了 `preDestroy` 值
+<2> 注解值与方法名匹配
+
+被指名的方法必须是 bean 类型的 public 无参方法；若名称解析不到这样的方法，则发生编译错误。
+
+对于工厂 bean，该值设置在产出该 bean 的工厂方法或字段上：
+
+snippet::io.micronaut.docs.lifecycle.ConnectionFactory[tags="class", indent=0]
+
+'''
+
+snippet::io.micronaut.docs.lifecycle.Connection[tags="class", indent=0]
+
+<1> 在注解上设置了 `preDestroy` 值
+<2> 注解值与方法名匹配
+
+NOTE: 仅仅实现 `Closeable` 或 `AutoCloseable` 接口不足以让 bean 随上下文一起关闭。必须使用上述方法之一。
+
+=== 销毁顺序
+
+当上下文关闭时，singleton 按依赖顺序销毁：bean 总是在注入它的那些 bean 之前销毁，无论它们是通过构造器、方法还是字段注入的。这使 bean 可以在其 `@PreDestroy` 方法中使用其依赖项。
+
+彼此没有相互注入但仍需按特定顺序创建和销毁的 bean，可以用 ann:context.annotation.DependsOn[] 声明依赖关系。被注解的 bean 会在所列类型的每个 bean 之后创建、之前销毁：
+
+snippet::io.micronaut.docs.lifecycle.MessageConsumer,io.micronaut.docs.lifecycle.MessagePublisher[tags="class", indent=0]
+
+<1> 消费者在不注入的情况下依赖发布者
+<2> 消费者停止时发布者仍处于打开状态，因此它可以发布其尚在处理中的消息
+<3> 消费者停止后，发布者才关闭
+
+该注解也适用于工厂方法，并接受接口——此时每个实现该接口的 bean 都在被注解 bean 之前创建、之后销毁。没有任何依赖关系的 bean 按 bean 名称顺序销毁，因此销毁顺序在每次运行时都相同。
+
+TIP: 跨越多个 bean 的关闭逻辑也可以放在监听 api:context.event.ShutdownEvent[] 的 ann:runtime.event.annotation.EventListener[] 方法中，该事件在任何 bean 被销毁之前发布。此类方法可用 ann:core.annotation.Order[] 排序。
+
+== 依赖 bean
+
+依赖 bean（dependent beans）是在构造您的 bean 时所用到的 bean。
+如果依赖 bean 的作用域是 `@Prototype` 或未知，它将与您的实例一起销毁。

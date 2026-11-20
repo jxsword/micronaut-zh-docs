@@ -1,0 +1,144 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Conditional Beans](https://docs.micronaut.io/5.2.x/core/#core-conditionalBeans)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/ioc/conditionalBeans.adoc  upstream_commit: 533a099abb19c41adf3518ad781cc041aca00f7d  upstream_hash: 0ba1d3d540388f9a07891b8343b0b8d245311025  translated_at: 2026-11-21 -->
+
+[[conditionalBeans]]
+有时，您可能希望 bean 基于多种潜在因素按条件加载，包括类路径、配置、其他 bean 的存在等。
+
+link:{api}/io/micronaut/context/annotation/Requires.html[Requires] 注解支持在一个 bean 上定义一个或多个条件。
+
+考虑以下示例：
+
+snippet::io.micronaut.docs.requires.JdbcBookService[tags="requires",indent=0, title="Using @Requires"]
+
+上面的 bean 定义了两个要求。第一个表明必须存在 `DataSource` bean，该 bean 才能加载。第二个要求确保在加载 `JdbcBookService` bean 之前已设置 `datasource.url` 属性。
+
+如果多个 bean 需要相同的条件组合，您可以定义一个包含这些要求的元注解：
+
+snippet::io.micronaut.docs.requires.RequiresJdbc[tags="annotation",indent=0, title="Using a @Requires meta-annotation"]
+
+在上面的示例中，可以在 `JdbcBookService` 上改用 `RequiresJdbc` 注解：
+
+.使用元注解
+[source,java]
+----
+@RequiresJdbc
+public class JdbcBookService implements BookService {
+    ...
+}
+----
+// TODO 有没有办法让它也支持多语言？
+
+如果您有多个 bean 需要在加载前满足给定要求，可以考虑 bean 配置组，下一节将对此进行说明。
+
+== 配置要求
+
+link:{api}/io/micronaut/context/annotation/Requires.html[@Requires] 注解非常灵活，可用于各种用例。下表汇总了部分可能性：
+
+.使用 @Requires
+|===
+|要求 | 示例
+
+|要求存在一个或多个类
+|`@Requires(classes=javax.servlet.Servlet)`
+
+|要求不存在一个或多个类
+|`@Requires(missing=javax.servlet.Servlet)`
+
+|要求存在一个或多个 bean
+|`@Requires(beans=javax.sql.DataSource)`
+
+|要求不存在一个或多个 bean
+|`@Requires(missingBeans=javax.sql.DataSource)`
+
+|要求应用特定环境
+|`@Requires(env="test")`
+
+|要求不应用特定环境
+|`@Requires(notEnv="test")`
+
+|要求存在另一个配置包
+|`@Requires(configuration="foo.bar")`
+
+|要求不存在另一个配置包
+|`@Requires(missingConfigurations="foo.bar")`
+
+|要求特定的 SDK 版本
+|`@Requires(sdk=Sdk.JAVA, value="1.8")`
+
+|要求通过包扫描使标注了给定注解的类对应用程序可用
+|`@Requires(entities=javax.persistence.Entity)`
+
+|要求存在某个属性（值可选）
+|`@Requires(property="data-source.url")`
+
+|要求某属性不属于配置
+|`@Requires(missingProperty="data-source.url")`
+
+|要求文件系统中存在一个或多个文件
+|`@Requires(resources="file:/path/to/file")`
+
+|要求存在一个或多个类路径资源
+|`@Requires(resources="classpath:myFile.properties")`
+
+|要求当前操作系统在列表中
+|`@Requires(os={Requires.Family.WINDOWS})`
+
+|要求当前操作系统*不在*列表中
+|`@Requires(notOs={Requires.Family.WINDOWS})`
+
+|未指定 beanProperty 时要求 bean 存在
+|`@Requires(bean=Config.class)`
+
+|要求 bean 的指定属性存在
+|`@Requires(bean=Config.class, beanProperty="enabled")`
+|===
+
+=== 关于属性要求的补充说明
+
+对属性添加要求还有一些附加功能。您可以要求属性为某个值、不为某个值，并在属性未设置时于这些检查中使用默认值。
+
+[source,java]
+----
+@Requires(property="foo") //<1>
+@Requires(property="foo", value="John") //<2>
+@Requires(property="foo", value="John", defaultValue="John") //<3>
+@Requires(property="foo", notEquals="Sally") //<4>
+----
+
+<1> 要求该属性已被设置
+<2> 要求该属性为 "John"
+<3> 要求该属性为 "John" 或未设置
+<4> 要求该属性不为 "Sally" 或未设置
+
+=== 在 @Requires 中引用 bean 属性
+
+您还可以在 `@Requires` 中引用其他 bean 的属性来按条件加载 bean。与 `property` 要求类似，您可以指定所需的 `value`，或使用 `notEquals` 注解成员设置 bean 属性不应等于的值。要使 bean 属性检查生效，上下文中必须存在 `bean` 注解成员所指定类型的 bean，否则该条件 bean 将不会加载。
+
+[source,java]
+----
+@Requires(bean=Config.class, beanProperty="foo") //<1>
+@Requires(bean=Config.class, beanProperty="foo", value="John") //<2>
+@Requires(bean=Config.class, beanProperty="foo", notEquals="Sally") //<3>
+----
+
+<1> 要求 `Config` bean 上的 "foo" 属性已被设置
+<2> 要求 `Config` bean 上的 "foo" 属性为 "John"
+<3> 要求 `Config` bean 上的 "foo" 属性不为 "Sally" 或未设置
+
+指定的 bean 属性通过相应的 getter 方法访问，其存在性与可用性将在编译期检查。
+
+请注意，bean 属性只要其值不为 null 即视为已设置。请记住，基本类型属性会以默认值初始化（例如 boolean 为 `false`，int 为 `0`），因此即使未显式指定值，它们也被视为已设置。
+
+== 调试条件 bean
+
+如果您有多个条件和复杂的要求，可能难以理解某个特定 bean 为何未加载。
+
+为帮助排查条件 bean 的问题，您可以为 `io.micronaut.context.condition` 包启用调试日志，它会记录 bean 未加载的原因。
+
+.logback.xml
+[source,xml]
+----
+<logger name="io.micronaut.context.condition" level="DEBUG"/>
+----
+
+详情请查阅日志章节 <<logging, 如何设置日志>>。

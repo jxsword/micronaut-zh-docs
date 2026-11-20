@@ -1,0 +1,14 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Graceful Shutdown](https://docs.micronaut.io/5.2.x/core/#core-gracefulShutdown)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/ioc/gracefulShutdown.adoc  upstream_commit: ab7f7411ac458845a44cad05a44d155112f6a715  upstream_hash: 590c9d1bea599b438a1cb27e35a2ef6c4982044f  translated_at: 2026-11-21 -->
+
+在某些部署中，最好能「优雅地（gracefully）」关闭应用程序，即停止接受新工作，但完成正在进行的任务。在 Micronaut 框架中，优雅关闭意味着：
+
+* 不再接受新的 HTTP 连接
+* 现有连接不再处理新请求，但进行中的请求仍会被处理
+* 计划任务将停止运行，但进行中的任务会不受干扰地完成
+
+如果配置属性 `micronaut.lifecycle.graceful-shutdown.enabled` 设置为 `true`，当上下文停止（`ApplicationContext.stop()`）时会自动触发优雅关闭。如果您希望对关闭过程有更多控制，还有编程式的 api:runtime.graceful.GracefulShutdownManager[] API。
+
+优雅关闭的状态可以通过健康管理端点读取。该端点还会返回仍处于活动状态的任务数量（例如连接或运行中的计划任务）。
+
+如果您想为自己的 bean 添加优雅关闭支持，请实现 api:runtime.graceful.GracefulShutdownCapable[]。您将实现一个 `shutdownGracefully` 方法来触发关闭，并返回一个应在优雅关闭完成时（例如所有客户端已关闭连接）完成的 future。您还可以选择实现 `reportActiveTasks`，为健康端点提供活动任务的数量。

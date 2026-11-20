@@ -1,0 +1,21 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Bean Events](https://docs.micronaut.io/5.2.x/core/#core-events)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/ioc/events.adoc  upstream_commit: 52496518371db590c0a06457586d931823622ef8  upstream_hash: bc6cd652b5959aa0b77ab3cbbac5a8d39822e22e  translated_at: 2026-11-21 -->
+
+您可以使用以下接口之一挂钩（hook）bean 的创建过程：
+
+* link:{api}/io/micronaut/context/event/BeanInitializedEventListener.html[BeanInitializedEventListener] - 允许在属性设置之后、`@PostConstruct` 事件挂钩之前修改或替换 bean。
+* link:{api}/io/micronaut/context/event/BeanCreatedEventListener.html[BeanCreatedEventListener] - 允许在 bean 完全初始化且所有 `@PostConstruct` 挂钩调用之后修改或替换 bean。
+
+`BeanInitializedEventListener` 接口通常与 link:{api}/io/micronaut/context/annotation/Factory.html[Factory] bean 配合使用。考虑以下示例：
+
+snippet::io.micronaut.docs.events.factory.V8Engine,io.micronaut.docs.events.factory.EngineFactory,io.micronaut.docs.events.factory.EngineInitializer[tags="class",indent=0]
+
+<1> `V8Engine` 类定义了 `rodLength` 属性
+<2> `EngineFactory` 初始化 `rodLength` 的值并创建实例
+<3> 创建的实例作为 link:{api}/io/micronaut/context/annotation/Bean.html[Bean] 返回
+<4> 实现 `BeanInitializedEventListener` 接口以监听工厂的初始化
+<5> 在 `onInitialized` 方法中，于工厂 bean 创建引擎之前覆盖 `rodLength`。
+
+link:{api}/io/micronaut/context/event/BeanCreatedEventListener.html[BeanCreatedEventListener] 接口更常用于装饰或增强完全初始化的 bean，例如通过创建代理。
+
+IMPORTANT: bean 事件监听器的初始化*早于*类型转换器。如果您的监听器依赖类型转换——无论是通过依赖配置属性 bean 还是通过任何其他机制——您可能会看到与类型转换相关的错误。

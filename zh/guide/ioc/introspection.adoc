@@ -1,0 +1,7 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Bean Introspection](https://docs.micronaut.io/5.2.x/core/#core-introspection)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/ioc/introspection.adoc  upstream_commit: 8c82ee03540bc11bc707c777c7ff4aa00d5be9d7  upstream_hash: 9003091558a43e0dba204d86b62abe7bd6870af1  translated_at: 2026-11-21 -->
+
+[[introspection]]
+自 Micronaut 框架 1.1 起，已包含 JDK link:{jdkapi}/java.desktop/java/beans/Introspector.html[Introspector] 类的编译期替代实现。
+
+api:core.beans.BeanIntrospector[] 和 api:core.beans.BeanIntrospection[] 接口支持查找 bean 内省（introspection），从而无需使用反射或缓存反射元数据即可实例化以及读写 bean 属性——对于大型 bean，这些操作会消耗过多内存。

@@ -1,0 +1,47 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Context Events](https://docs.micronaut.io/5.2.x/core/#core-contextEvents)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/ioc/contextEvents.adoc  upstream_commit: 130cfede2d9a325faf7016bf10e0a2060c5a3cbd  upstream_hash: a141e90caffc074762f78e229f70a145beae7951  translated_at: 2026-11-21 -->
+
+Micronaut 框架通过上下文支持一个通用事件系统。api:context.event.ApplicationEventPublisher[] API 用于发布事件，api:context.event.ApplicationEventListener[] API 用于监听事件。事件系统不限于 Micronaut 发布的事件，还支持用户创建的自定义事件。上下文事件（Context Events）需要 Micronaut Context 依赖：
+
+dependency::micronaut-context[]
+
+`micronaut-context` 是 `micronaut-http` 的传递依赖。如果您使用 Micronaut HTTP 运行时，您的项目已经包含 `micronaut-context` 依赖。
+
+=== 发布事件
+
+api:context.event.ApplicationEventPublisher[] API 支持任意类型的事件，不过 Micronaut 框架发布的所有事件都扩展自 api:context.event.ApplicationEvent[]。
+
+要发布事件，请使用依赖注入获取一个 api:context.event.ApplicationEventPublisher[] 实例（其泛型类型为事件的类型），并使用您的事件对象调用 `publishEvent` 方法。
+
+snippet::io.micronaut.docs.context.events.SampleEvent,io.micronaut.docs.context.events.SampleEventEmitterBean[tags="class",indent=0,title="Publishing an Event"]
+
+WARNING: 默认情况下，发布事件是*同步*的！在所有监听器执行完毕之前，`publishEvent` 方法不会返回。如果这项工作非常耗时，请将其移到线程池中执行。
+
+=== 监听事件
+
+要监听事件，请注册一个实现 api:context.event.ApplicationEventListener[] 的 bean，其泛型类型为事件的类型。
+
+snippet::io.micronaut.docs.context.events.application.SampleEventListener,io.micronaut.docs.context.events.application.SampleEventListenerSpec[tags="imports,class",indent=0,title="Listening for Events with `ApplicationEventListener`"]
+
+NOTE: 可以重写 link:{api}/io/micronaut/context/event/ApplicationEventListener.html#supports-E-[supports] 方法来进一步明确要处理的事件。
+
+或者，如果您不希望实现接口，或想利用 api:context.event.StartupEvent[] 和 api:context.event.ShutdownEvent[] 之类的内置事件，可以使用 ann:runtime.event.annotation.EventListener[] 注解：
+
+snippet::io.micronaut.docs.context.events.listener.SampleEventListener[tags="imports,class",indent=0,title="Listening for Events with `@EventListener`"]
+
+如果您的监听器执行的作业可能耗时较长，请使用 ann:scheduling.annotation.Async[] 注解在单独的线程上运行该操作：
+
+snippet::io.micronaut.docs.context.events.async.SampleEventListener,io.micronaut.docs.context.events.async.SampleEventListenerSpec[tags="imports,class",indent=0,title="Asynchronously listening for Events with `@EventListener`"]
+
+事件监听器默认在 `scheduled` 执行器上运行。您可以根据需要在配置文件（例如 `application.yml`）中配置该线程池：
+
+//TODO：将 YAML 片段移动到 ExecutorServiceConfigSpec
+.配置计划任务线程池
+[configuration]
+----
+micronaut:
+  executors:
+    scheduled:
+      type: scheduled
+      core-pool-size: 30
+----

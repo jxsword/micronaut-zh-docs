@@ -1,0 +1,12 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Making a Bean Available for Introspection](https://docs.micronaut.io/5.2.x/core/#core-makingABeanAvailableForIntrospection)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/ioc/introspection/makingABeanAvailableForIntrospection.adoc  upstream_commit: 8c82ee03540bc11bc707c777c7ff4aa00d5be9d7  upstream_hash: df81b63ff867e4ca7200fcb6cc94d34226082a45  translated_at: 2026-11-21 -->
+
+与 JDK 的 link:{jdkapi}/java.desktop/java/beans/Introspector.html[Introspector] 不同，并非每个类都自动可用于内省。要使一个类可用于内省，您至少必须在构建中启用 Micronaut 的注解处理器（Java 和 Kotlin 使用 `micronaut-inject-java`，Groovy 使用 `micronaut-inject-groovy`），并确保对 `micronaut-core` 存在运行时依赖。
+
+dependency::micronaut-inject-java[scope="annotationProcessor"]
+
+NOTE: 对于 Kotlin，请在 `kapt` 作用域中添加 `micronaut-inject-java` 依赖；对于 Groovy，请在 `compileOnly` 作用域中添加 `micronaut-inject-groovy`。
+
+dependency::micronaut-core[scope="runtimeOnly"]
+
+构建配置完成后，您有几种生成内省数据的方式。

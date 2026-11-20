@@ -1,0 +1,76 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Bean Replacement](https://docs.micronaut.io/5.2.x/core/#core-replaces)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/ioc/replaces.adoc  upstream_commit: c61386787e67fbb5438315d170efd47c44dc65d2  upstream_hash: 9199fceb32c71cd02c1fa279f5d1bf09bac53c7b  translated_at: 2026-11-21 -->
+
+[[replaces]]
+Micronaut 依赖注入系统与 Spring 的一个重要区别在于 bean 的替换方式。
+
+在 Spring 应用中，bean 有名称，通过创建同名 bean 即可覆盖另一个 bean，而不管 bean 的类型如何。Spring 还有 bean 注册顺序的概念，因此在 Spring Boot 中有 `@AutoConfigureBefore` 和 `@AutoConfigureAfter` 注解来控制 bean 之间的相互覆盖。
+
+这种策略会导致难以调试的问题，例如：
+
+* bean 加载顺序发生变化，导致出乎意料的结果
+* 同名 bean 覆盖了另一个不同类型的 bean
+
+为避免这些问题，Micronaut 的 DI 没有 bean 名称或加载顺序的概念。bean 拥有类型和 api:context.Qualifier[]。您不能用一个完全不同类型的 bean 去覆盖另一个 bean。
+
+Spring 方式的一个实用好处是允许覆盖已有 bean 来定制行为。为了支持同样的能力，Micronaut 的 DI 提供了显式的 ann:context.annotation.Replaces[] 注解，它与 <<conditionalBeans, 条件 bean>> 支持良好集成，并清晰地记载和表达了开发者的意图。
+
+任何已有 bean 都可以被另一个声明了 ann:context.annotation.Replaces[] 的 bean 替换。例如，考虑以下类：
+
+snippet::io.micronaut.docs.requires.JdbcBookService[tags="requires",indent=0, title="JdbcBookService"]
+
+您可以在 `src/test/java` 中定义一个类，仅为您的测试替换该类：
+
+snippet::io.micronaut.docs.replaces.MockBookService[tags="class",indent=0, title="Using @Replaces"]
+
+<1> `MockBookService` 声明它替换 `JdbcBookService`
+
+替换 bean 还会满足被替换 bean 所声明的限定符，因此像 `@Named("jdbc") BookService` 这样的注入点会解析到名为 `jdbc` 的 bean 的替换 bean，而替换 bean 无需重复该限定符。
+
+一个 bean 可以替换另一个本身替换了更宽泛类型的 bean。如果 `A` 声明了 `@Replaces(B.class)`，而 `B` 声明了 `@Replaces(SomeInterface.class)`，那么 `A` 就是唯一剩下的 bean，即使 `A` 也实现了 `SomeInterface`。替换同一目标的多个 bean 会彼此并存、仍为候选，因此请使用 ann:context.annotation.Primary[] 或 ann:core.annotation.Order[] 在它们之间做出选择。
+
+=== 工厂替换
+
+`@Replaces` 注解还支持 `factory` 参数。该参数允许整体替换工厂 bean，或替换工厂创建的特定类型。
+
+例如，可能希望替换给定工厂类的全部或部分：
+
+snippet::io.micronaut.docs.replaces.BookFactory[tags="class",indent=0, title="BookFactory"]
+
+WARNING: 要整体替换一个工厂，您的工厂方法必须与被替换工厂中所有方法的返回类型相匹配。
+
+在此示例中，`BookFactory#textBook()` *不会* 被替换，因为该工厂没有返回 `TextBook` 的工厂方法。
+
+snippet::io.micronaut.docs.replaces.CustomBookFactory[tags="class",indent=0, title="CustomBookFactory"]
+
+要替换一个或多个工厂方法而保留其余方法，请在相应方法上应用 `@Replaces` 注解并指明要应用于哪个工厂。
+
+snippet::io.micronaut.docs.replaces.TextBookFactory[tags="class",indent=0, title="TextBookFactory"]
+
+`BookFactory#novel()` 方法不会被替换，因为 TextBook 类已在注解中定义。
+
+=== 默认实现
+
+在对外暴露 API 时，您可能希望定义一个接口实现，作为注入该特定接口时的默认实现。为此可以使用 ann:context.annotation.DefaultImplementation[] 注解。
+
+也可能希望不将接口的默认实现作为公共 API 的一部分暴露，例如在 Java 中将其设为包级私有（package private）。
+
+这样做会使用户无法替换该实现，因为他们无法引用该类。
+
+ann:context.annotation.DefaultImplementation[] 注解允许框架在用户创建声明了 `@Replaces(YourInterface.class)` 的 bean 时确定要替换的实现。
+
+例如考虑：
+
+一个公共 API 契约
+
+snippet::io.micronaut.docs.qualifiers.replaces.defaultimpl.ResponseStrategy[tags="clazz"]
+
+默认实现
+
+snippet::io.micronaut.docs.qualifiers.replaces.defaultimpl.DefaultResponseStrategy[tags="clazz"]
+
+自定义实现
+
+snippet::io.micronaut.docs.qualifiers.replaces.defaultimpl.CustomResponseStrategy[tags="clazz"]
+
+在上面的示例中，`CustomResponseStrategy` 替换了 `DefaultResponseStrategy`，因为 api:context.annotation.DefaultImplementation[] 注解指向 `DefaultResponseStrategy`。
