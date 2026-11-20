@@ -157,10 +157,14 @@ def _git(args: List[str], cwd: Optional[Path] = None) -> str:
 
 
 def _gh_api_last_commit(repo_slug: str, path: str, ref: str) -> Optional[str]:
-    """gh api 查询某文件在 ref 上最后一次提交 sha；失败返回 None（可延后补采）。"""
+    """gh api 查询某文件在 ref 上最后一次提交 sha；失败返回 None（可延后补采）。
+
+    path 为 manifest 相对路径（如 guide/aop.adoc），查询时补全为全仓路径
+    src/main/docs/<path>。"""
+    full = path if path.startswith(UPSTREAM_DOC) else f"{UPSTREAM_DOC}/{path}"
     result = subprocess.run(
         ["gh", "api",
-         f"repos/{repo_slug}/commits?path={path}&sha={ref}&per_page=1",
+         f"repos/{repo_slug}/commits?path={full}&sha={ref}&per_page=1",
          "--jq", ".[0].sha"],
         capture_output=True, text=True, check=False)
     if result.returncode == 0 and result.stdout.strip():
