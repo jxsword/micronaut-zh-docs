@@ -1,0 +1,90 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Annotations as Decorators](https://docs.micronaut.io/5.2.x/core/#core-decorators)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/languageSupport/python/decorators.adoc  upstream_commit: ee21ad6c6ba1b83be131af6dabff85327a23ada6  upstream_hash: 4453593e2f779c24f1c91264e4d18b5218f5bff2  translated_at: 2026-11-21 -->
+
+Java 注解以装饰器（decorator）的形式应用于 Python 类、函数和参数，也以 `Annotated[...]` 元数据的形式应用。装饰器是裸用还是调用，取决于其书写方式，与 Java 注解相同：`@Singleton` 与 `@Singleton()` 是同一个注解，调用时的每个实参都是注解值。无论类型为何，单个位置实参就是 `value` 成员：
+
+[source,python]
+----
+from org.junit.jupiter.api import MethodOrderer, Test, TestMethodOrder
+
+@TestMethodOrder(MethodOrderer.OrderAnnotation)  # <1>
+class OrderedTest:
+
+    @Test  # <2>
+    def first(self):
+        pass
+----
+
+<1> 类 `MethodOrderer.OrderAnnotation` 是该注解的 `value`，如同 Java 中的 `@TestMethodOrder(MethodOrderer.OrderAnnotation.class)`
+<2> 裸用装饰器即不带成员的注解
+
+== 自定义注解
+
+自定义注解是一个返回装饰器的函数，其自身被构成其构造型（stereotype）的注解所装饰。它的参数就是注解成员，参数默认值即成员默认值。在定义它的模块以及导入它的模块中，它像生成的装饰器一样应用——可裸用也可调用：
+
+[source,python]
+----
+from jakarta.inject import Qualifier
+
+@Qualifier
+def Cylinders(value: int = 4):
+    def decorator(target):
+        return target
+    return decorator
+
+@Cylinders        # value = 4
+class FourCylinderEngine:
+    pass
+
+@Cylinders(8)
+class V8Engine:
+    pass
+----
+
+恰好有一个必填位置参数（或只有 `*args`）的函数在裸用时会接收被装饰的目标，这与任何 Python 装饰器一样；它永远不会被改写为调用。这包括直接返回目标的普通装饰器（`def Timed(target): return target`）、下文的包装型装饰器，以及成员没有默认值的注解（`def Tagged(value: str)`），后者写作 `@Tagged("x")`：
+
+[source,python]
+----
+from micronaut.core.bind.annotation import Bindable
+
+@Bindable
+def Traced(func):
+    def wrapper(*args, **kwargs):
+        return "traced:" + func(*args, **kwargs)
+    return wrapper
+
+@Traced   # Traced(hello), never Traced()(hello)
+def hello(self) -> str:
+    return "ok"
+----
+
+成员仅为 `*args` 的自定义注解函数（`def Tags(*values: str)`）同样是只有 `*args` 的函数：写作 `@Tags("a", "b")` 或 `@Tags()` 时，它就是带这些值的注解；但裸用时会像任何 Python 装饰器一样把被装饰的目标作为唯一值接收，编译器不会对其改写。若这类注解本意是裸用，请改为给它一个带默认值的常规成员。
+
+当生成的装饰器通过编译器无法识别为该注解的名称裸用（如另一模块中的 `Bean = Singleton`、`getattr`）时，它会接收类或函数作为唯一实参；除非该注解的 `value` 成员持有的是一个类，否则会引发一个指名该注解的 `TypeError`，而不是用装饰器替换目标。
+
+== 占位主体（Placeholder Bodies）
+
+主体只有 `...` 的方法是抽象方法——前提是 Python 本身不会实例化该类，且该方法由 Micronaut 实现：
+
+* 在继承 `abc.ABC` 或 `typing.Protocol` 的类中，或在被 `@abstractmethod` 装饰时；
+* 在带有 api:aop.Introduction[] 构造型的类中，例如声明式 HTTP 客户端、Micronaut Data 仓库或 AI 服务，其方法由引入通知（introduction advice）实现。
+
+`...` 之前的文档字符串（docstring）为所声明的方法提供文档，并使主体保持为占位：
+
+snippet::micronaut.docs.placeholders.BookClient[tags="imports,class", indent=0, title="A documented placeholder method"]
+
+主体为 `pass` 或引发 `NotImplementedError` 的主体不是占位：这样的方法是具有该主体的具体方法。
+
+在任何其他类中，占位主体是返回 `None` 的方法主体，因此方法皆为占位的具体 bean——例如在其处理器尚未编写之前先写好的消息监听器——仍是一个具体的、可注入的 bean：
+
+[source,python]
+----
+from jakarta.inject import Singleton
+from micronaut.context.annotation import Executable
+
+@Singleton
+class MessageListener:
+    @Executable
+    def on_message(self, message: str) -> None:
+        ...
+----

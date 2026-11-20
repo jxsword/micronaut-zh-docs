@@ -28,7 +28,7 @@
 | B19 | 14 | 3455 | 3491 | current |
 | B20 | 21 | 3456 | 3512 | current |
 | B21 | 35 | 2983 | 3078 | current |
-| B22 | 5 | 3062 | 3057 | pending |
+| B22 | 5 | 3062 | 3057 | current |
 | B23 | 6 | 3378 | 3353 | pending |
 | B24 | 5 | 3257 | 3199 | pending |
 | B25 | 7 | 3096 | 3070 | pending |
@@ -67,6 +67,7 @@
 - B19（2026-11-21 完成）：validate 全量 230 文件 PASSED + 14/14 --mark-current 核销 + squash commit；进度 230/388（59.3%）。锚点注入 3 处（clientFilter 批内闭环 + clientHttp3/contextPropagation 批间消解）+ 源内显式锚 certificates 保留（https ×2 消解）；restore 第 4 次拦截译丢段（clientFilter 漏 snippet 占位符）；nettyPooling ⑦ ×4、contextPropagation ⑦ ×2、certificates ③ classpath 修正。词数实测 3471/3424。⑤ 豁免警告 18 条（−4 消解，详见 reports/batch-B19.md）。冻结窗口遵守。**httpClient 章 26/26 全章译出（第七个全章）**；contextPropagation 组 2/2；cloud 章 1/17 起步。
 - B20（2026-11-21 完成）：validate 全量 251 文件 PASSED + 21/21 --mark-current 核销 + squash commit；进度 251/388（64.7%）。锚点注入 7 处（cloudConfiguration/distributedConfiguration/distributedConfigurationVault/serviceDiscovery/serviceDiscoveryManual/serverlessFunctions 批间消解 7 条豁免 + clientSideLoadBalancing 批内闭环）；validate 逐个 --file **首轮 21/21 全绿（B01 以来首次批次内零修正）**；restore 第 5 次拦截真缺陷（Route53 两占位符丢右花括号，修复后全过）。词数实测 3512/3456（与 M1 inventory 一致）；段落 277。⑤ 豁免警告 11 条（−7 消解 +0 新增，详见 reports/batch-B20.md）。冻结窗口遵守。**cloud 章 17/17 全章译出（第八个全章）**；serverlessFunctions 组 3/4。
 - B21（2026-11-21 完成）：validate 全量 286 文件 PASSED + 35/35 --mark-current 核销 + squash commit；进度 286/388（74.1%，剔 skipped 口径）。**全程最大批次（35 文件）逐组推进**；锚点注入 7 处（5 basename 片段锚 + 2 标题锚——sqlSupport 页内标题锚注入标题行之前；hibernateSupport/logging 消解 2 条豁免 + sqlSupport 批内闭环，groovy→cli +1 新增豁免）；restore 35/35 首轮全过（B20 回读习惯生效，零花括号缺陷）；validate 首轮 33/35（mongoSupport ③ Reactive Streams→响应式流物化、java9 ⑦ 占位符后漏空格），修复后全绿；reviewer 35/35 PASS 首轮零缺陷；占位符多重集校验发现 6 文件语序重排（合法）。词数实测 3078/2983（与 M1 inventory 一致）；段落 298。glossary +2（消息代理/发布者确认，现 25 术语）。⑤ 豁免 11→10 条（详见 reports/batch-B21.md）。冻结窗口遵守。**五个组全章译出（第九至第十三个全章）：serverlessFunctions 4/4、messaging、commandLineApps、configurations、logging**；languageSupport 章 8/50 起步。
+- B22（2026-11-21 完成）：validate 全量 291 文件 PASSED + 5/5 --mark-current 核销 + squash commit；进度 291/388（75.4%，剔 skipped 口径）。锚点注入 0 处（registry 实测该 5 文件无登记引用）；validate 首轮 3/5（pythonRuntime ⑦ ×2、pythonThreading ⑦ ×1——行内码/占位符后紧跟全角开括号）修复后全绿；reviewer 5/5 PASS 首轮零缺陷。**glossary 滚动回流新错误模式**：新术语 visitor 收录触发既有文件 ③ ×3（evaluatedExpressions/annotationMetadata 宏路径误触补括注、classImport B06 旧译「访问器」统一为「访问者」）。词数实测 3045/3048（M1 值 3057/3062，口径基数差异以实测为准）；段落 104。glossary +6（访问者/装饰器/GIL/上下文池/虚拟线程/仪表，现 31 术语）。⑤ 豁免维持 10 条（0 消解 0 新增）。冻结窗口遵守。python 子章 6/24（B23–B25 继续 18 文件）；languageSupport 章 13/50（26%）。
 
 ## 硬性纪律（每批次必守）
 

@@ -1,0 +1,112 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Python Threading](https://docs.micronaut.io/5.2.x/core/#core-pythonThreading)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/languageSupport/python/pythonThreading.adoc  upstream_commit: c1e1af9e15c2ba19d47cc460e2d18ca96f48e349  upstream_hash: f44cea67f30e7c376443a70d7dddeff2fab3b8e0  translated_at: 2026-11-21 -->
+
+== Python 线程
+
+=== Python 的 GIL
+
+GraalPy 目前使用全局解释器锁（Global Interpreter Lock，GIL）。在给定的 GraalPy 上下文中，GIL 同一时间只允许一个线程执行 Python 代码。GraalPy 在调用原生代码或执行 I/O 时可以释放 GIL，但您不应假设同一上下文中的 Python 代码会并行执行。更多信息请参阅 https://github.com/oracle/graalpython/blob/master/docs/user/Interoperability.md[GraalPy 多线程文档]。
+
+Micronaut 可以在多个 GraalPy 上下文中运行 Python 代码。每个上下文都有自己的 GIL，因此当多个请求并发执行 Python 时，上下文池（context pool）可以减少 GIL 争用。上下文池化尚处于实验阶段，应在测量工作负载之后再启用和调优。
+
+=== 不要将虚拟线程用于 Python 执行
+
+当前的 GraalPy 运行时不支持在 Java 虚拟线程（virtual threads）上执行 Python 代码。当虚拟线程可用时，Micronaut 的 `blocking` 执行器会使用虚拟线程，因此请将 Python 使用的执行器配置为缓存式平台线程执行器：
+
+[configuration]
+----
+micronaut:
+  executors:
+    io:
+      type: cached
+      virtual: false
+    blocking:
+      type: cached
+      virtual: false
+----
+
+Micronaut 会将同步的生成 Python 方法和 `asyncio.run_in_executor(None, ...)` 路由到 `io` 执行器。当操作显式标注 `@ExecuteOn(TaskExecutors.BLOCKING)` 时，则使用 `blocking` 执行器。当 Python 代码可能经由任一路径执行时，请对两者都进行配置。`io` 执行器默认是缓存式平台线程执行器；显式指定它可以在执行器默认值发生变化时保证配置安全。
+
+=== 配置 Python 上下文池
+
+Python 上下文池在 `micronaut.python.pool` 下配置：
+
+[configuration]
+----
+micronaut:
+  python:
+    pool:
+      enabled: true
+      size: 8
+      warn-wait: 2s
+----
+
+`enabled` 默认为 `true`。`size` 是额外 GraalPy 上下文的目标数量；取值 `0` 时采用默认值，即可用处理器数量的一半，最少 `2` 个、最多 `8` 个。上下文按需懒创建，每个都会消耗内存并需要初始化工作。编译后的 Python 代码会在可能的情况下跨上下文共享。`warn-wait` （默认 `2s`）是请求在记录警告前等待可用上下文的时长，也是调优 `size` 时要参考的信号；设为 `0s` 可关闭该警告。
+
+准备一个池化上下文占据了应用首个请求的大部分开销：它需要初始化一个 GraalPy 解释器，并导入每次 Python 调用都要经过的运行时模块，而该模块又会导入 `asyncio` 等加载缓慢的模块。`prestart` 将这项工作移出请求路径：应用启动后，一个后台线程会创建并预热指定数量的池化上下文，让最早的请求就能找到就绪的上下文。它默认为 `1`，既免去首个请求的等待，又不会填满空闲应用可能永远用不到的池；在 `test` 环境中默认为 `0`，因为大量短命的应用上下文会各自构建一个上下文，其测试之间会争抢处理器。设为 `0` 可完全按需创建上下文，或设为不超过 `size` 的值以在负载到来前备好整个池。在上下文预启动期间到达的请求会等待该上下文而不是构建第二个；中途停止的应用会在上下文构建完成后将其关闭。
+
+[configuration]
+----
+micronaut:
+  python:
+    pool:
+      prestart: 2
+----
+
+==== 选择池大小
+
+更多上下文并不必然更好，适合应用的池大小取决于其自身可控的一个因素：路由所触及的 Python bean 本身是否已池化。
+
+路由模块是池化的，因此每个上下文中各存在一份。而它注入的 `@Singleton` Python bean 则不是：它在某个上下文中只是一个对象，无论池中有多少上下文，通过它的每次调用都在那个上下文中运行。当路由背后的 bean 是单例时，增加上下文只是分走流量而不会增加吞吐——因此小池更好，大池反而不如小池。用 `@ContextPooled` 标注服务后，这一关系就会反转，因为此时上下文带来的是真正的并发。`pyronaut process` 会对每个依赖单例 Python bean 的池化类型发出警告——这正是需要关注此问题的信号。
+
+该警告指出的代价并非缺陷，而且有些代价是应用愿意接受的：每个请求（而非每行数据）才触及一次的 bean，或主体本来就是 Java 调用的 bean，留在单一上下文中损失很小。指名这些依赖即可停止报告，或列出 `*` 以停止报告全部：
+
+[configuration]
+----
+micronaut:
+  python:
+    pool:
+      ignoreDependencies:
+        - MailService
+        - PasswordResetTokens
+----
+
+Pyronaut 会将其作为注解处理器选项传给编译器，因此它在 `pyronaut process` 阶段生效而非运行时；直接驱动 `javac` 的构建可以传入 `-Amicronaut.python.pool.ignoreDependencies=MailService,PasswordResetTokens`，或在编译器 JVM 上设置同名系统属性。Core 5.2.11 以 `micronaut.python.pooled.ignoreDependencies` 之名发布该选项；该名称仍可读取，但只有新名称才是 `micronaut.python.pool` 的已知属性，因此配置校验只接受新名称。名称匹配依赖类型的简单名或全限定名均可。作为注解处理器选项或系统属性时，取值 `false` 同样会停止报告全部。请针对已作出决策的具体配对进行静默，而不是整个警告，这样下一个警告仍会送达您。
+
+其余取决于工作负载。Python 工作量少的请求会从更多上下文中受益，直到上下文数量超过处理器能并行运行的数量；而在 Python 中构建大响应的请求——比如将一页实体投影为 DTO——在较少上下文时即达最佳，超过该点后额外的解释器只会争抢核心而不增加并行度。在一台 12 核机器上、服务已池化的实测中：按键读取（keyed read）在 12 个上下文时仍在提升，而 20 行的分页读取在 6 个上下文时达到峰值，到 12 个时吞吐已损失三分之一。默认值是这两者之间的折中，并非任何一方的最优值。
+
+因此：在调优 `size` 之前，先将路由触及的服务池化，然后实测重要的端点。`warn-wait` 能告诉您池何时成为瓶颈；它无法告诉您池何时过大——过大只会表现为「增加上下文时吞吐反而下降」。
+
+启用 asyncio 桥后，每个执行 Python 协程的 Netty 事件循环还会额外持有一个专属上下文。它运行路由模块和 `@ContextPooled` bean 的协程。未池化的 Python bean——例如 `@Singleton` 控制器或服务——不会被复制进去：该 bean 的 `async def` 方法在 bean 自己的上下文中运行，对每个调用方事件循环而言，都使用该上下文中为此事件循环准备的 asyncio loop，因此 bean 持有的状态由每个事件循环共享，正如它由每个池化上下文共享一样。事件循环上下文中的协程在等待这样的 bean 时，收到的是自己那个 loop 的 future。由于单例的协程会运行在调用它的事件循环的 loop 上（与禁用池时一样），请用 `threading.Lock` 这类线程安全原语守护它跨请求共享的状态，而不要用 `asyncio.Lock`、`asyncio.Event` 或 `asyncio.Queue`——它们属于最先使用它们的那个 loop。事件循环上下文按需懒创建、每个事件循环一个，不计入 `size`。因此一个应用可创建的上下文总数为池的 `size`、运行 Python 的 Netty 事件循环数量与主上下文之和。当这一占用过大时，可调低 `micronaut.netty.event-loops.default.num-threads` 或禁用 `micronaut.python.asyncio.enabled`。也可以用 `micronaut.python.pool.max-event-loop-contexts` 为专属上下文设上限：先运行 Python 的事件循环各得一个上下文，其余事件循环通过共享池运行 Python——这能限制内存占用，代价是协程运行期间会阻塞这些事件循环；协程所在的池化上下文会一直租借给它直至协程完成，因此绝不会与另一个调用者共享。这样的协程，与从完全没有事件循环的线程上启动的协程一样，会在调用线程上由一个无需套接字的私有 loop 驱动至完成：它的定时器、`call_soon_threadsafe` 和执行器都能工作，而网络访问必须经过 Netty 事件循环。每个被拒绝分配上下文的事件循环都会有一条警告指名。
+
+优雅关闭期间，池会继续处理仍在进行中的请求，并在每个上下文都空闲后报告完成。上下文会在应用上下文销毁时关闭，此时其中仍在运行的 Python 执行都已结束。
+
+对于刻意只使用一个上下文、或不需要并发 Python 执行的应用，禁用池会很有用：
+
+[configuration]
+----
+micronaut:
+  python:
+    pool:
+      enabled: false
+----
+
+有关池属性的完整列表，请参阅生成的配置参考：
+
+include::{includedir}configurationProperties/io.micronaut.context.python.PythonPoolConfiguration.adoc[]
+
+WARNING: Python 上下文池化（包括 `@ContextPooled` 作用域）尚处于实验阶段。请仔细测试池化应用，尤其当 Python 代码依赖可变的模块级或全局状态时——因为每个池化上下文都有自己的 Python 状态。
+
+当前的 GIL 与虚拟线程限制是暂时的。未来的 GraalPy 版本将提供无 GIL 的 Python 执行和虚拟线程支持；使用该运行时时应重新审视本文的执行器与池配置建议。
+
+
+== 池统计
+
+`PythonContextExecutor` bean 通过 `statistics()` 报告池的快照：目标大小、池化、空闲与事件循环上下文的数量、借用（borrow）次数、其中需要等待的次数，以及总等待时长和最长等待时长。类路径上存在 `micronaut-management` 时，同一快照由 `pythonpool` 端点提供，该端点默认为敏感（sensitive）：
+
+[source,json]
+----
+{"enabled":true,"targetSize":8,"pooledContexts":3,"idleContexts":2,"eventLoopContexts":1,"borrows":1204,"waits":3,"totalWaitMillis":41,"maxWaitMillis":22,"closed":false}
+----
+
+`waits` 计数持续增长且 `maxWaitMillis` 接近 `warn-wait`，说明池对负载而言太小；`idleContexts` 始终接近 `pooledContexts`，说明池大于实际需要。使用 Micrometer 的应用可以通过 `MeterBinder` 将快照绑定为仪表（gauge）。

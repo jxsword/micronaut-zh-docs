@@ -2487,10 +2487,10 @@ files:
 - file: guide/languageSupport/python/decorators.adoc
   blob_sha: 4453593e2f779c24f1c91264e4d18b5218f5bff2
   size: 4242
-  status: missing
+  status: current
   zh: zh/guide/languageSupport/python/decorators.adoc
   paragraphs: 22
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: ee21ad6c6ba1b83be131af6dabff85327a23ada6
 - file: guide/languageSupport/python/extendingJavaClasses.adoc
   blob_sha: d8ec9e56fb490dd2a48562d7bb187dd8682804c1
@@ -2607,18 +2607,18 @@ files:
 - file: guide/languageSupport/python/pythonRuntime.adoc
   blob_sha: 27ec64dec9a4680c96fef3738655132862dd60c8
   size: 3734
-  status: missing
+  status: current
   zh: zh/guide/languageSupport/python/pythonRuntime.adoc
   paragraphs: 23
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 8b60f0c87c151d38a263beb644304638221567e6
 - file: guide/languageSupport/python/pythonThreading.adoc
   blob_sha: f44cea67f30e7c376443a70d7dddeff2fab3b8e0
   size: 10747
-  status: missing
+  status: current
   zh: zh/guide/languageSupport/python/pythonThreading.adoc
   paragraphs: 40
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: c1e1af9e15c2ba19d47cc460e2d18ca96f48e349
 - file: guide/languageSupport/python/runtimeTypes.adoc
   blob_sha: ef61df2c292e7b02bb1648e2964582228d03262c
@@ -2631,10 +2631,10 @@ files:
 - file: guide/languageSupport/python/sourceRoots.adoc
   blob_sha: 7e280e614b0db46e795020d5db03fbf4d291244f
   size: 2624
-  status: missing
+  status: current
   zh: zh/guide/languageSupport/python/sourceRoots.adoc
   paragraphs: 14
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 2bc8e9632f05e332a2f1b982946c105870d7fb4c
 - file: guide/languageSupport/python/standardTypes.adoc
   blob_sha: c2583f0d6586c39e32d5b263ca318e9ad34b5dbf
@@ -2647,10 +2647,10 @@ files:
 - file: guide/languageSupport/python/typeOrdering.adoc
   blob_sha: 00c30477480230f695991c92788a3b5e90f98157
   size: 1000
-  status: missing
+  status: current
   zh: zh/guide/languageSupport/python/typeOrdering.adoc
   paragraphs: 5
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: a2db693c33cea1aadfba9b4280da79283a641702
 - file: guide/logging.adoc
   blob_sha: 740bba19a0ce8a03db2171f90af284df9695e4b2

@@ -175,7 +175,7 @@ NOTE: 保留的出现存储在保留注解成员 `AnnotationUtil.STEREOTYPES_MEM
 
 * *组合约束* - 校验风格的注解组合了多个约束，违反时必须针对产生它的约束上报。这也是使单个出现可寻址的原因：ann:context.annotation.AliasFor[] 上的 `applyDefault` 和 `index` （及其建模的 `jakarta.validation.OverridesAttribute` 语义）指向可重复组合约束的一次出现，而按名称索引无法区分它们。
 * *拦截器绑定* - ann:aop.InterceptorBinding[] 被 `@Retainable` 元注解，因此用于绑定拦截器的每个注解都会保留其绑定出现。绑定比较基于保留的出现而非其成员的副本；在同一元素上以不同成员组合同一绑定注解的两个注解——按名称索引会被合并为一个——会解析为两个绑定。
-* *由元注解契约驱动的行为* - 当 api:inject.visitor.TypeElementVisitor[]、拦截器或 bean 内省作用于您定义的元注解时，保留它可以让这些代码恢复出是哪个用户编写的注解请求了该行为、以及带着哪些成员，而不是只看到一个合并后的出现。将您的元注解标记为 `@Retainable` 会为其之上的每个注解开启此能力。
+* *由元注解契约驱动的行为* - 当 api:inject.visitor.TypeElementVisitor[]（类型元素访问者）、拦截器或 bean 内省作用于您定义的元注解时，保留它可以让这些代码恢复出是哪个用户编写的注解请求了该行为、以及带着哪些成员，而不是只看到一个合并后的出现。将您的元注解标记为 `@Retainable` 会为其之上的每个注解开启此能力。
 * *诊断* - 错误消息和工具可以指明用户实际编写的注解，而不是它展开后的内部构造型。
 
 测试构造型是否存在、读取其合并值、或按名称查找引入它的注解，都不需要保留机制。api:core.annotation.AnnotationMetadata[] 的 `hasAnnotation`、`hasStereotype`、`getAnnotationValuesByName` 和 `getAnnotationNamesByStereotype` 方法已经能回答这些问题，且在生成的元数据中没有额外开销。

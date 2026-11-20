@@ -1,0 +1,37 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Main and Test Sources](https://docs.micronaut.io/5.2.x/core/#core-sourceRoots)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/languageSupport/python/sourceRoots.adoc  upstream_commit: 2bc8e9632f05e332a2f1b982946c105870d7fb4c  upstream_hash: 7e280e614b0db46e795020d5db03fbf4d291244f  translated_at: 2026-11-21 -->
+
+一个项目通常拥有不止一组 Python 源码：应用位于 `src/main/python`，其测试位于 `src/test/python`。与 Java 一样，构建会分别编译每组源码并输出到各自的输出目录，并且针对主源码的输出编译测试源码。运行时，所有输出都一起位于类路径上。
+
+== 导入另一组源码中的类
+
+考虑主源码中的一个 bean：
+
+[source,python]
+.src/main/python/micronaut/docs/sourceroots/greeting_service.py
+----
+from jakarta.inject import Singleton
+
+
+@Singleton
+class GreetingService:
+    def greet(self, name: str) -> str:
+        return f"Hello {name}"
+----
+
+测试通过普通的 Python import 从其模块或包中导入该类，并将其用作类型：
+
+snippet::micronaut.docs.sourceroots.GreetingServiceSpec[tags="test", indent=0, title="A test of another source set"]
+
+<1> 该类从主源码导入
+<2> 它被用作注入点的类型
+
+编译器通过类路径解析这类导入：每个 Python 类生成的桥接类都携带编译器将导入映射到其 Java 类型所需的元数据，因此标注了所导入类的构造器参数、字段或返回类型会以该类型编译——与类属于同一组源码时完全一致，注入因此可以跨源码组工作。打包为 jar 的 Python 库也以同样方式导入。在运行时，导入仍然是 Python 导入；它永远不会被重写为 Java 桥接。
+
+== 跨源码组的包
+
+两组源码通常会向同一个 Python 包贡献模块，例如上面的 `micronaut.docs.sourceroots`。每个编译输出都是一个 GraalPy 虚拟文件系统根，这些根在运行时合并为一个命名空间，其中在多个根中都存在的文件由其中一个根提供。
+
+因此，编译器生成的包初始化器（`__init__.py`）本身不携带任何成员。每次编译都会把它贡献给某个包的成员（其模块中的类、生成的装饰器以及它导入的 Java 类型）写入一个以 `__micronaut_members_` 加内容哈希命名的模块，而各根中完全相同的初始化器会导入它找到的所有模块的成员。同一机制也服务于顶层模块的启动器。跨源码组、或跨应用与库的包，因此会暴露所有这些成员。
+
+这一切都不需要任何构建配置；特别地，各组源码在编译前无需合并到同一个目录。

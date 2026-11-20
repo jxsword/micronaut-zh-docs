@@ -1,0 +1,21 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Type Ordering and Forward References](https://docs.micronaut.io/5.2.x/core/#core-typeOrdering)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/languageSupport/python/typeOrdering.adoc  upstream_commit: a2db693c33cea1aadfba9b4280da79283a641702  upstream_hash: 00c30477480230f695991c92788a3b5e90f98157  translated_at: 2026-11-21 -->
+
+除非注解被引号包裹，否则 Python 会在模块加载时对类型注解求值。这对 Micronaut 的编译期处理至关重要，因为类型元数据必须在 Micronaut Data、Serde、校验和依赖注入等访问者（visitor）处理该类之前就可用。
+
+如果两个 Python 类相互引用，或者一个类引用了同一文件中在稍后位置声明的另一个类，请将前向引用（forward reference）用引号包裹，并在字符串中包含完整的 Python 类型表达式：
+
+[source,python]
+----
+from dataclasses import dataclass, field
+
+@dataclass
+class Message:
+    room: "Room | None" = None
+
+@dataclass
+class Room:
+    messages: list[Message] | None = field(default_factory=list)
+----
+
+请使用这种带引号的形式，而不是依赖声明顺序或 `from __future__ import annotations`。这样既能保持 Python 代码的地道风格，又能让 Micronaut 在注解处理期间解析被引用类型、可空性以及泛型集合元素的元数据。

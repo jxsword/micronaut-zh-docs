@@ -2,7 +2,7 @@
 <!-- upstream_file: guide/ioc/classImport.adoc  upstream_commit: 77e0a29d7a2e866dcd42e2c0bd79d554c7fa4b2d  upstream_hash: 9f694ec2dfd4f3e09bfff42ed62b3f9e620951ff  translated_at: 2026-11-21 -->
 
 [[classImport]]
-作为 ann:context.annotation.Import[] 注解的替代方案，ann:context.annotation.ClassImport[] 注解允许像处理普通未编译类一样处理已编译的类。其内部会运行所有类型访问器（type visitor），从而创建必要的元数据。
+作为 ann:context.annotation.Import[] 注解的替代方案，ann:context.annotation.ClassImport[] 注解允许像处理普通未编译类一样处理已编译的类。其内部会运行所有类型访问者（type visitor），从而创建必要的元数据。
 
 NOTE: 目前仅支持在 Java 语言中使用类导入，因为其他语言在源码处理期间的类路径扫描存在限制。
 

@@ -1,0 +1,62 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Runtime Requirements](https://docs.micronaut.io/5.2.x/core/#core-pythonRuntime)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/languageSupport/python/pythonRuntime.adoc  upstream_commit: 8b60f0c87c151d38a263beb644304638221567e6  upstream_hash: 27ec64dec9a4680c96fef3738655132862dd60c8  translated_at: 2026-11-21 -->
+
+Python 代码运行在 GraalPy 之上，GraalPy 是一种 Truffle 语言。只有当 JVM 提供的 Graal 编译器版本与类路径上的 GraalPy 构件相匹配时，Truffle 才会在运行时将 Python 代码编译为原生代码。在其他任何 JVM 上，GraalPy 仍然可以工作，但每个 Python 函数都会被解释执行。
+
+差异非常显著：从生成的 Java 存根（stub）到 Python 的桥接调用，编译模式下耗时约 0.4 µs，解释模式下约 1 µs；而 Python 代码本身在解释器中的运行速度要慢 30 到 60 倍。
+
+== 选择 JDK
+
+GraalPy 版本为 `{graalpyVersion}`。请使用与之匹配的 GraalVM 发布线中的 GraalVM JDK，例如 GraalPy 25.4.x 对应 GraalVM 25.4.x。此时 JDK 的构建字符串会包含相同的 Truffle 发布线，例如 `25.0.4.1.1+1-LTS-jvmci-25.4-b23`。
+
+以下 JVM 会以解释模式运行 Python，尽管其中一些本身就是 GraalVM 构建：
+
+* 标准发行版的 OpenJDK 或 Oracle JDK。
+* 来自不同发布线的 GraalVM JDK，例如 GraalVM for JDK 25.0.x 搭配 GraalPy 25.4.x。内置的编译器会拒绝不匹配的 Truffle 运行时，Truffle 随即回退到解释器。
+
+== 检测回退运行时
+
+启动时，框架会记录当前生效的运行时：
+
+[source]
+----
+INFO  i.m.c.python.GraalPyEngineFactory - GraalPy engine created in 1843ms using the GraalVM CE runtime
+----
+
+该行中的 `Interpreted` 表示回退运行时。此外，Truffle 还会通过 `engine` logger 以 `WARN` 级别记录 `The polyglot engine uses a fallback runtime that does not support runtime compilation to native code`。
+
+== 编译器线程
+
+默认情况下，框架通过 `engine.CompilerThreads=1` 将 Truffle 编译器限制为单线程。需要并发预热大量 Python 上下文的应用可以提高该限制；显式配置的值始终优先于默认值：
+
+[configuration]
+----
+graalpy:
+  engine:
+    options:
+      engine.CompilerThreads: 4
+----
+
+== 宿主类查找（Host class lookup）
+
+通过 `java.type("...")` 和 `from ... import ...`，Python 代码可以查找应用类加载器能加载的任何类。这是默认行为，无需配置：应用自身的包、JDK、Micronaut 以及类路径上的每个库均可见。
+
+对于运行的 Python 代码可信度低于其 Java 代码的应用，可以使用 `graalpy.context.host-class-lookup` 收窄该暴露面。该设置为可选加入（opt-in）；设置后，只有列出的包（及其子包）可见，此外还有生成的 Python 代码所依赖的 JDK、Jakarta 和 `io.micronaut` 包。请列出应用自身的包（生成的 Python 代码会按名称查找应用的 Java 类），以及 Python 代码使用的每个库包：
+
+[configuration]
+----
+graalpy:
+  context:
+    host-class-lookup:
+      - com.example
+      - org.reactivestreams
+----
+
+条目按名称匹配：
+
+* 包（例如 `com.example`，尾部的 `.` 可省略）匹配其自身的类及其子包的类，但不匹配 `com.examples`；
+* 类（例如 `org.slf4j.Logger`）匹配该类及其嵌套类（`org.slf4j.Logger$Inner`）；
+* 基本类型始终可见，因此像 `java.type("byte[]")` 这样的基本类型数组无需条目即可使用，例如作为 `client.exchange(request, java.type("byte[]"))` 的主体类型；
+* 数组在其元素类型匹配时匹配：当 `com.example.Foo` 可见时，`com.example.Foo[]` 与 `com.example.Foo[][]` 也可见。JVM 描述符形式（如 `[B` 或 `[Lcom.example.Foo;`）以相同方式匹配。无需列出 `byte[]` 这类数组名称。
+
+在所配置包之外的查找会引发 Python 的 `KeyError` （针对 `java.type`）或 `ImportError` （针对导入）。保持该设置未配置即可保留默认的无限制查找。

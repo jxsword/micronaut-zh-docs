@@ -157,6 +157,42 @@ terms:
     context: "Messaging 章节（B21 收录：rabbitmq/nats.adoc）"
     aliases: []
 
+  - en: "visitor"
+    zh: "访问者"
+    status: "approved"
+    context: "Python 章节注解处理语境（B22 收录：typeOrdering.adoc 等，B22–B25 复现）"
+    aliases: ["visitors"]
+
+  - en: "decorator"
+    zh: "装饰器"
+    status: "approved"
+    context: "Python 章节（B22 收录：decorators.adoc 等，装饰器=注解载体）"
+    aliases: ["decorators"]
+
+  - en: "Global Interpreter Lock"
+    zh: "全局解释器锁"
+    status: "approved"
+    context: "Python 章节（B22 收录：pythonThreading.adoc；缩写 GIL 保留）"
+    aliases: ["GIL"]
+
+  - en: "context pool"
+    zh: "上下文池"
+    status: "approved"
+    context: "Python 章节（B22 收录：pythonThreading.adoc，GraalPy 上下文池化）"
+    aliases: ["context pooling", "pooled context"]
+
+  - en: "virtual thread"
+    zh: "虚拟线程"
+    status: "approved"
+    context: "Python 章节/并发语境（B22 收录：pythonThreading.adoc）"
+    aliases: ["virtual threads"]
+
+  - en: "gauge"
+    zh: "仪表"
+    status: "approved"
+    context: "Micrometer/management 语境（B22 收录：pythonThreading.adoc，B27–B28 复现）"
+    aliases: ["gauges"]
+
 banned:
   - bad: "编译时间"
     prefer: "编译期"
