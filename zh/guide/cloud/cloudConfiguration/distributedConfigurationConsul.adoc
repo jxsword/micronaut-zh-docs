@@ -1,0 +1,126 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – HashiCorp Consul Support](https://docs.micronaut.io/5.2.x/core/#core-distributedConfigurationConsul)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/cloud/cloudConfiguration/distributedConfigurationConsul.adoc  upstream_commit: 8c82ee03540bc11bc707c777c7ff4aa00d5be9d7  upstream_hash: 44c9839aa48099783baff388e644e9502844ff3f  translated_at: 2026-11-21 -->
+
+https://www.consul.io[Consul] 是 HashiCorp 提供的流行服务发现与分布式配置服务器。Micronaut 框架提供了原生的 link:{micronautdiscoveryapi}/io/micronaut/discovery/consul/client/v1/ConsulClient.html[ConsulClient]，它利用了 Micronaut 对 <<clientAnnotation,声明式 HTTP 客户端>> 的支持。
+
+== 启动 Consul
+
+开始使用 Consul 最快捷的方式是通过 Docker：
+
+. 使用 Docker 启动 Consul
+[source,bash]
+----
+docker run -p 8500:8500 consul
+----
+
+或者，您也可以 https://developer.hashicorp.com/consul/docs/install[安装并运行本地 Consul 实例]。
+
+== 通过 Consul 启用分布式配置
+
+[TIP]
+.使用 CLI
+====
+如果您使用 Micronaut CLI 创建项目，请提供 `config-consul` feature，以在项目中启用 Consul 的分布式配置：
+----
+$ mn create-app my-app --features config-consul
+----
+====
+
+要启用分布式配置，请确保 <<bootstrap>> 已启用，并创建一个包含以下配置的 `src/main/resources/bootstrap.[yml/toml/properties]` 文件：
+
+[configuration]
+----
+micronaut:
+  application:
+    name: hello-world
+  config-client:
+    enabled: true
+consul:
+  client:
+    defaultZone: "${CONSUL_HOST:localhost}:${CONSUL_PORT:8500}"
+----
+
+启用分布式配置后，将要共享的配置存储到 Consul 的键/值存储中。有多种方法可以做到这一点。
+
+== 以键/值对形式存储配置
+
+一种方法是直接将键和值存储在 Consul 中。在这种情况下，Micronaut 框架默认会在 Consul 的 `/config` 目录中查找配置。
+
+TIP: 您可以通过设置 `consul.client.config.path` 来更改所搜索的路径
+
+在 `/config` 目录内，Micronaut 会按优先级顺序在以下目录中查找值：
+
+.配置解析优先级
+|===
+|目录|描述
+
+|`/config/application`
+|所有应用共享的配置
+
+|`/config/application,prod`
+|所有应用在 `prod` api:context.env.Environment[] 环境下共享的配置
+
+|`/config/[APPLICATION_NAME]`
+|应用专属配置，例如 `/config/hello-world`
+
+|`/config/[APPLICATION_NAME],prod`
+|处于活动状态的某个 api:context.env.Environment[] 环境的应用专属配置
+
+|===
+
+`APPLICATION_NAME` 的值就是您在 `bootstrap` 配置文件中为 `micronaut.application.name` 配置的值。
+
+要实际观察这一机制，可使用下面的 cURL 命令在目录 `/config/application` 中存储一个名为 `foo.bar`、值为 `myvalue` 的属性。
+
+.使用 cURL 写入一个值
+[source,bash]
+----
+curl -X PUT -d @- localhost:8500/v1/kv/config/application/foo.bar <<< myvalue
+----
+
+现在，如果您定义 `@Value("${foo.bar}")` 或调用 `environment.getProperty(..)`，值 `myvalue` 就会从 Consul 中解析得到。
+
+== 以 YAML、JSON 等格式存储配置
+
+一些 Consul 用户更愿意将配置存储为特定格式（例如 YAML）的数据块。Micronaut 框架支持这种方式，并支持以 YAML、JSON 或 Java properties 格式存储配置。
+
+TIP: api:discovery.config.ConfigDiscoveryConfiguration[] 提供了若干配置选项，用于配置分布式配置的发现方式。
+
+您可以设置 `consul.client.config.format` 选项来配置读取属性所用的格式。
+
+例如，要配置 JSON：
+
+[configuration]
+----
+consul:
+  client:
+    config:
+      format: JSON
+----
+
+然后将您的配置以 JSON 格式写入 Consul：
+
+.使用 cURL 写入 JSON
+[source,bash]
+----
+curl -X PUT  localhost:8500/v1/kv/config/application \
+-d @- << EOF
+{ "foo": {  "bar": "myvalue" } }
+EOF
+----
+
+== 以文件引用形式存储配置
+
+另一个流行的选择是 https://github.com/breser/git2consul[git2consul]，它将 Git 仓库的内容镜像到 Consul 的键/值存储。
+
+您可以建立一个包含 `application.yml`、`hello-world-test.json` 等文件的 Git 仓库，这些文件的内容将被克隆到 Consul。
+
+在这种情况下，Consul 中的每个键都代表一个带扩展名的文件（例如 `/config/application.yml`），并且您必须配置 `FILE` 格式：
+
+[configuration]
+----
+consul:
+  client:
+    config:
+      format: FILE
+----

@@ -303,138 +303,138 @@ files:
 - file: guide/cloud/clientSideLoadBalancing.adoc
   blob_sha: 647dbbc44a94dbd9597fa0e19f8720ff0247e7d2
   size: 1607
-  status: missing
+  status: current
   zh: zh/guide/cloud/clientSideLoadBalancing.adoc
   paragraphs: 8
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/cloud/cloudConfiguration.adoc
   blob_sha: b0a55921ff6b5c84fcecec5db17616aa6395a82a
   size: 5959
-  status: missing
+  status: current
   zh: zh/guide/cloud/cloudConfiguration.adoc
   paragraphs: 30
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 1db1fb2cca43ee8084305cb50c2bde86bb7443f2
 - file: guide/cloud/cloudConfiguration/distributedConfiguration.adoc
   blob_sha: f3cb1c98220a25eaeebf3d5e6df7633b8893db94
   size: 2169
-  status: missing
+  status: current
   zh: zh/guide/cloud/cloudConfiguration/distributedConfiguration.adoc
   paragraphs: 8
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 851c00bd0149f7103a5b7a164d1ce6f8d27f0ade
 - file: guide/cloud/cloudConfiguration/distributedConfigurationAwsParameterStore.adoc
   blob_sha: 98fb0ba737debb202b4946ac1de31401e157605d
   size: 2638
-  status: missing
+  status: current
   zh: zh/guide/cloud/cloudConfiguration/distributedConfigurationAwsParameterStore.adoc
   paragraphs: 14
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 51650efcb97939ef02bf726bdcb28266b7ca20d1
 - file: guide/cloud/cloudConfiguration/distributedConfigurationConsul.adoc
   blob_sha: 44c9839aa48099783baff388e644e9502844ff3f
   size: 4314
-  status: missing
+  status: current
   zh: zh/guide/cloud/cloudConfiguration/distributedConfigurationConsul.adoc
   paragraphs: 47
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 8c82ee03540bc11bc707c777c7ff4aa00d5be9d7
 - file: guide/cloud/cloudConfiguration/distributedConfigurationGoogleCloudSecretManager.adoc
   blob_sha: e5f31830f8a93af77ab8f534fc8059d9e77ef862
   size: 155
-  status: missing
+  status: current
   zh: zh/guide/cloud/cloudConfiguration/distributedConfigurationGoogleCloudSecretManager.adoc
   paragraphs: 1
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: c1f9c0e5689d99f81ad7d06ace65f82206db590d
 - file: guide/cloud/cloudConfiguration/distributedConfigurationKubernetes.adoc
   blob_sha: 2fa7058e9679bd00a9921d6d33a1117a8aa250bd
   size: 148
-  status: missing
+  status: current
   zh: zh/guide/cloud/cloudConfiguration/distributedConfigurationKubernetes.adoc
   paragraphs: 1
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 19afb561de3aff8b585f25d8fc110401a80bc93c
 - file: guide/cloud/cloudConfiguration/distributedConfigurationOracleCloudVault.adoc
   blob_sha: 328ed86829e8b39167aa622091b487f90d262e34
   size: 161
-  status: missing
+  status: current
   zh: zh/guide/cloud/cloudConfiguration/distributedConfigurationOracleCloudVault.adoc
   paragraphs: 1
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 19afb561de3aff8b585f25d8fc110401a80bc93c
 - file: guide/cloud/cloudConfiguration/distributedConfigurationSpringCloud.adoc
   blob_sha: 5c0c5785ffb52f8735996d82b3fc5c84542f6ced
   size: 1167
-  status: missing
+  status: current
   zh: zh/guide/cloud/cloudConfiguration/distributedConfigurationSpringCloud.adoc
   paragraphs: 8
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 8c82ee03540bc11bc707c777c7ff4aa00d5be9d7
 - file: guide/cloud/cloudConfiguration/distributedConfigurationVault.adoc
   blob_sha: 1e3af6c78cf2273931a9dcfac1ff52cbb255ff1f
   size: 1438
-  status: missing
+  status: current
   zh: zh/guide/cloud/cloudConfiguration/distributedConfigurationVault.adoc
   paragraphs: 10
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: ac5020fc8bdbc2bf07cb752928b92d6545dd76f6
 - file: guide/cloud/distributedTracing.adoc
   blob_sha: 6cdb0a8098ff91fd4413e48f90d3fd0cd56f04b1
   size: 189
-  status: missing
+  status: current
   zh: zh/guide/cloud/distributedTracing.adoc
   paragraphs: 1
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: f5a5ec642df98a6e16c2dc870b5e3cc273c4af2c
 - file: guide/cloud/serviceDiscovery.adoc
   blob_sha: 3506e2665ac0d627fb2e4f7c5c8014efb5a3ada0
   size: 349
-  status: missing
+  status: current
   zh: zh/guide/cloud/serviceDiscovery.adoc
   paragraphs: 2
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/cloud/serviceDiscovery/serviceDiscoveryConsul.adoc
   blob_sha: 65e54d751f6db5beac9239ce138648961fb4eca0
   size: 152
-  status: missing
+  status: current
   zh: zh/guide/cloud/serviceDiscovery/serviceDiscoveryConsul.adoc
   paragraphs: 1
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: ede1891bd681062e0992d54fd437b71a40782343
 - file: guide/cloud/serviceDiscovery/serviceDiscoveryEureka.adoc
   blob_sha: e3f819802eb6cf25a372eae0119be699ee17f653
   size: 152
-  status: missing
+  status: current
   zh: zh/guide/cloud/serviceDiscovery/serviceDiscoveryEureka.adoc
   paragraphs: 1
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: ede1891bd681062e0992d54fd437b71a40782343
 - file: guide/cloud/serviceDiscovery/serviceDiscoveryKubernetes.adoc
   blob_sha: be9159e029d5f28345da24434a3fe5b4819379eb
   size: 342
-  status: missing
+  status: current
   zh: zh/guide/cloud/serviceDiscovery/serviceDiscoveryKubernetes.adoc
   paragraphs: 2
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/cloud/serviceDiscovery/serviceDiscoveryManual.adoc
   blob_sha: f8217d2cdf8d487e9c48e32bbd49a93155b1cf7a
   size: 1798
-  status: missing
+  status: current
   zh: zh/guide/cloud/serviceDiscovery/serviceDiscoveryManual.adoc
   paragraphs: 14
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 51650efcb97939ef02bf726bdcb28266b7ca20d1
 - file: guide/cloud/serviceDiscovery/serviceDiscoveryRoute53.adoc
   blob_sha: 8bad7c10cd313d3ee57c385656576345a1da3820
   size: 6291
-  status: missing
+  status: current
   zh: zh/guide/cloud/serviceDiscovery/serviceDiscoveryRoute53.adoc
   paragraphs: 60
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/commandLineApps.adoc
   blob_sha: f88b4914ec588d407f343e90b0b0572aba32c4b6
@@ -3055,18 +3055,18 @@ files:
 - file: guide/serverlessFunctions.adoc
   blob_sha: c72bd65275aaa45fc6467b5ac9e735f7e14484b3
   size: 1567
-  status: missing
+  status: current
   zh: zh/guide/serverlessFunctions.adoc
   paragraphs: 7
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/serverlessFunctions/awsLambda.adoc
   blob_sha: c118e62b3f78483dee673c5b2fee87cec37ed48a
   size: 1415
-  status: missing
+  status: current
   zh: zh/guide/serverlessFunctions/awsLambda.adoc
   paragraphs: 21
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: bbfd2621eba567f97318b10e7bcbf0a6f8507bbd
 - file: guide/serverlessFunctions/azureFunction.adoc
   blob_sha: a7bd0d9ae45a98e7f7962b22e7a5cfb1dbca62c4
@@ -3079,18 +3079,18 @@ files:
 - file: guide/serverlessFunctions/gcpCloudRun.adoc
   blob_sha: 99b9bd967b0ccef7b283cbe11f4f4789f5685744
   size: 1275
-  status: missing
+  status: current
   zh: zh/guide/serverlessFunctions/gcpCloudRun.adoc
   paragraphs: 19
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 5280436c47bbcd1a143801fcf266db27b3d6d758
 - file: guide/serverlessFunctions/gcpFunction.adoc
   blob_sha: 61f78eee3a893eda671410bba368bcdaf89efcd9
   size: 1488
-  status: missing
+  status: current
   zh: zh/guide/serverlessFunctions/gcpFunction.adoc
   paragraphs: 21
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/toc-python.yml
   blob_sha: c5dc674a85c3f9c4beb9ef6125165a785a5cbb28

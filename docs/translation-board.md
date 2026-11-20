@@ -26,7 +26,7 @@
 | B17 | 15 | 3004 | 3008 | current |
 | B18 | 8 | 3379 | 3379 | current |
 | B19 | 14 | 3455 | 3491 | current |
-| B20 | 21 | 3456 | 3512 | pending |
+| B20 | 21 | 3456 | 3512 | current |
 | B21 | 35 | 2983 | 3078 | pending |
 | B22 | 5 | 3062 | 3057 | pending |
 | B23 | 6 | 3378 | 3353 | pending |
@@ -65,6 +65,7 @@
 - B17（2026-11-21 完成）：validate 全量 208 文件 PASSED + 15/15 --mark-current 核销 + squash commit；进度 208/388（53.6%）**过半**。锚点注入 5 处（httpClient 批间消解 ×3 + nettyHttpClient/jdkHttpClient 批间+批内闭环 + lowLevelHttpClient 批间消解 + clientStreaming 承接）；restore 译丢段门禁拦截 clientBasics 漏 callout（补齐）；clientPostRequests ⑦ ×1 修正。词数实测 2893/2870。⑤ 豁免警告 21 条（−6 消解 +3 新增，详见 reports/batch-B17.md）。冻结窗口遵守。**httpServer 章 101/101 全章译出**（第六个全章）；httpClient 章 9/26 起步。
 - B18（2026-11-21 完成）：validate 全量 216 文件 PASSED + 8/8 --mark-current 核销 + squash commit；进度 216/388（55.7%）。锚点注入 2 处（clientAnnotation/proxyClient，4 条豁免消解）；**reviewer 段落对齐第三次拦截真缺陷**（proxyClient 尾段与 clientAnnotation 首段跨文件错位，互相归位）；clientParameters 上游 `////` 注释块逐字节保留（启发式 3 条误报已文档化）；proxyClient ⑦ ×1 修正。词数实测 3303/3282。⑤ 豁免警告 22 条（−4 消解 +5 新增，详见 reports/batch-B18.md）。冻结窗口遵守。httpClient 组 17/26（65%）。
 - B19（2026-11-21 完成）：validate 全量 230 文件 PASSED + 14/14 --mark-current 核销 + squash commit；进度 230/388（59.3%）。锚点注入 3 处（clientFilter 批内闭环 + clientHttp3/contextPropagation 批间消解）+ 源内显式锚 certificates 保留（https ×2 消解）；restore 第 4 次拦截译丢段（clientFilter 漏 snippet 占位符）；nettyPooling ⑦ ×4、contextPropagation ⑦ ×2、certificates ③ classpath 修正。词数实测 3471/3424。⑤ 豁免警告 18 条（−4 消解，详见 reports/batch-B19.md）。冻结窗口遵守。**httpClient 章 26/26 全章译出（第七个全章）**；contextPropagation 组 2/2；cloud 章 1/17 起步。
+- B20（2026-11-21 完成）：validate 全量 251 文件 PASSED + 21/21 --mark-current 核销 + squash commit；进度 251/388（64.7%）。锚点注入 7 处（cloudConfiguration/distributedConfiguration/distributedConfigurationVault/serviceDiscovery/serviceDiscoveryManual/serverlessFunctions 批间消解 7 条豁免 + clientSideLoadBalancing 批内闭环）；validate 逐个 --file **首轮 21/21 全绿（B01 以来首次批次内零修正）**；restore 第 5 次拦截真缺陷（Route53 两占位符丢右花括号，修复后全过）。词数实测 3512/3456（与 M1 inventory 一致）；段落 277。⑤ 豁免警告 11 条（−7 消解 +0 新增，详见 reports/batch-B20.md）。冻结窗口遵守。**cloud 章 17/17 全章译出（第八个全章）**；serverlessFunctions 组 3/4。
 
 ## 硬性纪律（每批次必守）
 

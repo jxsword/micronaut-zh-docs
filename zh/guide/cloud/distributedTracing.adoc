@@ -1,0 +1,4 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Distributed Tracing](https://docs.micronaut.io/5.2.x/core/#core-distributedTracing)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/cloud/distributedTracing.adoc  upstream_commit: f5a5ec642df98a6e16c2dc870b5e3cc273c4af2c  upstream_hash: 6cdb0a8098ff91fd4413e48f90d3fd0cd56f04b1  translated_at: 2026-11-21 -->
+
+有关为您的应用添加分布式追踪（distributed tracing）的更多信息，请参阅 link:https://micronaut-projects.github.io/micronaut-tracing/latest/guide/[Micronaut Tracing] 文档。

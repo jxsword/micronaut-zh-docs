@@ -1,0 +1,40 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Google Cloud Function](https://docs.micronaut.io/5.2.x/core/#core-gcpFunction)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/serverlessFunctions/gcpFunction.adoc  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360  upstream_hash: 61f78eee3a893eda671410bba368bcdaf89efcd9  translated_at: 2026-11-21 -->
+
+对 Google Cloud Function 的支持在 https://micronaut-projects.github.io/micronaut-gcp/latest/guide/#cloudFunction[Micronaut GCP] 子项目中实现。
+
+==== 基于 Cloud Function 的简单函数
+
+您可以使用 Micronaut 框架编写直接实现 https://github.com/GoogleCloudPlatform/functions-framework-java[Cloud Function Framework API] 的 Cloud Function。更多信息请参阅 https://micronaut-projects.github.io/micronaut-gcp/latest/guide/#simpleFunctions[简单函数（Simple Functions）] 文档。
+
+[TIP]
+.使用 CLI
+====
+要创建 Google Cloud Function：
+----
+$ mn create-function-app my-app --features google-cloud-function
+----
+或使用 Micronaut Launch：
+----
+$ curl https://launch.micronaut.io/create/function/example\?features\=google-cloud-function -o example.zip
+$ unzip example.zip -d example
+----
+====
+
+==== 基于 Cloud Function 的 HTTP 函数
+
+您可以借助 Micronaut 对 HTTP Functions 的支持，部署使用 ann:http.annotation.Controller[] 等注解的常规 Micronaut 应用。更多信息请参阅 https://micronaut-projects.github.io/micronaut-gcp/latest/guide/#httpFunctions[Google Cloud HTTP Functions] 文档。
+
+[TIP]
+.使用 CLI
+====
+要创建 Google Cloud HTTP 函数：
+----
+$ mn create-app my-app --features google-cloud-function
+----
+或使用 Micronaut Launch：
+----
+$ curl https://launch.micronaut.io/example.zip\?features\=google-cloud-function -o example.zip
+$ unzip example.zip -d example
+----
+====

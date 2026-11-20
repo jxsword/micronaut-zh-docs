@@ -1,0 +1,47 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – HashiCorp Vault Support](https://docs.micronaut.io/5.2.x/core/#core-distributedConfigurationVault)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/cloud/cloudConfiguration/distributedConfigurationVault.adoc  upstream_commit: ac5020fc8bdbc2bf07cb752928b92d6545dd76f6  upstream_hash: 1e3af6c78cf2273931a9dcfac1ff52cbb255ff1f  translated_at: 2026-11-21 -->
+
+[[distributedConfigurationVault]]
+Micronaut 框架集成了 https://www.vaultproject.io/[HashiCorp Vault]，将其作为分布式配置来源。
+
+要启用分布式配置，请确保 <<bootstrap>> 已启用，并创建一个包含以下配置的 `src/main/resources/bootstrap.[yml/toml/properties]` 文件：
+
+.集成 HashiCorp Vault
+[configuration]
+----
+micronaut:
+  application:
+    name: hello-world
+  config-client:
+    enabled: true
+
+vault:
+  client:
+    uri: http://localhost:8200
+    config:
+      enabled: true
+----
+
+全部配置选项请参阅 https://micronaut-projects.github.io/micronaut-discovery-client/latest/guide/configurationreference.html#io.micronaut.discovery.vault.config.VaultClientConfiguration[配置参考]。
+
+Micronaut 框架使用所配置的 `micronaut.application.name` 从 Vault 中查找应用的属性源。
+
+.配置解析优先级
+|===
+|Secret 路径|描述
+
+|`/application`
+|所有应用共享的配置
+
+|`/[APPLICATION_NAME]`
+|应用专属配置
+
+|`/application/[ENV_NAME]`
+|所有应用在处于活动状态的环境名称下共享的配置
+
+|`/[APPLICATION_NAME]/[ENV_NAME]`
+|处于活动状态的某个环境名称的应用专属配置
+
+|===
+
+有关如何搭建服务器的更多信息，请参阅 https://developer.hashicorp.com/vault/api-docs/secret/kv[HashiCorp Vault 文档]。

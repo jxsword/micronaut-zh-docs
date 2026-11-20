@@ -1,0 +1,142 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Cloud Configuration](https://docs.micronaut.io/5.2.x/core/#core-cloudConfiguration)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/cloud/cloudConfiguration.adoc  upstream_commit: 1db1fb2cca43ee8084305cb50c2bde86bb7443f2  upstream_hash: b0a55921ff6b5c84fcecec5db17616aa6395a82a  translated_at: 2026-11-21 -->
+
+[[cloudConfiguration]]
+为云构建的应用通常需要适应在云环境中运行、以分布式方式读取和共享配置，并在必要时将配置外置到所在环境。
+
+Micronaut 的 <<environments,环境>>（Environment）概念可以配置为感知 Cloud 平台，并尽最大努力检测底层处于活动状态的 Cloud 环境。
+
+要启用该特性，您可以：
+
+1. 在启动 Micronaut 时，对 api:context.ApplicationContextBuilder[] 接口调用 `deduceCloudEnvironment(true)`。例如：
++
+.启用 Cloud 环境检测
+[source,java]
+----
+public static void main(String...args) {
+    Micronaut.build(args)
+             .deduceCloudEnvironment(true)
+             .start();
+}
+----
+
+2. 在您的配置中将 `micronaut.env.cloud-deduction` 属性设置为 `true`。
+3. 提供取值为 `true` 的环境变量 `MICRONAUT_ENV_CLOUD_DEDUCTION`。
+
+随后您就可以使用 api:context.annotation.Requires[] 注解来 <<conditionalBeans,按条件加载 bean 定义>>。
+
+下表汇总了 api:context.env.Environment[] 接口中的常量，并给出了示例：
+
+.Micronaut 环境检测
+|===
+|常量|描述 |Requires 示例 |环境名称
+
+|api:context.env.Environment#ANDROID[]
+|应用正作为 Android 应用运行
+|`@Requires(env = Environment.ANDROID)`
+|`android`
+
+|api:context.env.Environment#TEST[]
+|应用正运行于 JUnit 或 Spock 测试中
+|`@Requires(env = Environment.TEST)`
+|`test`
+
+|api:context.env.Environment#CLOUD[]
+|应用正运行在云环境中（对所有其他云平台类型均存在）
+|`@Requires(env = Environment.CLOUD)`
+|`cloud`
+
+|api:context.env.Environment#AMAZON_EC2[]
+|运行在 https://aws.amazon.com/ec2[Amazon EC2] 上
+|`@Requires(env = Environment.AMAZON_EC2)`
+|`ec2`
+
+|api:context.env.Environment#GOOGLE_COMPUTE[]
+|运行在 https://cloud.google.com/compute/[Google Compute] 上
+|`@Requires(env = Environment.GOOGLE_COMPUTE)`
+|`gcp`
+
+|api:context.env.Environment#KUBERNETES[]
+|运行在 https://www.kubernetes.io[Kubernetes] 上
+|`@Requires(env = Environment.KUBERNETES)`
+|`k8s`
+
+|api:context.env.Environment#HEROKU[]
+|运行在 https://heroku.com[Heroku] 上
+|`@Requires(env = Environment.HEROKU)`
+|`heroku`
+
+|api:context.env.Environment#CLOUD_FOUNDRY[]
+|运行在 https://www.cloudfoundry.org[Cloud Foundry] 上
+|`@Requires(env = Environment.CLOUD_FOUNDRY)`
+|`pcf`
+
+|api:context.env.Environment#AZURE[]
+|运行在 https://azure.microsoft.com[Microsoft Azure] 上
+|`@Requires(env = Environment.AZURE)`
+|`azure`
+
+|api:context.env.Environment#IBM[]
+|运行在 https://www.ibm.com/cloud/[IBM Cloud] 上
+|`@Requires(env = Environment.IBM)`
+|`ibm`
+
+|api:context.env.Environment#DIGITAL_OCEAN[]
+|运行在 https://www.digitalocean.com/[Digital Ocean] 上
+|`@Requires(env = Environment.DIGITAL_OCEAN)`
+|`digitalocean`
+
+|api:context.env.Environment#ORACLE_CLOUD[]
+|运行在 https://cloud.oracle.com/[Oracle Cloud] 上
+|`@Requires(env = Environment.ORACLE_CLOUD)`
+|`oraclecloud`
+
+|===
+
+请注意，您可以同时激活多个环境，例如运行在 AWS 上的 Kubernetes 中时。
+
+此外，利用上表中所定义常量的值，您可以创建特定于环境的配置文件。例如，若您创建了 `src/main/resources/application-gcp.yml` 文件，则只有运行在 Google Compute 上时才会加载它。
+
+TIP: api:context.env.Environment[] 中的任何配置属性也都可以通过环境变量来设置。例如，设置环境变量 `CONSUL_CLIENT_HOST` 会覆盖 link:{micronautdiscoveryapi}/io/micronaut/discovery/consul/ConsulConfiguration.html[ConsulConfiguration] 中的 `host` 属性。
+
+== 使用 Cloud 实例元数据
+
+当 Micronaut 框架检测到自身运行于受支持的云平台上时，会在启动时填充 api:discovery.cloud.ComputeInstanceMetadata[] 接口。
+
+TIP: 自 Micronaut 框架 2.1.x 起，该逻辑依赖于 Oracle Cloud、AWS 或 GCP 相应核心 Cloud 模块的存在。
+
+所有这些数据都会合并到运行中的 api:discovery.ServiceInstance[] 的 `metadata` 属性里。
+
+要访问您应用实例的元数据，可以使用 api:discovery.EmbeddedServerInstance[] 接口并调用 `getMetadata()`，它会返回包含元数据的 Map。
+
+如果您通过客户端远程连接，那么在从 api:http.client.LoadBalancer[] 或 api:discovery.DiscoveryClient[] API 获取 api:io.micronaut.discovery.ServiceInstance[] 之后，即可引用实例元数据。
+
+NOTE: Netflix Ribbon 客户端负载均衡器可以配置为使用这些元数据执行感知可用区（zone-aware）的客户端负载均衡。参见 <<clientSideLoadBalancing,客户端负载均衡>>
+
+要通过 <<serviceDiscovery,服务发现>> 获取服务的元数据，请使用 api:http.client.LoadBalancerResolver[] 接口解析出 api:http.client.LoadBalancer[]，并按标识符获取对服务的引用：
+
+.获取服务实例的元数据
+[source,java]
+----
+LoadBalancer loadBalancer = loadBalancerResolver.resolve("some-service");
+Flux.from(
+    loadBalancer.select()
+).subscribe((instance) ->
+    ConvertibleValues<String> metaData = instance.getMetadata();
+    ...
+);
+----
+
+可以通过监听 api:discovery.event.ServiceReadyEvent[] 的事件监听器获得 api:discovery.EmbeddedServerInstance[]。借助 ann:runtime.event.annotation.EventListener[] 注解，您可以在 bean 中轻松监听该事件。
+
+要获取本地运行服务器的元数据，请为 api:discovery.event.ServiceReadyEvent[] 使用 <<events,事件监听器>>：
+
+.获取本地服务器的元数据
+[source,java]
+----
+@EventListener
+void onServiceStarted(ServiceReadyEvent event) {
+    ServiceInstance serviceInstance = event.getSource();
+    ConvertibleValues<String> metadata = serviceInstance.getMetadata();
+}
+----

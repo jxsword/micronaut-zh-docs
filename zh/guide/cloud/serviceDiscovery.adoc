@@ -1,0 +1,8 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Service Discovery](https://docs.micronaut.io/5.2.x/core/#core-serviceDiscovery)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/cloud/serviceDiscovery.adoc  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360  upstream_hash: 3506e2665ac0d627fb2e4f7c5c8014efb5a3ada0  translated_at: 2026-11-21 -->
+
+[[serviceDiscovery]]
+服务发现（Service Discovery）让微服务无需知道相关服务的物理位置或 IP 地址即可相互找到。
+
+Micronaut 框架与多种工具和库集成。更多详情请参阅
+https://micronaut-projects.github.io/micronaut-discovery-client/latest/guide/[Micronaut 服务发现文档]。

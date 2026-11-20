@@ -1,0 +1,162 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – AWS Route 53 Support](https://docs.micronaut.io/5.2.x/core/#core-serviceDiscoveryRoute53)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/cloud/serviceDiscovery/serviceDiscoveryRoute53.adoc  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360  upstream_hash: 8bad7c10cd313d3ee57c385656576345a1da3820  translated_at: 2026-11-21 -->
+
+要使用 https://aws.amazon.com/route53/[Route 53 服务发现]，您必须满足以下条件：
+
+* 运行某种类型的 EC2 实例
+* 在 Route 53 中托管一个域名
+* 拥有较新版本的 AWS-CLI（例如 14 及以上）
+
+假定您已具备上述条件，就可以开始了。它不如 Consul 或 Eureka 那样花哨，但除了使用 AWS-CLI 进行一些初始设置之外，没有其他会出错的软件在运行。如果您为服务添加了自定义健康检查，甚至还可以支持健康检查。要测试您的账户能否创建并使用服务发现，请参阅集成测试一节。更多信息见 https://docs.aws.amazon.com/Route53/latest/APIReference/overview-service-discovery.html.
+
+具体步骤如下：
+
+1. 使用 AWS-CLI 创建一个命名空间。您可以根据所使用的 IP 或子网创建公共或私有命名空间
+2. 使用 AWS-CLI 命令创建一个带有 DNS 记录的服务
+3. 添加健康检查或自定义健康检查（可选）
+4. 按如下方式将服务 ID 添加到您的应用配置文件中：
+
+.应用配置示例
+[configuration]
+----
+aws:
+  route53:
+    registration:
+        enabled: true
+        aws-service-id: srv-978fs98fsdf
+        namespace: micronaut.io
+micronaut:
+  application:
+    name: something
+----
+
+5. 确保您的构建文件中包含以下依赖：
+
+dependency:io.micronaut.aws:micronaut-aws-route53[]
+
+6. 在客户端一侧，您需要相同的依赖和更少的配置选项：
+
+[configuration]
+----
+aws:
+  route53:
+    discovery:
+      client:
+        enabled: true
+        aws-service-id: srv-978fs98fsdf
+        namespace-id: micronaut.io
+----
+
+随后您就可以使用 api:discovery.DiscoveryClient[] API 查找通过 Route 53 注册的其他服务。例如：
+
+.客户端示例代码
+[source,java]
+----
+DiscoveryClient discoveryClient = embeddedServer.getApplicationContext().getBean(DiscoveryClient.class);
+List<String> serviceIds = Flux.from(discoveryClient.getServiceIds()).blockFirst();
+List<ServiceInstance> instances = Flux.from(discoveryClient.getInstances(serviceIds.get(0))).blockFirst();
+----
+
+==== 创建命名空间
+
+命名空间类似于常规的 Route53 托管区域，并且会出现在 Route53 控制台中，但控制台不支持修改它们。目前，任何服务发现功能都必须使用 AWS-CLI。
+
+首先决定要创建面向公共的命名空间还是私有命名空间，因为两者使用的命令不同：
+
+.创建命名空间
+[source,bash]
+----
+$ aws servicediscovery create-public-dns-namespace --name micronaut.io --create-request-id create-1522767790 --description adescriptionhere
+
+or
+
+$ aws servicediscovery create-private-dns-namespace --name micronaut.internal.io --create-request-id create-1522767790 --description adescriptionhere --vpc yourvpcID
+----
+
+运行该命令后您会得到一个操作 ID。您可以使用 `get-operation` CLI 命令检查其状态：
+
+.获取操作结果
+[source,bash]
+----
+$ aws servicediscovery get-operation --operation-id asdffasdfsda
+----
+
+您可以使用该命令获取任何返回了操作 ID 的调用的状态。
+
+该命令的结果会告诉您命名空间的 ID。请把它记下来，后续步骤会用到它。如果出现错误，结果会说明错误是什么。
+
+==== 创建服务与 DNS 记录
+
+下一步是创建服务与 DNS 记录。
+
+.创建服务
+[source,bash]
+----
+$ aws create-service --name yourservicename --create-request-id somenumber --description someservicedescription --dns-config NamespaceId=yournamespaceid,RoutingPolicy=WEIGHTED,DnsRecords=[{Type=A,TTL=1000},{Type=A,TTL=1000}]
+----
+
+`DnsRecord` 类型可以是 `A`(ipv4)、`AAAA`(ipv6)、`SRV` 或 `CNAME`。`RoutingPolicy` 可以是 `WEIGHTED` 或 `MULTIVALUE`。请记住，`CNAME` 必须使用加权（weighted）路由类型，`SRV` 必须配置有效端口。
+
+要添加健康检查，请在 CLI 上使用以下语法：
+
+.指定健康检查
+[source,bash]
+----
+Type=string,ResourcePath=string,FailureThreshold=integer
+----
+
+类型可以是 'HTTP'、'HTTPS' 或 'TCP'。标准健康检查只能用于公共命名空间；私有命名空间请参阅自定义健康检查。资源路径应是一个在健康时返回 `200 OK` 的 URL。
+
+对于自定义健康检查，您只需指定 `--health-check-custom-config FailureThreshold=integer`，它同样适用于私有命名空间。
+
+这样做还有一个好处：Micronaut 框架会发送心跳（pulsation）命令，让 AWS 知道实例仍然健康。
+
+如需更多帮助，请运行 'aws discoveryservice create-service help'。
+
+如果成功，该命令会返回一个服务 ID 和一个 ARN。请把它们记下来，它们将写入 Micronaut 配置中。
+
+==== 在 Micronaut 中完成配置设置
+
+==== Auto Naming 注册
+
+添加配置，让您的应用向 Route 53 Auto-discovery 注册：
+
+.注册属性
+[configuration]
+----
+aws:
+  route53:
+    registration:
+      enabled: true
+      aws-service-id: <enter the service id you got after creation on aws cli>
+    discovery:
+      namespace-id: <enter the namespace id you got after creating the namespace>
+----
+
+==== 发现客户端配置
+
+.发现属性
+[configuration]
+----
+aws:
+  route53:
+    discovery:
+      client:
+        enabled: true
+        aws-service-id: <enter the service id you got after creation on aws cli>
+----
+
+您还可以通过获取 bean "Route53AutoNamingClient" 来调用以下方法：
+
+.发现方法
+[source,java]
+----
+// if serviceId is null it will use property "aws.route53.discovery.client.awsServiceId"
+Publisher<List<ServiceInstance>> getInstances(String serviceId)
+// reads property "aws.route53.discovery.namespaceId"
+Publisher<List<String>> getServiceIds()
+----
+
+==== 集成测试
+
+如果您设置了环境变量 AWS_SUBNET_ID，并且主目录中（位于 `~/.aws/credentials`）配置了有效凭证，就可以运行集成测试。您还需要一个托管在 Route53 上的域名。该测试会创建一个 t2.nano 实例、一个命名空间和一个服务，并将该实例注册到服务发现。测试完成后，它会删除/终止其启动的所有资源。

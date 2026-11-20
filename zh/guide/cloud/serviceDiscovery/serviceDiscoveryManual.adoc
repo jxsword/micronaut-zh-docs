@@ -1,0 +1,45 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Manual Service Discovery Configuration](https://docs.micronaut.io/5.2.x/core/#core-serviceDiscoveryManual)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/cloud/serviceDiscovery/serviceDiscoveryManual.adoc  upstream_commit: 51650efcb97939ef02bf726bdcb28266b7ca20d1  upstream_hash: f8217d2cdf8d487e9c48e32bbd49a93155b1cf7a  translated_at: 2026-11-21 -->
+
+[[serviceDiscoveryManual]]
+如果您不想引入 Consul 这样的服务发现服务器，或者您所交互的第三方服务无法注册到 Consul，则可以改为手动配置通过服务发现可用的服务。
+
+为此，请使用 `micronaut.http.services` 设置。例如：
+
+.手动配置服务
+[configuration]
+----
+micronaut:
+  http:
+    services:
+      foo:
+        urls:
+          - http://foo1
+          - http://foo2
+----
+
+随后您可以通过 `@Client("foo")` 注入一个客户端，它将使用上述配置在两台已配置的服务器之间进行负载均衡。
+
+IMPORTANT: 在将 `@Client` 与服务发现一起使用时，必须在注解中以 kebab case（短横线分隔的小写形式）指定服务 ID；而上例中的配置则可以使用驼峰式（camel case）。
+
+TIP: 您可以通过指定诸如 `MICRONAUT_HTTP_SERVICES_FOO_URLS=http://prod1,http://prod2` 之类的环境变量，在生产环境中覆盖此配置
+
+请注意，默认情况下不会进行健康检查来确认所引用的服务是否可用。您可以通过启用健康检查并（可选地）指定健康检查路径（默认值为 `/health`）来改变这一点：
+
+.启用健康检查
+[configuration]
+----
+micronaut:
+  http:
+    services:
+      foo:
+        health-check: true
+        health-check-interval: 15s
+        health-check-uri: /health
+----
+
+- `health-check` 表示是否对该服务进行健康检查
+- `health-check-interval` 是检查之间的间隔
+- `health-check-uri` 指定健康检查请求的端点 URI
+
+Micronaut 框架会启动一个后台线程来检查服务的健康状态；如果任何已配置的服务以错误码响应，它们就会被从可用服务列表中移除。

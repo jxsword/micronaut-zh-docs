@@ -1,0 +1,4 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Kubernetes Support](https://docs.micronaut.io/5.2.x/core/#core-distributedConfigurationKubernetes)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/cloud/cloudConfiguration/distributedConfigurationKubernetes.adoc  upstream_commit: 19afb561de3aff8b585f25d8fc110401a80bc93c  upstream_hash: 2fa7058e9679bd00a9921d6d33a1117a8aa250bd  translated_at: 2026-11-21 -->
+
+请参阅 link:https://micronaut-projects.github.io/micronaut-kubernetes/latest/guide/#config-client[Kubernetes 配置客户端^] 文档。

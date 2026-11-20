@@ -1,0 +1,40 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – AWS Lambda](https://docs.micronaut.io/5.2.x/core/#core-awsLambda)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/serverlessFunctions/awsLambda.adoc  upstream_commit: bbfd2621eba567f97318b10e7bcbf0a6f8507bbd  upstream_hash: c118e62b3f78483dee673c5b2fee87cec37ed48a  translated_at: 2026-11-21 -->
+
+对 AWS Lambda 的支持在 https://micronaut-projects.github.io/micronaut-aws/latest/guide/#whatsNew[Micronaut AWS] 子项目中实现。
+
+==== 基于 AWS Lambda 的简单函数
+
+您可以使用 Micronaut 框架编写直接实现 AWS Lambda SDK API 的 AWS 请求处理器（Request Handler）。更多信息请参阅 https://micronaut-projects.github.io/micronaut-aws/latest/guide/#requestHandlers[Micronaut Request Handlers] 文档。
+
+[TIP]
+.使用 CLI
+====
+要创建 AWS Lambda 函数：
+----
+$ mn create-function-app my-app --features aws-lambda
+----
+或使用 Micronaut Launch：
+----
+$ curl https://launch.micronaut.io/create/function/example\?features\=aws-lambda -o example.zip
+$ unzip example.zip -d example
+----
+====
+
+==== 基于 AWS Lambda 的 HTTP 函数
+
+您可以借助 Micronaut 对 AWS API Gateway 的支持，部署使用 ann:http.annotation.Controller[] 等注解的常规 Micronaut 应用。更多信息请参阅 https://micronaut-projects.github.io/micronaut-aws/latest/guide/#applicationtyperuntimedependencies[AWS 应用类型、Lambda 运行时与依赖] 文档。
+
+[TIP]
+.使用 CLI
+====
+要创建 AWS API Gateway Proxy 应用：
+----
+$ mn create-app my-app --features aws-lambda
+----
+或使用 Micronaut Launch：
+----
+$ curl https://launch.micronaut.io/example.zip\?features\=aws-lambda -o example.zip
+$ unzip example.zip -d example
+----
+====

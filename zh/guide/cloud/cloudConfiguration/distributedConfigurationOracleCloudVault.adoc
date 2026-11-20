@@ -1,0 +1,4 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Oracle Cloud Vault Support](https://docs.micronaut.io/5.2.x/core/#core-distributedConfigurationOracleCloudVault)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/cloud/cloudConfiguration/distributedConfigurationOracleCloudVault.adoc  upstream_commit: 19afb561de3aff8b585f25d8fc110401a80bc93c  upstream_hash: 328ed86829e8b39167aa622091b487f90d262e34  translated_at: 2026-11-21 -->
+
+请参阅 https://micronaut-projects.github.io/micronaut-oracle-cloud/latest/guide/#vault[基于 Oracle Cloud Vault 的安全分布式配置] 文档。

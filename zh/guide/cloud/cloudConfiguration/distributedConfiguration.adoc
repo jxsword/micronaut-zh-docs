@@ -1,0 +1,19 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Distributed Configuration](https://docs.micronaut.io/5.2.x/core/#core-distributedConfiguration)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/cloud/cloudConfiguration/distributedConfiguration.adoc  upstream_commit: 851c00bd0149f7103a5b7a164d1ce6f8d27f0ade  upstream_hash: f3cb1c98220a25eaeebf3d5e6df7633b8893db94  translated_at: 2026-11-21 -->
+
+[[distributedConfiguration]]
+如您所见，Micronaut 框架提供了一套健壮的系统，用于将配置外置并适配到所在环境，其设计灵感来自 Grails 与 Spring Boot 中的相应方案。
+
+但是，如果您想让多个微服务共享配置该怎么办？Micronaut 框架内置了用于分布式配置的 API。
+
+对于新应用和新集成，推荐的方式是通过 `micronaut.config.import` 使用 <<configImport,配置导入>>，而不是依赖 bootstrap 上下文。配置导入允许您在正常的属性源解析过程中加载远程或共享配置；自定义远程来源可以通过 <<customPropertySourceImporter,PropertySourceImporter>> 实现来集成。
+
+api:discovery.config.ConfigurationClient[] 接口提供了一个 `getPropertySources` 方法，实现该方法即可从分布式来源读取并解析配置。
+
+`getPropertySources` 返回一个 rs:Publisher[]，它会发出零个或多个 api:context.env.PropertySource[] 实例。
+
+默认实现是 api:discovery.config.DefaultCompositeConfigurationClient[]，它将所有已注册的 `ConfigurationClient` bean 合并为单个 bean。
+
+您既可以实现自己的 api:discovery.config.ConfigurationClient[]，也可以使用 Micronaut 提供的实现。对于新的开发工作，建议通过配置导入支持与 `PropertySourceImporter` 来实现分布式配置。以下小节介绍可用的集成方式。
+
+NOTE: bootstrap 上下文仍然可用于遗留集成与兼容性场景，但它不再是分布式配置的推荐默认方式。如果您仍在 bootstrap 期间加载分布式配置，仅实现 api:discovery.config.ConfigurationClient[] 是不够的：应用还需要发现客户端基础设施（通常来自 `io.micronaut.discovery:micronaut-discovery-client` 依赖），并且任何参与解析该配置的 bean 都仍必须与 bootstrap 兼容。相关遗留要求请参阅 <<bootstrap,bootstrap 配置>>。

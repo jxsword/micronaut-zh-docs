@@ -1,0 +1,6 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Kubernetes Support](https://docs.micronaut.io/5.2.x/core/#core-serviceDiscoveryKubernetes)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/cloud/serviceDiscovery/serviceDiscoveryKubernetes.adoc  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360  upstream_hash: be9159e029d5f28345da24434a3fe5b4819379eb  translated_at: 2026-11-21 -->
+
+Kubernetes 是一个容器运行时（container runtime），具备诸多特性，其中包括集成的服务发现与分布式配置。
+
+Micronaut 框架包含与 Kubernetes 的一流集成。更多详情请参阅 https://micronaut-projects.github.io/micronaut-kubernetes/latest/guide/index.html[Micronaut Kubernetes 文档]。

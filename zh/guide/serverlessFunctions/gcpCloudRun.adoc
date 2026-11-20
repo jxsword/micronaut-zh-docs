@@ -1,0 +1,49 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Google Cloud Run](https://docs.micronaut.io/5.2.x/core/#core-gcpCloudRun)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/serverlessFunctions/gcpCloudRun.adoc  upstream_commit: 5280436c47bbcd1a143801fcf266db27b3d6d758  upstream_hash: 99b9bd967b0ccef7b283cbe11f4f4789f5685744  translated_at: 2026-11-21 -->
+
+要部署到 https://cloud.google.com/run[Google Cloud Run]，我们建议使用 https://github.com/GoogleContainerTools/jib[JIB] 将您的应用容器化。
+
+[TIP]
+.使用 CLI
+====
+使用 JIB 创建应用：
+----
+$ mn create-app my-app --features jib
+----
+或使用 Micronaut Launch：
+----
+$ curl https://launch.micronaut.io/example.zip\?features\=jib -o example.zip
+$ unzip example.zip -d example
+----
+====
+
+配置好 JIB 以将您的应用部署到 Google Container Registry 后，运行：
+
+[source, bash]
+----
+$ ./gradlew jib
+----
+
+现在您就可以部署自己的应用了：
+
+[source, bash]
+----
+$ gcloud run deploy --image gcr.io/[PROJECT ID]/example --platform=managed --allow-unauthenticated
+----
+
+其中 `[PROJECT ID]` 是您的项目 ID。系统会要求您指定一个区域，然后您将看到类似如下的输出：
+
+[source]
+----
+Service name: (example):
+Deploying container to Cloud Run service [example] in project [PROJECT_ID] region [us-central1]
+
+✓ Deploying... Done.
+  ✓ Creating Revision...
+  ✓ Routing traffic...
+  ✓ Setting IAM Policy...
+Done.
+Service [example] revision [example-00004] has been deployed and is serving 100 percent of traffic at https://example-9487r97234-uc.a.run.app
+----
+
+该 URL 就是您的 Cloud Run 应用的 URL。

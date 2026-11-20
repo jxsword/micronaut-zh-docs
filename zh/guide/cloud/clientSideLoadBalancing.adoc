@@ -1,0 +1,19 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Client Side Load Balancing](https://docs.micronaut.io/5.2.x/core/#core-clientSideLoadBalancing)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/cloud/clientSideLoadBalancing.adoc  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360  upstream_hash: 647dbbc44a94dbd9597fa0e19f8720ff0247e7d2  translated_at: 2026-11-21 -->
+
+[[clientSideLoadBalancing]]
+当从 Consul、Eureka 或其他服务发现服务器 <<serviceDiscovery,发现服务>> 时，api:discovery.DiscoveryClient[] 会发出可用 api:discovery.ServiceInstance[] 的列表。
+
+Micronaut 框架默认会使用此列表中的服务器自动执行轮询（Round Robin）客户端负载均衡。这与 <<retry,重试通知>>（Retry Advice）相结合，为您的微服务基础设施增加了额外的弹性。
+
+负载均衡由 api:http.client.LoadBalancer[] 接口处理，该接口有一个 api:http.client.LoadBalancer.select()[] 方法，返回一个会发出 api:discovery.ServiceInstance[] 的 `Publisher`。
+
+之所以返回 rs:Publisher[]，是因为选择 api:discovery.ServiceInstance[] 的过程可能引发网络操作，这取决于所采用的 <<serviceDiscovery,服务发现>> 策略。
+
+api:http.client.LoadBalancer[] 接口的默认实现是 api:http.client.loadbalance.DiscoveryClientRoundRobinLoadBalancer[]。您可以用另一个实现来替换该策略，以自定义 Micronaut 中客户端负载均衡的处理方式，因为优化负载均衡的方法有很多种。
+
+例如，您可能希望在某特定可用区（zone）内的服务之间进行负载均衡，或者在整体响应时间最佳的服务器之间进行负载均衡。
+
+要替换 api:http.client.LoadBalancer[]，请定义一个 <<replaces,替换>> api:http.client.loadbalance.DiscoveryClientLoadBalancerFactory[] 的 bean。
+
+实际上，这正是下一节将要介绍的 Netflix Ribbon 支持所做的事情。

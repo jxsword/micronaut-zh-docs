@@ -1,0 +1,4 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Consul Support](https://docs.micronaut.io/5.2.x/core/#core-serviceDiscoveryConsul)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/cloud/serviceDiscovery/serviceDiscoveryConsul.adoc  upstream_commit: ede1891bd681062e0992d54fd437b71a40782343  upstream_hash: 65e54d751f6db5beac9239ce138648961fb4eca0  translated_at: 2026-11-21 -->
+
+请参阅 https://micronaut-projects.github.io/micronaut-discovery-client/latest/guide/index.html#serviceDiscoveryConsul[Micronaut Consul 文档]。

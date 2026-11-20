@@ -1,0 +1,4 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Eureka Support](https://docs.micronaut.io/5.2.x/core/#core-serviceDiscoveryEureka)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/cloud/serviceDiscovery/serviceDiscoveryEureka.adoc  upstream_commit: ede1891bd681062e0992d54fd437b71a40782343  upstream_hash: e3f819802eb6cf25a372eae0119be699ee17f653  translated_at: 2026-11-21 -->
+
+请参阅 https://micronaut-projects.github.io/micronaut-discovery-client/latest/guide/index.html#serviceDiscoveryEureka[Micronaut Eureka 文档]。

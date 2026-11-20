@@ -1,0 +1,30 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Spring Cloud Config Support](https://docs.micronaut.io/5.2.x/core/#core-distributedConfigurationSpringCloud)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/cloud/cloudConfiguration/distributedConfigurationSpringCloud.adoc  upstream_commit: 8c82ee03540bc11bc707c777c7ff4aa00d5be9d7  upstream_hash: 5c0c5785ffb52f8735996d82b3fc5c84542f6ced  translated_at: 2026-11-21 -->
+
+自 1.1 起，Micronaut 框架为尚未切换到 Consul 等更完整专用方案的用户提供了原生 https://spring.io/projects/spring-cloud-config/[Spring Cloud Configuration] 支持。
+
+要启用分布式配置，请确保 <<bootstrap>> 已启用，并创建一个包含以下配置的 `src/main/resources/bootstrap.[yml/toml/properties]` 文件：
+
+.集成 Spring Cloud Configuration
+[configuration]
+----
+micronaut:
+  application:
+    name: hello-world
+  config-client:
+    enabled: true
+spring:
+  cloud:
+    config:
+      enabled: true
+      uri: http://localhost:8888/
+      retry-attempts: 4
+      retry-delay: 2s
+----
+
+- `retry-attempts` 为可选，指定重试次数
+- `retry-delay` 为可选，指定重试之间的延迟
+
+Micronaut 框架使用所配置的 `micronaut.application.name`，从通过 `spring.cloud.config.uri` 配置的 Spring Cloud 配置服务器查找应用的属性源。
+
+有关如何搭建服务器的更多信息，请参阅 https://spring.io/projects/spring-cloud-config/[Spring Cloud Config Server 文档]。

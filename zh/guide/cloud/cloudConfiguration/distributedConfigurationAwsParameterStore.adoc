@@ -1,0 +1,54 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – AWS Parameter Store Support](https://docs.micronaut.io/5.2.x/core/#core-distributedConfigurationAwsParameterStore)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/cloud/cloudConfiguration/distributedConfigurationAwsParameterStore.adoc  upstream_commit: 51650efcb97939ef02bf726bdcb28266b7ca20d1  upstream_hash: 98fb0ba737debb202b4946ac1de31401e157605d  translated_at: 2026-11-21 -->
+
+Micronaut 框架支持通过 AWS System Manager Parameter Store 共享配置。您需要配置以下依赖：
+
+dependency:io.micronaut.aws:micronaut-aws-parameter-store[]
+
+要启用分布式配置，请确保 <<bootstrap>> 已启用，并创建一个包含以下配置的 `src/main/resources/bootstrap.yml` 文件：
+
+[configuration]
+----
+micronaut:
+  application:
+    name: hello-world
+  config-client:
+    enabled: true
+aws:
+  client:
+    system-manager:
+      parameterstore:
+        enabled: true
+----
+
+全部配置选项请参阅 https://micronaut-projects.github.io/micronaut-aws/latest/guide/configurationreference.html#io.micronaut.discovery.aws.parameterstore.AWSParameterStoreConfiguration[配置参考]。
+
+您可以在 AWS 控制台 -> System Manager -> Parameter Store 中配置共享属性。
+
+Micronaut 框架使用层次结构来读取配置值，并支持 `String`、`StringList` 和 `SecureString` 类型。
+
+您还可以通过在下划线 `_` 之后附加环境名称来创建特定于环境的配置。例如，如果 `micronaut.application.name` 被设置为 `helloworld`，则在 `helloworld_test` 下指定的配置值将仅应用于 `test` 环境。
+
+.配置解析优先级
+|===
+|目录|描述
+
+|`/config/application`
+|所有应用共享的配置
+
+|`/config/[APPLICATION_NAME]`
+|应用专属配置，例如 `/config/hello-world`
+
+|`/config/application_prod`
+|所有应用在 `prod` api:context.env.Environment[] 环境下共享的配置
+
+|`/config/[APPLICATION_NAME]_prod`
+|处于活动状态的某个 api:context.env.Environment[] 环境的应用专属配置
+
+|===
+
+例如，如果在 AWS Parameter Store 中配置了配置名 `/config/application_test/server.url`，那么任何连接到该参数存储的应用都可以使用 `server.url` 检索该值。如果应用将 `micronaut.application.name` 配置为 `myapp`，则名为 `/config/myapp_test/server.url` 的值将仅覆盖该应用的这一值。
+
+树的每一层都可以由 key=value 对组成。对于多个键/值对，请将类型设置为 `StringList`。
+
+对于密钥或密码等特殊敏感信息，请使用 `SecureString` 类型。在添加和检索值时会自动调用 KMS，并使用您账户的默认密钥库（key store）对值进行解密。如果您将配置设置为不使用安全字符串（secure string），返回的值将是加密的，您必须手动解密它们。
