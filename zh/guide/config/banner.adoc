@@ -1,0 +1,34 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Micronaut Banner](https://docs.micronaut.io/5.2.x/core/#core-banner)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/config/banner.adoc  upstream_commit: 8b0864ad8f103900d8cd522704223d93d49edf43  upstream_hash: e9f11f8fb12538b0994d74a00bdf5422c2fc109b  translated_at: 2026-11-21 -->
+
+自 Micronaut framework 2.3 起，应用启动时会显示一个 banner（横幅）。banner 默认启用，并会同时显示 Micronaut 版本。
+
+[source,shell,subs="attributes"]
+----
+$ ./gradlew run
+ __  __ _                                  _
+|  \/  (_) ___ _ __ ___  _ __   __ _ _   _| |_
+| |\/| | |/ __| '__/ _ \| '_ \ / _` | | | | __|
+| |  | | | (__| | | (_) | | | | (_| | |_| | |_
+|_|  |_|_|\___|_|  \___/|_| |_|\__,_|\__,_|\__|
+  Micronaut ({version})
+
+17:07:22.997 [main] INFO  io.micronaut.runtime.Micronaut - Startup completed in 611ms. Server Running: http://localhost:8080
+----
+
+要使用您自己的 ASCII 字符画（当前仅支持纯 ASCII）定制 banner，请创建文件 `src/main/resources/micronaut-banner.txt`，它将被用来代替默认 banner。
+
+要禁用 banner，请修改您的 `Application` 类：
+
+[source,java]
+----
+public class Application {
+
+    public static void main(String[] args) {
+        Micronaut.build(args)
+                 .banner(false) // <1>
+                 .start();
+    }
+}
+----
+<1> 禁用 banner

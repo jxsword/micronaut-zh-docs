@@ -463,10 +463,10 @@ files:
 - file: guide/config/banner.adoc
   blob_sha: e9f11f8fb12538b0994d74a00bdf5422c2fc109b
   size: 1034
-  status: missing
+  status: current
   zh: zh/guide/config/banner.adoc
   paragraphs: 8
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 8b0864ad8f103900d8cd522704223d93d49edf43
 - file: guide/config/bootstrap.adoc
   blob_sha: c718890fd4ed679eff43f39400b544702ae1c41f
@@ -519,10 +519,10 @@ files:
 - file: guide/config/environments/defaultEnvironment.adoc
   blob_sha: f4366a90fd03daf48189301bacbdc6c0b55e1ab8
   size: 1446
-  status: missing
+  status: current
   zh: zh/guide/config/environments/defaultEnvironment.adoc
   paragraphs: 5
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 8b0864ad8f103900d8cd522704223d93d49edf43
 - file: guide/config/environments/disablingEnvironmentDetection.adoc
   blob_sha: 21fd83295b23480c5e7a8e98b0cef20d1ad2bbbd
@@ -567,18 +567,18 @@ files:
 - file: guide/config/propertySource.adoc
   blob_sha: ae4b84c3d480f4154a3eb6b81e4a9d8738ff46af
   size: 16256
-  status: missing
+  status: current
   zh: zh/guide/config/propertySource.adoc
   paragraphs: 107
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: cf57233fbf01f04684b450c04ae371aaf246e5dd
 - file: guide/config/valueAnnotation.adoc
   blob_sha: edebfca76447c624bfb9232828cc7666957faadc
   size: 5069
-  status: missing
+  status: current
   zh: zh/guide/config/valueAnnotation.adoc
   paragraphs: 47
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 8df8f983d510c789d46b953833ab46b442e150c4
 - file: guide/configurations.adoc
   blob_sha: e1021983277ae6a84378b8964f22c8f21b88d232

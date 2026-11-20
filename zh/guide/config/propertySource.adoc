@@ -1,0 +1,316 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Externalized Configuration with PropertySources](https://docs.micronaut.io/5.2.x/core/#core-propertySource)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/config/propertySource.adoc  upstream_commit: cf57233fbf01f04684b450c04ae371aaf246e5dd  upstream_hash: ae4b84c3d480f4154a3eb6b81e4a9d8738ff46af  translated_at: 2026-11-21 -->
+
+[[propertySource]]
+在初始化 api:context.ApplicationContext[] 之前，可以向环境添加额外的 api:io.micronaut.context.env.PropertySource[] 实例。
+
+snippet::io.micronaut.docs.context.env.EnvironmentSpec[tags="envProps",indent=0,title="Initializing the Environment"]
+
+link:{api}/io/micronaut/context/env/PropertySource.html[PropertySource.of] 方法可用于从值映射（map）创建 `PropertySource`。
+
+也可以通过创建 `META-INF/services/io.micronaut.context.env.PropertySourceLoader` 文件来注册 link:{api}/io/micronaut/context/env/PropertySourceLoader.html[PropertySourceLoader]，该文件需包含对 `PropertySourceLoader` 类名的引用。
+
+=== 内置 PropertySource 加载器
+
+Micronaut 框架默认包含 `PropertySourceLoader` 实现，按给定的位置与优先级加载属性：
+
+. 命令行参数
+. 来自 `SPRING_APPLICATION_JSON` 的属性（为了与 Spring 兼容）
+. 来自 `MICRONAUT_APPLICATION_JSON` 的属性
+. Java 系统属性
+. 操作系统环境变量
+. 按顺序从系统属性 'micronaut.config.files' 或环境变量 `MICRONAUT_CONFIG_FILES` 加载的配置文件。该值可以是逗号分隔的路径列表，最后一个文件具有最高优先级。这些文件可通过以下方式引用：
+.. 文件系统上的绝对路径（不带任何前缀），
+.. 带 `classpath:` 前缀的类路径。
+. 来自 `application-{environment}.{extension}` 的环境特定属性
+. 来自 `application.{extension}` 的应用特定属性
+
+NOTE: 在 bootstrap.yml 或 application.yml 中，'micronaut.config.files' 会被忽略。
+
+[[configImport]]
+=== 导入额外的配置
+
+您可以使用 `micronaut.config.import` 直接从配置文件导入额外的配置。
+该值可以是单个字符串、列表或带索引的条目（`micronaut.config.import[0]`、`micronaut.config.import[1]` 等）。
+
+导入位置与结构化声明值支持属性占位符，包括默认值与自定义属性表达式解析器。
+在选择提供者（provider）或解析连接字符串之前，会使用当前配置以及已加载导入中的属性来解析占位符。
+同一属性源中的声明会一起解析，因此后面的条目无法引用同一列表中较早条目提供的属性；如需表达这种依赖，请使用嵌套导入。
+例如，`file://${CONFIG_DIRECTORY:/etc/myapp}/shared.properties` 会从配置或环境变量中选择一个目录，默认为 `/etc/myapp`。
+即使导入带有 `optional:` 前缀，没有默认值的缺失占位符也会导致配置加载失败；该前缀只允许导入目标缺失。
+
+[configuration,title="Importing additional configuration"]
+----
+micronaut:
+  config:
+    import:
+      - "file:///etc/myapp/shared"
+      - "classpath://overrides.yml"
+      - "optional:env://MY_APP_INLINE_CONFIG"
+----
+
+导入会递归解析，并支持以下协议：
+
+* `file://` – 从文件系统加载
+* `classpath://` – 精确加载一个匹配的类路径资源（发现重复时失败）
+* `classpath*://` – 按类路径发现顺序加载并合并所有匹配的类路径资源
+* `env://` – 从环境变量的值中加载键/值属性，可使用变量名后缀（例如 `.yml`）或 `?extension=yml` / `?extension=json` 来选择非 properties 格式
+* `configtree://` – 加载一个目录树，其中文件路径映射为属性键
+
+在任何导入前加上 `optional:` 前缀，即可在目标缺失时跳过该导入。
+如果没有 `optional:`，当导入无法加载时会抛出 api:io.micronaut.context.exceptions.ConfigurationException[]。
+
+对于 `file://`、`classpath://` 与 `classpath*://` 导入，如果未提供扩展名，Micronaut 会探测已知的配置扩展名（`.properties`、`.json`、`.yml` 以及任何其他已启用的加载器）。
+
+对于 `env://` 导入，Micronaut 默认按 `.properties` 解析。要从环境变量导入 YAML 或 JSON，可以在变量引用中包含格式（例如 `env://MY_APP_INLINE_CONFIG.yml`），或通过 `env://MY_APP_INLINE_CONFIG?extension=yml` 显式指定。
+
+当存在多个同名类路径资源时：
+
+* `classpath://` 会抛出 api:io.micronaut.context.exceptions.ConfigurationException[]，并报告所有匹配的位置。
+* `classpath*://` 会按类路径顺序加载所有匹配项，并按相同顺序合并。
+
+IMPORTANT: `file:///tmp/bar.properties` （三个斜杠）会解析为绝对路径 `/tmp/bar.properties`。
+
+[[customPropertySourceImporter]]
+=== 实现自定义 PropertySourceImporter
+
+通过实现 api:io.micronaut.context.env.PropertySourceImporter[] 并将其注册到 Java ServiceLoader，可以添加对自定义导入协议的支持。每个导入器通过 `getProvider()` 声明其提供者，通过 `newImportDeclaration(..)` 将解析后的 api:io.micronaut.core.util.ConnectionString[] 转换为类型化声明，然后从 `importPropertySource(..)` 读取配置。
+
+snippet::io.micronaut.docs.config.importer.DemoPropertySourceImporter[tags="class",indent=0,title="Custom importer implementation"]
+
+snippet::io.micronaut.docs.config.importer.DemoPropertySourceImporterTest[tags="test",indent=0,title="Custom importer test"]
+
+在 `META-INF/services/io.micronaut.context.env.PropertySourceImporter` 中注册您的实现：
+
+[source]
+----
+io.micronaut.docs.config.importer.DemoPropertySourceImporter
+----
+
+注册之后，当 `micronaut.config.import` 使用您的协议（例如 `demo://defaults`）时，该导入器就会被选中。
+
+如果您的导入器加载远程配置，`micronaut-discovery-core` 中的 api:discovery.config.RetryablePropertySourceImporter[] 提供了一个可复用的基类，为连接字符串与基于映射（map）的导入统一重试行为。它可以从两种形式解析出相同的重试属性，并借助 Micronaut 的编程式重试支持来应用这些属性。
+
+api:discovery.config.RetryablePropertySourceImporter[] 支持的标准重试属性包括：
+
+* `retry-attempts` – 最大尝试次数
+* `retry-count` – `retry-attempts` 的别名
+* `retry-delay` – 两次尝试之间的延迟
+* `retry-max-delay` – 总体重试延迟上限
+* `retry-multiplier` – 延迟乘数
+* `retry-jitter` – 介于 `0.0` 与 `1.0` 之间的重试抖动因子
+
+TIP: `.properties`、`.json`、`.yml` 开箱即用。对于 Groovy 用户，`.groovy` 也受支持。
+
+[[duplicateConfigurationResources]]
+=== 重复的配置资源
+
+如果某个配置文件（例如 `application.properties` 或 `application.yml`）在类路径上出现多次，可以将 Micronaut 配置为：
+
+* 快速失败，并报出清晰错误说明冲突的位置，
+* 采用第一个匹配项（可选发出警告），或
+* 合并所有匹配的资源。
+
+该行为可以通过 api:io.micronaut.context.ApplicationContextBuilder[]（包括 `Micronaut`）进行定制。
+
+snippet::io.micronaut.docs.context.env.ConfigurationLoadStrategySnippet[tags="firstMatch",indent=0,title="Using FIRST_MATCH"]
+
+要合并重复项，请将策略类型设为 `MERGE_ALL`：
+
+snippet::io.micronaut.docs.context.env.ConfigurationLoadStrategySnippet[tags="mergeAll",indent=0,title="Merging duplicates"]
+
+使用 `MERGE_ALL` 时，还可以选择基于构件（JAR）名称模式指定合并顺序：
+
+snippet::io.micronaut.docs.context.env.ConfigurationLoadStrategySnippet[tags="mergeOrder",indent=0,title="MERGE_ALL with mergeOrder"]
+
+NOTE: 仅当策略类型为 `MERGE_ALL` 时才支持 `mergeOrder`。
+合并资源时，如果存在相同的属性键，后面的资源会覆盖较早的资源。
+
+注意，如果您想完全控制应用从何处加载配置，可以在启动应用时调用 api:context.ApplicationContextBuilder[] 接口的 `enableDefaultPropertySources(false)` 方法，禁用上面列出的默认 `PropertySourceLoader` 实现。
+
+在这种情况下，只会使用您通过 api:context.ApplicationContextBuilder[] 接口的 `propertySources(..)` 方法添加的显式 api:context.env.PropertySource[] 实例。
+
+=== 通过命令行提供配置
+
+可以使用 Gradle 或我们的 Maven 插件在命令行提供配置。例如：
+
+[source,bash]
+.Gradle
+----
+$ ./gradlew run --args="-endpoints.health.enabled=true -config.property=test"
+----
+
+[source,bash]
+.Maven
+----
+$ ./mvnw mn:run -Dmn.appArgs="-endpoints.health.enabled=true -config.property=test"
+----
+
+要让配置成为上下文的一部分，必须将 main 方法中的 args 传递给上下文构建器。例如：
+
+[source,java]
+----
+import io.micronaut.runtime.Micronaut;
+
+public class Application {
+
+    public static void main(String[] args) {
+        Micronaut.run(Application.class, args); // passing args
+    }
+}
+----
+
+=== 机密与敏感配置
+
+需要特别注意：不建议将密码、令牌等敏感配置存储在可能被提交到源码控制系统的配置文件里。
+
+更好的做法是将敏感配置完全从应用代码中外部化，优先使用外部机密管理系统（可选方案很多，其中许多由云提供商提供）或在应用部署期间设置的环境变量。您还可以使用属性占位符（参见下一节）来自定义要使用的环境变量名称并提供默认值：
+
+.使用属性值占位符定义安全配置
+[configuration]
+----
+datasources:
+  default:
+    url: ${JDBC_URL:`jdbc:mysql://localhost:3306/db`}
+    username: ${JDBC_USER:root}
+    password: ${JDBC_PASSWORD:}
+    dialect: MYSQL
+    driverClassName: ${JDBC_DRIVER:com.mysql.cj.jdbc.Driver}
+----
+
+要安全地外部化配置，可考虑使用 Micronaut 框架支持的机密管理系统，例如：
+
+* https://micronaut-projects.github.io/micronaut-aws/latest/guide/#secretsmanager[AWS Secrets Manager]。
+* https://micronaut-projects.github.io/micronaut-gcp/latest/guide/#secretManager[Google Cloud Secrets Manager]。
+* <<distributedConfigurationVault, HashiCorp Vault>>
+* https://micronaut-projects.github.io/micronaut-kubernetes/latest/guide/index.html#config-client[Kubernetes Secrets]。
+* https://micronaut-projects.github.io/micronaut-oracle-cloud/latest/guide/#vault[Oracle Cloud Vault]。
+
+=== 属性值占位符
+
+如上一节所述，Micronaut 框架包含属性占位符语法，既可在配置值中引用配置属性，也可在任意 Micronaut 注解中使用。参见 ann:io.micronaut.context.annotation.Value[] 以及 <<valueAnnotation,配置注入>> 一节。
+
+TIP: 也可以通过 api:io.micronaut.context.env.PropertyPlaceholderResolver[] 接口以编程方式使用。
+
+基本语法是用 `${...}` 将属性引用包裹起来。例如：
+
+[configuration,title="Defining Property Placeholders"]
+----
+myapp:
+  endpoint: http://${micronaut.server.host}:${micronaut.server.port}/foo
+----
+
+上例嵌入了 `micronaut.server.host` 与 `micronaut.server.port` 属性的引用。
+
+可以在 `:` 字符之后定义一个值来指定默认值。例如：
+
+[configuration,title="Using Default Values"]
+----
+myapp:
+  endpoint: http://${micronaut.server.host:localhost}:${micronaut.server.port:8080}/foo
+----
+
+上例在找不到值时默认使用 `localhost` 与端口 `8080`，而不是抛出异常。注意，如果默认值中包含 `:` 字符，则必须使用反引号转义：
+
+.使用反引号
+[configuration]
+----
+myapp:
+  endpoint: ${server.address:`http://localhost:8080`}/foo
+----
+
+上例查找 `server.address` 属性，默认值为 `http://localhost:8080`。该默认值使用反引号转义，因为它包含 `:` 字符。
+
+=== 属性值绑定
+
+注意，在代码或占位符值中放置属性引用时，应使用 kebab case（小写并以连字符分隔）。例如，应使用 `micronaut.server.default-charset` 而不是 `micronaut.server.defaultCharset`。
+
+Micronaut 框架仍允许在配置中指定后者，但会将属性规范化为 kebab case 形式，以优化内存占用并降低属性解析的复杂度。下表汇总了来自不同来源的属性如何被规范化：
+
+.属性值规范化
+|===
+|配置值 |结果属性|属性来源
+
+|`myApp.myStuff` | `my-app.my-stuff` | properties、YAML 等
+
+|`my-app.myStuff` | `my-app.my-stuff` | properties、YAML 等
+|`myApp.my-stuff` | `my-app.my-stuff` | properties、YAML 等
+
+|`MYAPP_MYSTUFF` | `myapp.mystuff`、`myapp-mystuff` | 环境变量
+
+|`MY_APP_MY_STUFF` | `my.app.my.stuff`、`my.app.my-stuff`、`my.app-my.stuff`、`my.app-my-stuff`、`my-app.my.stuff`、`my-app.my-stuff`、`my-app-my.stuff`、`my-app-my-stuff` | 环境变量
+|===
+
+环境变量受到特殊处理，以提供更大的灵活性。注意，无法引用驼峰式（camel-case）的环境变量。
+
+IMPORTANT: 由于生成的属性数量随环境变量中 `_` 字符的数量呈指数级增长，如果含多个下划线的环境变量较多，建议细化哪些环境变量（若有）被纳入配置。
+
+IMPORTANT: 由于 `_` 字符在环境变量中的处理方式，无法定位名称中含 `_` 的属性。按照上述要求，属性应采用 kebab case，以保持能够用环境变量定位属性的能力。
+
+要控制环境属性如何参与配置，请调用 `Micronaut` 构建器上的相应方法。
+
+snippet::io.micronaut.docs.context.Application[tags="imports,class",title="Application class"]
+
+NOTE: 上面的配置对属性占位符没有任何影响。无论环境配置是否被禁用，甚至特定属性被显式排除，占位符中仍然可以引用环境变量。
+
+=== 使用随机属性
+
+您可以通过以下属性使用 `random` 值。它们可以像下面这样在配置文件中作为变量使用。
+
+[configuration]
+----
+micronaut:
+  application:
+    name: myapplication
+    instance:
+      id: ${random.shortuuid}
+----
+
+.随机值
+|===
+|属性 |值
+
+|random.port
+|一个可用的随机端口号
+
+|random.int
+|随机 int
+
+|random.integer
+|随机 int
+
+|random.long
+|随机 long
+
+|random.float
+|随机 float
+
+|random.shortuuid
+|长度仅 10 个字符的随机 UUID（注意：由于这不是完整 UUID，可能会发生冲突）
+
+|random.uuid
+|带连字符的随机 UUID
+
+|random.uuid2
+|不带连字符的随机 UUID
+|===
+
+`random.int`、`random.integer`、`random.long` 与 `random.float` 属性支持范围后缀，其语法为以下之一：
+
+- `(max)`，其中 max 为不包含在内的值
+- `[min,max]`，其中 min 为包含在内的值，max 为不包含在内的值。
+
+[configuration]
+----
+instance:
+  id: ${random.int[5,10]}
+  count: ${random.int(5)}
+----
+
+NOTE: 该范围也可以是从负数到正数。
+
+=== 快速失败属性注入
+
+对于注入必需属性的 bean，注入及可能的失败要到该 bean 被请求时才会发生。若要在启动时验证属性存在且可注入，可以为 bean 标注 ann:io.micronaut.context.annotation.Context[]。Context 作用域的 bean 会在启动时注入，如果任何必需属性缺失或无法转换为所需类型，启动将失败。
+
+IMPORTANT: 为确保快速启动，建议谨慎使用该特性。

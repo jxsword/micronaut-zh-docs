@@ -1,0 +1,123 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Configuration Injection](https://docs.micronaut.io/5.2.x/core/#core-valueAnnotation)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/config/valueAnnotation.adoc  upstream_commit: 8df8f983d510c789d46b953833ab46b442e150c4  upstream_hash: edebfca76447c624bfb9232828cc7666957faadc  translated_at: 2026-11-21 -->
+
+[[valueAnnotation]]
+您可以使用 ann:io.micronaut.context.annotation.Value[] 注解将配置值注入到 bean 中。
+
+=== 使用 `@Value` 注解
+
+请看下面的示例：
+
+snippet::io.micronaut.docs.config.value.EngineImpl[tags="imports,class",indent=0,title="@Value Example"]
+
+<1> `@Value` 注解接受一个可嵌入占位符值的字符串（默认值可在冒号 `:` 字符之后指定）。同时请尽量避免将成员可见性设为 `private`，因为这会要求 Micronaut 框架使用反射，建议改用 `protected`。
+<2> 注入的值随后即可在代码中使用。
+
+注意，`@Value` 也可以用来注入静态值。例如，下面注入了数字 10：
+
+.静态 @Value 示例
+[source,groovy]
+----
+@Value("10")
+int number;
+----
+
+当用于组合注入值（将静态内容与占位符结合）时，这种方式更为有用。例如要设置一个 URL：
+
+.@Value 占位符
+[source,groovy]
+----
+@Value("http://${my.host}:${my.port}")
+URL url;
+----
+
+上例中的 URL 由两个占位符属性构造而成，这两个属性必须存在于配置中：`my.host` 与 `my.port`。
+
+请记住，在占位符表达式中指定默认值时使用冒号 `:` 字符。但是，如果您指定的默认值本身包含冒号，则必须使用反引号转义该值。例如：
+
+.@Value 占位符
+[source,groovy]
+----
+@Value("${my.url:`http://foo.com`}")
+URL url;
+----
+
+注意，就属性值占位符的解析而言，`@Value` 本身没有任何特殊之处。
+
+由于 Micronaut 对注解元数据的广泛支持，您可以在任意注解上使用属性占位符表达式。例如，要让 `@Controller` 的路径可配置，您可以这样：
+
+[source,java]
+----
+@Controller("${hello.controller.path:/hello}")
+class HelloController {
+    ...
+}
+----
+
+在上例中，如果配置中指定了 `hello.controller.path`，控制器将映射到指定路径，否则将映射到 `/hello`。
+
+您也可以让 ann:io.micronaut.http.client.annotation.Client[] 的目标服务器可配置（尽管服务发现方式通常更好），例如：
+
+[source,java]
+----
+@Client("${my.server.url:`http://localhost:8080`}")
+interface HelloClient {
+    ...
+}
+----
+
+在上例中，属性 `my.server.url` 可用于配置客户端，否则客户端会回退到 localhost 地址。
+
+=== 使用 `@Property` 注解
+
+回想一下，ann:io.micronaut.context.annotation.Value[] 注解接收一个 String 值，它可以是静态内容与占位符表达式的混合。如果您尝试像下面这样做，可能会引起困惑：
+
+.@Value 的错误用法
+[source,groovy]
+----
+@Value("my.url")
+String url;
+----
+
+在上例中，注入并设置到 `url` 字段的是字面字符串值 `my.url`，而 *不是* 应用配置中 `my.url` 属性的值。这是因为 `@Value` 只解析其被指定值内的占位符。
+
+要注入特定属性名，改用 ann:io.micronaut.context.annotation.Property[] 可能更合适：
+
+snippet::io.micronaut.docs.config.property.Engine[tags="imports,class",indent=0, title="Using @Property"]
+
+<1> `my.engine.cylinders` 属性从配置中解析并注入到字段。
+<2> 接受注入的字段不应为 private，因为必须使用开销高昂的反射
+<3> `@Property` 注解用于通过 setter 注入
+
+NOTE: 由于 `@Property` 无法定义默认值，如果值不存在或无法转换为所需类型，bean 实例化将失败。
+
+上例改为注入从应用配置中解析出的 `my.engine.cylinders` 属性的值。如果在配置中找不到该属性，将抛出异常。与其他注入类型一样，注入点也可以用 `@Nullable` 注解标注，使注入变为可选。
+
+您还可以使用该特性解析子映射（sub map）。例如，考虑以下配置：
+
+[configuration]
+----
+datasources:
+  default:
+    name: 'mydb'
+jpa:
+  default:
+    properties:
+      hibernate:
+        hbm2ddl:
+          auto: update
+        show_sql: true
+----
+
+要解析仅包含以 `hibernate` 开头的属性的扁平化映射，可以使用 `@Property`，例如：
+
+.使用 `@Property`
+[source,java]
+----
+@Property(name = "jpa.default.properties")
+Map<String, String> jpaProperties;
+----
+
+注入的映射将包含键 `hibernate.hbm2ddl.auto` 与 `hibernate.show_sql` 及其值。
+
+TIP: 可以使用 ann:io.micronaut.core.convert.format.MapFormat[] 注解自定义注入的映射，取决于是需要嵌套键还是扁平键，并且可以通过 api:io.micronaut.core.naming.conventions.StringConvention[] 枚举自定义键风格。
