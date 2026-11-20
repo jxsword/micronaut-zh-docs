@@ -1,0 +1,56 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Cache Advice](https://docs.micronaut.io/5.2.x/core/#core-caching)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/aop/caching.adoc  upstream_commit: 400e272bf3fbf33a3489e17760ea3a590accf852  upstream_hash: b87ccd1483b5ee8b76d736d24e8cdb374c2cea1f  translated_at: 2026-11-21 -->
+
+与 Spring 和 Grails 一样，Micronaut 框架在 link:{micronautcacheapi}/io/micronaut/cache/package-summary.html[io.micronaut.cache] 包中提供了缓存注解。
+
+link:{micronautcacheapi}/io/micronaut/cache/CacheManager.html[CacheManager] 接口允许按需插入不同的缓存实现。
+
+link:{micronautcacheapi}/io/micronaut/cache/SyncCache.html[SyncCache] 接口为缓存提供了同步 API，而 link:{micronautcacheapi}/io/micronaut/cache/AsyncCache.html[AsyncCache] API 则支持非阻塞操作。
+
+== 缓存注解
+
+支持以下缓存注解：
+
+- link:{micronautcacheapi}/io/micronaut/cache/annotation/Cacheable.html[@Cacheable]——表示方法可在指定的缓存中缓存
+- link:{micronautcacheapi}/io/micronaut/cache/annotation/CachePut.html[@CachePut]——表示方法调用的返回值应当被缓存。与 `@Cacheable` 不同，原始操作永远不会被跳过。
+- link:{micronautcacheapi}/io/micronaut/cache/annotation/CacheInvalidate.html[@CacheInvalidate]——表示方法的调用应当导致一个或多个缓存失效。
+
+使用这些注解之一会激活 link:{micronautcacheapi}/io/micronaut/cache/interceptor/CacheInterceptor[CacheInterceptor]（缓存拦截器），就 `@Cacheable` 而言，它会缓存方法的返回值。
+
+如果方法的返回类型是非阻塞类型（link:{jdkapi}/java.base/java/util/concurrent/CompletableFuture.html[CompletableFuture] 或 rs:Publisher[] 实例），则发出的结果会被缓存。
+
+此外，如果底层 Cache 实现支持非阻塞缓存操作，缓存值将以非阻塞方式读取，从而实现非阻塞的缓存操作。
+
+== 配置缓存
+
+默认情况下，使用 https://github.com/ben-manes/caffeine[Caffeine] 从应用配置创建缓存。例如：
+
+[configuration,title="Cache Configuration Example"]
+----
+micronaut:
+  caches:
+    my-cache:
+      maximum-size: 20
+----
+
+上例配置了一个名为 "my-cache"、最大大小为 20 的缓存。
+
+[NOTE]
+.缓存命名
+====
+在 `micronaut.caches` 下定义缓存名称时使用 kebab case（小写并以连字符分隔）；如果使用驼峰式，名称会被规范化为 kebab case。例如 `myCache` 会变为 `my-cache`。在 {micronautcacheapi}/io/micronaut/cache/annotation/Cacheable.html[@Cacheable] 注解中引用缓存时必须使用 kebab-case 形式。
+====
+
+要配置与 `maximumWeight` 配置搭配使用的 weigher（权重计算器），请创建一个实现 `io.micronaut.caffeine.cache.Weigher` 的 bean。要将给定的 weigher 仅与特定缓存关联，请用 `@Named(<cache name>)` 标注该 bean。没有具名限定符的 weigher 适用于所有没有具名 weigher 的缓存。如果找不到任何 bean，则使用默认实现。
+
+所有可用的配置选项请参阅 https://micronaut-projects.github.io/micronaut-cache/latest/guide/configurationreference.html#io.micronaut.cache.caffeine.DefaultCacheConfiguration[配置参考]。
+
+== 动态缓存创建
+
+对于无法提前配置缓存的用例，可以注册 {micronautcacheapi}/io/micronaut/cache/DynamicCacheManager.html[DynamicCacheManager] bean。当尝试检索一个未预先定义的缓存时，会调用动态缓存管理器来创建并返回缓存。
+
+默认情况下，如果应用中没有定义其他动态缓存管理器，Micronaut 框架会注册一个 {micronautcacheapi}/io/micronaut/cache/caffeine/DefaultDynamicCacheManager.html[DefaultDynamicCacheManager] 实例，它以默认值创建 Caffeine 缓存。
+
+== 其他缓存实现
+
+更多信息请查看 https://micronaut-projects.github.io/micronaut-cache/latest/guide/index.html[Micronaut Cache] 项目。

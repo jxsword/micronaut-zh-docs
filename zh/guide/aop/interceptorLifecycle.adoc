@@ -1,0 +1,143 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Interceptor Life Cycle](https://docs.micronaut.io/5.2.x/core/#core-interceptorLifecycle)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/aop/interceptorLifecycle.adoc  upstream_commit: d106b03832f54fd4f6129ce2c85dd4b6953e2ff7  upstream_hash: cda02162f0338aeec5dbc42f35f68788292203a1  translated_at: 2026-11-21 -->
+
+[[interceptorLifecycle]]
+api:aop.Interceptor[] 是一个普通 bean，因此它的作用域决定了存在多少个实例以及每个实例存活多久。一旦拦截器需要持有状态，这一选择就很重要，因为框架会据此决定是由每个被拦截的 bean 共享一个实例，还是每个被拦截的 bean 各得一个。
+
+== 拦截类型
+
+单个拦截器可以绑定到多种类型。类型还决定选择哪个拦截器接口：对于 `AROUND_CONSTRUCT`，只会调用 api:aop.ConstructorInterceptor[] bean；对于其他类型，只会调用 api:aop.MethodInterceptor[] bean。既不实现这两者的拦截器——即普通 api:aop.Interceptor[]——对其绑定的每种类型都适用。
+
+|===
+|类型 |应用于 |要求
+
+|`AROUND`
+|bean 的每个被拦截方法
+|目标上的 ann:aop.Around[]
+
+|`INTRODUCTION`
+|bean 的每个抽象方法
+|目标上的 ann:aop.Introduction[]
+
+|`AROUND_CONSTRUCT`
+|bean 的构造器
+|目标上的 ann:aop.AroundConstruct[]
+
+|`POST_CONSTRUCT`
+|bean 的 `@PostConstruct` 方法
+|目标上的 `@InterceptorBinding(kind = POST_CONSTRUCT)`
+
+|`PRE_DESTROY`
+|bean 的 `@PreDestroy` 方法
+|目标上的 `@InterceptorBinding(kind = PRE_DESTROY)`
+|===
+
+== 拦截器作用域
+
+ann:aop.InterceptorBean[] 以 `@Singleton` 元注解，因此除非您另行声明，拦截器都是单例：
+
+* *单例*——整个应用上下文一个实例，由每个被拦截的 bean 及其绑定的每种类型共享。它不得持有属于单个被拦截 bean 的状态，因为它会面对许多 bean。属于某个 _类型_ 的状态可以针对 api:aop.InvocationContext[] 中的 `ExecutableMethod` 或声明类型进行缓存。
+* *非单例*——声明 ann:context.annotation.Prototype[] 或其他非单例作用域，框架会 *为每个被拦截的 bean 创建一个实例*。该实例随后会复用于绑定到该 bean 的每种类型，因此在 bean 构造期间设置的状态在 bean 销毁时仍然存在。
+
+.针对每个目标的拦截器
+[source,java]
+----
+@Prototype // <1>
+@InterceptorBinding(value = Tracked.class, kind = InterceptorKind.AROUND_CONSTRUCT)
+@InterceptorBinding(value = Tracked.class, kind = InterceptorKind.POST_CONSTRUCT)
+@InterceptorBinding(value = Tracked.class, kind = InterceptorKind.PRE_DESTROY)
+public class TrackingInterceptor implements Interceptor<Object, Object> {
+
+    private Registration registration; // <2>
+
+    @Override
+    public Object intercept(InvocationContext<Object, Object> context) {
+        MethodInvocationContext<?, ?> method = (MethodInvocationContext<?, ?>) context;
+        if (method.getKind() == InterceptorKind.POST_CONSTRUCT) {
+            registration = Tracker.register(method.getTarget());
+        } else if (method.getKind() == InterceptorKind.PRE_DESTROY) {
+            registration.close(); // <3>
+        }
+        return context.proceed();
+    }
+}
+----
+
+<1> 拦截器覆盖默认的单例作用域，因此每个被拦截的 bean 都会创建一个拦截器
+<2> 属于单个被拦截 bean 的状态，单例拦截器无法安全持有
+<3> 同一实例处理 `@PreDestroy`，因此它可以释放在 `@PostConstruct` 中获取的资源
+
+NOTE: 生命周期拦截在每个事件运行一次，因此类层次结构中有多个 `@PostConstruct` 方法的 bean 只被拦截一次，`proceed()` 会调用所有这些方法。请参阅 <<lifecycleAdvice,bean 生命周期通知>>。
+
+== 非单例拦截器的生命周期
+
+对于单个被拦截的 bean，按顺序：
+
+. 绑定到该 bean 的拦截器在 bean 创建期间解析一次。
+. `AROUND_CONSTRUCT` 拦截运行，然后是 bean 的构造器。
+. `POST_CONSTRUCT` 拦截运行一次，然后是 bean 的 `@PostConstruct` 方法，超类方法在前。
+. `AROUND` 或 `INTRODUCTION` 拦截在每次方法调用时运行，贯穿 bean 的整个生命周期。
+. `PRE_DESTROY` 拦截运行一次，然后是 bean 的 `@PreDestroy` 方法，超类方法在前。
+. 拦截器作为被拦截 bean 的依赖销毁，因此它自己的 `@PreDestroy` 在目标 *之后* 运行。
+
+同一实例服务于每一步。单例拦截器遵循相同的顺序，但实例与所有其他被拦截的 bean 共享，并且随上下文销毁，而不是随任何单个目标销毁。
+
+拦截器保存在何处取决于被拦截 bean 的形态——这是实现细节，但它解释了一种行为不同的特例：
+
+|===
+|目标 |持有者 |共享同一实例的阶段
+
+|ann:aop.Around[] 通知
+|生成的代理
+|construct、methods、post-construct、pre-destroy
+
+|`@Around(proxyTarget = true)`
+|生成的代理
+|construct、methods、post-construct、pre-destroy
+
+|ann:aop.Introduction[] 通知
+|生成的代理
+|methods、post-construct、pre-destroy
+
+|由 ann:context.annotation.Factory[] 方法产生的 bean
+|生成的代理
+|methods、post-construct、pre-destroy
+
+|ann:aop.AroundConstruct[] 通知且无 ann:aop.Around[]
+|上下文中该 bean 的注册
+|construct、post-construct、pre-destroy
+
+|带 ann:aop.AroundConstruct[] 通知且无代理的 ann:context.annotation.Prototype[]，用 `createBean` 创建、用 `destroyBean(Object)` 销毁
+|没有；上下文不为其跟踪注册
+|仅 construct 与 post-construct
+|===
+
+NOTE: 在最后一行中，上下文没有该实例的注册，因此没有任何东西将其销毁与创建时的对象关联起来，`PRE_DESTROY` 会解析一个新的拦截器。以相同方式创建和销毁的代理 bean 不受影响：代理保留了它的注册，`destroyBean(Object)` 会随目标一起销毁其中非单例的注册。注入到其他 bean 的 prototype，以及通过其 `BeanRegistration` 销毁的 prototype，不受影响。
+
+== 排序
+
+当多个拦截器应用于同一个拦截点时，它们按升序运行，且该顺序在每种类型中都相同。拦截器通过实现 `io.micronaut.core.order.Ordered` 来控制自己的位置：
+
+[source,java]
+----
+@Prototype
+@InterceptorBinding(value = Tracked.class, kind = InterceptorKind.POST_CONSTRUCT)
+public class FirstInterceptor implements Interceptor<Object, Object>, Ordered {
+
+    @Override
+    public int getOrder() {
+        return 10; // runs before an interceptor returning 20
+    }
+
+    @Override
+    public Object intercept(InvocationContext<Object, Object> context) {
+        return context.proceed();
+    }
+}
+----
+
+== 选择
+
+当拦截器的绑定注解与目标匹配 *且* 它绑定到该类型时，拦截器才会被选用于某个拦截点。绑定到一种类型并不意味着绑定其他类型，因此仅绑定到 `POST_CONSTRUCT` 的拦截器永远不会为 `AROUND` 运行，仅绑定到 `AROUND` 的拦截器永远不会在生命周期阶段运行。由不同注解绑定的拦截器永远不会应用于该 bean。
+
+TIP: 在被代理 bean 的各阶段之间复用同一个拦截器实例是生成的代理的一部分。升级后，请重新编译被拦截的类，使较早版本编译的 bean 也能获得这一行为；在此之前，它们的行为与以前相同，在每个拦截点解析一个拦截器。

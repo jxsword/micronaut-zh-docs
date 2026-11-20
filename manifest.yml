@@ -31,18 +31,18 @@ files:
 - file: guide/aop/caching.adoc
   blob_sha: b87ccd1483b5ee8b76d736d24e8cdb374c2cea1f
   size: 3952
-  status: missing
+  status: current
   zh: zh/guide/aop/caching.adoc
   paragraphs: 26
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 400e272bf3fbf33a3489e17760ea3a590accf852
 - file: guide/aop/interceptorLifecycle.adoc
   blob_sha: cda02162f0338aeec5dbc42f35f68788292203a1
   size: 7291
-  status: missing
+  status: current
   zh: zh/guide/aop/interceptorLifecycle.adoc
   paragraphs: 26
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: d106b03832f54fd4f6129ce2c85dd4b6953e2ff7
 - file: guide/aop/introductionAdvice.adoc
   blob_sha: a10c67d786f4f97f4efc22bb5526e548d1ad0752
@@ -55,18 +55,18 @@ files:
 - file: guide/aop/lifecycleAdvice.adoc
   blob_sha: 0d4adeff82620235fdbe1570ee54285d8d82f7cd
   size: 7966
-  status: missing
+  status: current
   zh: zh/guide/aop/lifecycleAdvice.adoc
   paragraphs: 31
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: db442e72ceb68a8d6db5fa3153c70ba65cc38dc0
 - file: guide/aop/retry.adoc
   blob_sha: 8a228a84376dd93aca7676cd5835f334527bfc77
   size: 6452
-  status: missing
+  status: current
   zh: zh/guide/aop/retry.adoc
   paragraphs: 49
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: c1733e1c5e6ce879a2a2d6acf05daeb717a5c451
 - file: guide/aop/scheduling.adoc
   blob_sha: 1f711edb538ae851e7ca7fb5b6278431a9c9f11a
@@ -87,10 +87,10 @@ files:
 - file: guide/aop/validation.adoc
   blob_sha: 68c63c8e2eab54cf3b3da901818d6b55e4700770
   size: 1042
-  status: missing
+  status: current
   zh: zh/guide/aop/validation.adoc
   paragraphs: 8
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/appendix.adoc
   blob_sha: e69de29bb2d1d6434b8b29ae775ad8c2e48c5391

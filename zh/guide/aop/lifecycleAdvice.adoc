@@ -1,0 +1,86 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Bean Life Cycle Advice](https://docs.micronaut.io/5.2.x/core/#core-lifecycleAdvice)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/aop/lifecycleAdvice.adoc  upstream_commit: db442e72ceb68a8d6db5fa3153c70ba65cc38dc0  upstream_hash: 0d4adeff82620235fdbe1570ee54285d8d82f7cd  translated_at: 2026-11-21 -->
+
+[[lifecycleAdvice]]
+有时您可能需要将通知应用于 bean 的生命周期。适用于这种情况的通知有 3 种类型：
+
+* 拦截 bean 的构造
+* 拦截 bean 的 `@PostConstruct` 调用
+* 拦截 bean 的 `@PreDestroy` 调用
+
+Micronaut 框架通过允许定义额外的 ann:aop.InterceptorBinding[] 元注解，支持这 3 种用例。
+
+请看以下注解定义：
+
+snippet::io.micronaut.docs.aop.lifecycle.ProductBean[tags="imports,class", indent=0, title="AroundConstruct example"]
+
+<1> 添加 ann:aop.AroundConstruct[] 注解，指示应发生构造器拦截
+<2> ann:aop.InterceptorBinding[] 定义用于指示应发生 `@PostConstruct` 拦截
+<3> ann:aop.InterceptorBinding[] 定义用于指示应发生 `@PreDestroy` 拦截
+<4> bean 定义为 ann:context.annotation.Prototype[]，因此每个注入点都需要一个新实例
+
+注意，如果您不需要 `@PostConstruct` 与 `@PreDestroy` 拦截，直接移除这些绑定即可。
+
+然后可以在目标类上使用 `@ProductBean` 注解：
+
+snippet::io.micronaut.docs.aop.lifecycle.Product[tags="imports,class", indent=0, title="Using an AroundConstruct meta-annotation"]
+
+<1> `@ProductBean` 注解定义在 `Product` 类型的类上
+<2> ann:context.annotation.Parameter[] 注解表明该 bean 需要一个参数才能完成构造
+<3> 任何 `@PreDestroy` 或 `@PostConstruct` 方法都会在拦截器链中最后执行
+
+现在，您可以定义 api:aop.ConstructorInterceptor[] bean 来拦截构造器，并定义 api:aop.MethodInterceptor[] bean 来拦截 `@PostConstruct` 或 `@PreDestroy`。
+
+下面的工厂定义了一个 api:aop.ConstructorInterceptor[]，它拦截 `Product` 实例的构造，先校验产品名，再将它们注册到一个假想的 `ProductService` 中：
+
+snippet::io.micronaut.docs.aop.lifecycle.ProductInterceptors[tags="imports,class,constructor-interceptor", indent=0, title="Defining a constructor interceptor"]
+
+<1> 定义了一个新的 ann:aop.InterceptorBean[]，它是 api:aop.ConstructorInterceptor[]
+<2> 构造器参数值可以按需检索和修改
+<3> 可以用 `proceed()` 方法调用构造器
+
+`getConstructor()` 返回的 api:core.beans.BeanConstructor[] 描述被通知的构造器。对于同时用 `@Around` 代理的 bean，它描述的是被拦截类的构造器，只包含该类声明的参数，而不是生成的代理构造器。其 `getTargetConstructor()` 返回对应的 `java.lang.reflect.Constructor`，就像 `getTargetMethod()` 对被拦截方法所做的那样；框架交出的构造器会解析一次并持有它。当 bean 不是通过其自身类型的构造器创建时（例如由工厂方法产生的 bean），它返回 `null`。
+
+定义拦截 `@PostConstruct` 与 `@PreDestroy` 方法的 api:aop.MethodInterceptor[] 实例，与为常规方法定义拦截器没有什么不同。但请注意，您可以使用传入的 api:aop.MethodInvocationContext[] 来识别正在发生哪种拦截，并相应地调整代码，如下例所示：
+
+snippet::io.micronaut.docs.aop.lifecycle.ProductInterceptors[tags="method-interceptor", indent="0", title="Defining a constructor interceptor"]
+
+<1> 定义了一个新的 ann:aop.InterceptorBean[]，它是 api:aop.MethodInterceptor[]
+<2> 处理 `@PostConstruct` 拦截
+<3> 处理 `@PreDestroy` 拦截
+
+=== 构造通知抛出的异常
+
+api:aop.ConstructorInterceptor[] 抛出的异常会按抛出时的原样到达请求该 bean 的一方，就像 api:aop.MethodInterceptor[] 抛出的异常按原样到达其通知方法的调用者一样。它不会被包装在 api:context.exceptions.BeanInstantiationException[] 中。无论拦截器是在 `proceed()` 之前抛出（拒绝构造器将要接收的参数），还是在其之后抛出（拒绝构造器产生的实例），都是如此：
+
+[source,java]
+----
+@InterceptorBean(ProductBean.class)
+class ProductInterceptor implements ConstructorInterceptor<Product> {
+    @Override
+    public Product intercept(ConstructorInvocationContext<Product> context) {
+        if (context.getParameterValues()[0] == null) {
+            throw new IllegalArgumentException("A product needs a name"); // <1>
+        }
+        return context.proceed();
+    }
+}
+----
+
+<1> `context.getBean(Product.class)` 抛出的是这个 `IllegalArgumentException`，而不是 `BeanInstantiationException`
+
+这使通知能够以自己的方式拒绝构造。正是这一点使得在构造器上声明的约束能够在容器创建 bean 时被强制执行，从而调用者捕获的是校验异常本身，而不是它的包装。
+
+构造器自身方法体抛出的异常不属于通知抛出，它会被包装在 api:context.exceptions.BeanInstantiationException[] 中，就像完全没有构造通知的 bean 一样。启动期间饿汉式初始化中发生的任何失败也是如此，因为此时 bean 并不是代表某一方创建的。
+
+=== 被拦截的回调
+
+`@PostConstruct` 或 `@PreDestroy` 拦截在 bean 的每个生命周期事件运行一次，而不是每个回调运行一次。绑定到事件的拦截器链先运行，最后一个拦截器中的 `proceed()` 会调用 bean 声明的该类型的每个回调——超类回调在前，两个事件的顺序相同。不调用 `proceed()` 的拦截器会阻止所有这些回调运行，并且它返回的 bean 会替换该实例。
+
+传给拦截器的 api:aop.MethodInvocationContext[] 代表该事件：`getKind()` 为 `POST_CONSTRUCT` 或 `PRE_DESTROY`，`getTarget()` 是该 bean，而 `proceed()` 返回该 bean。`getExecutableMethod()` 代表整个事件，并以事件将运行的最后一个回调为其命名：即最派生的那个——若 bean 自己声明了该类型的回调，就是 bean 声明的那个。其 `getDeclaringType()` 与 `getMethodName()` 就是该回调的，`getTargetMethod()` 解析为该回调的 `Method`；只有当 bean 未声明该类型的回调时，名称才会回退为 `initialize` 或 `dispose`。它描述的仍然是事件而不是那一个回调，因此它携带 bean 类的注解元数据且不声明任何参数——回调自身的参数只在事件进行时才解析。
+
+事件即将运行的回调可以从被拦截 bean 的 bean 定义中获取：api:inject.InitializingBeanDefinition[] 暴露 `getPostConstructExecutableMethods()`，api:inject.DisposableBeanDefinition[] 暴露 `getPreDestroyExecutableMethods()`，各自是按调用顺序排列的免反射 api:inject.ExecutableMethod[] 实例列表。每个条目都携带其回调的注解元数据（例如 `@PostConstruct` 注解），需要自己运行回调的拦截器可以在目标上调用它。只有绑定了相应拦截类型的 bean 才会填充这些列表。
+
+这些回调不属于 bean 定义的可执行方法：`BeanDefinition.getExecutableMethods()` 不包含它们，因此可执行方法处理器与适配器不受影响。由较早版本的框架编译的 bean 不报告任何回调。
+
+绑定到这些生命周期类型的拦截器默认是单例，此时一个实例由它应用到的每个 bean 共享。若要让每个被拦截的 bean 拥有自己的拦截器——使 `@PostConstruct` 中设置的状态在 `@PreDestroy` 中仍然可用——请参阅 <<interceptorLifecycle,拦截器生命周期>>。

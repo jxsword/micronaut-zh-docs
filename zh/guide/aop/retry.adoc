@@ -1,0 +1,111 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Retry Advice](https://docs.micronaut.io/5.2.x/core/#core-retry)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/aop/retry.adoc  upstream_commit: c1733e1c5e6ce879a2a2d6acf05daeb717a5c451  upstream_hash: 8a228a84376dd93aca7676cd5835f334527bfc77  translated_at: 2026-11-21 -->
+
+[[retry]]
+在分布式系统与微服务环境中，失败是必须预先规划的事情；当操作失败时重试该操作是很常见的需求。一次不成功，就再试一次！
+
+考虑到这一点，Micronaut 框架提供了 api:retry.annotation.Retryable[] 注解。
+
+== 重试依赖
+
+NOTE: 自 Micronaut Framework 4.0 起，要使用重试功能，需要添加以下依赖：
+
+dependency::micronaut-retry[]
+
+== 简单重试
+
+最简单的重试形式是只需将 `@Retryable` 注解添加到类型或方法。`@Retryable` 的默认行为是重试三次，每次重试之间有 1 秒的线性延迟（第一次尝试延迟 1 秒，第二次尝试延迟 2 秒，第三次尝试延迟 3 秒）。
+
+例如：
+
+snippet::io.micronaut.docs.aop.retry.BookService[tags="simple", indent=0, title="Simple Retry Example"]
+
+在上面的示例中，如果 `listBooks()` 方法抛出异常，它会一直重试，直到达到最大尝试次数。
+
+`@Retryable` 注解的 `multiplier` 值可用于配置一个乘数，用于计算重试之间的延迟，从而支持指数重试。
+
+要自定义重试行为，请设置 `attempts` 与 `delay` 成员。例如，配置 5 次尝试、2 秒延迟：
+
+snippet::io.micronaut.docs.aop.retry.BookService[tags="attempts", indent=0, title="Setting Retry Attempts"]
+
+注意 `attempts` 与 `delay` 都定义为字符串。这是为了支持通过注解元数据进行配置。例如，您可以允许通过属性占位符解析来配置重试策略：
+
+snippet::io.micronaut.docs.aop.retry.BookService[tags="config", indent=0, title="Setting Retry via Configuration"]
+
+完成上述设置后，如果配置中指定了 `book.retry.attempts`，它会通过注解元数据绑定到 `@Retryable` 注解的 `attempts` 成员的值。
+
+== 响应式重试
+
+`@Retryable` 通知也可以应用于返回响应式类型的方法，例如 `Publisher` （https://projectreactor.io[Project Reactor] 的 `Flux` 或 https://github.com/ReactiveX/RxJava[RxJava] 的 `Flowable`）。例如：
+
+snippet::io.micronaut.docs.aop.retry.BookService[tags="reactive", indent=0, title="Applying Retry Policy to Reactive Types"]
+
+在这种情况下，`@Retryable` 通知会将重试策略应用于响应式类型。
+
+== 断路器
+
+重试在微服务环境中很有用，但在某些情况下，过多的重试会因为客户端反复重新尝试失败的操作而压垮系统。
+
+https://en.wikipedia.org/wiki/Circuit_breaker_design_pattern[断路器（Circuit Breaker）] 模式旨在解决此问题：允许一定数量的失败请求，然后打开一个在一段时间内保持打开的断路器，之后才允许更多重试尝试。
+
+api:retry.annotation.CircuitBreaker[] 注解是 `@Retryable` 注解的一种变体，它支持 `reset` 成员，指示断路器在重置之前应保持打开多长时间（默认为 20 秒）。
+
+snippet::io.micronaut.docs.aop.retry.BookService[tags="circuit", indent=0, title="Applying CircuitBreaker Advice"]
+
+上例对 `findBooks` 方法重试三次，然后打开断路器 30 秒，重新抛出原始异常，并防止诸如 HTTP 请求与 I/O 操作等潜在下游流量涌入系统。
+
+== 编程式重试
+
+对于不适合使用注解的情况，Micronaut Retry 还通过类型化策略与注入的工厂 bean 提供编程式重试创建。
+
+创建一次策略，并从注入的工厂派生可复用的操作：
+
+snippet::io.micronaut.docs.aop.retry.ProgrammaticBookService[tags="programmatic-policy", indent=0, title="Creating a Programmatic Retry Policy"]
+
+编程式 API 使用类型化值（例如 `Duration` 与 `int`）而不是注解字符串。
+
+对于同步工作，直接通过 `RetryOperations` 执行 supplier：
+
+snippet::io.micronaut.docs.aop.retry.ProgrammaticBookService[tags="programmatic-sync", indent=0, title="Programmatic Retry for Synchronous Code"]
+
+也支持响应式重试。传入一个 supplier，使每次重试尝试都会创建一个全新的 `Publisher`：
+
+snippet::io.micronaut.docs.aop.retry.ProgrammaticBookService[tags="programmatic-reactive", indent=0, title="Programmatic Retry for Reactive Code"]
+
+对于异步工作，传入一个为每次尝试创建新 `CompletionStage` 的 supplier：
+
+snippet::io.micronaut.docs.aop.retry.ProgrammaticBookService[tags="programmatic-async", indent=0, title="Programmatic Retry for Asynchronous Code"]
+
+== 编程式断路器
+
+编程式断路器的创建方式相同，使用类型化的 `CircuitBreakerPolicy` 与注入的 `CircuitBreakerOperationsFactory`。生成的 `CircuitBreakerOperations` 实例持有共享的断路器状态。
+
+snippet::io.micronaut.docs.aop.retry.ProgrammaticBookService[tags="programmatic-circuit", indent=0, title="Programmatic Circuit Breaker"]
+
+== 工厂 bean 重试
+
+当 ann:retry.annotation.Retryable[] 应用于 bean 工厂方法时，其行为如同注解被放置在要返回的类型上。重试行为在调用返回对象上的方法时生效。注意，bean 工厂方法本身 *不会* 被重试。如果希望创建 bean 的功能被重试，应将其委托给另一个应用了 ann:retry.annotation.Retryable[] 注解的单例。
+
+例如：
+
+[source,java]
+----
+@Factory // <1>
+public class Neo4jDriverFactory {
+    ...
+    @Retryable(ServiceUnavailableException.class) // <2>
+    @Bean(preDestroy = "close")
+    public Driver buildDriver() {
+        ...
+    }
+}
+----
+
+<1> 创建了一个工厂 bean，它定义创建 bean 的方法
+<2> ann:retry.annotation.Retryable[] 注解用于捕获在 `Driver` 上执行的方法抛出的异常。
+
+== 重试事件
+
+您可以将 api:retry.event.RetryEventListener[] 实例注册为 bean，以监听每次操作重试时发布的 api:retry.event.RetryEvent[] 事件。
+
+此外，您可以注册 api:retry.event.CircuitOpenEvent[] 的事件监听器，在断路器打开时收到通知；或注册 api:retry.event.CircuitClosedEvent[]，在断路器关闭时收到通知。

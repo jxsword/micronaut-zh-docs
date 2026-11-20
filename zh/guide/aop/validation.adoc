@@ -1,0 +1,19 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Validation Advice](https://docs.micronaut.io/5.2.x/core/#core-validation)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/aop/validation.adoc  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360  upstream_hash: 68c63c8e2eab54cf3b3da901818d6b55e4700770  translated_at: 2026-11-21 -->
+
+[[validation]]
+校验通知（validation advice）是您最可能想在应用中使用的最常见通知类型之一。
+
+校验通知基于 https://beanvalidation.org/2.0/spec/[Bean Validation JSR 380] 构建，这是一份用于 bean 校验的 Java API 规范，通过 `jakarta.validation` 注解（例如 `@NotNull`、`@Min` 与 `@Max`）确保 bean 的属性满足特定条件。
+
+Micronaut 框架通过 `micronaut-validation` 依赖为 `jakarta.validation` 注解提供原生支持：
+
+dependency:micronaut-validation-processor[groupId="io.micronaut.validation",scope="annotationProcessor"]
+
+dependency:micronaut-validation[groupId="io.micronaut.validation"]
+
+或者通过 `micronaut-hibernate-validator` 依赖获得完整的 https://beanvalidation.org/2.0/spec/[JSR 380] 兼容性：
+
+dependency::micronaut-hibernate-validator[groupId="io.micronaut.beanvalidation"]
+
+有关如何将校验规则应用到 bean 类的更多信息，请参阅 <<beanValidation,bean 校验>> 一节。
