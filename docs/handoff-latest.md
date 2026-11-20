@@ -52,6 +52,7 @@
 10. **check_toc 白名单机制**：标题值含 CJK 即视为已译；纯 API/产品名条目进 ALLOWLIST（31 条）；「与源逐字节相同」仅对含 CJK 的值报警（防漏译）。
 11. **YAML 行级变换**：`key:` 节点行/注释行/空行原样保留，仅替换 `key: value` 叶值；带引号值保留引号风格；替换值与原值相同则整行不动（`'@Blocking'`）。
 12. **临时脚本沿用纪律**：Write 工具创建 + py_compile 先行 + memgate 包裹；sweep/抽检/术语扫描脚本口径已固化进 reports/m3-final.md，需要复跑时按报告口径重建即可。
+13. **--apply 会改写 source/_upstream_commit**（脚本 apply 收尾写入检测时上游 HEAD，sync_upstream.py:583）：0 变更演练后该文件会偏离基线 sha——M3 收尾时已还原（0b46d27a 与 manifest baseline_commit 一致）；真实增量 apply 后出现此变化属预期行为，配套同步报告会记录当次 HEAD，不必回滚。
 
 ## 硬性纪律清单（继承，持续有效）
 
