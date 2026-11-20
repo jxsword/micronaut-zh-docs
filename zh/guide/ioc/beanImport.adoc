@@ -1,0 +1,33 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Importing Beans from Libraries](https://docs.micronaut.io/5.2.x/core/#core-beanImport)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/ioc/beanImport.adoc  upstream_commit: 6b62d9ce07aae05cab1b252920d6513acaa6866d  upstream_hash: 5b50a5e7fef34b3da6cd9f2e9b0c15e976a58262  translated_at: 2026-11-21 -->
+
+您可以使用 ann:context.annotation.Import[] 注解从使用 JSR-330 注解的外部已编译库导入 bean。
+
+NOTE: 目前仅支持在 Java 语言中使用 bean 导入，因为其他语言在源码处理期间的类路径扫描存在限制。
+
+例如，要将 JSR-330 TCK 导入应用程序，请添加对 TCK 的依赖：
+
+dependency::jakarta.inject-tck[groupId="jakarta.inject", version="2.0.1"]
+
+然后在 `Application` 类上定义 `@Import` 注解：
+
+[source,java]
+----
+package example;
+
+import io.micronaut.context.annotation.Import;
+
+@Import( // <1>
+        packages = { // <2>
+                "org.atinject.tck.auto",
+                "org.atinject.tck.auto.accessories"},
+        annotated = "*") // <3>
+public class Application {
+}
+----
+
+<1> 定义了 ann:context.annotation.Import[]
+<2> 定义了要导入的 `packages`。注意，Micronaut 框架不会递归子包，因此需要显式列出子包
+<3> 默认情况下，Micronaut 框架只会导入具有作用域或限定符的类。使用 `*` 可以让每个类型都成为 bean。
+
+NOTE: 一般来说，`@Import` 应在应用程序中使用而非库中使用，因为如果两个库导入相同的 bean，结果很可能是 api:context.exceptions.NonUniqueBeanException[]

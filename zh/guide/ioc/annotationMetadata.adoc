@@ -1,0 +1,181 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Bean Annotation Metadata](https://docs.micronaut.io/5.2.x/core/#core-annotationMetadata)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/ioc/annotationMetadata.adoc  upstream_commit: 025ae13b07d45b26c0b0971923d0b828867452b2  upstream_hash: 53a6e57b20953cabbe648fabd2635d2d4957b189  translated_at: 2026-11-21 -->
+
+[[annotationMetadata]]
+Java 的 link:{jdkapi}/java.base/java/lang/reflect/AnnotatedElement.html[AnnotatedElement] API 提供的方法通常无法在不加载注解本身的情况下内省注解，也没有任何内省注解构造型（stereotype，常称为元注解：一个注解被另一个注解标注，从而实质上继承其行为）的能力。
+
+为了解决这个问题，许多框架会生成运行时元数据，或执行昂贵的反射来分析类的注解。
+
+Micronaut 框架则改为在编译期生成这些注解元数据，避免了昂贵的反射并节省内存。
+
+link:{api}/io/micronaut/context/BeanContext.html[BeanContext] API 可用于获取实现了 link:{api}/io/micronaut/core/annotation/AnnotationMetadata.html[AnnotationMetadata] 接口的 link:{api}/io/micronaut/inject/BeanDefinition.html[BeanDefinition] 的引用。
+
+例如，以下代码获取所有标注了特定构造型的 bean 定义：
+
+.按构造型查找 Bean 定义
+[source,java]
+----
+BeanContext beanContext = ... // obtain the bean context
+Collection<BeanDefinition> definitions =
+    beanContext.getBeanDefinitions(Qualifiers.byStereotype(Controller.class))
+
+for (BeanDefinition definition : definitions) {
+    AnnotationValue<Controller> controllerAnn = definition.getAnnotation(Controller.class);
+    // do something with the annotation
+}
+----
+
+上面的示例查找所有标注了 `@Controller` 的 api:inject.BeanDefinition[] 实例，无论 `@Controller` 是直接使用还是通过注解构造型继承而来。
+
+请注意，`getAnnotation` 方法及其变体返回的是 api:core.annotation.AnnotationValue[] 类型而非 Java 注解。这是有意为之的设计：在读取注解值时，通常应尽量使用该 API，因为合成代理实现在性能和内存消耗方面都更差。
+
+如果您需要注解实例的引用，可以使用 `synthesize` 方法，它会创建一个实现该注解接口的运行时代理：
+
+.合成注解实例
+[source,java]
+----
+Controller controllerAnn = definition.synthesize(Controller.class);
+----
+
+但不建议采用这种方式：它需要反射，并且由于使用运行时生成的代理而增加内存消耗，应作为最后手段使用——例如需要注解实例来与第三方库集成时。
+
+=== 注解继承
+
+Micronaut 框架会遵循 Java 的 link:{jdkapi}/java.base/java/lang/reflect/AnnotatedElement.html[AnnotatedElement] API 中定义的注解继承规则：
+
+* 被 link:{jdkapi}/java.base/java/lang/annotation/Inherited.html[Inherited] 元注解的注解可通过 api:core.annotation.AnnotationMetadata[] API 的 `getAnnotation*` 方法获取，而直接声明的注解可通过 `getDeclaredAnnotation*` 方法获取。
+* 未被 link:{jdkapi}/java.base/java/lang/annotation/Inherited.html[Inherited] 元注解的注解不会包含在元数据中
+
+Micronaut 框架与 link:{jdkapi}/java.base/java/lang/reflect/AnnotatedElement.html[AnnotatedElement] API 的不同之处在于，它将这些规则扩展到方法和方法参数：
+
+* 被 link:{jdkapi}/java.base/java/lang/reflect/AnnotatedElement.html[AnnotatedElement] 标注且出现在接口或超类 `A` 的方法上、并被子接口或类 `B` 覆写的任何注解，都会被继承到 api:core.annotation.AnnotationMetadata[] 中——该元数据可通过 api:inject.ExecutableMethod[] API 从 api:inject.BeanDefinition[] 或 <<aop, AOP 拦截器>> 获取。
+* 被 link:{jdkapi}/java.base/java/lang/annotation/Inherited.html[Inherited] 标注且出现在接口或超类 `A` 的方法参数上、并被子接口或类 `B` 覆写的任何注解，都会被继承到 api:core.annotation.AnnotationMetadata[] 中——该元数据可通过 api:core.type.Argument[] 接口、从 api:inject.ExecutableMethod[] API 的 `getArguments` 方法获取。
+
+通常，您可能希望覆写的行为默认不会被继承，包括 <<scopes, bean 作用域>>、<<qualifiers, bean 限定符>>、<<conditionalBeans, bean 条件>>、<<validation, 校验规则>> 等。
+
+如果您希望在子类化时继承特定作用域、限定符或一组要求，可以定义一个被 `@Inherited` 标注的元注解。例如：
+
+snippet::io.micronaut.docs.inject.anninheritance.SqlRepository[tags="imports, class", indent=0, title="Defining Inherited Meta Annotations"]
+
+<1> 该注解被声明为 `@Inherited`
+<2> <<conditionalBeans, bean 条件>> 会被子类继承
+<3> <<qualifiers, bean 限定符>> 会被子类继承
+<4> <<scopes, bean 作用域>> 会被子类继承
+<5> 您还可以对注解进行别名（alias），它们同样会被继承
+
+有了这个元注解，您就可以把该注解添加到超类上：
+
+snippet::io.micronaut.docs.inject.anninheritance.BaseSqlRepository[tags="class", indent=0, title="Using Inherited Meta Annotations on a Super Class"]
+
+然后子类将继承所有注解：
+
+snippet::io.micronaut.docs.inject.anninheritance.BookRepository[tags="imports, class", indent=0, title="Inherting Annotations in a Child Class"]
+
+NOTE: 子类必须至少有一个 bean 定义注解，例如作用域或限定符。
+
+=== 别名 / 映射注解
+
+有时您可能希望把一个注解成员的值别名映射到另一个注解成员的值。为此，请使用 ann:io.micronaut.context.annotation.AliasFor[] 注解。
+
+一个常见用例是：注解定义了 `value()` 成员，同时还支持其他成员，例如 ann:io.micronaut.http.client.annotation.Client[] 注解：
+
+.@Client 注解
+[source,java]
+----
+include::http-client-core/src/main/java/io/micronaut/http/client/annotation/Client.java[tag=value]
+}
+----
+
+<1> `value` 成员同时设置 `id` 成员
+<2> `id` 成员同时设置 `value` 成员
+
+有了这些别名，无论您定义 `@Client("foo")` 还是 `@Client(id="foo")`，`value` 和 `id` 两个成员都会被设置，从而更易于解析和使用该注解。
+
+==== 别名映射其他注解的成员
+
+通过设置 ann:io.micronaut.context.annotation.AliasFor[] 的 `annotation()` （或 `annotationName()`）成员，别名还可以指向另一个注解的成员。当被注解的成员被设置时，被别名指向的注解会作为正在处理的注解的构造型（stereotype）接收该值。如果目标注解已经声明为构造型，别名值将*覆盖*已声明的成员值，而不是再贡献一个注解。
+
+还有两个成员可以细化这一行为：
+
+* `applyDefault()` - 默认情况下，别名仅在使用处显式设置该成员时生效。设置 `applyDefault = true` 后，别名也会应用该成员的*默认*值。这可以建模诸如 `jakarta.validation.OverridesAttribute` 之类的语义：覆写成员的默认值替换组合约束上声明的值。
+* `index()` - 当被别名指向的注解是可重复（repeatable）注解且作为构造型多次声明时，`index` 选择别名覆盖哪一次出现（按声明顺序，从零开始）。默认值 `-1` 将别名应用于所有已声明的出现，超出已声明出现范围的索引会被忽略。
+
+例如：
+
+snippet::io.micronaut.docs.inject.aliasfor.ComposedZip[tags="imports, class", indent=0, title="Overriding a Member of a Declared Stereotype"]
+
+<1> `@Size` 被声明为构造型，`max` 设置为 `5`
+<2> `max()` 成员别名映射 `Size.max`，覆盖已声明的值
+
+因此，任何对 `@ComposedZip` 的使用都会在元数据中产生 `@Size(min = 5, max = 10)`——`max` 来自 `max()` 的默认值，因为 `applyDefault` 为 `true`——而 `@ComposedZip(max = 20)` 则产生 `@Size(min = 5, max = 20)`。
+
+NOTE: `index()` 仅对从 Java 和 Groovy 源码处理的注解进行计算。Kotlin（KSP）注解元数据构建器不提取可重复构造型容器，因此无法按索引定位在 Kotlin 注解类上多次声明的可重复注解。
+
+无法依赖 Micronaut 的注解可以通过 api:io.micronaut.inject.annotation.AnnotationTransformer[] 参与别名解析：当注解成员不携带字面 `@AliasFor` 时，已注册的转换器会应用于该成员的注解，产生的任何 `@AliasFor` 值都会像直接声明一样被处理（未设置 `member` 值的产出别名默认使用被注解成员自身的名称）。例如，校验注解处理器就是通过这种方式把 `jakarta.validation.OverridesAttribute` 重新映射为 `@AliasFor` 的。
+
+如果您无法控制该注解，另一种方法是使用 api:io.micronaut.inject.annotation.AnnotationMapper[]。要创建 `AnnotationMapper`，请执行以下操作：
+
+* 实现 api:io.micronaut.inject.annotation.AnnotationMapper[] 接口
+* 定义一个引用实现类的 `META-INF/services/io.micronaut.inject.annotation.AnnotationMapper` 文件
+* 将包含该实现的 JAR 文件添加到 `annotationProcessor` 类路径（Kotlin 为 `kapt`）
+
+NOTE: 由于 `AnnotationMapper` 实现必须位于注解处理器类路径上，因此它们通常应放在外部依赖较少的项目中，以避免污染注解处理器类路径。
+
+下面是一个改进 JPA 实体内省能力的 `AnnotationMapper` 示例。
+
+.EntityIntrospectedAnnotationMapper 映射器示例
+[source,java]
+----
+include::core-processor/src/main/java/io/micronaut/inject/beans/visitor/EntityIntrospectedAnnotationMapper.java[indent=0, tag="class"]
+----
+
+<1> `map` 方法接收一个 api:io.micronaut.core.annotation.AnnotationValue[]，其中包含该注解的值。
+<2> 可以返回一个或多个注解。
+
+NOTE: 上面的示例实现了 api:io.micronaut.inject.annotation.NamedAnnotationMapper[] 接口，该接口允许注解与运行时代码混合使用。若要针对具体注解类型操作，请改用 api:io.micronaut.inject.annotation.TypedAnnotationMapper[]。但 api:io.micronaut.inject.annotation.TypedAnnotationMapper[] 要求映射器和注解类本身都位于使用方项目的注解处理器类路径上。如果注解和映射器定义在常规应用代码中、且未打包为注解处理器可见的依赖，请改用 api:io.micronaut.inject.annotation.NamedAnnotationMapper[]。
+
+=== 保留组合注解
+
+api:core.annotation.AnnotationMetadata[] 按名称索引注解，因此当一个注解作为另一个注解的构造型被组合时，单个出现与引入它的注解之间的关联就丢失了。考虑两个分别以不同成员组合同一注解的注解：
+
+snippet::io.micronaut.docs.inject.retainable.MinLength[tags="imports, class", indent=0, title="An Annotation Composing @Limit"]
+
+<1> `@Limit` 被声明为构造型，`min` 设置为 `5`
+<2> `value()` 成员别名映射 `Limit.min`，覆盖已声明的值
+
+第二个注解 `@MaxLength` 以同样的方式组合 `@Limit(max = 50)` 并别名映射 `Limit.max`。然后将两者应用于同一个 bean：
+
+snippet::io.micronaut.docs.inject.retainable.CodeValidator[tags="imports, class", indent=0, title="Applying Both Composing Annotations"]
+
+对于这个 bean，`getAnnotationValuesByName(Limit.class)` 报告两次出现，`getAnnotationNamesByStereotype(Limit.class)` 报告 `@MinLength` 和 `@MaxLength` 都引入了一个 `@Limit`，但没有任何信息说明哪一次出现来自哪个组合注解——而且这种对应关系无法从顺序中恢复，因为不同注解贡献的相同出现会合并为一个。
+
+用 ann:core.annotation.Retainable[] 元注解被组合的注解可以解决这个问题。每个组合了可保留（retainable）注解的注解，除了将该出现扁平化进元素的构造型之外，还会在自己的 api:core.annotation.AnnotationValue[] 上保留被组合的出现：
+
+snippet::io.micronaut.docs.inject.retainable.Limit[tags="imports, class", indent=0, title="Declaring a Retainable Annotation"]
+
+<1> 该标记放在*被组合*的注解上，而不是组合它的注解上
+
+注解的保留策略若未达到运行时，就会被元数据编写器输出的内容过滤掉，因此被组合的注解必须在运行时保留才能在那里被读回。
+
+保留的出现通过 api:core.annotation.AnnotationValue[] 的 `getStereotypes()` 方法读回，其中通过 ann:context.annotation.AliasFor[] 声明的成员覆盖已经应用：
+
+snippet::io.micronaut.docs.inject.retainable.RetainableSpec[tags="read", indent=0, title="Reading Retained Stereotypes"]
+
+此处 `min` 为 `@Limit(min = 3)`，`max` 为 `@Limit(max = 9)`：每个组合注解都准确报告它引入的那次出现。
+
+当 ann:core.annotation.Retainable[] 出现在注解自身的构造型中的任何位置时，该注解就是可保留的，因此被 `@Retainable` 元注解的框架注解可以一次性为一整族注解开启此能力。保留的出现反过来又会保留自己的可保留构造型，因此 `getStereotypes()` 可以按树遍历，传递的 `@AliasFor` 覆盖会级联到其每一层。
+
+保留机制会使生成的代码随每个使用处可保留出现的数量成比例增长，因此它是可选加入的，对不组合任何可保留内容的注解完全没有开销。该标记本身永远不会被保留。
+
+NOTE: 保留的出现存储在保留注解成员 `AnnotationUtil.STEREOTYPES_MEMBER` （`$stereotypes`）中，遵循与 `$nonBinding` 相同的约定。它不是注解的属性：对 `getValues()`、`getMemberNames()`、可转换值视图和 `toString()` 隐藏，且不参与相等性判断。请通过 `getStereotypes()` 而非该成员读取它。
+
+==== 何时保留组合注解
+
+当*出现的身份*很重要——而不仅是它的存在或合并值——时，值得添加保留机制：
+
+* *组合约束* - 校验风格的注解组合了多个约束，违反时必须针对产生它的约束上报。这也是使单个出现可寻址的原因：ann:context.annotation.AliasFor[] 上的 `applyDefault` 和 `index` （及其建模的 `jakarta.validation.OverridesAttribute` 语义）指向可重复组合约束的一次出现，而按名称索引无法区分它们。
+* *拦截器绑定* - ann:aop.InterceptorBinding[] 被 `@Retainable` 元注解，因此用于绑定拦截器的每个注解都会保留其绑定出现。绑定比较基于保留的出现而非其成员的副本；在同一元素上以不同成员组合同一绑定注解的两个注解——按名称索引会被合并为一个——会解析为两个绑定。
+* *由元注解契约驱动的行为* - 当 api:inject.visitor.TypeElementVisitor[]、拦截器或 bean 内省作用于您定义的元注解时，保留它可以让这些代码恢复出是哪个用户编写的注解请求了该行为、以及带着哪些成员，而不是只看到一个合并后的出现。将您的元注解标记为 `@Retainable` 会为其之上的每个注解开启此能力。
+* *诊断* - 错误消息和工具可以指明用户实际编写的注解，而不是它展开后的内部构造型。
+
+测试构造型是否存在、读取其合并值、或按名称查找引入它的注解，都不需要保留机制。api:core.annotation.AnnotationMetadata[] 的 `hasAnnotation`、`hasStereotype`、`getAnnotationValuesByName` 和 `getAnnotationNamesByStereotype` 方法已经能回答这些问题，且在生成的元数据中没有额外开销。

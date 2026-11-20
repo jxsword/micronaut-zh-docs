@@ -1815,10 +1815,10 @@ files:
 - file: guide/ioc/annotationMetadata.adoc
   blob_sha: 53a6e57b20953cabbe648fabd2635d2d4957b189
   size: 16715
-  status: missing
+  status: current
   zh: zh/guide/ioc/annotationMetadata.adoc
   paragraphs: 77
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 025ae13b07d45b26c0b0971923d0b828867452b2
 - file: guide/ioc/beanConfigurations.adoc
   blob_sha: e09ccd342e5eeb470203cb1f283ca8d4e4b2bd18
@@ -1839,10 +1839,10 @@ files:
 - file: guide/ioc/beanImport.adoc
   blob_sha: 5b50a5e7fef34b3da6cd9f2e9b0c15e976a58262
   size: 1383
-  status: missing
+  status: current
   zh: zh/guide/ioc/beanImport.adoc
   paragraphs: 9
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 6b62d9ce07aae05cab1b252920d6513acaa6866d
 - file: guide/ioc/beanMappers.adoc
   blob_sha: e14ab1972f56e583f459ce2d278bbb97eabf081c
