@@ -23,7 +23,7 @@ from typing import Dict, List, Optional, Tuple
 import yaml
 
 sys.path.insert(0, str(Path(__file__).parent))
-from segment_adoc import RE_HEADING, segment_adoc  # noqa: E402
+from segment_adoc import RE_HEADING, RE_DIRECTIVE, segment_adoc  # noqa: E402
 
 REPO_ROOT = Path(__file__).parent.parent.resolve()
 SOURCE_DIR = REPO_ROOT / "source"
@@ -84,7 +84,7 @@ def load_banned() -> List[Dict]:
 
 
 def strip_code(content: str) -> str:
-    """剥除代码块/行内码/占位符/URL/引用块行，供 ③④⑦ 在散文上校验。"""
+    """剥除代码块/行内码/占位符/URL/引用块行/指令行，供 ③④⑦ 在散文上校验。"""
     lines = content.split("\n")
     out = []
     in_code = False
@@ -97,6 +97,12 @@ def strip_code(content: str) -> str:
             out.append("")
             continue
         if RE_QUOTE_LINE.match(line):
+            out.append("")
+            continue
+        if RE_DIRECTIVE.match(line):
+            # 指令行（include::/snippet::/source:: 等）逐字节同源、受 ② 门禁，
+            # 其宏参数（如 io.micronaut.docs.inject.qualifiers.*）不是散文，
+            # 不得参与 ③ 术语匹配（B02 实测缺陷修复）
             out.append("")
             continue
         out.append(line)

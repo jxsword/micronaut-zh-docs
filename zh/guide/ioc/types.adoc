@@ -1,0 +1,106 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Injectable Container Types](https://docs.micronaut.io/5.2.x/core/#core-types)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/ioc/types.adoc  upstream_commit: b082149534e5c3d9c202d04380d63e8ef4158e4a  upstream_hash: 7d4178cdb6eb3b0615ca3ce9017439f16bbc9d7a  translated_at: 2026-11-21 -->
+
+[[types]]
+除能够注入 bean 外，Micronaut 框架原生支持注入其他语言类型。
+
+[.lang-python]
+--
+对于 Python，包括：
+.可注入容器类型
+|===
+|类型 |描述 |示例
+
+|https://docs.python.org/3/library/typing.html#typing.Optional[typing.Optional]
+|bean 的 `Optional`。如果 bean 不存在，则注入 `None`
+|`Optional[Engine]`
+
+|https://docs.python.org/3/library/typing.html#typing.List[typing.List or list]
+|Python 原生的 `list`
+|`list[Engine] or List[Engine]`
+
+|https://docs.python.org/3/library/typing.html#typing.Dict[typing.Dict or dict]
+|Python 原生的字典类型 `dict`
+|`dict[str, Engine] or Dict[str, Engine]`
+
+--
+
+[.lang-kotlin.lang-java.lang-groovy]
+--
+对于 Java、Groovy 和 Kotlin，包括：
+
+.可注入容器类型
+|===
+|类型 |描述 |示例
+
+|link:{jdkapi}/java.base/java/util/Optional.html[java.util.Optional]
+|bean 的 `Optional`。如果 bean 不存在，则注入 `empty()`
+|`Optional<Engine>`
+
+|link:{jdkapi}/java.base/java/util/Collection.html[java.util.Collection]
+|`Collection` 或 `Collection` 的子类型（例如 `List`、`Set` 等）
+|`Collection<Engine>`
+
+|link:{jdkapi}/java.base/java/util/Map.html[java.util.Map]
+|`Map` 或 `Map` 的子类型（例如 `LinkedHashMap`、`TreeMap` 等），其中键为限定符
+|`Map<String, Engine>`
+
+|link:{jdkapi}/java.base/java/util/stream/Stream.html[java.util.stream.Stream]
+|bean 的惰性 `Stream`
+|`Stream<Engine>`
+
+|link:{jdkapi}/java.base/java/lang/reflect/Array.html[Array]
+|给定类型的 bean 的原生数组
+|`Engine[]`
+
+|link:{jakartaapi}/jakarta/inject/Provider.html[Provider]
+|循环依赖需要时使用 `jakarta.inject.Provider`，或为每次 `get` 调用实例化一个 prototype。
+|`Provider<Engine>`
+
+|api:context.BeanProvider[]
+|循环依赖需要时使用 `io.micronaut.context.BeanProvider`，或为每次 `get` 调用实例化一个 prototype。
+|`BeanProvider<Engine>`
+
+|===
+
+NOTE: 支持三种不同的 provider 类型，但我们建议使用 `BeanProvider`。
+
+[NOTE]
+====
+将 `java.lang.Collection`、`java.util.stream.Stream` 或 `Array` 等 bean 集合注入到与注入类型匹配的 bean 中时，持有该注入的 bean 自身不会成为注入集合的成员。演示这一点的常见模式是聚合。例如：
+[source,java]
+----
+@Singleton
+class AggregateEngine implements Engine {
+  @Inject
+  List<Engine> engines;
+
+  @Override
+  public void start() {
+    engines.forEach(Engine::start);
+  }
+
+  ...
+}
+----
+在此示例中，注入的成员变量 `engines` 不会包含 `AggregateEngine` 的实例。
+====
+
+TIP: prototype bean 在每个注入该 bean 的位置都会创建一个实例。当 prototype bean 作为 provider 注入时，每次调用 `get()` 都会创建一个新实例。
+--
+
+=== 集合排序
+
+注入 bean 集合时，默认情况下它们是无序的。实现 api:core.order.Ordered[] 接口即可注入有序集合。如果请求的 bean 类型未实现 api:core.order.Ordered[]，Micronaut 框架会在 bean 上搜索 ann:core.annotation.Order[] 注解。
+
+ann:core.annotation.Order[] 注解对于排序由工厂创建的 bean 尤其有用——此时 bean 类型是第三方库中的类。在此示例中，`LowRateLimit` 和 `HighRateLimit` 都实现了 `RateLimit` 接口。
+
+snippet::io.micronaut.docs.config.env.RateLimitsFactory[tags="clazz", indent=0, title="Factory with @Order"]
+
+从上下文请求 `RateLimit` bean 集合时，会根据注解中的值按升序返回它们。Micronaut 在构建时将 link:{jakartaapi}/jakarta/annotation/Priority.html[jakarta.annotation.Priority] 映射为 ann:core.annotation.Order[]，因此 link:{jakartaapi}/jakarta/annotation/Priority.html[@Priority] 值的处理方式与 ann:core.annotation.Order[] 相同，遵循同样的数值升序优先级（数字越小优先级越高）。
+
+=== 按顺序注入 bean
+
+注入单个 bean 实例时，ann:core.annotation.Order[] 注解也可用于定义哪个 bean 具有最高优先级、从而应被注入。Micronaut 还会在构建时将 link:{jakartaapi}/jakarta/annotation/Priority.html[jakarta.annotation.Priority] 映射为 ann:core.annotation.Order[]，因此相同的 link:{jakartaapi}/jakarta/annotation/Priority.html[@Priority] 数值语义决定了对单 bean 注入时哪个 bean 具有最高优先级。
+
+NOTE: 选择单个实例时不会考虑 api:core.order.Ordered[] 接口，因为这将需要实例化 bean 才能解析顺序。

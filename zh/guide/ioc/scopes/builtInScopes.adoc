@@ -1,0 +1,34 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Built-In Scopes](https://docs.micronaut.io/5.2.x/core/#core-builtInScopes)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/ioc/scopes/builtInScopes.adoc  upstream_commit: 400e272bf3fbf33a3489e17760ea3a590accf852  upstream_hash: e49e7b5571e3419491f615c256fa8d4ff3a1631d  translated_at: 2026-11-21 -->
+
+.Micronaut 内置作用域
+|===
+|类型 |描述
+
+|link:{jakartaapi}/jakarta/inject/Singleton.html[@Singleton]
+|Singleton 作用域表明该 bean 只会存在一个实例
+|link:{api}/io/micronaut/context/annotation/Context.html[@Context]
+|Context 作用域表明该 bean 将与 `ApplicationContext` 同时创建（饿汉式初始化）
+|link:{api}/io/micronaut/context/annotation/Prototype.html[@Prototype]
+|Prototype 作用域表明每次注入该 bean 时都会创建一个新实例
+|link:{api}/io/micronaut/context/annotation/Infrastructure.html[@Infrastructure]
+|Infrastructure 作用域表示一个无法使用 ann:context.annotation.Replaces[] 覆盖或替换的 bean，因为它对系统的正常运行至关重要。
+|link:{api}/io/micronaut/runtime/context/scope/ThreadLocal.html[@ThreadLocal]
+|`@ThreadLocal` 作用域是一种自定义作用域，通过 ThreadLocal 为每个线程关联一个 bean
+|link:{api}/io/micronaut/runtime/context/scope/Refreshable.html[@Refreshable]
+|`@Refreshable` 作用域是一种自定义作用域，允许通过 `/refresh` 端点刷新 bean 的状态。
+|link:{api}/io/micronaut/runtime/http/scope/RequestScope.html[@RequestScope]
+|`@RequestScope` 作用域是一种自定义作用域，表明每次 HTTP 请求都会创建该 bean 的一个新实例并与该请求关联
+|===
+
+NOTE: link:{api}/io/micronaut/context/annotation/Prototype.html[@Prototype] 注解是 link:{api}/io/micronaut/context/annotation/Bean.html[@Bean] 的同义词，因为默认作用域就是 prototype。
+
+可以通过定义一个实现 link:{api}/io/micronaut/context/scope/CustomScope.html[CustomScope] 接口的 `@Singleton` bean 来添加更多作用域。
+
+请注意，启动 api:context.ApplicationContext[] 时，默认情况下 `@Singleton` 作用域的 bean 是按需延迟创建的。这是为优化启动时间而有意为之的设计。
+
+如果这给您的用例带来了问题，您可以选择使用 ann:context.annotation.Context[] 注解，它将对象的生命周期与 api:context.ApplicationContext[] 的生命周期绑定。换句话说，当 api:context.ApplicationContext[] 启动时，您的 bean 将被创建。
+
+或者，您可以为任何 `@Singleton` 作用域的 bean 标注 ann:context.annotation.Parallel[]，它允许并行初始化您的 bean，而不影响整体启动时间。
+
+NOTE: 如果您的 bean 并行初始化失败，应用程序将自动关闭。

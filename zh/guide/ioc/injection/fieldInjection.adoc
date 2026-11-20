@@ -1,0 +1,30 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Field Injection](https://docs.micronaut.io/5.2.x/core/#core-fieldInjection)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/ioc/injection/fieldInjection.adoc  upstream_commit: 130cfede2d9a325faf7016bf10e0a2060c5a3cbd  upstream_hash: 69c555980fb0d167106ec9dad03b3e6ed96dd9d8  translated_at: 2026-11-21 -->
+
+[.lang-kotlin.lang-java.lang-groovy]
+--
+可以通过用 `jakarta.inject.Inject` 注解字段来注入非 final 字段，例如：
+--
+
+[.lang-python]
+--
+可以通过使用 `typing.Annotated[]` 并传入 `jakarta.inject.Inject` 来注入 Python 属性，例如：
+--
+
+.字段注入示例
+snippet::io.micronaut.docs.ioc.injection.field.Vehicle[indent="0"]
+
+<1> 该字段标注了 `jakarta.inject.Inject`。
+
+[.lang-kotlin]
+--
+NOTE: 对于 Kotlin，可以使用 `lateinit var` 来代替可选类型（以 `?` 结尾的类型）
+--
+
+[.lang-kotlin.lang-java.lang-groovy]
+--
+尝试注入声明为 `final` 的字段将导致编译错误。正如前几节所述，字段注入应被视为不如构造器注入，因为它可能导致代码结构更差、更难阅读、更难测试。
+
+WARNING: 如果字段是 `private` 作用域或不可访问，则该字段将通过 Java 反射 API 注入，不推荐这样做。
+--
+

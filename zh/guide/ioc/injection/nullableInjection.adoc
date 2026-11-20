@@ -1,0 +1,44 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Nullable Injection](https://docs.micronaut.io/5.2.x/core/#core-nullableInjection)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/ioc/injection/nullableInjection.adoc  upstream_commit: 130cfede2d9a325faf7016bf10e0a2060c5a3cbd  upstream_hash: e99993d695c4ab99e0051f8b3b224bbf5aa9ac66  translated_at: 2026-11-21 -->
+
+有时希望注入是可选的（即当没有可用的候选 bean 时，不因 api:context.exceptions.NoSuchBeanException[] 而失败）。
+
+例如，如果您试图构建一个可扩展的系统：类型本身提供了默认实现，而 API 的使用者可以提供一个 bean，如果该 bean 可用，它将被注入。
+
+[.lang-java.lang-groovy]
+--
+使注入变为可选的一种方式是使用 `org.jspecify.annotations.Nullable` 对注入的类型进行注解，这样当 bean 不可用时，框架将注入 `null`：
+--
+
+[.lang-kotlin]
+--
+在 Kotlin 中，将注入的类型声明为可空类型（以 `?` 结尾的类型），当 bean 不可用时，框架将注入 `null`：
+--
+
+.注入 `null` 的示例
+snippet::io.micronaut.docs.ioc.injection.nullable.Vehicle[indent="0"]
+
+[.lang-java.lang-groovy]
+--
+<1> 此处构造器参数标注了 `org.jspecify.annotations.Nullable`
+--
+
+[.lang-kotlin]
+--
+<1> 此处构造器参数声明为可空类型 `Engine?`
+--
+[.lang-python]
+--
+<1> 在 Python 中，您可以使用带 `None` 的联合类型，如上例中的 `Engine | None`。
+--
+<2> 由于没有可用的 bean，将注入 `null`，代码必须处理参数可能为 `null` 的情况。
+
+[.lang-java.lang-groovy]
+--
+使用 `org.jspecify.annotations.Nullable` 有以下注意事项：
+
+* 可用于任何注入类型（构造器注入、方法注入或字段注入）
+* 代码必须在某处处理注入 `null` 时会发生什么。对构造器而言这很容易，因为构造器可以处理 `null`；而对字段和方法，如果 `null` 不合期望，则需要实现一个 `@PostConstruct` 方法来处理 `null`。
+* 最后，在使用 <<valueAnnotation, 配置注入>> 时，`@Nullable` 不能用于 `int`、`long` 等基本类型。要处理基本类型，您需要指定 `@Bindable(defaultValue="..")` 并提供默认值。
+--
+

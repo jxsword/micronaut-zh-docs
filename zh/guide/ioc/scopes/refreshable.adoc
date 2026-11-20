@@ -1,0 +1,21 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Refreshable Scope](https://docs.micronaut.io/5.2.x/core/#core-refreshable)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/ioc/scopes/refreshable.adoc  upstream_commit: 5280436c47bbcd1a143801fcf266db27b3d6d758  upstream_hash: 5c4d18316d6b22d3f32f4ddc0ec0f01ce1197f96  translated_at: 2026-11-21 -->
+
+[[refreshable]]
+api:runtime.context.scope.Refreshable[] 作用域是一种自定义作用域，允许通过以下方式刷新 bean 的状态：
+
+- `/refresh` 端点。
+- 发布 api:runtime.context.scope.refresh.RefreshEvent[]。
+
+下面的示例展示了 `@Refreshable` 作用域的行为。
+
+snippet::io.micronaut.docs.inject.scope.RefreshEventSpec[tags="weatherService",indent="0"]
+
+<1> `WeatherService` 标注了 `@Refreshable` 作用域，它会存储一个实例，直到刷新事件被触发
+<2> `forecast` 属性的值在 bean 创建时被设置为一个固定值，在 bean 被刷新之前不会改变
+
+如果您调用 `latestForecast()` 两次，将看到相同的响应，例如 `"Scattered Clouds 01/Feb/18 10:29.199"`。
+
+当 `/refresh` 端点被调用或 api:runtime.context.scope.refresh.RefreshEvent[] 被发布时，实例会失效，下次请求该对象时将创建新实例。例如：
+
+snippet::io.micronaut.docs.inject.scope.RefreshEventSpec[tags="publishEvent",indent="0"]

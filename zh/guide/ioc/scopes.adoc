@@ -1,0 +1,5 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Scopes](https://docs.micronaut.io/5.2.x/core/#core-scopes)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/ioc/scopes.adoc  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360  upstream_hash: 8dee727e1e1655290c6972f12d2d43022064908c  translated_at: 2026-11-21 -->
+
+[[scopes]]
+Micronaut 框架提供了一种基于 JSR-330 的可扩展 bean 作用域机制。支持以下默认作用域：

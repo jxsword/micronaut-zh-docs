@@ -1,0 +1,58 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Eager Initialization of Singletons](https://docs.micronaut.io/5.2.x/core/#core-eagerInit)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/ioc/scopes/builtInScopes/eagerInit.adoc  upstream_commit: 51650efcb97939ef02bf726bdcb28266b7ca20d1  upstream_hash: 183ea26e38a51c31d0bf5eb769b49ca45e0df2ed  translated_at: 2026-11-21 -->
+
+在某些场景下，对 `@Singleton` bean 采用饿汉式初始化（eager initialization）可能是可取的，例如在 AWS Lambda 上，Lambda 构建阶段分配的 CPU 资源多于执行阶段。
+
+您可以使用 link:{api}/io/micronaut/context/ApplicationContextBuilder.html[ApplicationContextBuilder] 接口指定是否对 `@Singleton` 作用域的 bean 进行饿汉式初始化：
+
+.启用 Singleton 的饿汉式初始化
+[source,java]
+----
+public class Application {
+
+    public static void main(String[] args) {
+        Micronaut.build(args)
+            .eagerInitSingletons(true) // <1>
+            .mainClass(Application.class)
+            .start();
+    }
+}
+----
+
+<1> 将饿汉式初始化设置为 `true` 会初始化所有单例
+
+当在 <<serverlessFunctions, Serverless 函数>> 等环境中使用 Micronaut 框架时，您不会有 Application 类，而是继承一个由 Micronaut 提供的类。在这些情况下，Micronaut 提供了可供重写的方法来增强 api:context.ApplicationContextBuilder[]
+
+.重写 newApplicationContextBuilder()
+[source,java]
+----
+public class MyFunctionHandler extends MicronautRequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
+...
+    @Nonnull
+    @Override
+    protected ApplicationContextBuilder newApplicationContextBuilder() {
+        ApplicationContextBuilder builder = super.newApplicationContextBuilder();
+        builder.eagerInitSingletons(true);
+        return builder;
+    }
+    ...
+}
+----
+
+ann:context.annotation.ConfigurationReader[] bean（例如 ann:context.annotation.EachProperty[] 或 ann:context.annotation.ConfigurationProperties[]）是 singleton bean。要对配置进行饿汉式初始化，同时保持其他 `@Singleton` 作用域的 bean 延迟创建，请使用 `eagerInitConfiguration`：
+
+.启用配置的饿汉式初始化
+[source,java]
+----
+public class Application {
+
+    public static void main(String[] args) {
+        Micronaut.build(args)
+            .eagerInitConfiguration(true) // <1>
+            .mainClass(Application.class)
+            .start();
+    }
+}
+----
+
+<1> 将饿汉式初始化设置为 true 会初始化所有配置读取器 bean。

@@ -1,0 +1,24 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Limiting Injectable Types](https://docs.micronaut.io/5.2.x/core/#core-typed)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/ioc/typed.adoc  upstream_commit: 51650efcb97939ef02bf726bdcb28266b7ca20d1  upstream_hash: 925321454f881aec1d472a54fe86726be4fcbc75  translated_at: 2026-11-21 -->
+
+默认情况下，当您用 `@Singleton` 之类的作用域注解标注 bean 时，该 bean 类及其实现的所有接口和继承的所有超类都可通过 `@Inject` 注入。
+
+考虑前一节定义 bean 中的示例：
+
+snippet::io.micronaut.docs.inject.qualifiers.named.V8Engine[tags="class",indent=0]
+
+在上述情况下，应用程序中的其他类可以选择注入接口 `Engine` 或具体实现 `V8Engine`。
+
+如果这不是您想要的行为，可以使用 ann:context.annotation.Bean[] 注解的 `typed` 成员来限制暴露的类型。例如：
+
+snippet::io.micronaut.docs.inject.typed.V8Engine[tags="class",indent=0]
+
+<1> 使用 `@Bean(typed=..)` 仅允许注入接口 `Engine`，而不允许注入具体类型
+<2> 该类必须实现 `typed` 所定义的类或接口，否则将发生编译错误
+
+以下测试通过程序化查找和 api:context.BeanContext[] API 演示了 `typed` 的行为：
+
+snippet::io.micronaut.docs.inject.typed.EngineSpec[tags="class",indent=0]
+
+<1> 尝试查找 `V8Engine` 将抛出 api:context.exceptions.NoSuchBeanException[]
+<2> 而查找 `Engine` 接口则会成功

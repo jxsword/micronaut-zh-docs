@@ -1,0 +1,146 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Bean Qualifiers](https://docs.micronaut.io/5.2.x/core/#core-qualifiers)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/ioc/qualifiers.adoc  upstream_commit: 15119ba9ee63100091348d40eaffe708155b53ae  upstream_hash: 2a2f7e0f4cdfc479ca41cde23b85c09fbf2284fa  translated_at: 2026-11-21 -->
+
+[[qualifiers]]
+如果要注入的给定接口存在多个可能的实现，您需要使用限定符（qualifier）。
+
+Micronaut 框架同样利用 JSR-330 以及 link:{jakartaapi}/jakarta/inject/Qualifier.html[Qualifier] 和 link:{jakartaapi}/jakarta/inject/Named.html[Named] 注解来支持这一用例。
+
+== 按名称限定
+
+要按名称限定，请使用 link:{jakartaapi}/jakarta/inject/Named.html[Named] 注解。例如，考虑以下类：
+
+snippet::io.micronaut.docs.inject.qualifiers.named.Engine,io.micronaut.docs.inject.qualifiers.named.V6Engine,io.micronaut.docs.inject.qualifiers.named.V8Engine,io.micronaut.docs.inject.qualifiers.named.Vehicle[tags="class",indent=0]
+
+<1> `Engine` 接口定义了公共契约
+<2> `V6Engine` 类是第一个实现
+<3> `V8Engine` 类是第二个实现
+<4> link:{jakartaapi}/jakarta/inject/Named.html[jakarta.inject.Named] 注解表明需要 `V8Engine` 实现
+<5> 调用 start 方法将输出：`"Starting V8"`
+
+Micronaut 框架能够在上一个示例中注入 `V8Engine`，原因是：
+
+`@Named` 限定符值（`v8`）+ 被注入类型的简单名称（`Engine`）==（不区分大小写）== 类型为 `Engine` 的 bean 的简单名称（`V8Engine`）
+
+您也可以在 bean 的类级别声明 link:{jakartaapi}/jakarta/inject/Named.html[@Named]，以显式定义该 bean 的名称。
+
+== 按注解限定
+
+除按名称限定外，您还可以使用 link:{jakartaapi}/jakarta/inject/Qualifier.html[Qualifier] 注解构建自己的限定符。例如，考虑以下注解：
+
+snippet::io.micronaut.docs.qualifiers.annotation.V8[tags="imports,class",indent=0]
+
+上面的注解本身又用 `@Qualifier` 注解标注，以将其指定为限定符。随后即可在代码中的任何注入点使用该注解。例如：
+
+snippet::io.micronaut.docs.qualifiers.annotation.Vehicle[tags="constructor",indent=0]
+
+== 按注解成员限定
+
+自 Micronaut 框架 3.0 起，注解限定符还可以使用注解成员来解析要注入的正确 bean。例如，考虑以下注解：
+
+snippet::io.micronaut.docs.qualifiers.annotationmember.Cylinders[tags="imports,class",indent=0]
+
+<1> `@Cylinders` 注解以 `@Qualifier` 元注解标注
+<2> 该注解有两个成员。ann:context.annotation.NonBinding[] 注解用于在依赖解析期间排除 `description` 成员。
+
+随后可在任何 bean 上使用 `@Cylinders` 注解，未用 ann:context.annotation.NonBinding[] 注解标注的成员会在依赖解析期间被纳入考量：
+
+snippet::io.micronaut.docs.qualifiers.annotationmember.V6Engine[tags="class",indent=0]
+
+<1> 此处将 `V6Engine` 类型的 `value` 成员设为 6
+<2> 该类实现了一个 `Engine` 接口
+
+snippet::io.micronaut.docs.qualifiers.annotationmember.V8Engine[tags="class",indent=0]
+
+<1> 此处将 `V8Engine` 类型的 `value` 成员设为 8
+<2> 该类实现了一个 `Engine` 接口
+
+随后可在任何注入点使用 `@Cylinders` 限定符来选择要注入的正确 bean。例如：
+
+snippet::io.micronaut.docs.qualifiers.annotationmember.Vehicle[tags="constructor",indent="0"]
+
+== 按泛型类型实参限定
+
+自 Micronaut 框架 3.0 起，可以基于类或接口的泛型类型实参选择要注入的 bean。考虑以下示例：
+
+snippet::io.micronaut.docs.inject.generics.CylinderProvider[tags="class",indent=0]
+
+`CylinderProvider` 接口提供气缸数量。
+
+snippet::io.micronaut.docs.inject.generics.Engine[tags="class",indent=0]
+
+<1> 该引擎类定义了一个泛型类型实参 `<T>`，其必须是 `CylinderProvider` 的实例
+
+您可以用不同的泛型类型实参定义 `Engine` 接口的实现。例如，对于 V6 引擎：
+
+snippet::io.micronaut.docs.inject.generics.V6[tags="class",indent=0]
+
+上面的代码定义了一个实现 `CylinderProvider` 接口的 `V6` 类。
+
+snippet::io.micronaut.docs.inject.generics.V6Engine[tags="class",indent=0]
+
+<1> `V6Engine` 实现了 `Engine`，并提供 `V6` 作为泛型类型参数
+
+V8 引擎：
+
+snippet::io.micronaut.docs.inject.generics.V8[tags="class",indent=0]
+
+上面的代码定义了一个实现 `CylinderProvider` 接口的 `V8` 类。
+
+snippet::io.micronaut.docs.inject.generics.V8Engine[tags="class",indent=0]
+
+<1> `V8Engine` 实现了 `Engine`，并提供 `V8` 作为泛型类型参数
+
+随后在定义注入点时即可使用泛型实参，Micronaut 框架会根据具体的泛型类型实参选取要注入的正确 bean：
+
+snippet::io.micronaut.docs.inject.generics.Vehicle[tags="constructor",indent=0]
+
+在上面的示例中，注入的是 `V8Engine` bean。
+
+== Primary 与 Secondary bean
+
+api:context.annotation.Primary[] 是一个限定符，当存在多个接口实现时，它表明该 bean 是应被选中的 primary bean。
+
+考虑以下示例：
+
+snippet::io.micronaut.docs.context.annotation.primary.ColorPicker[tags="clazz", indent=0]
+
+以下类实现了 `ColorPicker`：
+
+snippet::io.micronaut.docs.context.annotation.primary.Green[tags="imports,clazz", indent=0, title="The Primary Bean"]
+
+`Green` bean 类实现了 `ColorPicker` 并标注了 `@Primary`。
+
+snippet::io.micronaut.docs.context.annotation.primary.Blue[tags="imports,clazz", indent=0, title="Another Bean of the Same Type"]
+
+`Blue` bean 类也实现了 `ColorPicker`，因此在注入 `ColorPicker` 接口时您会有两个可能的候选。由于 `Green` 是 primary，它总是会被优先选用。
+
+snippet::io.micronaut.docs.context.annotation.primary.TestController[tags="clazz", indent=0]
+
+<1> 虽然存在两个 `ColorPicker` bean，但由于 `@Primary` 注解，注入的是 `Green`。
+
+如果存在多个可能的候选且未定义 `@Primary`，将抛出 api:context.exceptions.NonUniqueBeanException[]。
+
+除 `@Primary` 外，还有 api:context.annotation.Secondary[] 注解，其效果相反，可用于降低某个 bean 的优先级。
+
+TIP: 更多内容请参阅 https://guides.micronaut.io/latest/micronaut-patterns-composite.html[Micronaut 模式 - Composite] 指南。
+
+== 注入任意 bean
+
+如果您不介意注入哪个 bean，可以使用 ann:context.annotation.Any[] 限定符，它会注入第一个可用的 bean，例如：
+
+snippet::io.micronaut.docs.qualifiers.any.VehicleSpec[tags="any", indent=0, title="Injecting Any Instance"]
+
+ann:context.annotation.Any[] 限定符通常与 api:context.BeanProvider[] 接口配合使用，以支持更动态的使用场景。例如，下面的 `Vehicle` 实现会在该 bean 存在时启动 `Engine`：
+
+snippet::io.micronaut.docs.qualifiers.any.Vehicle[tags="imports,clazz", indent=0, title="Using BeanProvider with Any"]
+
+<1> 使用 `@Any` 注入 api:context.BeanProvider[]
+<2> 通过 `ifPresent` 方法在底层 bean 存在时调用 `start` 方法
+
+如果存在多个 bean，您也可以调整行为。下面的示例会启动 `Vehicle` 中安装的所有引擎（如果有）：
+
+snippet::io.micronaut.docs.qualifiers.any.Vehicle[tags="startAll", indent=0, title="Using BeanProvider with Any"]
+
+<1> 检查是否存在任何 bean
+<2> 如果存在，则通过 `stream().forEach(..)` 方法遍历每一个并启动引擎

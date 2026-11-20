@@ -1951,34 +1951,34 @@ files:
 - file: guide/ioc/injection/constructorInjection.adoc
   blob_sha: b488d5b08d472500f4f7c66e1f61ca219971d6e0
   size: 2266
-  status: missing
+  status: current
   zh: zh/guide/ioc/injection/constructorInjection.adoc
   paragraphs: 10
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: dc62175fe6d4ea8e243d30b99badec90ffda330b
 - file: guide/ioc/injection/fieldInjection.adoc
   blob_sha: 69c555980fb0d167106ec9dad03b3e6ed96dd9d8
   size: 1022
-  status: missing
+  status: current
   zh: zh/guide/ioc/injection/fieldInjection.adoc
   paragraphs: 17
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 130cfede2d9a325faf7016bf10e0a2060c5a3cbd
 - file: guide/ioc/injection/methodInjection.adoc
   blob_sha: 03fcffffe0369499d0c5dc0f05d367dd0e678744
   size: 821
-  status: missing
+  status: current
   zh: zh/guide/ioc/injection/methodInjection.adoc
   paragraphs: 7
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 5b2e2bb6e6af14cdcb7ef0bcf4b1f363ccdae9df
 - file: guide/ioc/injection/nullableInjection.adoc
   blob_sha: e99993d695c4ab99e0051f8b3b224bbf5aa9ac66
   size: 2056
-  status: missing
+  status: current
   zh: zh/guide/ioc/injection/nullableInjection.adoc
   paragraphs: 29
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 130cfede2d9a325faf7016bf10e0a2060c5a3cbd
 - file: guide/ioc/introspection.adoc
   blob_sha: 9003091558a43e0dba204d86b62abe7bd6870af1
@@ -2159,10 +2159,10 @@ files:
 - file: guide/ioc/qualifiers.adoc
   blob_sha: 2a2f7e0f4cdfc479ca41cde23b85c09fbf2284fa
   size: 7803
-  status: missing
+  status: current
   zh: zh/guide/ioc/qualifiers.adoc
   paragraphs: 67
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 15119ba9ee63100091348d40eaffe708155b53ae
 - file: guide/ioc/reflection.adoc
   blob_sha: fee9571a39beabb43a51c19c6bb34f5777e9c541
@@ -2183,42 +2183,42 @@ files:
 - file: guide/ioc/scopes.adoc
   blob_sha: 8dee727e1e1655290c6972f12d2d43022064908c
   size: 128
-  status: missing
+  status: current
   zh: zh/guide/ioc/scopes.adoc
   paragraphs: 1
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/ioc/scopes/builtInScopes.adoc
   blob_sha: e49e7b5571e3419491f615c256fa8d4ff3a1631d
   size: 2518
-  status: missing
+  status: current
   zh: zh/guide/ioc/scopes/builtInScopes.adoc
   paragraphs: 8
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 400e272bf3fbf33a3489e17760ea3a590accf852
 - file: guide/ioc/scopes/builtInScopes/eagerInit.adoc
   blob_sha: 183ea26e38a51c31d0bf5eb769b49ca45e0df2ed
   size: 2155
-  status: missing
+  status: current
   zh: zh/guide/ioc/scopes/builtInScopes/eagerInit.adoc
   paragraphs: 15
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 51650efcb97939ef02bf726bdcb28266b7ca20d1
 - file: guide/ioc/scopes/metaScopes.adoc
   blob_sha: 2e19faad8a8303c6651608b1b39104449acd1398
   size: 1863
-  status: missing
+  status: current
   zh: zh/guide/ioc/scopes/metaScopes.adoc
   paragraphs: 21
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 92e1b442d416e561e4d0e18e6350176c69350263
 - file: guide/ioc/scopes/refreshable.adoc
   blob_sha: 5c4d18316d6b22d3f32f4ddc0ec0f01ce1197f96
   size: 1062
-  status: missing
+  status: current
   zh: zh/guide/ioc/scopes/refreshable.adoc
   paragraphs: 8
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 5280436c47bbcd1a143801fcf266db27b3d6d758
 - file: guide/ioc/springBeans.adoc
   blob_sha: 8fd28e5d53d7956f23b290a2d63376ac460efa1b
@@ -2231,18 +2231,18 @@ files:
 - file: guide/ioc/typed.adoc
   blob_sha: 925321454f881aec1d472a54fe86726be4fcbc75
   size: 1266
-  status: missing
+  status: current
   zh: zh/guide/ioc/typed.adoc
   paragraphs: 10
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 51650efcb97939ef02bf726bdcb28266b7ca20d1
 - file: guide/ioc/types.adoc
   blob_sha: 7d4178cdb6eb3b0615ca3ce9017439f16bbc9d7a
   size: 4768
-  status: missing
+  status: current
   zh: zh/guide/ioc/types.adoc
   paragraphs: 14
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: b082149534e5c3d9c202d04380d63e8ef4158e4a
 - file: guide/languageSupport.adoc
   blob_sha: 01adae2cb38a495f5c8e321fa1576e86e989eb3a

@@ -1,0 +1,27 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Constructor Injection](https://docs.micronaut.io/5.2.x/core/#core-constructorInjection)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/ioc/injection/constructorInjection.adoc  upstream_commit: dc62175fe6d4ea8e243d30b99badec90ffda330b  upstream_hash: b488d5b08d472500f4f7c66e1f61ca219971d6e0  translated_at: 2026-11-21 -->
+
+构造器注入是指将依赖注入到类型的构造器中。
+
+构造器注入是首选且推荐的注入类型，因为构造器注入：
+
+* 允许不可变类型
+* 无需额外的注解
+* 更不容易导致 `NullPointerException`
+* 在一处更清晰地表达特定类型的依赖。
+
+下一节中的示例使用了构造器注入。请注意，如果您有多个构造器，可以使用 `jakarta.inject.Inject` 注解或 ann:core.annotation.Creator[] 注解来消歧要调用的构造器：
+
+.构造器注入示例
+snippet::io.micronaut.docs.ioc.injection.ctor.Vehicle[indent="0"]
+
+<1> 定义了多个构造器，因此使用 `@Inject` 来选择正确的构造器。
+<2> ann:core.annotation.Creator[] 注解也可用于选择一个 `static` 工厂方法来充当构造器。
+
+在上面的示例中，从 link:{api}/io/micronaut/context/BeanContext.html[BeanContext] 获取 `Vehicle` 类型将导致调用 `Vehicle(Engine engine)` 构造器，该构造器又会使用 `getDefault()` 方法来解析 `Engine`，因为它标注了 `@Creator`。
+
+NOTE: 如果未指定 `@Inject` 或 `@Creator`，Micronaut 将尝试定位类中的第一个 `public` 构造器，否则将发生编译错误。
+
+如果特定构造器参数存在多个可能的候选 bean，可以指定限定符（qualifier）（例如 `jakarta.inject.Named`）来消歧注入。如果无法消歧，结果将抛出 api:context.exceptions.NonUniqueBeanException[]。更多信息请参阅 <<qualifiers, 限定符>> 一节。
+
+WARNING: `private` 构造器只能通过 Java 反射 API 调用，不推荐这样做。如果在 `private` 构造器上使用 `@Inject` 或 ann:core.annotation.Creator[]，还必须用 ann:core.annotation.ReflectiveAccess[] 对其注解以选择加入反射实例化，否则将发生编译错误。请注意，通过反射实例化的类型无法应用 AOP advice，因为生成的代理必须直接调用构造器。

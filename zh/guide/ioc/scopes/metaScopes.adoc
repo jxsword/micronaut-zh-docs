@@ -1,0 +1,64 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Scopes on Meta Annotations](https://docs.micronaut.io/5.2.x/core/#core-metaScopes)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/ioc/scopes/metaScopes.adoc  upstream_commit: 92e1b442d416e561e4d0e18e6350176c69350263  upstream_hash: 2e19faad8a8303c6651608b1b39104449acd1398  translated_at: 2026-11-21 -->
+
+作用域可以定义在元注解（meta-annotation）上，然后您可以将这些元注解应用到您的类。考虑以下示例元注解：
+
+.Driver.java 注解
+
+snippet::io.micronaut.docs.ioc.scopes.Driver[tags="imports,class",indent=0]
+
+<1> 该作用域使用 api:context.annotation.Requires[] 声明对 `Car` 类的要求
+<2> 该注解被声明为 `@Singleton`
+
+在上面的示例中，`@Singleton` 注解被应用到了 `@Driver` 注解上，这使得每个标注了 `@Driver` 的类都被视为 singleton。
+
+请注意，在这种情况下，应用注解时无法更改作用域。例如，以下代码不会覆盖 `@Driver` 声明的作用域，因此是无效的：
+
+.声明另一个作用域
+[source,java]
+----
+@Driver
+@Prototype
+class Foo {}
+----
+// TODO 这是否应该转换？我认为它在每种语言中都一样
+
+要使作用域可被覆盖，请改为在 `@Driver` 上使用 api:context.annotation.DefaultScope[] 注解，它允许在不存在其他作用域时指定默认作用域：
+
+.使用 @DefaultScope
+
+[source.multi-language-sample,java]
+----
+@Requires(classes = Car.class)
+@DefaultScope(Singleton.class) // <1>
+@Documented
+@Retention(RUNTIME)
+public @interface Driver {
+}
+----
+[source.multi-language-sample,groovy]
+----
+@Requires(classes = Car.class)
+@DefaultScope(Singleton.class) // <1>
+@Documented
+@Retention(RUNTIME)
+@interface Driver {
+}
+----
+[source.multi-language-sample,kotlin]
+----
+@Requires(classes = [Car::class])
+@DefaultScope(Singleton::class) // <1>
+@Documented
+@Retention(RUNTIME)
+annotation class Driver
+----
+[source.multi-language-sample,python]
+----
+@Requires(classes = Car)
+@DefaultScope(Singleton) # <1>
+def Driver(func):
+    return func
+----
+
+<1> api:context.annotation.DefaultScope[] 声明在未指定作用域时使用的作用域

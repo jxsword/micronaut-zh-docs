@@ -141,6 +141,18 @@ def test_check3_required_term_missing(tmp_path, monkeypatch):
     assert any("③ 必译术语缺失" in e for e in errs)
 
 
+def test_check3_directive_line_not_prose(tmp_path, monkeypatch):
+    # B02 实测缺陷修复：snippet:: 宏参数中的 qualifiers 不是散文，
+    # 指令行不得参与 ③ 术语匹配（指令行本身受 ② 逐字节门禁保护）
+    directive = 'snippet::io.micronaut.docs.inject.qualifiers.named.V8Engine[tags="class",indent=0]\n'
+    make_tree(tmp_path, directive + "\n散文段落。\n", directive + "\n正文段落。\n")
+    patch_vt(monkeypatch, tmp_path)
+    errs, _ = vt.validate_file(
+        tmp_path / "source/guide/a.adoc", tmp_path / "zh/guide/a.adoc",
+        "guide/a.adoc", {"qualifier": "限定符"}, [], None, "a" * 40)
+    assert not any("③ 必译术语缺失" in e for e in errs)
+
+
 def test_check4_structure_level_mismatch(tmp_path, monkeypatch):
     bad = GOOD_ZH.replace("= 标题一", "== 标题一")
     make_tree(tmp_path, GOOD_SRC, bad)

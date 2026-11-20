@@ -1,0 +1,16 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Method Injection](https://docs.micronaut.io/5.2.x/core/#core-methodInjection)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/ioc/injection/methodInjection.adoc  upstream_commit: 5b2e2bb6e6af14cdcb7ef0bcf4b1f363ccdae9df  upstream_hash: 03fcffffe0369499d0c5dc0f05d367dd0e678744  translated_at: 2026-11-21 -->
+
+可以通过用 `jakarta.inject.Inject` 注解方法来注入方法。对于方法的每个参数，Micronaut 都会尝试将其解析为一个 bean。如果任一参数无法解析，将抛出 api:context.exceptions.NoSuchBeanException[]。
+
+.方法注入示例
+snippet::io.micronaut.docs.ioc.injection.method.Vehicle[indent="0"]
+
+<1> 该方法标注了 `jakarta.inject.Inject`，因此将被注入
+
+[.lang-kotlin.lang-java.lang-groovy]
+--
+WARNING: 如果方法是 `private` 作用域或不可访问，则该方法将通过 Java 反射 API 注入，不推荐这样做。
+--
+
+如果需要构造后初始化器，方法注入可能很有用，但一般应尽量避免使用，在可能的情况下优先选择构造器注入。

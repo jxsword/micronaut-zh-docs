@@ -109,6 +109,24 @@ terms:
     context: "小写保留（上游惯例）"
     aliases: []
 
+  - en: "qualifier"
+    zh: "限定符"
+    status: "approved"
+    context: "IoC/Qualifiers 章节（B02 转正：qualifiers.adoc 全章 + 构造器注入等）"
+    aliases: []
+
+  - en: "eager initialization"
+    zh: "饿汉式初始化"
+    status: "approved"
+    context: "Scopes 章节（B02 转正：whatsNew/builtInScopes/eagerInit）"
+    aliases: ["eagerly initialize", "eager init"]
+
+  - en: "meta annotation"
+    zh: "元注解"
+    status: "approved"
+    context: "IoC/Scopes 章节（B02 转正：metaScopes.adoc）"
+    aliases: ["meta-annotation"]
+
 banned:
   - bad: "编译时间"
     prefer: "编译期"
