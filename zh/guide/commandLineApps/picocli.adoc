@@ -1,0 +1,6 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Picocli Support](https://docs.micronaut.io/5.2.x/core/#core-picocli)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/commandLineApps/picocli.adoc  upstream_commit: 461985c2db1cfad049219629d4d289da46fd34dd  upstream_hash: e7f9d78bdc928e33e4788ad9f367f68a6b5bd9ad  translated_at: 2026-11-21 -->
+
+https://github.com/remkop/picocli[Picocli] 是一个命令行解析器，支持带有 ANSI 颜色的用法帮助、自动补全和嵌套子命令。它提供一个注解 API，几乎无需编写代码即可创建命令行应用；还提供一个编程式 API，用于创建领域特定语言（Domain Specific Language）等动态用途。
+
+更多信息请参阅 https://micronaut-projects.github.io/micronaut-picocli/latest/guide/[Picocli 集成文档]。

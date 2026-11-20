@@ -1,0 +1,32 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Configuring a SQL Data Source](https://docs.micronaut.io/5.2.x/core/#core-sqlSupport)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/configurations/dataAccess/sqlSupport.adoc  upstream_commit: 2cdec8a96d87c7538ac0a63cf9527dc06e827d3d  upstream_hash: c3045edd6a0f528a5fc0bd912e09c063dccc3f20  translated_at: 2026-11-21 -->
+
+JDBC DataSource 可以配置为当前提供的三种实现之一——默认支持 Apache DBCP2、Hikari 和 Tomcat。
+
+[[sqlSupport]]
+== 配置 JDBC DataSource
+
+[TIP]
+.使用 CLI
+====
+如果您使用 Micronaut CLI 创建项目，请提供 `jdbc-tomcat`、`jdbc-hikari` 或 `jdbc-dbcp` feature 之一，以在项目中预配置简单的 JDBC 连接池（connection pool），以及默认的 H2 数据库驱动：
+----
+$ mn create-app my-app --features jdbc-tomcat
+----
+====
+
+要开始使用，请为与您将采用的实现相对应的 JDBC 配置添加依赖。请从以下选项中选择其一：
+
+dependency:micronaut-jdbc-tomcat[groupId="io.micronaut.sql", scope="runtimeOnly"]
+
+dependency:micronaut-jdbc-hikari[groupId="io.micronaut.sql",scope="runtimeOnly"]
+
+dependency:micronaut-jdbc-dbcp[groupId="io.micronaut.sql",scope="runtimeOnly"]
+
+dependency:micronaut-jdbc-ucp[groupId="io.micronaut.sql",scope="runtimeOnly"]
+
+此外，请在构建中添加一个 JDBC 驱动依赖。例如，添加 https://www.h2database.com[H2 In-Memory Database]：
+
+dependency:h2[groupId="com.h2database",scope="runtimeOnly"]
+
+更多信息请参阅 https://github.com/micronaut-projects/micronaut-sql[Micronaut SQL libraries] 项目的 https://micronaut-projects.github.io/micronaut-sql/latest/guide/#jdbc[Configuring JDBC] 章节。

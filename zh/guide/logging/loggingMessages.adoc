@@ -1,0 +1,21 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Logging Messages](https://docs.micronaut.io/5.2.x/core/#core-loggingMessages)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/logging/loggingMessages.adoc  upstream_commit: 4c2b2588a167c61aa85c01e23da2ead48a9e6db3  upstream_hash: 199af28c8f8564779e65f25fb6b3f7dc53ebfe3a  translated_at: 2026-11-21 -->
+
+要记录日志消息，请使用 Slf4j 的 `LoggerFactory` 为您的类获取 logger。
+
+[source,java]
+----
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+public class LoggerExample {
+
+    private static Logger logger = LoggerFactory.getLogger(LoggerExample.class);
+
+    public static void main(String[] args) {
+        logger.debug("Debug message");
+        logger.info("Info message");
+        logger.error("Error message");
+    }
+}
+----

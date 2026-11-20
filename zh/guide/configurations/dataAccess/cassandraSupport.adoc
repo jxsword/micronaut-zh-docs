@@ -1,0 +1,13 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Configuring Cassandra](https://docs.micronaut.io/5.2.x/core/#core-cassandraSupport)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/configurations/dataAccess/cassandraSupport.adoc  upstream_commit: 461985c2db1cfad049219629d4d289da46fd34dd  upstream_hash: d4642b4f54ee55ad1c2eef91cbf8a7ee2c391ae8  translated_at: 2026-11-21 -->
+
+[TIP]
+.使用 CLI
+====
+如果您使用 Micronaut CLI 创建项目，请提供 `cassandra` feature 以在项目中包含 Cassandra 配置：
+----
+$ mn create-app my-app --features cassandra
+----
+====
+
+更多信息请参阅 https://micronaut-projects.github.io/micronaut-cassandra/latest/guide/[Micronaut Cassandra Module] 文档。

@@ -1,0 +1,34 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Retaining Parameter Names](https://docs.micronaut.io/5.2.x/core/#core-retainparameternames)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/languageSupport/java/retainparameternames.adoc  upstream_commit: 51650efcb97939ef02bf726bdcb28266b7ca20d1  upstream_hash: 46f4c622723cbefd91727d29a26465ac35813b06  translated_at: 2026-11-21 -->
+
+默认情况下，在 Java 中，方法参数的参数名数据在编译时不会被保留。如果您没有显式定义参数名，并且依赖的是已编译的外部 JAR，这对 Micronaut 框架来说可能是个问题。
+
+请看这个接口：
+
+.客户端接口
+[source,java]
+----
+interface HelloOperations {
+    @Get("/hello/{name}")
+    String hello(String name);
+}
+----
+
+在编译期，参数名 `name` 会丢失，之后在针对其编译或通过反射读取时会变为 `arg0`。为避免此问题，您有两种选择。您可以显式声明参数名：
+
+.客户端接口
+[source,java]
+----
+interface HelloOperations {
+    @Get("/hello/{name}")
+    String hello(@QueryValue("name") String name);
+}
+----
+
+或者，建议您在编译所有字节码时向 `javac` 传递 `-parameters` 标志。请参阅 https://docs.oracle.com/javase/tutorial/reflect/member/methodparameterreflection.html[Obtaining Names of Method Parameters]。例如在 `build.gradle` 中：
+
+.build.gradle
+[source,groovy]
+----
+compileJava.options.compilerArgs += '-parameters'
+----

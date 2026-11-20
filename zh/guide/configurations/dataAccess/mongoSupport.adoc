@@ -1,0 +1,41 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Configuring MongoDB](https://docs.micronaut.io/5.2.x/core/#core-mongoSupport)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/configurations/dataAccess/mongoSupport.adoc  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360  upstream_hash: 64dcb1c708ab45a7513adb053e81e66c7382c255  translated_at: 2026-11-21 -->
+
+==== 设置原生 MongoDB 驱动
+
+[TIP]
+.使用 CLI
+====
+如果您使用 Micronaut CLI 创建项目，请提供 `mongo-reactive` feature 以在项目中配置原生 MongoDB 驱动：
+----
+$ mn create-app my-app --features mongo-reactive
+----
+====
+
+Micronaut 框架可以自动配置原生 MongoDB Java 驱动。要使用它，请在构建中添加以下依赖：
+
+dependency:micronaut-mongo-reactive[groupId="io.micronaut.mongodb"]
+
+然后在配置文件（例如 `application.yml`）中配置 MongoDB 服务器的 URI：
+
+.配置 MongoDB 服务器
+[configuration]
+----
+mongodb:
+  uri: mongodb://username:password@localhost:27017/databaseName
+----
+
+TIP: `mongodb.uri` 采用 https://www.mongodb.com/docs/manual/reference/connection-string/[MongoDB Connection String] 格式。
+
+随后即可获得一个可用于依赖注入的非阻塞响应式流（Reactive Streams）https://mongodb.github.io/mongo-java-driver-reactivestreams/1.8/javadoc/com/mongodb/reactivestreams/client/MongoClient.html[MongoClient]。
+
+要使用阻塞式驱动，请在构建中添加对 mongo-java-driver 的依赖：
+
+[source,groovy]
+----
+runtimeOnly "org.mongodb:mongo-java-driver"
+----
+
+随后该阻塞式 https://mongodb.github.io/mongo-java-driver/3.7/javadoc/com/mongodb/MongoClient.html[MongoClient] 即可供注入使用。
+
+有关在 Micronaut 中配置和使用 MongoDB 的更多信息，请参阅 https://micronaut-projects.github.io/micronaut-mongodb/latest/guide/[Micronaut MongoDB] 文档。

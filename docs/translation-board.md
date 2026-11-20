@@ -27,7 +27,7 @@
 | B18 | 8 | 3379 | 3379 | current |
 | B19 | 14 | 3455 | 3491 | current |
 | B20 | 21 | 3456 | 3512 | current |
-| B21 | 35 | 2983 | 3078 | pending |
+| B21 | 35 | 2983 | 3078 | current |
 | B22 | 5 | 3062 | 3057 | pending |
 | B23 | 6 | 3378 | 3353 | pending |
 | B24 | 5 | 3257 | 3199 | pending |
@@ -66,6 +66,7 @@
 - B18（2026-11-21 完成）：validate 全量 216 文件 PASSED + 8/8 --mark-current 核销 + squash commit；进度 216/388（55.7%）。锚点注入 2 处（clientAnnotation/proxyClient，4 条豁免消解）；**reviewer 段落对齐第三次拦截真缺陷**（proxyClient 尾段与 clientAnnotation 首段跨文件错位，互相归位）；clientParameters 上游 `////` 注释块逐字节保留（启发式 3 条误报已文档化）；proxyClient ⑦ ×1 修正。词数实测 3303/3282。⑤ 豁免警告 22 条（−4 消解 +5 新增，详见 reports/batch-B18.md）。冻结窗口遵守。httpClient 组 17/26（65%）。
 - B19（2026-11-21 完成）：validate 全量 230 文件 PASSED + 14/14 --mark-current 核销 + squash commit；进度 230/388（59.3%）。锚点注入 3 处（clientFilter 批内闭环 + clientHttp3/contextPropagation 批间消解）+ 源内显式锚 certificates 保留（https ×2 消解）；restore 第 4 次拦截译丢段（clientFilter 漏 snippet 占位符）；nettyPooling ⑦ ×4、contextPropagation ⑦ ×2、certificates ③ classpath 修正。词数实测 3471/3424。⑤ 豁免警告 18 条（−4 消解，详见 reports/batch-B19.md）。冻结窗口遵守。**httpClient 章 26/26 全章译出（第七个全章）**；contextPropagation 组 2/2；cloud 章 1/17 起步。
 - B20（2026-11-21 完成）：validate 全量 251 文件 PASSED + 21/21 --mark-current 核销 + squash commit；进度 251/388（64.7%）。锚点注入 7 处（cloudConfiguration/distributedConfiguration/distributedConfigurationVault/serviceDiscovery/serviceDiscoveryManual/serverlessFunctions 批间消解 7 条豁免 + clientSideLoadBalancing 批内闭环）；validate 逐个 --file **首轮 21/21 全绿（B01 以来首次批次内零修正）**；restore 第 5 次拦截真缺陷（Route53 两占位符丢右花括号，修复后全过）。词数实测 3512/3456（与 M1 inventory 一致）；段落 277。⑤ 豁免警告 11 条（−7 消解 +0 新增，详见 reports/batch-B20.md）。冻结窗口遵守。**cloud 章 17/17 全章译出（第八个全章）**；serverlessFunctions 组 3/4。
+- B21（2026-11-21 完成）：validate 全量 286 文件 PASSED + 35/35 --mark-current 核销 + squash commit；进度 286/388（74.1%，剔 skipped 口径）。**全程最大批次（35 文件）逐组推进**；锚点注入 7 处（5 basename 片段锚 + 2 标题锚——sqlSupport 页内标题锚注入标题行之前；hibernateSupport/logging 消解 2 条豁免 + sqlSupport 批内闭环，groovy→cli +1 新增豁免）；restore 35/35 首轮全过（B20 回读习惯生效，零花括号缺陷）；validate 首轮 33/35（mongoSupport ③ Reactive Streams→响应式流物化、java9 ⑦ 占位符后漏空格），修复后全绿；reviewer 35/35 PASS 首轮零缺陷；占位符多重集校验发现 6 文件语序重排（合法）。词数实测 3078/2983（与 M1 inventory 一致）；段落 298。glossary +2（消息代理/发布者确认，现 25 术语）。⑤ 豁免 11→10 条（详见 reports/batch-B21.md）。冻结窗口遵守。**五个组全章译出（第九至第十三个全章）：serverlessFunctions 4/4、messaging、commandLineApps、configurations、logging**；languageSupport 章 8/50 起步。
 
 ## 硬性纪律（每批次必守）
 

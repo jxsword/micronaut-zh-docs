@@ -1,0 +1,9 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Standalone Command Line Applications](https://docs.micronaut.io/5.2.x/core/#core-commandLineApps)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/commandLineApps.adoc  upstream_commit: 6750d82d163469ca4bef326dd67b7a5daa34a875  upstream_hash: f88b4914ec588d407f343e90b0b0572aba32c4b6  translated_at: 2026-11-21 -->
+
+[[commandLineApps]]
+在某些情况下，您可能希望创建与微服务基础设施交互的独立命令行（CLI）应用。
+
+这类应用的例子包括定时任务、批处理应用以及一般用途的命令行应用。
+
+在这种情况下，拥有一种健壮的方式来解析命令行选项和位置参数非常重要。

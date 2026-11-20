@@ -1,0 +1,4 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Configuring Flyway](https://docs.micronaut.io/5.2.x/core/#core-flywaySupport)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/configurations/dataAccess/flywaySupport.adoc  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360  upstream_hash: 5142bc03abaf19ca4afd69845e52775fc1ac06b9  translated_at: 2026-11-21 -->
+
+要配置 Micronaut 与 https://flywaydb.org/[Flyway] 的集成，请按照 https://micronaut-projects.github.io/micronaut-flyway/latest/guide/index.html[这些说明] 操作

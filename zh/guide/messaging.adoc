@@ -1,0 +1,8 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Message-Driven Microservices](https://docs.micronaut.io/5.2.x/core/#core-messaging)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/messaging.adoc  upstream_commit: 9b6da4ec1602e499125970b1e7734a79a3a4782c  upstream_hash: e3384517ab466e5256bba5d9a05f230a049f4745  translated_at: 2026-11-21 -->
+
+过去，在单体应用中，监听来自消息系统的消息的消息监听器通常内嵌在同一个应用单元里。
+
+在微服务架构中，常见做法是由 RabbitMQ 或 Kafka 等消息系统驱动的各个微服务应用相互独立。
+
+事实上，消息驱动（message-driven）的微服务甚至可能不提供 HTTP 端点或 HTTP 服务器（尽管从健康检查和可观测性的角度来看，HTTP 端点很有价值）。

@@ -1,0 +1,4 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Configurations](https://docs.micronaut.io/5.2.x/core/#core-configurations)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/configurations.adoc  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360  upstream_hash: e1021983277ae6a84378b8964f22c8f21b88d232  translated_at: 2026-11-21 -->
+
+Micronaut 框架内置了多种配置，支持与常见数据库和其他服务器集成。

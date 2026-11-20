@@ -1,0 +1,4 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Configuring Liquibase](https://docs.micronaut.io/5.2.x/core/#core-liquibaseSupport)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/configurations/dataAccess/liquibaseSupport.adoc  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360  upstream_hash: aa1f40282db2b77de2a8279e3d2ce0d4451755ea  translated_at: 2026-11-21 -->
+
+要配置 Micronaut 与 https://www.liquibase.org[Liquibase] 的集成，请按照 https://micronaut-projects.github.io/micronaut-liquibase/latest/guide/index.html[这些说明] 操作。

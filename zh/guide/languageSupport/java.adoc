@@ -1,0 +1,6 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Micronaut for Java](https://docs.micronaut.io/5.2.x/core/#core-java)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/languageSupport/java.adoc  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360  upstream_hash: 635177a5c51888b0d850452da1e70aaa3ce483e8  translated_at: 2026-11-21 -->
+
+对于 Java，Micronaut 框架使用 api:annotation.processing.BeanDefinitionInjectProcessor[] 注解处理器在编译期处理类并生成 api:inject.BeanDefinition[] 类。
+
+这样做的主要优势在于，您只需在编译期付出少量代价，而在运行时 Micronaut 框架基本不使用反射、速度快且内存消耗极少。

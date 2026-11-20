@@ -1,0 +1,37 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Configuring Redis](https://docs.micronaut.io/5.2.x/core/#core-redisSupport)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/configurations/dataAccess/redisSupport.adoc  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360  upstream_hash: a190ba1ed42ba7cecd2ee30b8bfbf42002378dd7  translated_at: 2026-11-21 -->
+
+Micronaut 框架通过 `redis-lettuce` 模块为 https://redis.io[Redis] 的 https://lettuce.io[Lettuce] 驱动提供自动配置。
+
+== 配置 Lettuce
+[TIP]
+.使用 CLI
+====
+如果您使用 Micronaut CLI 创建项目，请提供 `redis-lettuce` feature 以在项目中配置 Lettuce 驱动：
+----
+$ mn create-app my-app --features redis-lettuce
+----
+====
+
+要配置 Lettuce 驱动，请首先将 `redis-lettuce` 模块添加到构建中：
+
+.build.gradle
+[source,groovy]
+----
+compile "io.micronaut.redis:micronaut-redis-lettuce"
+----
+
+然后在配置文件（例如 `application.yml`）中配置 Redis 服务器的 URI：
+
+.配置 `redis.uri`
+[configuration]
+----
+redis:
+  uri: redis://localhost
+----
+
+TIP: `redis.uri` 设置必须采用 Lettuce wiki https://github.com/lettuce-io/lettuce-core/wiki/Redis-URI-and-connection-details[Connection URIs] 章节所述的格式
+
+您还可以使用 `redis.uris` 指定多个 Redis URI，此时将改为创建 `RedisClusterClient`。
+
+更多信息与更多文档请参阅 https://micronaut-projects.github.io/micronaut-redis/latest/guide[Micronaut Redis] 文档。

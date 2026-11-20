@@ -1,0 +1,10 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Nats.io Support](https://docs.micronaut.io/5.2.x/core/#core-nats)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/messaging/nats.adoc  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360  upstream_hash: 78f5428ef91757edf218111f2db1bb2e3510646f  translated_at: 2026-11-21 -->
+
+https://nats.io/[Nats.io] 是一个面向云原生应用、IoT 消息传递和微服务架构的简单、安全且高性能的开源消息系统。
+
+Micronaut 框架为定义 Nats.io 发布者与消费者提供专门支持。基于 Nats.io 构建的 Micronaut 应用可以在有或没有 HTTP 服务器的情况下部署。
+
+借助 Micronaut 高效的编译期 AOP，使用 Nats.io 从未如此简单。同时还新增了对通过响应式流实现发布者确认与 RPC 的支持。
+
+有关如何使用 Micronaut 构建 Nats.io 应用的更多信息，请参阅 https://micronaut-projects.github.io/micronaut-nats/latest/guide/[Micronaut Nats] 文档。

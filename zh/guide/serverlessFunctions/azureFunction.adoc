@@ -1,0 +1,40 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Azure Function](https://docs.micronaut.io/5.2.x/core/#core-azureFunction)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/serverlessFunctions/azureFunction.adoc  upstream_commit: 51650efcb97939ef02bf726bdcb28266b7ca20d1  upstream_hash: a7bd0d9ae45a98e7f7962b22e7a5cfb1dbca62c4  translated_at: 2026-11-21 -->
+
+对 Azure Function 的支持在 https://micronaut-projects.github.io/micronaut-azure/1.0.x/guide/index.html#azureFunction[Micronaut Azure] 子项目中实现。
+
+==== 基于 Azure Function 的简单函数
+
+您可以使用 Micronaut 框架编写直接实现 https://docs.microsoft.com/en-us/azure/azure-functions/functions-reference-java?tabs=consumption[Azure Function Java SDK] 的 Azure Function。更多信息请参阅 https://micronaut-projects.github.io/micronaut-azure/1.0.x/guide/index.html#azureFunction[Azure Functions] 文档。
+
+[TIP]
+.使用 CLI
+====
+要创建 Azure Function：
+----
+$ mn create-function-app my-app --features azure-function
+----
+或使用 Micronaut Launch：
+----
+$ curl https://launch.micronaut.io/create/function/example\?features\=azure-function -o example.zip
+$ unzip example.zip -d example
+----
+====
+
+==== 基于 Azure Function 的 HTTP 函数
+
+您可以借助 Micronaut 对 Azure HTTP Functions 的支持，部署使用 ann:http.annotation.Controller[] 等注解的常规 Micronaut 应用。更多信息请参阅 https://micronaut-projects.github.io/micronaut-azure/1.0.x/guide/index.html#azureFunction[Azure HTTP Functions] 文档。
+
+[TIP]
+.使用 CLI
+====
+要创建 Azure HTTP Function：
+----
+$ mn create-app my-app --features azure-function
+----
+或使用 Micronaut Launch：
+----
+$ curl https://launch.micronaut.io/example.zip\?features\=azure-function -o example.zip
+$ unzip example.zip -d example
+----
+====

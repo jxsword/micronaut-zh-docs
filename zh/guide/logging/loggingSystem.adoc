@@ -1,0 +1,4 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Logging System](https://docs.micronaut.io/5.2.x/core/#core-loggingSystem)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/logging/loggingSystem.adoc  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360  upstream_hash: d1141da764416687ba1be860fc8a1faf20a4956c  translated_at: 2026-11-21 -->
+
+Micronaut 框架有日志系统（logging system）的概念。简而言之，它是一个简单的 API，用于在运行时设置日志实现中的日志级别。Micronaut 为 Logback 和 Log4j2 提供了默认实现。您可以通过创建自己的 api:logging.LoggingSystem[] 实现来覆盖日志系统的行为，并使用 ann:context.annotation.Replaces[] 注解替换当前使用的实现。

@@ -1,0 +1,22 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Configuring Hibernate](https://docs.micronaut.io/5.2.x/core/#core-hibernateSupport)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/configurations/dataAccess/hibernateSupport.adoc  upstream_commit: 7dd6cb2ab4ab3a02c16fae3691798313b8a880fc  upstream_hash: 569fd66b5f1cbdb3e1f11a5bf92e2b1ec4f2aaed  translated_at: 2026-11-21 -->
+
+[[hibernateSupport]]
+==== 设置 Hibernate/JPA EntityManager
+
+[TIP]
+.使用 CLI
+====
+如果您使用 Micronaut CLI 创建项目，请提供 `hibernate-jpa` feature 以在项目中包含 Hibernate JPA 配置：
+----
+$ mn create-app my-app --features hibernate-jpa
+----
+====
+
+Micronaut 框架支持配置构建于 <<sqlSupport,SQL 数据源支持>> 之上的 https://hibernate.org[Hibernate] / JPA `EntityManager`。
+
+一旦您已 <<sqlSupport,配置一个或多个 DataSource>> 以使用 Hibernate，请将 `hibernate-jpa` 依赖添加到您的构建中：
+
+dependency:micronaut-hibernate-jpa[groupId="io.micronaut.sql"]
+
+更多信息请参阅 https://github.com/micronaut-projects/micronaut-sql[Micronaut SQL libraries] 项目的 https://micronaut-projects.github.io/micronaut-sql/latest/guide/#hibernate[Configuring Hibernate] 章节。

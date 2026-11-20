@@ -1,0 +1,39 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Configuration](https://docs.micronaut.io/5.2.x/core/#core-loggingConfiguration)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/logging/loggingConfiguration.adoc  upstream_commit: a15ac7b65796f4b93cd37e0293a2daf8fc3d6687  upstream_hash: ab5b023731ec43cd731ed57f98737f549f4682d6  translated_at: 2026-11-21 -->
+
+日志级别可以通过配置文件（例如 `application.yml`）（以及环境变量）中定义的属性进行配置，这些属性须以 `logger.levels` 为前缀：
+
+[configuration]
+----
+logger:
+  levels:
+    foo.bar: ERROR
+----
+
+通过设置环境变量 `LOGGER_LEVELS_FOO_BAR` 也可以达到相同的配置效果。请注意，目前无法为 `foo.barBaz` 这类非常规前缀设置日志级别。
+
+==== 自定义 Logback XML 配置
+
+[configuration]
+----
+logger:
+  config: /foo/custom-logback.xml
+----
+
+您还可以通过 `logger.config` 设置要使用的自定义 Logback XML 配置文件。
+该文件会先在类路径中查找，然后再在文件系统中查找。
+
+==== 通过属性禁用 logger
+
+要禁用某个 logger，您需要将其级别设置为 `OFF`：
+
+[configuration]
+----
+logger:
+  levels:
+    io.verbose.logger.who.CriedWolf: OFF
+----
+- 这将禁用 `io.verbose.logger.who.CriedWolf` 的全部日志记录
+
+
+请注意，通过配置控制日志级别的能力由 api:logging.LoggingSystem[] 接口控制。目前，Micronaut 框架仅包含一个允许为 Logback 库设置日志级别的实现。如果您使用其他库，则应提供一个实现该接口的 bean。

@@ -439,18 +439,18 @@ files:
 - file: guide/commandLineApps.adoc
   blob_sha: f88b4914ec588d407f343e90b0b0572aba32c4b6
   size: 359
-  status: missing
+  status: current
   zh: zh/guide/commandLineApps.adoc
   paragraphs: 3
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 6750d82d163469ca4bef326dd67b7a5daa34a875
 - file: guide/commandLineApps/picocli.adoc
   blob_sha: e7f9d78bdc928e33e4788ad9f367f68a6b5bd9ad
   size: 456
-  status: missing
+  status: current
   zh: zh/guide/commandLineApps/picocli.adoc
   paragraphs: 2
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 461985c2db1cfad049219629d4d289da46fd34dd
 - file: guide/config.adoc
   blob_sha: 7999fac82da143e0f16be8d135afb9f02b5abae0
@@ -583,114 +583,114 @@ files:
 - file: guide/configurations.adoc
   blob_sha: e1021983277ae6a84378b8964f22c8f21b88d232
   size: 127
-  status: missing
+  status: current
   zh: zh/guide/configurations.adoc
   paragraphs: 1
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/configurations/dataAccess.adoc
   blob_sha: 30121da3d58e6d3b5fd0181d6583374c73687f1f
   size: 2083
-  status: missing
+  status: current
   zh: zh/guide/configurations/dataAccess.adoc
   paragraphs: 8
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 7dd6cb2ab4ab3a02c16fae3691798313b8a880fc
 - file: guide/configurations/dataAccess/cassandraSupport.adoc
   blob_sha: d4642b4f54ee55ad1c2eef91cbf8a7ee2c391ae8
   size: 364
-  status: missing
+  status: current
   zh: zh/guide/configurations/dataAccess/cassandraSupport.adoc
   paragraphs: 7
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 461985c2db1cfad049219629d4d289da46fd34dd
 - file: guide/configurations/dataAccess/flywaySupport.adoc
   blob_sha: 5142bc03abaf19ca4afd69845e52775fc1ac06b9
   size: 187
-  status: missing
+  status: current
   zh: zh/guide/configurations/dataAccess/flywaySupport.adoc
   paragraphs: 1
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/configurations/dataAccess/hibernateSupport.adoc
   blob_sha: 569fd66b5f1cbdb3e1f11a5bf92e2b1ec4f2aaed
   size: 882
-  status: missing
+  status: current
   zh: zh/guide/configurations/dataAccess/hibernateSupport.adoc
   paragraphs: 11
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 7dd6cb2ab4ab3a02c16fae3691798313b8a880fc
 - file: guide/configurations/dataAccess/liquibaseSupport.adoc
   blob_sha: aa1f40282db2b77de2a8279e3d2ce0d4451755ea
   size: 198
-  status: missing
+  status: current
   zh: zh/guide/configurations/dataAccess/liquibaseSupport.adoc
   paragraphs: 1
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/configurations/dataAccess/mongoSupport.adoc
   blob_sha: 64dcb1c708ab45a7513adb053e81e66c7382c255
   size: 1559
-  status: missing
+  status: current
   zh: zh/guide/configurations/dataAccess/mongoSupport.adoc
   paragraphs: 20
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/configurations/dataAccess/neo4jSupport.adoc
   blob_sha: beae36049d327e4299f7c8cfe6d286deb8c17185
   size: 1392
-  status: missing
+  status: current
   zh: zh/guide/configurations/dataAccess/neo4jSupport.adoc
   paragraphs: 16
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/configurations/dataAccess/postgresSupport.adoc
   blob_sha: 49d3357c59d6871be7333e72c8a99fa89dd2f213
   size: 971
-  status: missing
+  status: current
   zh: zh/guide/configurations/dataAccess/postgresSupport.adoc
   paragraphs: 13
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/configurations/dataAccess/redisSupport.adoc
   blob_sha: a190ba1ed42ba7cecd2ee30b8bfbf42002378dd7
   size: 1239
-  status: missing
+  status: current
   zh: zh/guide/configurations/dataAccess/redisSupport.adoc
   paragraphs: 19
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/configurations/dataAccess/sqlSupport.adoc
   blob_sha: c3045edd6a0f528a5fc0bd912e09c063dccc3f20
   size: 1378
-  status: missing
+  status: current
   zh: zh/guide/configurations/dataAccess/sqlSupport.adoc
   paragraphs: 16
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 2cdec8a96d87c7538ac0a63cf9527dc06e827d3d
 - file: guide/configurations/reactiveConfigs.adoc
   blob_sha: f3c8a5515a52da5e3b7138e17c5ca35dfe54f870
   size: 228
-  status: missing
+  status: current
   zh: zh/guide/configurations/reactiveConfigs.adoc
   paragraphs: 1
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 51650efcb97939ef02bf726bdcb28266b7ca20d1
 - file: guide/configurations/reactiveConfigs/reactor.adoc
   blob_sha: cb1e8e85867443e17e4d3a0c4b21d16265f16e58
   size: 424
-  status: missing
+  status: current
   zh: zh/guide/configurations/reactiveConfigs/reactor.adoc
   paragraphs: 5
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: eb891b91ca2ab6aa90a1dd6dde328e8c354bacdb
 - file: guide/configurations/reactiveConfigs/rxjava3.adoc
   blob_sha: 6cd7c641b9c0480507f6c35b5d3068f1a7c81861
   size: 405
-  status: missing
+  status: current
   zh: zh/guide/configurations/reactiveConfigs/rxjava3.adoc
   paragraphs: 5
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 461985c2db1cfad049219629d4d289da46fd34dd
 - file: guide/contextPropagation.adoc
   blob_sha: d63ca8b2633b619a21e3ca2807498623418d1bb6
@@ -2247,10 +2247,10 @@ files:
 - file: guide/languageSupport.adoc
   blob_sha: 01adae2cb38a495f5c8e321fa1576e86e989eb3a
   size: 732
-  status: missing
+  status: current
   zh: zh/guide/languageSupport.adoc
   paragraphs: 4
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: a3cd8c2bb12b566d82264ab110368eb63b78c285
 - file: guide/languageSupport/graal.adoc
   blob_sha: 9f24f73ebe8dca9d2f47afe9d84b3438949245a3
@@ -2279,58 +2279,58 @@ files:
 - file: guide/languageSupport/groovy.adoc
   blob_sha: 6994ce5e8af6d622ebbcd2a2fb8d5a0f7927d9ea
   size: 5304
-  status: missing
+  status: current
   zh: zh/guide/languageSupport/groovy.adoc
   paragraphs: 53
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: e71c488cf518aa2a41c1f3564ef0df656eec6772
 - file: guide/languageSupport/java.adoc
   blob_sha: 635177a5c51888b0d850452da1e70aaa3ce483e8
   size: 380
-  status: missing
+  status: current
   zh: zh/guide/languageSupport/java.adoc
   paragraphs: 2
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/languageSupport/java/ide.adoc
   blob_sha: 1d9e821a3c940bba057cdc4308a13d4263f0b65f
   size: 407
-  status: missing
+  status: current
   zh: zh/guide/languageSupport/java/ide.adoc
   paragraphs: 3
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 91d2b59dc99e78ca58af5af2ddc69ce8e58a3cb4
 - file: guide/languageSupport/java/incrementalannotationgradle.adoc
   blob_sha: c1dccef66695fa1f0860c706168a1d350e53e070
   size: 1041
-  status: missing
+  status: current
   zh: zh/guide/languageSupport/java/incrementalannotationgradle.adoc
   paragraphs: 7
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/languageSupport/java/java9.adoc
   blob_sha: 44e84d8f38f815f79cde2e4674a93b6558f624d1
   size: 749
-  status: missing
+  status: current
   zh: zh/guide/languageSupport/java/java9.adoc
   paragraphs: 9
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/languageSupport/java/lombok.adoc
   blob_sha: c5bec9fbeb0d5a0633cd9e32f10597fe2e533f18
   size: 1703
-  status: missing
+  status: current
   zh: zh/guide/languageSupport/java/lombok.adoc
   paragraphs: 11
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/languageSupport/java/retainparameternames.adoc
   blob_sha: 46f4c622723cbefd91727d29a26465ac35813b06
   size: 1135
-  status: missing
+  status: current
   zh: zh/guide/languageSupport/java/retainparameternames.adoc
   paragraphs: 13
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 51650efcb97939ef02bf726bdcb28266b7ca20d1
 - file: guide/languageSupport/kotlin.adoc
   blob_sha: a17ae9f2ece7c8832f57259e8ef19e3c970dd77a
@@ -2431,10 +2431,10 @@ files:
 - file: guide/languageSupport/python.adoc
   blob_sha: 0cc7e20af81fc55eb33762a890e25e3fd715645a
   size: 218
-  status: missing
+  status: current
   zh: zh/guide/languageSupport/python.adoc
   paragraphs: 2
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: a2db693c33cea1aadfba9b4280da79283a641702
 - file: guide/languageSupport/python/aopProxies.adoc
   blob_sha: 5ce15ee8220f18e71405bb1768f06dcded52c6f9
@@ -2655,42 +2655,42 @@ files:
 - file: guide/logging.adoc
   blob_sha: 740bba19a0ce8a03db2171f90af284df9695e4b2
   size: 240
-  status: missing
+  status: current
   zh: zh/guide/logging.adoc
   paragraphs: 1
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 51650efcb97939ef02bf726bdcb28266b7ca20d1
 - file: guide/logging/logback.adoc
   blob_sha: 6bf1798a3dcb17301c4550002ddc5c8650445732
   size: 1230
-  status: missing
+  status: current
   zh: zh/guide/logging/logback.adoc
   paragraphs: 10
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: c8db8aed7351df08ab1779e0462b353a341722d3
 - file: guide/logging/loggingConfiguration.adoc
   blob_sha: ab5b023731ec43cd731ed57f98737f549f4682d6
   size: 1304
-  status: missing
+  status: current
   zh: zh/guide/logging/loggingConfiguration.adoc
   paragraphs: 14
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: a15ac7b65796f4b93cd37e0293a2daf8fc3d6687
 - file: guide/logging/loggingMessages.adoc
   blob_sha: 199af28c8f8564779e65f25fb6b3f7dc53ebfe3a
   size: 443
-  status: missing
+  status: current
   zh: zh/guide/logging/loggingMessages.adoc
   paragraphs: 3
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 4c2b2588a167c61aa85c01e23da2ead48a9e6db3
 - file: guide/logging/loggingSystem.adoc
   blob_sha: d1141da764416687ba1be860fc8a1faf20a4956c
   size: 436
-  status: missing
+  status: current
   zh: zh/guide/logging/loggingSystem.adoc
   paragraphs: 1
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/management.adoc
   blob_sha: 3784a11ca7e95f06c09ef27dcd5a3f508bdef90e
@@ -2919,34 +2919,34 @@ files:
 - file: guide/messaging.adoc
   blob_sha: e3384517ab466e5256bba5d9a05f230a049f4745
   size: 493
-  status: missing
+  status: current
   zh: zh/guide/messaging.adoc
   paragraphs: 3
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 9b6da4ec1602e499125970b1e7734a79a3a4782c
 - file: guide/messaging/kafka.adoc
   blob_sha: bdf63a8e87defc9076f5c12d6ccc60f5d7084b29
   size: 761
-  status: missing
+  status: current
   zh: zh/guide/messaging/kafka.adoc
   paragraphs: 4
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/messaging/nats.adoc
   blob_sha: 78f5428ef91757edf218111f2db1bb2e3510646f
   size: 716
-  status: missing
+  status: current
   zh: zh/guide/messaging/nats.adoc
   paragraphs: 4
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/messaging/rabbitmq.adoc
   blob_sha: 36a73dbe68a8364f6f5049869c0c676d219c92ed
   size: 652
-  status: missing
+  status: current
   zh: zh/guide/messaging/rabbitmq.adoc
   paragraphs: 4
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/multitenancy.adoc
   blob_sha: ff7c36fdaf2daa7a37c0c38d57a1d325e68dda9a
@@ -3071,10 +3071,10 @@ files:
 - file: guide/serverlessFunctions/azureFunction.adoc
   blob_sha: a7bd0d9ae45a98e7f7962b22e7a5cfb1dbca62c4
   size: 1500
-  status: missing
+  status: current
   zh: zh/guide/serverlessFunctions/azureFunction.adoc
   paragraphs: 21
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 51650efcb97939ef02bf726bdcb28266b7ca20d1
 - file: guide/serverlessFunctions/gcpCloudRun.adoc
   blob_sha: 99b9bd967b0ccef7b283cbe11f4f4789f5685744

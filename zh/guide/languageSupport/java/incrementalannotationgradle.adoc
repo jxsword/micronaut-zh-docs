@@ -1,0 +1,22 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Incremental Annotation Processing with Gradle](https://docs.micronaut.io/5.2.x/core/#core-incrementalannotationgradle)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/languageSupport/java/incrementalannotationgradle.adoc  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360  upstream_hash: c1dccef66695fa1f0860c706168a1d350e53e070  translated_at: 2026-11-21 -->
+
+[[incrementalannotationgradle]]
+Micronaut 框架支持 https://docs.gradle.org/current/userguide/java_plugin.html#sec:incremental_annotation_processing[Gradle 增量注解处理（Gradle incremental annotation processing）]，它通过只编译发生变化的类来加速构建，避免完整重新编译。
+
+然而，该支持默认是禁用的，因为 Micronaut 框架允许定义自定义元注解（例如定义 <<aop,自定义 AOP 通知>>），这些注解需要进行相应配置才能被处理。
+
+以下示例演示如何为您在 `com.example` 包下定义的注解启用并配置增量注解处理：
+
+.启用增量注解处理
+[source,groovy]
+----
+tasks.withType(JavaCompile) {
+    options.compilerArgs = [
+        '-Amicronaut.processing.incremental=true',
+        '-Amicronaut.processing.annotations=com.example.*',
+    ]
+}
+----
+
+WARNING: 如果您未为自定义注解启用处理，它们将被 Micronaut 忽略，这可能会破坏您的应用。

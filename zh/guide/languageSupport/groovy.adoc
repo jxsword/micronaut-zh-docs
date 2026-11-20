@@ -1,0 +1,175 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Micronaut for Groovy](https://docs.micronaut.io/5.2.x/core/#core-groovy)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/languageSupport/groovy.adoc  upstream_commit: e71c488cf518aa2a41c1f3564ef0df656eec6772  upstream_hash: 6994ce5e8af6d622ebbcd2a2fb8d5a0f7927d9ea  translated_at: 2026-11-21 -->
+
+https://groovy-lang.org[Groovy] 在 Micronaut 中拥有一等支持。
+
+== Groovy 专用模块
+
+还有一些专门面向 Groovy 的附加模块，可以改善整体使用体验。下表详细列出了这些模块：
+
+.Groovy 专用模块
+|===
+|依赖|描述
+
+|`io.micronaut:micronaut-inject-groovy`
+|包含用于生成 bean 定义的 AST 变换。它应以 `compileOnly` 作用域置于类路径上。
+
+|`io.micronaut:micronaut-runtime-groovy`
+|支持以 Groovy 格式（即 `application.groovy`）在 `src/main/resources` 下指定配置
+
+|`io.micronaut:micronaut-function-groovy`
+|包含一些 AST 变换，使为 AWS Lambda 编写 <<serverlessFunctions,函数>> 更加容易
+
+|===
+
+您最常需要的模块是 `micronaut-inject-groovy`，它为 Groovy 类启用 DI 和 AOP。
+
+== CLI 中的 Groovy 支持
+
+Micronaut <<cli,命令行界面>> 为 Groovy 提供了特别支持。要创建 Groovy 应用，请使用 `groovy` lang 选项。例如：
+
+[source,bash]
+.创建 Micronaut Groovy 应用
+----
+$ mn create-app hello-world --lang groovy
+----
+
+上述命令会生成一个使用 Gradle 构建的 Groovy 项目。使用 `-build maven` 标志可改为生成使用 Maven 构建的项目。
+
+一旦您使用 `groovy` feature 创建了应用，`create-controller`、`create-client` 等命令就会生成 Groovy 文件而非 Java 文件。以下示例演示了使用 CLI 交互模式时的情形：
+
+[source,bash]
+.创建 bean
+----
+$ mn
+| Starting interactive mode...
+| Enter a command name to run. Use TAB for completion:
+mn>
+
+create-bean          create-client        create-controller
+create-job           help
+
+mn> create-bean helloBean
+| Rendered template Bean.groovy to destination src/main/groovy/hello/world/HelloBean.groovy
+----
+
+上面的示例演示了创建一个如下所示的 Groovy bean：
+
+[source,groovy]
+.Micronaut bean
+----
+package hello.world
+
+import jakarta.inject.Singleton
+
+@Singleton
+class HelloBean {
+
+}
+----
+
+WARNING: Groovy 会自动导入 `groovy.lang.Singleton`，这可能造成困扰，因为它与 `jakarta.inject.Singleton` 冲突。在声明 Micronaut 单例 bean 时，请务必使用 `jakarta.inject.Singleton`，以避免出现意外行为。
+
+我们还可以创建一个客户端——别忘了 Micronaut 框架既可以充当客户端，也可以充当服务器！
+
+[source,bash]
+.创建客户端
+----
+mn> create-client hello
+| Rendered template Client.groovy to destination src/main/groovy/hello/world/HelloClient.groovy
+----
+
+[source,groovy]
+.Micronaut 客户端
+----
+package hello.world
+
+import io.micronaut.http.client.annotation.Client
+import io.micronaut.http.annotation.Get
+import io.micronaut.http.HttpStatus
+
+@Client("hello")
+interface HelloClient {
+
+    @Get
+    HttpStatus index()
+}
+----
+
+现在让我们创建一个控制器：
+
+[source,bash]
+.创建控制器
+----
+mn> create-controller hello
+| Rendered template Controller.groovy to destination src/main/groovy/hello/world/HelloController.groovy
+| Rendered template ControllerSpec.groovy to destination src/test/groovy/hello/world/HelloControllerSpec.groovy
+mn>
+----
+
+[source,groovy]
+.Micronaut 控制器
+----
+package hello.world
+
+import io.micronaut.http.annotation.Controller
+import io.micronaut.http.annotation.Get
+import io.micronaut.http.HttpStatus
+
+@Controller("/hello")
+class HelloController {
+
+    @Get
+    HttpStatus index() {
+        return HttpStatus.OK
+    }
+}
+----
+
+从 CLI 的输出可以看到，还为您生成了一个 https://spockframework.org[Spock] 测试，它演示了如何测试该控制器：
+
+[source,groovy]
+.HelloControllerSpec.groovy
+----
+...
+    void "test index"() {
+        given:
+        HttpResponse response = client.toBlocking().exchange("/hello")
+
+        expect:
+        response.status == HttpStatus.OK
+    }
+...
+----
+
+请注意，这里将 Micronaut 框架同时用作客户端和服务器，让应用自行测试自身。
+
+== 使用 GroovyRouterBuilder 的编程式路由
+
+如果您更喜欢以编程方式构建路由（类似于 Grails 的 `UrlMappings`），那么可以使用一个特殊的 `io.micronaut.web.router.GroovyRouteBuilder`，它包含一些增强功能以改进 DSL。
+
+以下示例展示了 `GroovyRouteBuilder` 的实际应用：
+
+.使用 GroovyRouteBuilder
+[source,groovy]
+----
+include::router/src/test/groovy/io/micronaut/context/router/GroovyRouteBuilderSpec.groovy[tag=routes, indent=0]
+----
+
+<1> 您可以使用注入的控制器按约定创建路由，并使用 Groovy 方法引用创建指向方法的路由
+<2> `ID` 属性可用于引用，从而在路由中包含 `{id}` URI 变量
+
+上述示例会产生以下路由：
+
+* `/book` - 映射到 `BookController.index()`
+* `/book/hello/{message}` - 映射到 `BookController.hello(String)`
+* `/book/{id}` - 映射到 `BookController.show(String id)`
+* `/book/{id}/author` - 映射到 `AuthorController.index`
+
+== 使用 Groovy 的 Serverless 函数
+
+微服务应用只是使用 Micronaut 的一种方式。您还可以将它用于 Serverless 函数，例如 AWS Lambda 上的函数。
+
+借助 `function-groovy` 模块，Micronaut 框架为用 Groovy 编写的函数提供了增强支持。
+
+更多信息请参阅 <<serverlessFunctions,Serverless 函数>> 一节。

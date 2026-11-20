@@ -145,6 +145,18 @@ terms:
     context: "IoC/Lifecycle 章节（B03 转正：gracefulShutdown.adoc）"
     aliases: []
 
+  - en: "message broker"
+    zh: "消息代理"
+    status: "approved"
+    context: "Messaging 章节（B21 收录：rabbitmq.adoc）"
+    aliases: []
+
+  - en: "publisher confirms"
+    zh: "发布者确认"
+    status: "approved"
+    context: "Messaging 章节（B21 收录：rabbitmq/nats.adoc）"
+    aliases: []
+
 banned:
   - bad: "编译时间"
     prefer: "编译期"

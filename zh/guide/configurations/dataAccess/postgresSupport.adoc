@@ -1,0 +1,25 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Configuring Postgres](https://docs.micronaut.io/5.2.x/core/#core-postgresSupport)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/configurations/dataAccess/postgresSupport.adoc  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360  upstream_hash: 49d3357c59d6871be7333e72c8a99fa89dd2f213  translated_at: 2026-11-21 -->
+
+Micronaut 框架支持使用 https://github.com/eclipse-vertx/vertx-sql-client/tree/master/vertx-pg-client[vertx-pg-client] 连接 Postgres 的响应式非阻塞客户端，它可以用单个线程处理大量数据库连接。
+
+== 配置 Reactive Postgres 客户端
+
+[TIP]
+.使用 CLI
+====
+如果您使用 Micronaut CLI 创建项目，请提供 `vertx-pg-client` feature 以在项目中配置 Reactive Postgres 客户端：
+----
+$ mn create-app my-app --features vertx-pg-client
+----
+====
+
+要配置 Reactive Postgres 客户端，请首先将 `vertx-pg-client` 模块添加到构建中：
+
+[source,groovy]
+.build.gradle
+----
+compile "io.micronaut.sql:micronaut-vertx-pg-client"
+----
+
+更多信息请参阅 https://github.com/micronaut-projects/micronaut-sql[Micronaut SQL libraries] 项目的 https://micronaut-projects.github.io/micronaut-sql/latest/guide/#pgclient[Configuring Reactive Postgres] 章节。

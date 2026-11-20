@@ -1,0 +1,12 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Reactor Support](https://docs.micronaut.io/5.2.x/core/#core-reactor)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/configurations/reactiveConfigs/reactor.adoc  upstream_commit: eb891b91ca2ab6aa90a1dd6dde328e8c354bacdb  upstream_hash: cb1e8e85867443e17e4d3a0c4b21d16265f16e58  translated_at: 2026-11-21 -->
+
+要添加对 Reactor 的支持，请添加以下模块：
+
+dependency:micronaut-reactor[scope="compile", groupId="io.micronaut.reactor"]
+
+要使用 Reactor HTTP 客户端，请添加以下依赖：
+
+dependency:micronaut-reactor-http-client[scope="compile", groupId="io.micronaut.reactor"]
+
+更多信息请参阅 https://micronaut-projects.github.io/micronaut-reactor/latest/guide/[Micronaut Reactor] 文档。

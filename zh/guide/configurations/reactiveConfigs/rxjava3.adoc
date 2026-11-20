@@ -1,0 +1,12 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – RxJava 3 Support](https://docs.micronaut.io/5.2.x/core/#core-rxjava3)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/configurations/reactiveConfigs/rxjava3.adoc  upstream_commit: 461985c2db1cfad049219629d4d289da46fd34dd  upstream_hash: 6cd7c641b9c0480507f6c35b5d3068f1a7c81861  translated_at: 2026-11-21 -->
+
+要添加对 RxJava 3 的支持，请添加以下模块：
+
+dependency:io.micronaut.rxjava3:micronaut-rxjava3[scope="compile"]
+
+要使用 RxJava 3 HTTP 客户端，请添加以下依赖：
+
+dependency:io.micronaut.rxjava3:micronaut-rxjava3-http-client[scope="compile"]
+
+更多信息请参阅 https://micronaut-projects.github.io/micronaut-rxjava3/latest/guide/[Micronaut RxJava 3] 文档。

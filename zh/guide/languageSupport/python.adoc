@@ -1,0 +1,6 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Micronaut for Python](https://docs.micronaut.io/5.2.x/core/#core-python)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/languageSupport/python.adoc  upstream_commit: a2db693c33cea1aadfba9b4280da79283a641702  upstream_hash: 0cc7e20af81fc55eb33762a890e25e3fd715645a  translated_at: 2026-11-21 -->
+
+Micronaut 框架通过对 Python 源码的编译期处理来支持 Python。
+
+Python 支持将 Python 类、注解和类型元数据与 Micronaut 的编译期 bean 定义模型集成在一起。

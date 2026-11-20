@@ -1,0 +1,11 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Language Support](https://docs.micronaut.io/5.2.x/core/#core-languageSupport)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/languageSupport.adoc  upstream_commit: a3cd8c2bb12b566d82264ab110368eb63b78c285  upstream_hash: 01adae2cb38a495f5c8e321fa1576e86e989eb3a  translated_at: 2026-11-21 -->
+
+[[languageSupport]]
+Micronaut 框架支持任何实现了 link:{jdkapi}/java.compiler/javax/annotation/processing/package-summary.html[Java Annotation Processor] API 的 JVM 语言。
+
+尽管 Groovy 不支持该 API，但已通过 AST 变换（AST transformations）为其构建了特殊支持。当前支持的语言列表为：Java、Groovy、Kotlin（通过 `kapt` 工具）和 Python。
+
+NOTE: 从理论上讲，任何支持在编译期分析 AST 的语言都可以获得支持。pkg:inject.writer[] 包中包含一些语言中立的类，它们在编译期使用 ASM 工具构建 api:inject.BeanDefinition[] 类。
+
+以下小节介绍使用 Micronaut 时各语言特有的功能与注意事项。

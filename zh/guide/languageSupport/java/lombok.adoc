@@ -1,0 +1,54 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Using Project Lombok](https://docs.micronaut.io/5.2.x/core/#core-lombok)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/languageSupport/java/lombok.adoc  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360  upstream_hash: c5bec9fbeb0d5a0633cd9e32f10597fe2e533f18  translated_at: 2026-11-21 -->
+
+https://projectlombok.org[Project Lombok] 是一个流行的 Java 库，它通过注解处理器为 Java 语言添加许多有用的 AST 变换。
+
+由于 Micronaut 框架和 Lombok 都使用注解处理器，因此在配置 Lombok 时必须特别注意，确保 Lombok 处理器在 Micronaut 处理器*之前*运行。
+
+如果您使用 Gradle，请添加以下依赖：
+
+.在 Gradle 中配置 Lombok
+[source,groovy]
+----
+compileOnly 'org.projectlombok:lombok:1.18.24'
+annotationProcessor "org.projectlombok:lombok:1.18.24"
+...
+// Micronaut processor defined after Lombok
+annotationProcessor "io.micronaut:micronaut-inject-java"
+----
+
+如果使用 Maven：
+
+.在 Maven 中配置 Lombok
+[source,xml]
+----
+<dependencies>
+  <dependency>
+    <groupId>org.projectlombok</groupId>
+    <artifactId>lombok</artifactId>
+    <version>1.18.24</version>
+    <scope>provided</scope>
+  </dependency>
+</dependencies>
+...
+<annotationProcessorPaths combine.self="override">
+  <path>
+    <!-- must precede micronaut-inject-java -->
+    <groupId>org.projectlombok</groupId>
+    <artifactId>lombok</artifactId>
+    <version>1.18.24</version>
+  </path>
+  <path>
+    <groupId>io.micronaut</groupId>
+    <artifactId>micronaut-inject-java</artifactId>
+    <version>${micronaut.version}</version>
+  </path>
+  <path>
+    <groupId>io.micronaut.validation</groupId>
+    <artifactId>micronaut-validation-processor</artifactId>
+    <version>${micronaut.version}</version>
+  </path>
+</annotationProcessorPaths>
+----
+
+NOTE: 在两种情况下（Gradle 和 Maven），Micronaut 处理器都必须配置在 Lombok 处理器之后。调换所声明依赖的顺序将无法工作。

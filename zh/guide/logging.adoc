@@ -1,0 +1,5 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Logging](https://docs.micronaut.io/5.2.x/core/#core-logging)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/logging.adoc  upstream_commit: 51650efcb97939ef02bf726bdcb28266b7ca20d1  upstream_hash: 740bba19a0ce8a03db2171f90af284df9695e4b2  translated_at: 2026-11-21 -->
+
+[[logging]]
+Micronaut 框架使用 https://www.slf4j.org/[Slf4j] 记录日志消息。通过 Micronaut Launch 创建的应用所使用的默认实现是 https://logback.qos.ch/[Logback]。不过，任何其他 Slf4j 实现也都受支持。

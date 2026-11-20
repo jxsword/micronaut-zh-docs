@@ -1,0 +1,16 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Using Micronaut with Java 9+](https://docs.micronaut.io/5.2.x/core/#core-java9)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/languageSupport/java/java9.adoc  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360  upstream_hash: 44e84d8f38f815f79cde2e4674a93b6558f624d1  translated_at: 2026-11-21 -->
+
+Micronaut 框架使用 Java 8 构建，但在 Java 9 及以上版本中也能正常工作。Micronaut 生成的类与现有类位于同一个包中，因此不会违反 Java 模块系统的任何规定。
+
+在 Java 9+ 中使用 Micronaut 时有一些注意事项。
+
+=== javax.annotation 包
+
+[TIP]
+.使用 CLI
+====
+如果您使用 Micronaut CLI 创建项目，当您使用 Java 9+ 时，`javax.annotation` 依赖会自动添加到您的项目中。
+====
+
+`javax.annotation` （其中包括 `@PostConstruct`、`@PreDestroy` 等）已被从 JDK 核心中移至一个模块。一般而言，应避免使用该包中的注解，而应改用 `jakarta.annotation` 中的对应注解。

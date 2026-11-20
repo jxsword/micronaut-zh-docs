@@ -1,0 +1,32 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Configuring Neo4j](https://docs.micronaut.io/5.2.x/core/#core-neo4jSupport)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/configurations/dataAccess/neo4jSupport.adoc  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360  upstream_hash: beae36049d327e4299f7c8cfe6d286deb8c17185  translated_at: 2026-11-21 -->
+
+Micronaut 框架为流行的 https://neo4j.com/[Neo4j] 图数据库的 https://neo4j.com/docs/developer-manual/current/drivers/[Neo4j Bolt Driver] 提供自动配置的专门支持。
+
+[TIP]
+.使用 CLI
+====
+如果您使用 Micronaut CLI 创建项目，请提供 `neo4j-bolt` feature 以在项目中配置 Neo4j Bolt 驱动：
+----
+$ mn create-app my-app --features neo4j-bolt
+----
+====
+
+要配置 Neo4j Bolt 驱动，请首先将 `neo4j-bolt` 模块添加到构建中：
+
+dependency::micronaut-neo4j-bolt[groupId="io.micronaut.neo4j"]
+
+然后在配置文件（例如 `application.yml`）中配置 Neo4j 服务器的 URI：
+
+.配置 `neo4j.uri`
+[configuration]
+----
+neo4j:
+  uri: bolt://localhost
+----
+
+TIP: `neo4j.uri` 设置必须采用 Neo4j 文档 https://neo4j.com/docs/developer-manual/current/drivers/client-applications/#driver-connection-uris[Connection URIs] 章节所述的格式
+
+完成上述配置后，您就可以注入 `org.neo4j.driver.v1.Driver` bean 的实例，该 bean 同时提供同步阻塞 API 和基于 `CompletableFuture` 的非阻塞 API。
+
+有关在 Micronaut 中配置和使用 Neo4j 的更多信息，请参阅 https://micronaut-projects.github.io/micronaut-neo4j/latest/guide/[Micronaut Neo4j] 文档。

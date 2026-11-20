@@ -1,0 +1,10 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Kafka Support](https://docs.micronaut.io/5.2.x/core/#core-kafka)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/messaging/kafka.adoc  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360  upstream_hash: bdf63a8e87defc9076f5c12d6ccc60f5d7084b29  translated_at: 2026-11-21 -->
+
+https://kafka.apache.org[Apache Kafka] 是一个分布式流处理平台，除流处理和实时数据处理外，还可用于一系列消息传递需求。
+
+Micronaut 框架为定义 Kafka `Producer` 与 `Consumer` 实例提供专门支持。基于 Kafka 构建的 Micronaut 应用可以在有或没有 HTTP 服务器的情况下部署。
+
+借助 Micronaut 高效的编译期 AOP 与云原生特性，编写占用资源极少的高效 Kafka 消费者应用轻而易举。
+
+有关如何使用 Micronaut 构建 Kafka 应用的更多信息，请参阅 https://micronaut-projects.github.io/micronaut-kafka/latest/guide[Micronaut Kafka] 文档。

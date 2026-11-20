@@ -1,0 +1,4 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Configurations for Reactive Programming](https://docs.micronaut.io/5.2.x/core/#core-reactiveConfigs)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/configurations/reactiveConfigs.adoc  upstream_commit: 51650efcb97939ef02bf726bdcb28266b7ca20d1  upstream_hash: f3c8a5515a52da5e3b7138e17c5ca35dfe54f870  translated_at: 2026-11-21 -->
+
+Micronaut 内部使用 https://projectreactor.io[Project Reactor]。但是，若要在您的控制器和/或 HTTP 客户端方法中使用 Reactor 或其他响应式库（例如 RxJava）的类型，您需要添加相应依赖。
