@@ -1,0 +1,43 @@
+# PR/push 门禁：pytest + validate + 清单冒烟（PLAN §7）
+# 远程仓库建立前 workflows 仅为预备件；本地门禁以直接运行 scripts/ 校验命令为准
+name: validate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install deps
+        run: pip install pyyaml pytest
+
+      - name: pytest
+        run: python3 -m pytest tests/ -q
+
+      - name: validate translation (empty library must pass)
+        run: python3 scripts/validate_translation.py
+
+      - name: manifest smoke check
+        run: |
+          python3 - <<'PY'
+          import yaml, sys
+          m = yaml.safe_load(open("manifest.yml"))
+          assert m.get("schema") == "v1", "manifest schema must be v1"
+          assert isinstance(m.get("files"), list), "manifest files must be a list"
+          print(f"manifest smoke: {len(m['files'])} entries")
+          if not m["files"]:
+              print("manifest is empty (pre-init); smoke OK")
+          PY
+
+      - name: progress report smoke
+        run: python3 scripts/progress.py
