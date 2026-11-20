@@ -1,0 +1,23 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Importing Java Types](https://docs.micronaut.io/5.2.x/core/#core-javaImports)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/languageSupport/python/javaImports.adoc  upstream_commit: 20cf7e9b43033aae898f2922bbd4971359fbb3ed  upstream_hash: 0ad591a064cdc834af8b3cde49cdddc48b278eea  translated_at: 2026-11-21 -->
+
+Java 类型像 Python 模块一样导入：Java 包就是模块，类就是被导入的名称。Micronaut 包可以不带 `io.` 前缀直接导入。
+
+[source,python]
+----
+from java.util import Optional
+from micronaut.context.annotation import Factory
+from io.lettuce.core.codec import ByteArrayCodec, RedisCodec
+----
+
+对编译类路径上包的星号导入（star import）会绑定该包的每个顶层类，因此 `from io.lettuce.core.codec import *` 使 `RedisCodec` 与 `ByteArrayCodec` 以简单名可用。星号导入的类型在任何使用位置都解析为与显式导入相同的 Java 类型：类型注解、基类、泛型实参（例如返回 `RedisCodec[bytes, bytes]` 的 `@Factory` 方法）以及装饰器成员。JDK 包（`java.util`、`java.time` 等）的类不受星号导入约束：请像上文 `Optional` 那样按名称导入。
+
+被导入的名称必须存在于编译类路径上。从某个 Java 包导入但该包中不存在此名称的类（例如构建缺少提供它的依赖）时，会产生一个指名该导入的编译错误，而不是生成代码中 `Object` 类型的签名：
+
+----
+Cannot import [UserAgentProvider] from [micronaut.aws.ua]: the Java type [io.micronaut.aws.ua.UserAgentProvider] is not on the compile classpath. Check the imported name, or add the dependency that provides it.
+----
+
+模块在以下情况下视为 Java 包：它包含位于编译类路径上的类，或位于为 Java 保留的命名空间（`java`、`javax`、`jakarta`、`io` 与 `micronaut`）中。项目自身 Python 源码的模块、Python 标准库以及第三方 Python 包绝不会被当作 Java 导入。
+
+运行时不存在对应 Java 包的 Python 模块。编译器会把源码导入的 Java 包、类型和注解记录在编译产物旁的清单（manifest）中，运行时则安装一个导入查找器（import finder）把它们作为模块提供：包在首次访问时绑定其类；子包在首次使用时被导入；注解是一个携带注解类型并返回其目标的装饰器——元数据已被编译进生成的 Java 类。每种导入形式都与 Python 包相同（`import micronaut.http.annotation as a`、`from micronaut.core import util`、`import micronaut` 之后的 `micronaut.core.util.StringUtils`，以及绑定包中被导入注解与类的 `from micronaut.http.annotation import *`）。存在于编译类路径但运行时缺失的类会绑定到一个首次使用时再解析的外观（facade），因此仅编译期依赖不会使包导入失败。应用的 Python 模块可以位于与 Java 包同名的包中（`micronaut/context/helper.py` 与 `io.micronaut.context` 并存）：其包同时服务两者，但与从该包导入的 Java 类型同名的模块（`jakarta/inject/Singleton.py`）是编译错误。

@@ -1,0 +1,50 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Python Classes and Objects at Run Time](https://docs.micronaut.io/5.2.x/core/#core-runtimeTypes)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/languageSupport/python/runtimeTypes.adoc  upstream_commit: 0ff0e4373074974878227fd73bb8e9f398e9cdc0  upstream_hash: ef61df2c292e7b02bb1648e2964582228d03262c  translated_at: 2026-11-21 -->
+
+Python 代码通过 GraalPy 宿主互操作（host interop）直接调用 Java API。本节描述 Python 类、这些类的对象以及 `java.time` 值在运行时如何跨越该边界。
+
+[[runtimeTypes]]
+=== 作为 Java Class 实参的 Python 类
+
+Python 编译器为其编译的每个 Python 类生成一个 Java 类：bean 或 dataclass 对应一个类，`Protocol` 对应接口，抽象基类或引入类型（如客户端或仓库）对应相应形式。凡 Java API 期望 `java.lang.Class` 的位置，直接传入 Python 类本身；运行时会替换为生成的类：
+
+[source,python]
+----
+from micronaut.context import ApplicationContext
+from micronaut.core.type import Argument
+from micronaut.websocket import WebSocketClient
+
+from .Book import Book
+from .BookRepository import BookRepository
+from .ChatClientWebSocket import ChatClientWebSocket
+
+def lookups(context: ApplicationContext, client, ws_client: WebSocketClient):
+    repository = context.getBean(BookRepository)
+    repositories = context.getBeansOfType(BookRepository)
+    books = client.retrieve(request, Argument.listOf(Book))
+    chat = ws_client.connect(ChatClientWebSocket, "/chat/stuff/fred")
+----
+
+这适用于每个 `Class` 参数，包括 `Argument.of`、`Argument.listOf` 与 `Argument.mapOf` 的类型实参、`Class...` 可变参数，以及同时接受 `Argument` 的方法中 `Class` 的重载（选中的是 `Class` 重载）。不需要为生成的类创建 `java.type("...")` 别名。
+
+=== Java 调用返回的生成包装器
+
+返回已编译 Python 类实例的 Java API，返回的是该 Python 对象的生成 Java 包装器：例如 `HttpClient.retrieve(request, Book)` 调用、`ObjectMapper.readValue(json, Book)` 或 `ApplicationContext.getBean(BookService)`。在 Python 中，这样的包装器表现得如同它所包装的 Python 对象：
+
+* `==`、`!=` 与 `hash()` 都是 Python 对象的行为（dataclass 按值比较），因此反序列化得到的 `Book` 与在 Python 中构造的 `Book` 比较相等。当 Python 类可哈希时——冻结 dataclass、或声明了 `unsafe_hash=True` 或 `__hash__` 方法的类——它可以在 set 或字典中查找。非冻结 dataclass 将 `__hash__` 设为 `None`，因此其包装器同样不可哈希（`TypeError: unhashable type`），与 Python 对象一致。
+* `isinstance(book, Book)` 的结果是 `True`，`book.__class__` 是 Python 类；`type(book)` 是包装器的互操作视图。
+* `repr()` 与 `str()` 都是 Python 对象的行为。
+* 属性与方法是 Python 对象的属性与方法，外加包装器的公共 Java 成员。
+
+`book.asPolyglotValue()` 返回被包装的 Python 对象本身。
+
+=== `java.time` 值
+
+`java.time` 值通过两条路径进入 Python：
+
+* 生成代码传给 Python 的值（例如 Python bean 方法的实参或 dataclass 的属性）会转换为 <<standardTypes,标准类型转换>> 中的 Python 标准类型：`LocalDateTime` 到来时是 `datetime.datetime`。
+* Python 直接调用的 Java 方法返回的值保持为 Java 对象。GraalPy 将其呈现为匹配的 `datetime` 类型的实例（`isinstance(value, datetime)` 成立，`value.year`、`value.isoformat()` 与 `value + timedelta(days=1)` 可用），且其 Java 方法仍然可用（`value.plusDays(1)`、`value.toInstant(ZoneOffset.UTC)`）。将该值传回其类型的 Java 参数时传递的是同一对象；传给 `java.time` 参数的 Python `datetime` 则按标准类型转换规则转换。
+
+=== 数值重载
+
+Python 数字会选择它能够无损适配的数值重载，且是其中最具体的一个：`Vector.of(0.1, 0.2, 0.3)` 选择 `of(double...)`，`Vector.of(0.5, 0.25)` 选择 `of(float...)` （因为两个值都能以 `float` 精确表示），`Vector.of(1, 2, 3)` 选择 `of(byte...)`。若要选择浮点重载，请将值写作浮点数（`1.0`、`2.0`）。

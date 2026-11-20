@@ -1,0 +1,108 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Standard Library Type Conversions](https://docs.micronaut.io/5.2.x/core/#core-standardTypes)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/languageSupport/python/standardTypes.adoc  upstream_commit: f5fe0e901df2894640cbf80008dd43ad7f805c07  upstream_hash: c2583f0d6586c39e32d5b263ca318e9ad34b5dbf  translated_at: 2026-11-21 -->
+
+Micronaut 在生成 Python 存根（stub）时，会将选定的 Python 标准库注解映射为 Java 类型。该转换适用于 bean 内省、生成的构造器、可执行方法以及返回给 Java 的 Python 值。
+
+[%header,cols="1,1"]
+|===
+|Python 类型 |Java 类型
+
+|`datetime.date`
+|`java.time.LocalDate`
+
+|`datetime.time`
+|`java.time.LocalTime`
+
+|`datetime.datetime`
+|`java.time.LocalDateTime`
+
+|`datetime.timedelta`
+|`java.time.Duration`
+
+|`datetime.tzinfo` 与 `datetime.timezone`
+|`java.time.ZoneOffset`
+
+|`uuid.UUID`
+|`java.util.UUID`
+|===
+
+例如，可执行的 Python 方法可以使用标准 Python 注解，而其生成的 Java 签名暴露对应的 Java 类型：
+
+[source,python]
+----
+from datetime import datetime, timedelta
+from uuid import UUID
+
+from jakarta.inject import Singleton
+from micronaut.context.annotation import Executable
+
+@Singleton
+class EventService:
+    @Executable
+    def reschedule(self, event_id: UUID, scheduled_at: datetime, delay: timedelta) -> datetime:
+        return scheduled_at + delay
+----
+
+从 Java 以 `UUID`、`LocalDateTime` 和 `Duration` 调用 `reschedule` 时，会向该方法传入原生 Python 的 `UUID`、`datetime` 和 `timedelta` 对象。Python 的返回值会被转换回声明的 Java 类型。
+
+`time` 与 `datetime` 默认使用朴素（naive）Java 表示。带 `tzinfo` 的值会被拒绝，而不是丢弃其时区信息。`timezone` 转换支持 `ZoneOffset` 可表示的固定偏移；不支持自定义 `tzinfo` 实现。
+
+[[standardTypes]]
+=== 带时区的日期时间（Aware datetimes）
+
+持有绝对时间点的 `datetime`——例如 `datetime.now(timezone.utc)`——会改为映射到 `java.time.Instant`、`OffsetDateTime` 或 `ZonedDateTime`。请以 `Annotated` 元数据指明 Java 类型：
+
+[source,python]
+----
+from dataclasses import dataclass
+from datetime import datetime
+from typing import Annotated
+
+from java.time import Instant, OffsetDateTime
+from micronaut.data.annotation import GeneratedValue, Id, MappedEntity
+
+
+@dataclass
+@MappedEntity("fetch_log")
+class FetchLogEntry:
+    id: Annotated[int | None, Id, GeneratedValue]
+    run: Annotated[datetime, Instant]
+    finished: Annotated[datetime | None, OffsetDateTime]
+----
+
+该属性仍是 Python 的 `datetime`；只有其 Java 类型发生变化。而直接声明 Java 类型本身（`run: Instant`）则不同：此时值保持为 Java 对象，供将其传给 Java API 的 Python 代码使用。保存 `FetchLogEntry(None, datetime(2026, 10, 7, tzinfo=timezone.utc), None)` 会存储该时间点，读回时再次得到带时区的（aware）`datetime`。可执行方法与仓库方法的参数和返回类型同样适用此规则。
+
+[%header,cols="1,2"]
+|===
+|Java 类型 |Python 值
+
+|`java.time.Instant`
+|UTC 中的带时区 `datetime`
+
+|`java.time.OffsetDateTime`
+|带固定偏移 `timezone` 的带时区 `datetime`
+
+|`java.time.ZonedDateTime`
+|位于同名 `zoneinfo.ZoneInfo` 区域的带时区 `datetime`；该区域没有时区数据时使用其固定偏移。Python 的 `zoneinfo` （或 pytz）区域会转换为同名的 Java 区域
+|===
+
+在期望上述类型的位置传入朴素 `datetime` 会被拒绝：它不指名任何时间点，猜测时区会使其发生静默偏移。请先为它设置 `tzinfo` （`value.replace(tzinfo=timezone.utc)`）。
+
+当 Java 未声明具体类型（`Object` 参数，例如泛型仓库被擦除的类型实参）时，朴素 `datetime` 会转换为 `LocalDateTime`，带时区的转换为 `OffsetDateTime`；若其 `tzinfo` 是命名区域，则转换为 `ZonedDateTime`。
+
+=== 未带类型注解的类属性
+
+未带类型注解、被赋以字面量的类属性，其 Java 类型取自该字面量：`int`、`float`、`str`、`bool`、`bytes`、`list`、`dict` 或 `set`。被赋 `None` 或非字面量表达式的属性则定为 `Object`。字面量选取最窄的类型，因此 `ratio = 0` 会成为 `int` 属性，`ratio = 0.0` 则成为 `double` 属性；若本意是更宽的类型，请为属性添加注解（`ratio: float = 0`）。Java `int` 无法容纳的 `int` 字面量（`big = 10_000_000_000`）会被定为 `Object`：
+
+[source,python]
+----
+from jakarta.inject import Singleton
+
+@Singleton
+class Customizer:
+    CONNECTION_TIMEOUT = 25000  # int
+    RATIO = 0.5                 # double
+    NAME = "customizer"         # String
+    TAGS = ["a", "b"]           # List
+    NOTHING = None              # Object
+----

@@ -1,0 +1,81 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Python Keywords in Java APIs](https://docs.micronaut.io/5.2.x/core/#core-keywords)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/languageSupport/python/keywords.adoc  upstream_commit: 20cf7e9b43033aae898f2922bbd4971359fbb3ed  upstream_hash: 4822ee5aa3a9c9d3db332df50b5ff59f54873b57  translated_at: 2026-11-21 -->
+
+一些 Java API 使用的方法或注解成员名是 Python 的保留关键字。Python 代码应使用同一名称加尾部下划线的形式。Python 编译器支持会在处理期间改写这些别名，因此 Micronaut 元数据与运行时调用仍指向原始 Java 名称。
+
+对于注解成员，请使用尾部下划线形式：
+
+[source,python]
+----
+from micronaut.http.annotation import Controller, Error
+
+@Controller("/errors")
+class ErrorController:
+    @Error(global_=True)
+    def error(self):
+        pass
+----
+
+`global_` 成员会被记录为 Java 注解成员 `global`。
+
+对于 Java 方法，请使用相同约定：
+
+[source,python]
+----
+import java
+
+Flux = java.type("reactor.core.publisher.Flux")
+
+publisher = Flux.from_(source)
+----
+
+`from_` 调用会在处理期间被改写为调用 Java 的 `from` 方法。
+
+相同约定也适用于 Java 在运行时返回的对象（例如构建器与方法调用的返回值），此时无法进行改写。每个 Java 对象都能响应「以 Python 关键字命名的成员的尾部下划线形式」，因此构建器的 `from` 方法或规约（specification）的 `and`、`or` 与 `not` 组合器可按 `from_`、`and_`、`or_` 与 `not_` 调用：
+
+[source,python]
+----
+from micronaut.email import Email
+
+email = (Email.builder()
+    .from_("sender@example.com")
+    .to("john@example.com")
+    .subject("Hello")
+    .build())
+----
+
+只有当剩余名称是 Python 关键字且 Java 对象没有带下划线名称的成员时，下划线才会被去掉；真正名为 `from_` 的 Java 方法仍以 `from_` 访问。
+
+== `io` 下的 Java 包
+
+`io` 是 Python 标准库的模块，因此 Python 自身无法从名为 `io.something` 的包导入。尽管如此，`io` 下的 Java 包（如 `io.micronaut`、`io.swagger` 或 `io.kubernetes`）仍以 Java 名称导入；Python 编译器支持能识别出 `io.*` 导入只能指向 Java 包，并为运行时改写它：
+
+[source,python]
+----
+from micronaut.http.annotation import Controller, Get
+from io.swagger.v3.oas.annotations import Operation
+from io.swagger.v3.oas.annotations.tags import *
+import io.swagger.v3.oas.annotations.responses as responses
+
+@Controller("/pets")
+@Tag(name="pets")
+class PetController:
+    @Get
+    @Operation(summary="List pets")
+    @responses.ApiResponse(responseCode="200")
+    def list_pets(self) -> list[str]:
+        return []
+----
+
+Micronaut 自身的包也可以省略前缀书写（`from micronaut.http.annotation import Controller`）。`io.*` 导入若在编译类路径上找不到对应的类或包，即是编译错误，因为 Python 的 `io` 模块永远无法满足它；`import io.some.package` 需要别名（`as`），因为名称 `io` 在运行时无法指代该 Java 包。导入 Python 模块本身（`import io`、`from io import StringIO`）不受影响；应用中恰好名为 `io` 的子包的相对导入（`from .io.util import helper`）也不受影响。
+
+NOTE: 运行时，Java 的 `io.<name>` 包是顶层 Python 包 `<name>` （如 `micronaut`、`swagger`、`kubernetes` 等）。它会占用与名为 `<name>` 的 Python 库相同的名称（例如 PyPI 上的 `grpc`、`opentelemetry` 或 `kubernetes` 发行版）：路径上同名的 Python 包优先，此时 Java 包 `io.grpc` 的类将无法导入。在同一个应用内，同一名称请要么使用 Java 包、要么使用 Python 库，二者取其一。
+
+相同约定也适用于包含 Python 关键字片段的 Java 包，例如 `software.amazon.awssdk.http.async`：以尾部下划线从该包导入，运行时会把该片段映射回 Java 包：
+
+[source,python]
+----
+from software.amazon.awssdk.http.async_ import SdkAsyncHttpClient
+----
+
+被导入的 Java 类在运行时就是 Java 类本身，因此可用在任何期望该 Java 类的位置：作为接口基类（Python 类不能继承具体 Java 类）、在 `isinstance` 检查中，以及作为 Java 方法的 `Class` 实参（例如 `context.getBeansOfType(SdkAsyncHttpClient)`）。被导入的注解是装饰器；其 `java_class` 属性是注解类型，传入 Java 方法时装饰器本身会转换为该注解类型，例如 `Qualifiers.byStereotype(Primary)`。

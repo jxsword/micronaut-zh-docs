@@ -1,0 +1,68 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Java Collections and Serialization](https://docs.micronaut.io/5.2.x/core/#core-javaCollections)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/languageSupport/python/javaCollections.adoc  upstream_commit: 0ff0e4373074974878227fd73bb8e9f398e9cdc0  upstream_hash: 060e834d11c4de6f8fd4173db508f681727e7682  translated_at: 2026-11-21 -->
+
+拥有自身类的 Java 集合会以引用方式进入 Python。被注入 Python bean、传给 Python 方法或赋给 Python 对象属性的 `java.util.Map` 实现（例如缓存或视图）就是 Java 对象本身，由 GraalPy 以外部 dict（foreign dict）的形式暴露：它保留自身的类、同一性和完整的 Java API，在 Python 中所做的修改从 Java 侧可见。
+
+[source,python]
+----
+from typing import Annotated
+
+from com.example.cache import NamedCache  # a Java Map implementation with an API of its own
+from jakarta.inject import Inject, Singleton
+
+
+@Singleton
+class PeopleService:
+    people: Annotated[NamedCache[str, Person], Inject]
+
+    def add(self, person: Person) -> str:
+        self.people.put(person.getId(), person)   # the Java API of the injected map
+        self.people[person.getId()] = person      # or the Python dict protocol
+        return self.people.getName()
+----
+
+普通 JDK 集合（`ArrayList`、`HashMap`、`List.of(...)` 等）进入 Python 时会被复制，元素随之转换（生成的 Python 类以 Python 对象形式到来，`java.time` 值以对应的 Python 对象到来）。Python 代码操作的是副本：它可以向 Java 侧不可修改的列表追加元素，也绝不会改动它仅是被交予的 Java 状态，例如配置列表。
+
+Python 对象的 `list` 与 `dict` 属性是 Python 集合，并保持为 Python 集合。为 `@Introspected` Python 类生成的 Java 类不会把这类属性复制进其 property：该 property 是 Python list 或 dict 的实时视图，因此 Python 中的 `cart.items.append(name)` 与 Java 中的 `cart.getItems().add(name)` 触及同一集合——无论对象是在 Python 中创建，还是从 HTTP 会话等 Java 存储中读回——并且 `dataclasses.asdict`、`copy.deepcopy` 与 `json.dumps` 在 Python 侧继续可用。Java 赋给该 property 的集合（`cart.setItems(list)`）会在下一次从 Python 使用该对象时被复制为 Python list，此后 property 视图即指向该列表。这适用于字符串、数字、布尔值的 list 与 dict 以及由它们嵌套而成的 list 与 dict；由 Python 对象或 `java.time` 值组成的集合则在每次跨越时转换。
+
+=== 序列化
+
+为 `@Introspected` Python 类生成的 Java 类（包括 `@Serdeable`）实现了 `java.io.Serializable`，因此 Python 对象可以存入任何使用 Java 序列化的地方：分布式缓存、topic 或 HTTP 会话存储。序列化形式由内省的 property 值组成，从生成的 Java 字段写出；GraalPy 对象是 transient 的。反序列化后，Python 运行时会在该对象首次被使用时从这些值重建 Python 对象，其方式与为池化上下文重建对象相同。
+
+该契约有以下限制：
+
+* 只有内省的 property 值会被序列化。Python 对象的其他任何状态（未声明为 property 的属性、闭包、打开的资源）都会丢失，且不会再次调用 `+__init__+`。
+* 每个 property 值本身必须可序列化；嵌套的 Python 对象在其类被内省时是可序列化的，而被视图化的 `list` 或 `dict` 属性会以普通 `ArrayList` 或 `LinkedHashMap` 副本写出。
+* 带自定义 property 访问器（带逻辑的 `@property`）或未标注 `@Introspected` 的 Python 类不可序列化，因为其状态无法从 property 重建。
+* 反序列化得到的对象是新的 Python 实例：它与原对象不共享同一性。
+* 生成的类声明固定的 `serialVersionUID`：序列化形式只取决于 property 值，而不取决于生成类的结构。
+
+=== 由 Java 创建的对象与持久化
+
+由 Java 创建的内省 Python 类对象（通过生成类的构造器、`BeanIntrospection.instantiate(...)` 或反序列化器），或由持久化库从存储中加载的对象，在 Python 首次使用之前没有 Python 对象。此后由生成的 Java 字段持有其状态：Python 对象是从这些字段构建的视图，其集合属性与嵌套的内省对象以引用方式交给 Python。`dict[str, Customer]` 属性就是该字段的 Java `Map`，Python 添加的条目会加入该映射（以生成的 `Customer` 类），嵌套对象就是 Java 对象，Python 在其上赋值的属性会写入 Java 字段。这类对象从 Python 返回 Java 时，其生成类保持同一性，不会被再次包装。
+
+这使 Java 对象图成为实时状态，而这正是以反射方式存储对象的 Java 持久化库（EclipseStore、MicroStream）所需要的：只有生成类的 property 字段是持久的（GraalPy 对象与同步状态是 transient 的），存储的值是 Python 实际处理过的值，重启后加载的对象图在 Python 中的使用方式与其他任何 Java 创建的对象一样。
+
+[source,python]
+----
+@Introspected
+@dataclass
+class Data:
+    customers: dict[str, Customer] = field(default_factory=dict)
+
+
+@Singleton
+class CustomerRepository:
+    def __init__(self, root_provider: RootProvider[Data]):
+        self.root_provider = root_provider
+
+    @StoreParams("customers")
+    def add_customer(self, customers: dict[str, Customer], customer_save: CustomerSave) -> Customer:
+        customer = Customer(str(uuid.uuid4()), customer_save.firstName, customer_save.lastName)
+        customers[customer.id] = customer   # the Java map of the stored root: this is what gets stored
+        return customer
+----
+
+这类集合的条目与嵌套对象是 Java 对象，而非由 dataclass 创建的 Python 实例。借助 <<runtimeTypes,运行时类型>> 一节所述生成包装器的视图，读取与赋值其属性、调用其方法都与在任何 Python 对象上一样（赋值会到达 Java 字段——这正是直写（write-through）的意义所在），`isinstance(entry, Customer)` 的结果是 `True`，`entry == Customer(...)` 会比较 dataclass 字段；而查看 `type(entry)` 的 dataclass 辅助工具（如 `dataclasses.asdict` 或 `dataclasses.replace`）对它们不适用。
+
+在 Python 中创建的对象会保留它所持有的 Python 对象：这类对象的生成 Java 类是它的一个视图，其集合字段是转换后的副本，而在视图创建之后对 Python 对象所做的 Python 侧修改不会反映到该视图中。对属于 Java 所拥有对象图的对象的修改，应通过 Java 交回的对象进行，如上例所示。

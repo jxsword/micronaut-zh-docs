@@ -2527,26 +2527,26 @@ files:
 - file: guide/languageSupport/python/interfaces.adoc
   blob_sha: b139ce5108a78de3b80747695747efa4c5a683a7
   size: 4970
-  status: missing
+  status: current
   zh: zh/guide/languageSupport/python/interfaces.adoc
   paragraphs: 20
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 32406cbe4031c62a1c5df1410f703cf31a499d93
 - file: guide/languageSupport/python/javaCollections.adoc
   blob_sha: 060e834d11c4de6f8fd4173db508f681727e7682
   size: 6736
-  status: missing
+  status: current
   zh: zh/guide/languageSupport/python/javaCollections.adoc
   paragraphs: 16
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 0ff0e4373074974878227fd73bb8e9f398e9cdc0
 - file: guide/languageSupport/python/javaImports.adoc
   blob_sha: 0ad591a064cdc834af8b3cde49cdddc48b278eea
   size: 3043
-  status: missing
+  status: current
   zh: zh/guide/languageSupport/python/javaImports.adoc
   paragraphs: 8
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 20cf7e9b43033aae898f2922bbd4971359fbb3ed
 - file: guide/languageSupport/python/javaInterfaces.adoc
   blob_sha: bd681018980f12c842edfe7812258d3174cc37fd
@@ -2559,10 +2559,10 @@ files:
 - file: guide/languageSupport/python/keywords.adoc
   blob_sha: 4822ee5aa3a9c9d3db332df50b5ff59f54873b57
   size: 4480
-  status: missing
+  status: current
   zh: zh/guide/languageSupport/python/keywords.adoc
   paragraphs: 23
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 20cf7e9b43033aae898f2922bbd4971359fbb3ed
 - file: guide/languageSupport/python/moduleScripts.adoc
   blob_sha: 0a72aa1ff8579ade67b0c2fd151138685f0e9842
@@ -2623,10 +2623,10 @@ files:
 - file: guide/languageSupport/python/runtimeTypes.adoc
   blob_sha: ef61df2c292e7b02bb1648e2964582228d03262c
   size: 3991
-  status: missing
+  status: current
   zh: zh/guide/languageSupport/python/runtimeTypes.adoc
   paragraphs: 15
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 0ff0e4373074974878227fd73bb8e9f398e9cdc0
 - file: guide/languageSupport/python/sourceRoots.adoc
   blob_sha: 7e280e614b0db46e795020d5db03fbf4d291244f
@@ -2639,10 +2639,10 @@ files:
 - file: guide/languageSupport/python/standardTypes.adoc
   blob_sha: c2583f0d6586c39e32d5b263ca318e9ad34b5dbf
   size: 4496
-  status: missing
+  status: current
   zh: zh/guide/languageSupport/python/standardTypes.adoc
   paragraphs: 21
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: f5fe0e901df2894640cbf80008dd43ad7f805c07
 - file: guide/languageSupport/python/typeOrdering.adoc
   blob_sha: 00c30477480230f695991c92788a3b5e90f98157

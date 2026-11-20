@@ -1,0 +1,82 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Interfaces and Introduction Advice](https://docs.micronaut.io/5.2.x/core/#core-interfaces)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/languageSupport/python/interfaces.adoc  upstream_commit: 32406cbe4031c62a1c5df1410f703cf31a499d93  upstream_hash: b139ce5108a78de3b80747695747efa4c5a683a7  translated_at: 2026-11-21 -->
+
+Python 没有接口。当 Python 类自身没有状态且只声明抽象方法时，Python 编译器（`micronaut-inject-python`）会将其编译为 Java *接口* 而非 Java 类：
+
+* 该类没有 `__init__`、没有属性也没有 property，且
+* 每个方法都是抽象方法：以 `@abstractmethod` 装饰、声明于 `typing.Protocol` 中，或以 `...` 占位主体书写。
+
+符合这些规则的类有两种形态。
+
+== 普通接口
+
+不带 bean 或拦截器构造型（stereotype）的普通抽象类或 `Protocol`，就是 Java 接口在 Python 中的写法。其他 Python 类通过继承来实现它，而 Java 代码看到的是生成的接口：
+
+[source,python]
+----
+from abc import ABC, abstractmethod
+from jakarta.inject import Singleton
+
+
+class Translator(ABC):
+    @abstractmethod
+    def translate(self, text: str) -> str:
+        ...
+
+
+@Singleton
+class UpperTranslator(Translator):
+    def translate(self, text: str) -> str:
+        return text.upper()
+----
+
+== 引入接口
+
+被装饰以 api:aop.Introduction[] 构造型的类——例如声明式 HTTP 客户端（ann:http.client.annotation.Client[]）、Micronaut Data 仓库或 AI 服务——如果其实例方法全部为抽象方法，就是一个*引入接口*。与 Java 接口一样，Micronaut 会在编译期用引入代理实现它；Python 类本身不会被实例化，因此 bean 背后没有 Python 对象。
+
+[source,python]
+----
+from abc import ABC, abstractmethod
+from micronaut.http.annotation import Get
+from micronaut.http.client.annotation import Client
+
+
+@Client("/pets")
+class PetClient(ABC):
+    @Get("/{name}")
+    @abstractmethod
+    def pet(self, name: str) -> str:
+        ...
+----
+
+引入接口的静态函数会成为生成接口中调用该 Python 函数的静态方法。
+
+带有引入构造型但同时拥有自身状态或行为（`__init__`、注入的属性、与抽象方法并存的具象方法，或基类本身不是接口）的类会被编译为 Java 类：其抽象方法在运行时由引入通知实现，而类的其余部分（包括从基类继承的内容）仍是 Python 对象。
+
+NOTE: 引入接口的 bean 是 Micronaut 生成的 Java 代理，而不是 Python 类的实例。对它检查 `isinstance(bean, PetClient)` 的 Python 代码会得到 `False`，且该 bean 没有 `asPolyglotValue()`；从 Python 调用其方法的方式与其他任何 Java bean 相同。
+
+== 运行时注解
+
+LangChain4j 这类框架通过 `java.lang.reflect.Proxy` 以反射方式构建接口实现，并用 `Method.getAnnotation` 读取其注解。因此，对于带有 ann:core.annotation.AllowsReflection[] 提示（可声明于类上、元注解于其某个注解类型上、或由注解映射器添加）或在 `micronaut.introspection.allow-reflection` 属性中列名的接口，当接口类、其方法及其参数上的注解类型具有 `RUNTIME` 保留策略且可置于此类声明时，这些注解会被复制到生成的接口上（参见 <<generatedClasses,生成的 Java 类>>；否则不复制任何注解）：
+
+[source,python]
+----
+from abc import ABC, abstractmethod
+from typing import Annotated
+
+from dev.langchain4j.service import SystemMessage, UserMessage, V
+from micronaut.langchain4j.annotation import AiService
+
+
+@AiService
+class Friend(ABC):
+    @SystemMessage("You are a good friend of mine. Answer using slang.")
+    @UserMessage("Tell me about {{topic}}")
+    @abstractmethod
+    def chat(self, topic: Annotated[str, V("topic")]) -> str:
+        ...
+----
+
+当 `@AiService` 由 LangChain4j 模块映射到该提示、或在 Python 类上声明 `@AllowsReflection`、或以 `-Amicronaut.introspection.allowReflection=example.micronaut.aiservice.*` 编译时，生成的 `Friend` 接口会在 `chat` 上携带 `@SystemMessage` 与 `@UserMessage`，并在其参数上携带 `@V("topic")`；否则这些注解会被省略，此时可通过 `-Amicronaut.python.reflection.warnings=true` 让编译器以备注形式报告（参见 <<generatedClasses,生成的 Java 类>>）。
+
+Micronaut 注解通过 Python 类的注解元数据提供给 Micronaut，不会被复制；除非其注解类型标注了 ann:core.annotation.ReflectiveAccess[]——它声明某个框架会以反射方式读取该注解——这类注解以及 JUnit 注解无论提示与选项如何都会被复制。Python 自定义注解与 `java.lang` 中约束声明的注解（如 `@FunctionalInterface`）永远不会被复制。成员值无法写入 Java 源码的注解会以编译警告报告并被省略。
