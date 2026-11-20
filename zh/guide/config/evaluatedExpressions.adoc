@@ -1,0 +1,423 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Expression Language](https://docs.micronaut.io/5.2.x/core/#core-evaluatedExpressions)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/config/evaluatedExpressions.adoc  upstream_commit: 130cfede2d9a325faf7016bf10e0a2060c5a3cbd  upstream_hash: c7fc084c223c8f7b3dc9185fa2d53721145ea0db  translated_at: 2026-11-21 -->
+
+[[evaluatedExpressions]]
+自 4.0 起，Micronaut 框架支持使用 `#{...}` 语法在注解值中嵌入求值表达式（evaluated expressions），从而在配置应用时获得更高的灵活性。
+
+.求值表达式示例
+[source,groovy]
+----
+@Value("#{ T(Math).random() }")
+double injectedValue;
+----
+
+只要注解成员接受字符串或字符串数组，就可以定义表达式。
+
+NOTE: 目前「类型使用」注解（声明了 `ElementType.TYPE_USE` 的注解）尚不支持表达式。
+
+.数组中的求值表达式
+[source,java]
+----
+@Singleton
+@Requires(env = {"dev", "#{ 'test' }"})
+public class EvaluatedExpressionInArray {}
+----
+
+您也可以在字符串模板中嵌入一个或多个表达式，方式与使用 `${...}` 语法嵌入属性类似。
+
+.求值表达式模板
+[source,groovy]
+----
+@Value("http://#{'hostname'}/#{'path'}")
+String url;
+----
+
+求值表达式在构建时完成校验与编译，从而保证运行时的类型安全。
+
+应用运行之后，表达式会按需求值，作为注解元数据解析的一部分。表达式的使用不影响性能，因为求值过程完全不使用反射。
+
+注意，出于安全考虑，表达式不能在运行时根据可能不可信的输入动态编译。所有表达式都在应用的编译过程中静态编译并检查，错误将作为编译失败报告。
+
+通常，表达式可以视为用一种可用功能受限的编程语言编写的语句。尽管表达式的复杂度只受受支持语法构造列表的限制，但一般不建议在表达式中放置复杂逻辑，因为通常有更好的方式来实现同样的结果。
+
+== 在 Micronaut 框架中使用表达式
+
+表达式可以在 Micronaut 框架及其相关模块的任何地方使用。例如，您可以使用表达式实现简单的定时任务控制：
+
+snippet::io.micronaut.docs.expressions.ExampleJob[tags="imports,clazz",title="Job Control with Expressions"]
+
+<1> 这里使用 ann:scheduling.annotation.Scheduled[] 注解的 `condition` 成员，只有在满足前置条件时才执行任务。
+<2> `condition` 会调用该类型中检查任务是否暂停的方法。还可以按需使用其他方法来暂停和恢复任务的执行。
+
+TIP: 您还可以使用表达式，配合 ann:http.annotation.RouteCondition[] 注解实现条件路由。
+
+== 求值表达式语言参考
+
+求值表达式语法支持以下功能：
+
+* 字面量值
+* 数学运算符
+* 比较运算符
+* 逻辑运算符
+* 三元运算符
+* 类型引用
+* 方法调用
+* 属性访问
+* 从 Bean 上下文检索 bean
+* 检索环境属性
+
+=== 字面量值
+
+支持以下类型的字面量值：
+
+* `null`
+* 布尔值（`true`、`false`）
+* 字符串，需要用单引号（`'`）包围
+* 数值（`int`、`long`、`float`、`double`）
+
+Integer 与 Long 值还可以用十六进制或八进制记法指定。Float 与 Double 值还可以用指数记法指定。所有数值也都可以为负数。
+
+.字面量值示例
+[source]
+----
+#{ null }
+#{ true }
+#{ 'string value' }
+#{ 10 }
+#{ 0xFFL }
+#{ 10L }
+#{ .123f }
+#{ 1E+1d }
+#{ 123D }
+----
+
+=== 数学运算符
+
+支持的数学运算符有 `+`、`-`、`*`、`/`、`%`、`^`。数学运算符只能应用于数值（`+` 除外，它还可用于字符串拼接）。数学运算按标准运算符优先级规定的顺序执行。您也可以使用括号 `()` 改变求值顺序。
+
+`/` 与 `%` 运算符可以分别用 `div` 与 `mod` 关键字作为别名。
+
+.数学运算符示例
+[source]
+----
+#{ 1 + 2 }             // 3
+#{ 'a' + 'b' + 'c' }   // 'abc'
+#{ 7 - 3 }             // 4
+#{ 7 * 3 }             // 21
+#{ 7 * ( 3 + 1) }      // 28
+
+#{ 15 / 3 }            // 5
+#{ 15 div 3 }          // 5
+
+#{ 15 % 3 }            // 0
+#{ 15 mod 3 }          // 0
+
+// Unlike in Java, ^ operator means exponentiation
+#{ 3 ^ 2 }             // 9
+----
+
+=== 比较运算符
+
+支持以下比较运算符：`==`、`!=`、`>`、`<`、`>=`、`\<=`、`matches`
+比较运算按标准运算符优先级规定的顺序执行。
+您也可以使用括号 `()` 改变求值顺序。
+
+基本类型与对象都支持相等性检查，它通过 `Object.equals()` 方法执行。
+
+`>`、`<`、`>=`、`\<=` 运算可应用于数值类型或实现了 `java.lang.Comparable` 接口的类型。
+
+`matches` 关键字可用于判断字符串是否匹配给定的正则表达式，该表达式必须以字符串字面量指定。正则表达式本身会在编译时检查有效性。
+
+.比较运算符示例
+[source]
+----
+#{ 1 + 2 == 3 }         // true
+#{ 'abc' != 'abc' }     // false
+#{ 7 > 3 }              // true
+#{ 7 < 3 }              // false
+#{ 7 >= 7 }             // true
+#{ 7 <= 8 }             // false
+
+#{ 'AbC' matches '[A-Za-z*'  }      // Compilation failure
+#{ 'AbC' matches '[A-Za-z]*'  }     // true
+#{ 'AbC' matches '[a-z]*'  }        // false
+----
+
+=== 逻辑运算符
+
+支持以下逻辑运算符：
+
+* `&&` （可用 `and` 作为别名）
+* `||` （可用 `or` 作为别名）
+* `!` （可用 `not` 作为别名）
+* `empty` / `not empty` （适用于字符串、集合、数组和映射）
+
+逻辑运算按标准运算符优先级规定的顺序执行。
+您也可以使用括号 `()` 改变求值顺序。
+
+.逻辑运算符示例
+[source]
+----
+#{ true && false }         // false
+#{ true and true }         // true
+
+#{ true || false }         // true
+#{ false or false }        // false
+
+#{ !false }                // true
+#{ !!true }                // true
+
+#{ empty '' }              // true
+#{ not empty '' }          // false
+----
+
+=== 三元运算符
+
+支持标准三元运算符，允许在表达式中指定 if-then-else 条件逻辑
+
+[source]
+----
+condition ? thenBranch : elseBranch
+----
+
+其中 `condition` 的求值应产生布尔值，且 `then` 与 `else` 分支的复杂度不受限制。
+
+.三元运算符示例
+[source]
+----
+#{ 15 > 10 ? 'a' : 'b' }    // 'a'
+#{ 15 >= 16 ? 'a' : 'b' }   // 'b'
+----
+
+=== 点运算符与安全导航运算符
+
+点运算符可用于访问表达式中某个值的方法与属性。例如：
+
+.点运算符用法
+[source]
+----
+#{ collection.size() > 0 }
+#{ foo.bar.name == "Fred" }
+----
+
+您还可以使用安全解引用运算符 `?.` 以空安全的方式导航路径：
+
+.安全解引用运算符
+[source]
+----
+#{ foo?.bar?.name == "Fred" }
+----
+
+TIP: 使用时，安全解引用运算符还会自动解包（unwrap）Java 的 `Optional` 类型。
+
+=== 类型引用
+
+预定义语法构造 `T(...)` 可用于引用类。括号内的值应当是全限定类名（包括包名）。唯一的例外是 `java.lang.*` 类，它们只需指定简单类名即可直接引用。基本类型无法被引用。
+
+类型引用会根据上下文以不同方式求值。
+
+==== 简单类型引用
+
+简单类型引用会解析为 `Class<?>` 对象。
+
+.类型引用示例
+[source]
+----
+#{ T(java.lang.String) }    // String.class
+----
+
+如果类型引用作为方法参数指定，也适用同样的规则。
+
+==== 使用 `instanceof` 进行类型检查
+
+类型引用可以用作 `instanceof` 运算符的右侧部分
+
+.类型检查示例
+[source]
+----
+#{ 'abc' instanceof T(String) }  // true
+----
+
+这等价于以下 Java 代码，并将求值为布尔值：
+
+[source]
+----
+"abc" instanceof String
+----
+
+==== 静态方法调用
+
+类型引用可用于调用类的静态方法
+
+.静态方法调用
+[source]
+----
+#{ T(Math).random() }
+----
+
+=== 表达式求值上下文
+
+默认情况下，您在求值表达式中可以调用的方法只有通过类型引用调用的静态方法。
+
+可通过扩展求值上下文来增加可用方法。扩展求值上下文有两种方式。第一种是通过自定义 api:TypeElementVisitor[] 注册新的上下文类。
+
+NOTE: api:TypeElementVisitor[] 必须位于注解处理器的类路径上，因此需要定义在一个可被包含到该类路径的独立模块中。
+
+类注册到求值上下文之后，其方法与属性即可在求值表达式中引用。
+
+请看下面的示例：
+
+[source, java]
+.用户自定义的求值表达式上下文
+----
+include::test-suite/src/main/java/io/micronaut/docs/expressions/CustomEvaluationContext.java[tag=clazz]
+----
+
+NOTE: 该类应能解析为 bean，必要时可使用 `jakarta.inject` 注解来注入其他类型。此外，出于性能考虑，无论定义的作用域为何，所有求值上下文类实际上都是单例。
+
+注册该类可以通过自定义实现 api:expressions.context.ExpressionEvaluationContextRegistrar[] 来完成，该实现经服务加载器注册为 api:inject.visitor.TypeElementVisitor[]（创建一个引用新类的 `META-INF/services/io.micronaut.inject.visitor.TypeElementVisitor` 文件），并放到注解处理器类路径上：
+
+[source, java]
+.定义 ExpressionEvaluationContextRegistrar
+----
+include::test-suite/src/main/java/io/micronaut/docs/expressions/ContextRegistrar.java[tag=clazz]
+----
+
+现在，方法 `generateRandom(int, int)` 可以在求值表达式中按如下方式使用：
+
+snippet::io.micronaut.docs.expressions.ContextConsumer[title="Usage of user-defined evaluated expression context"]
+
+在运行时，将从应用上下文中检索该 bean，并调用相应的方法。
+
+如果编译时在求值上下文中找不到匹配的方法，编译将失败。如果求值上下文中找到多个合适的方法，也会发生编译错误——请记住，如果您提供多个 api:expressions.context.ExpressionEvaluationContextRegistrar[]，可能会发生冲突，因为这些类型实际上是全局的。
+
+当方法名相同且所提供的参数列表匹配多个方法的参数时，这些方法将被视为有歧义（导致编译失败）。
+
+使用 api:expressions.context.ExpressionEvaluationContextRegistrar[] 会使其方法与属性以全局方式可用于任意注解中的求值表达式。
+
+不过，您也可以使用 ann:context.annotation.AnnotationExpressionContext[] 指定作用于具体注解或注解成员的求值上下文。
+
+snippet::io.micronaut.docs.expressions.AnnotationContextExample[title="Usage of annotation level evaluated expression context"]
+
+<1> 这里为上下文引入了两个新方法 `firstValue()` 与 `secondValue()`，但仅限于 `@CustomAnnotation` 的作用范围
+<2> `firstValue()` 方法定义在名为 `AnnotationContext` 的 bean 中
+<3> `secondValue()` 方法定义在名为 `AnnotationMemberContext` 的 bean 中
+<4> 在 `@CustomAnnotation` 注解上，`AnnotationContext` 类型的方法对注解的所有成员可见（类型级上下文）。
+<5> 在 `@CustomAnnotation` 注解的 `value()` 成员上，`AnnotationMemberContext` 类型的方法可用，但作用范围仅限于 `value()` 成员。
+
+同样，上下文类也需要显式定义为 bean，以便在运行时能从应用上下文中检索到它们。
+
+=== 方法调用
+
+您既可以调用通过类型引用调用的静态方法，也可以调用求值上下文中的方法以及对象上的方法，这意味着支持方法链式调用。
+
+.表达式中的方法链式调用
+[source,java]
+----
+import io.micronaut.context.annotation.Value;
+import jakarta.inject.Singleton;
+
+@Singleton
+class CustomEvaluationContext {
+
+    public String stringValue() {
+        return "stringValue";
+    }
+
+}
+
+@Singleton
+class ContextConsumer {
+
+    @Value("#{ #stringValue().length() }")
+    public int stringLength;
+
+}
+----
+
+也支持可变参数（varargs）方法的调用。注意，如果方法的最后一个参数是数组，您仍可以在调用时提供以逗号分隔的参数列表而无需显式包装成数组。在这种情况下，其处理方式与方法最后一个参数显式声明为可变参数时相同。
+
+.在表达式中调用可变参数方法
+[source,java]
+----
+import io.micronaut.context.annotation.Value;
+import jakarta.inject.Singleton;
+
+@Singleton
+class CustomEvaluationContext {
+
+    public int countIntegers(int... values) {
+        return values.length;
+    }
+
+    public int countStrings(String[] values) {
+        return values.length;
+    }
+
+}
+
+@Singleton
+class ContextConsumer {
+
+    @Value("#{ #countIntegers(1, 2, 3) }")
+    public int totalIntegers;
+
+    @Value("#{ #countStrings('a', 'b', 'c') }")
+    public int totalStrings;
+
+}
+----
+
+=== 属性访问
+
+只需在求值上下文中以 `#` 为前缀引用名称，即可访问 JavaBean 属性。bean 属性也可以像方法一样用点号链式访问。
+
+.在表达式中访问 bean 属性
+[source,java]
+----
+
+import io.micronaut.context.annotation.Value;
+import jakarta.inject.Singleton;
+
+@Singleton
+class CustomEvaluationContext {
+
+    public String getName() {
+        return "Bob";
+    }
+
+    public int getAge() {
+        return 25;
+    }
+
+}
+
+@Singleton
+class ContextConsumer {
+
+    @Value("#{ 'Name is ' + #name + ', age is ' + #age }")
+    public String value;
+
+}
+----
+
+=== 从 Bean 上下文检索 bean
+
+预定义语法构造 `ctx[...]` 可用于从 bean 上下文检索 bean。方括号内的参数必须是全限定类名（注意 `T(...)` 包装是可选的，为简便起见可以省略）。
+
+.从 bean 上下文检索 bean
+[source]
+----
+#{ ctx[T(io.micronaut.example.ContextBean)] }
+#{ ctx[io.micronaut.example.ContextBean] }
+----
+
+=== 检索环境属性
+
+语法构造 `env[...]` 可用于按名称检索环境属性。方括号内的表达式必须解析为字符串值，否则编译将失败。如果属性值在运行时缺失，表达式将返回 `null`
+
+.检索环境属性
+[source]
+----
+#{ env['test.property'] }
+----

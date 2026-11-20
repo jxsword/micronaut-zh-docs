@@ -1,0 +1,282 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Configuration Properties](https://docs.micronaut.io/5.2.x/core/#core-configurationProperties)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/config/configurationProperties.adoc  upstream_commit: 141801d51f78801de73ea33aab4592c00e79a3aa  upstream_hash: 39683df65243717e40697052860aa98baf82cf69  translated_at: 2026-11-21 -->
+
+[[configurationProperties]]
+您可以通过创建标注了
+ ann:io.micronaut.context.annotation.ConfigurationProperties[] 的类来创建类型安全的配置。
+
+Micronaut 框架会生成一个免反射的 `@ConfigurationProperties` bean，并且还会在编译时计算要评估的属性路径，大大提高加载 `@ConfigurationProperties` 的速度与效率。
+
+例如：
+
+snippet::io.micronaut.docs.config.properties.EngineConfig[tags="imports,class",indent=0,title="@ConfigurationProperties Example"]
+
+<1> `@ConfigurationProperties` 注解接受配置前缀
+<2> 您可以使用 `jakarta.validation` 注解校验配置
+<3> 可以为属性分配默认值
+<4> 静态内部类可以提供嵌套配置
+<5> 可选的配置值可以包装在 `java.util.Optional` 中
+
+准备好类型安全的配置之后，就可以像其他任何 bean 一样将其注入到您的 bean 中：
+
+snippet::io.micronaut.docs.config.properties.EngineImpl[tags="class",indent=0,title="@ConfigurationProperties Dependency Injection"]
+
+<1> 注入 `EngineConfig` bean
+<2> 使用配置属性
+
+配置值随后可以从 link:{api}/io/micronaut/context/env/PropertySource.html[PropertySource] 实例之一提供。例如：
+
+snippet::io.micronaut.docs.config.properties.VehicleSpec[tags="start",indent=0,title="Supply Configuration"]
+
+上例输出：`"Ford Engine Starting V8 [rodLength=6.0]"`
+
+您可以在 `@Requires` 注解中直接引用配置属性来按条件加载 bean，语法如下：`@Requires(bean=Config.class, beanProperty="property", value="true")`
+
+注意，对于更复杂的配置，您可以通过继承来组织 ann:context.annotation.ConfigurationProperties[] bean。
+
+例如，创建 `EngineConfig` 的子类并使用 `@ConfigurationProperties('bar')`，将解析 `my.engine.bar` 路径下的所有属性。
+
+[NOTE]
+====
+YAML 保留字
+~~~~~~~~~~~~~~~~~~~~
+
+使用 YAML 配置文件时，某些单词被 YAML 规范保留，会被自动转换为布尔值。这些词包括：
+
+* `yes` / `no`
+* `true` / `false`
+* `on` / `off`
+
+如果您在 YAML 中将这些词用作不带引号的属性键，它们将被解析为布尔值而不是字符串：
+
+[source,yaml]
+----
+foo:
+  bar:
+    yes: "1"     # yes is parsed as true (boolean)
+    no: "2"      # no is parsed as false (boolean)
+----
+
+要将这些词用作属性名，必须给键加引号：
+
+[source,yaml]
+----
+foo:
+  bar:
+    "yes": "1"   # forces YAML to treat as string
+    "no": "2"    # forces YAML to treat as string
+----
+
+这是 YAML/SnakeYAML 解析的限制，并非 Micronaut 特有。更多信息请参阅 link:https://yaml.org/spec/1.2/spec.html#id2765879[YAML 1.2 规范]。
+====
+
+== 包含与排除
+
+当配置属性类从父类继承属性时，可能需要排除来自父类的属性。ann:io.micronaut.context.annotation.ConfigurationProperties[] 注解的 `includes` 与 `excludes` 成员提供了该功能。列表同时适用于本地属性与继承的属性。
+
+提供给 includes/excludes 列表的名称必须是「属性」名。例如，如果注入的是 setter 方法，属性名就是将 setter 名去大写化后的结果（`setConnectionTimeout` -> `connectionTimeout`）。
+
+[[configurationPropertiesAccessorsStyle]]
+== 更改访问器风格
+
+自 3.3 起，Micronaut 框架支持为 getter 与 setter 定义不同于 Java Bean 默认 `get` 与 `set` 的访问器前缀。在您的 POJO 或 `@ConfigurationProperties` 类上标注 link:{api}/io/micronaut/core/annotation/AccessorsStyle.html[@AccessorsStyle] 注解。
+
+当您以流畅（fluent）风格编写 getter 与 setter 时，这很有用。例如：
+
+.使用 `@AccessorsStyle`
+[source,java]
+----
+import io.micronaut.context.annotation.ConfigurationProperties;
+import io.micronaut.core.annotation.AccessorsStyle;
+
+@AccessorsStyle(readPrefixes = "", writePrefixes = "") // <1>
+@ConfigurationProperties("my.engine")
+public class EngineConfig {
+
+    private String manufacturer;
+    private int cylinders;
+
+    public EngineConfig(String manufacturer, int cylinders) {
+        this.manufacturer = manufacturer;
+        this.cylinders = cylinders;
+    }
+
+    public String manufacturer() { // <2>
+        return manufacturer;
+    }
+
+    public void manufacturer(String manufacturer) { // <2>
+        this.manufacturer = manufacturer;
+    }
+
+    public int cylinders() { // <2>
+        return cylinders;
+    }
+
+    public void cylinders(int cylinders) { // <2>
+        this.cylinders = cylinders;
+    }
+
+}
+----
+<1> Micronaut 框架将为 getter 与 setter 使用空前缀。
+<2> 使用空前缀定义 getter 与 setter。
+
+现在您可以注入 `EngineConfig`，并使用 `engineConfig.manufacturer()` 与 `engineConfig.cylinders()` 从配置中获取值。
+
+== 属性类型转换
+
+Micronaut 框架使用 api:io.micronaut.core.convert.ConversionService[] bean 在解析属性时转换值。您可以通过定义实现 api:io.micronaut.core.convert.TypeConverter[] 接口的 bean，为 Micronaut 不支持的类型注册额外的转换器。
+
+Micronaut 框架内置了一些实用的转换，详情如下。
+
+=== 时长转换
+
+时长可以通过在数字后附加单位来指定。支持的单位有 `s`、`ms`、`m` 等。下表汇总了示例：
+
+.时长转换
+|===
+|配置值 |结果值
+
+|`10ms` | 10 毫秒的 `Duration`
+
+|`10m` | 10 分钟的 `Duration`
+
+|`10s` | 10 秒的 `Duration`
+
+|`10d` | 10 天的 `Duration`
+
+|`10h` | 10 小时的 `Duration`
+
+|`10ns` | 10 纳秒的 `Duration`
+
+|`PT15M` | 使用 ISO-8601 格式的 15 分钟 `Duration`
+
+|===
+
+例如，配置默认 HTTP 客户端的读取超时：
+
+[configuration,title="Using Duration Values"]
+----
+micronaut:
+  http:
+    client:
+      read-timeout: 15s
+----
+
+=== 列表/数组转换
+
+列表和数组可以在 Java properties 文件中以逗号分隔的值指定，或在 YAML 中使用原生 YAML 列表指定。泛型类型用于转换值。例如在 YAML 中：
+
+[configuration,title="Specifying lists or arrays in YAML"]
+----
+my:
+  app:
+    integers:
+      - 1
+      - 2
+    urls:
+      - http://foo.com
+      - http://bar.com
+----
+
+对于上述示例配置，您可以定义要绑定到的属性，并通过泛型提供目标类型：
+
+[source,java]
+List<Integer> integers;
+List<URL> urls;
+
+=== 可读字节数
+
+您可以用 ann:io.micronaut.core.convert.format.ReadableBytes[] 注解标注任何 setter 参数，从而允许使用简写语法指定字节、千字节等来设置值。例如，以下代码取自 api:io.micronaut.http.client.HttpClientConfiguration[]：
+
+.使用 `@ReadableBytes`
+[source,java]
+----
+public void setMaxContentLength(@ReadableBytes int maxContentLength) {
+    this.maxContentLength = maxContentLength;
+}
+----
+
+有了上述配置，您可以使用以下值设置 `micronaut.http.client.max-content-length`：
+
+.@ReadableBytes 转换
+|===
+|配置值 |结果值
+
+|`10mb` | 10 兆字节
+
+|`10kb` | 10 千字节
+
+|`10gb` | 10 千兆字节
+
+|`1024` | 原始字节长度
+
+|===
+
+=== 日期格式化
+
+ann:io.micronaut.core.convert.format.Format[] 注解可用于 setter，以指定绑定 `java.time` 日期对象时使用的日期格式。
+
+.对日期使用 `@Format`
+[source,java]
+----
+public void setMyDate(@Format("yyyy-MM-dd") LocalDate date) {
+    this.myDate = date;
+}
+----
+
+== 配置构建器
+
+许多框架和工具已经使用构建器风格的类来构造配置。
+
+您可以使用 link:{api}/io/micronaut/context/annotation/ConfigurationBuilder.html[@ConfigurationBuilder] 注解为构建器风格的类填充配置值。link:{api}/io/micronaut/context/annotation/ConfigurationBuilder.html[ConfigurationBuilder] 可以应用于标注了 link:{api}/io/micronaut/context/annotation/ConfigurationProperties.html[@ConfigurationProperties] 的类中的字段或方法。
+
+由于 Java 世界中没有一致的构建器定义方式，可以在注解中指定一个或多个方法前缀，以支持诸如 `withXxx` 或 `setXxx` 之类的构建器方法。如果构建器方法没有前缀，请将该参数赋值为空字符串。
+
+还可以指定配置前缀，告诉 Micronaut 框架到哪里查找配置值。默认情况下，构建器方法使用类级 link:{api}/io/micronaut/context/annotation/ConfigurationProperties.html[@ConfigurationProperties] 注解中指定的配置前缀。
+
+例如：
+
+.@ConfigurationBuilder 示例
+snippet::io.micronaut.docs.config.builder.EngineConfig[tags="imports,class"]
+
+<1> `@ConfigurationProperties` 注解接受配置前缀
+<2> 第一个构建器可以不带类配置前缀进行配置；它继承自上面的前缀。
+<3> 第二个构建器可以用类配置前缀 + `configurationPrefix` 值进行配置。
+<4> 第三个构建器演示了注解既可以应用于属性，也可以应用于方法。
+
+NOTE: 默认仅支持单参数构建器方法。对于无参数的方法，请将注解的 `allowZeroArgs` 参数设置为 `true`。
+
+与前面的示例一样，我们可以构造 `EngineImpl`。由于我们使用的是构建器，可以使用工厂类从构建器构建引擎。
+
+.工厂 bean
+snippet::io.micronaut.docs.config.builder.EngineFactory[tags="imports,class"]
+
+返回的引擎随后可以注入到任何需要引擎的地方。
+
+配置值可以从 link:{api}/io/micronaut/context/env/PropertySource.html[PropertySource] 实例之一提供。例如：
+
+.提供配置
+snippet::io.micronaut.docs.config.builder.VehicleSpec[tags="start"]
+
+上例输出：`"Subaru Engine Starting V4 [rodLength=4.0, sparkPlug=Iridium(NGK 6619 LFR6AIX)]"`
+
+== MapFormat
+
+在某些用例中，可能希望接受可提供给 bean 的任意配置属性映射，尤其当该 bean 代表第三方 API（并非所有可能的配置属性都已知）时。例如，数据源可以接受特定数据库驱动专有的配置属性映射，允许用户在该映射中指定任何所需的选项，而无需显式编写每个属性。
+
+为此，api:core.convert.format.MapFormat[] 注解允许您将映射绑定到单个配置属性，并指定是接受键到值的扁平映射，还是嵌套映射（其中值可以是其他映射）。
+
+snippet::io.micronaut.docs.config.mapFormat.EngineConfig[tags="imports,class",indent=0,title="@MapFormat Example"]
+<1> 注意注解的 `transformation` 参数；可能的值为 `MapTransformation.FLAT` （用于扁平映射）和 `MapTransformation.NESTED` （用于嵌套映射）
+
+snippet::io.micronaut.docs.config.mapFormat.EngineImpl[tags="class",indent=0,title="EngineImpl"]
+
+现在可以向 `my.engine.sensors` 配置属性提供属性映射。
+
+snippet::io.micronaut.docs.config.mapFormat.VehicleSpec[tags="start",indent=0,title="Use Map Configuration"]
+
+上例输出：`"Engine Starting V8 [sensors=2]"`
+
+TIP: 欲了解更多，请参阅 https://guides.micronaut.io/latest/micronaut-configuration.html[@Configuration 与 @ConfigurationBuilder] 指南。

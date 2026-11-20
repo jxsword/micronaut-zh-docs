@@ -1,0 +1,35 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Using @EachProperty to Drive Configuration](https://docs.micronaut.io/5.2.x/core/#core-eachProperty)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/config/eachProperty.adoc  upstream_commit: a15ac7b65796f4b93cd37e0293a2daf8fc3d6687  upstream_hash: fa42f7d051445da837d0185f2293590eb937caf5  translated_at: 2026-11-21 -->
+
+link:{api}/io/micronaut/context/annotation/ConfigurationProperties.html[@ConfigurationProperties] 注解非常适合单个配置类，但有时您需要多个实例，每个实例都有自己独特的配置。这正是 link:{api}/io/micronaut/context/annotation/EachProperty.html[EachProperty] 的用武之地。
+
+ann:context.annotation.EachProperty[] 注解会为给定名称下的每个子属性创建一个 `ConfigurationProperties` bean。例如，考虑以下类：
+
+snippet::io.micronaut.docs.config.env.DataSourceConfiguration[tags="eachProperty", indent=0, title="Using @EachProperty"]
+
+<1> `@EachProperty` 注解定义了要处理的属性名。
+<2> `@Parameter` 注解可用于注入子属性的名称，该名称定义了 bean 的名称（同时也是 bean 的限定符）
+<3> bean 的每个属性都绑定到配置。
+
+NOTE: Micronaut 配置使用 kebab case，而不是小驼峰式（lower camel case）。例如，使用 `@EachProperty("my-bean")` 可以正常工作，而 `@EachProperty("myBean")` 会失败。
+
+上面的 `DataSourceConfiguration` 定义了一个 `url` 属性，用于配置一个或多个数据源。这些 URL 本身可以通过 Micronaut 所评估的任何 link:{api}/io/micronaut/context/env/PropertySource.html[PropertySource] 实例进行配置：
+
+snippet::io.micronaut.docs.config.env.EachPropertyTest[tags="config", indent=0, title="Providing Configuration to @EachProperty"]
+
+在上例中，两个数据源（分别名为 `one` 与 `two`）定义在 `test.datasource` 前缀之下，该前缀早先在 `@EachProperty` 注解中指定。这些配置项中的每一个都会触发创建一个新的 `DataSourceConfiguration` bean，从而使下面的测试成功：
+
+snippet::io.micronaut.docs.config.env.EachPropertyTest[tags="beans", indent=0, title="Evaluating Beans Built by @EachProperty"]
+
+<1> `DataSourceConfiguration` 类型的所有 bean 都可以使用 `getBeansOfType` 检索
+<2> 单个 bean 可以使用 `byName` 限定符检索。
+
+=== 基于列表的绑定
+
+ann:context.annotation.EachProperty[] 的默认行为是从映射风格的配置绑定，其中键是 bean 的具名限定符，值是要绑定的数据。对于映射风格配置不适合的情况，可以告知 Micronaut 框架该类从列表绑定。只需将注解的 `list` 成员设置为 true。
+
+snippet::io.micronaut.docs.config.env.RateLimitsConfiguration[tags="clazz", indent=0, title="@EachProperty List Example"]
+
+<1> 注解的 `list` 成员被设置为 `true`
+<2> 如果检索 bean 时顺序很重要，请实现 `Ordered`
+<3> 索引被注入到构造器中

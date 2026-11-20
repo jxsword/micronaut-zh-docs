@@ -1,6 +1,6 @@
 # 交接文档（handoff-latest）
 
-> 更新：2026-11-21 ｜ 会话：M2 分批翻译（B07 完成，config 章 7/15）｜ 下一会话任务：M2 继续分批翻译（B08 起）
+> 更新：2026-11-21 ｜ 会话：M2 分批翻译（B07+B08 完成，config 章 11/15）｜ 下一会话任务：M2 继续分批翻译（B09 起）
 
 ## 已完成清单（全部已提交，main 分支）
 
@@ -14,35 +14,37 @@
 | **B04 翻译批次** | `aef8bda` | 19 文件（Introspection 全章 15 + BeanMappers 3 + BeanValidation）全绿核销；词数 2588（实测）/段落 151；报告见 `reports/batch-B04.md`；批内锚点闭环 ×2；restore 门禁拦截占位符笔误 1 处 |
 | **B05 翻译批次** | `49b7a9b` | 2 文件（annotationMetadata + beanImport）全绿核销；词数 2074（实测）/段落 86；报告见 `reports/batch-B05.md`；[[annotationMetadata]] 注入后 B01 ioc.adoc 引用闭环；reviewer 脚本收紧（代码块段不计停用词漏译）；validate ⑦ 邻接违规 3 处修正 |
 | **B06 翻译批次** | `2e5a662` | 11 文件（IoC 余 7 + config 章开头 4）全绿核销；词数 3482（实测）/段落 163；报告见 `reports/batch-B06.md`；锚点注入 5 处（reflection/classImport/nullabilityAnnotations/jspecify/environments），批内 classImport↔mixin 闭环；**IoC 章 55 文件全部 current——IoC 全章译出** |
-| **B07 翻译批次** | 本次提交 | 4 文件（config：defaultEnvironment + banner + propertySource + valueAnnotation）全绿核销；词数 2540（实测）/段落 167；报告见 `reports/batch-B07.md`；锚点注入 2 处（propertySource/valueAnnotation），5 条既有 ⑤ 豁免消解 + 批内 propertySource→valueAnnotation 闭环；config 章 current 7/15（47%） |
+| **B07 翻译批次** | `abef899` | 4 文件（config：defaultEnvironment + banner + propertySource + valueAnnotation）全绿核销；词数 2540（实测）/段落 167；报告见 `reports/batch-B07.md`；锚点注入 2 处，5 条既有 ⑤ 豁免消解 + 批内 propertySource→valueAnnotation 闭环；config 章 7/15（47%） |
+| **B08 翻译批次** | 本次提交 | 4 文件（config：evaluatedExpressions + configurationProperties + customTypeConverter + eachProperty）全绿核销；词数 3400（实测）/段落 260；报告见 `reports/batch-B08.md`；锚点注入 2 处 + 显式锚点 configurationPropertiesAccessorsStyle 保留，5 条豁免消解；reviewer 脚本术语检查范围修正（仅查可译段）；config 章 11/15（73%） |
 
-## 状态快照（2026-11-21，B07 收尾）
+## 状态快照（2026-11-21，B08 收尾）
 
 - 分支 main；基线 v5.2.25（`0b46d27afdfa`，快照日期 2026-11-20）；批次期间冻结窗口遵守（未跑 --apply）
-- manifest：388 条目 = 309 missing + 2 skipped + **77 current**（进度 19.8%）
-- 看板：B01–B07 = current，其余 25 批 pending
-- anchor-registry：121 条（不变）；validate 全量跑：PASSED（77 文件，⑤ 豁免警告 32 条，M3 清零）
+- manifest：388 条目 = 305 missing + 2 skipped + **81 current**（进度 20.9%）
+- 看板：B01–B08 = current，其余 24 批 pending
+- anchor-registry：121 条（不变）；validate 全量跑：PASSED（81 文件，⑤ 豁免警告 27 条，M3 清零）
 - 页头溯源投影：页名=toc 英文原题、URL=`https://docs.micronaut.io/5.2.x/core/#core-<basename>`（复用 B01 实测格式）、基线锁定日期 2026-11-19、translated_at=2026-11-21
-- reports/progress.md 已重新生成（IoC 55/55、introduction 2/2、quickStart 9/9、config 7/15）
-- 里程碑：IoC 章全章译出（B06 收尾）；config 章 7/15（47%），下一批 B08 继续 config 章
+- reports/progress.md 已重新生成（IoC 55/55、introduction 2/2、quickStart 9/9、config 11/15）
+- 里程碑：config 章 11/15（73%，余 bootstrap/eachBean/immutableConfig/jmx）；IoC 章保持全 current
 
 ## 实测结论（本会话新增/沿用）
 
-1. **锚点注入位置规则（B02 精化，B07 再次复用验证）**：basename 约定锚点 = 官方站 `core-<basename>` = 片段首内容之前的块锚——对正文先行的文件注入于第一段之前。B07 两处注入（propertySource/valueAnnotation）一次通过。
-2. **词数口径差异**：M1 inventory 报告值生成于 B01 snippet:: 保护修复之前；后续批次词数以批次执行时实测为准（B02 3055/2991、B03 3417/3377、B04 2588/2545、B05 2074/2076、B06 3482/3445、B07 2540/2484），M1 报告值仅作切分参考。
-3. **批间前向引用消解模式**：whatsNew.adoc（B01 译）等先行文件对未译目标的 xref 记为 ⑤ 豁免；后续批次落盘目标文件后豁免自动消解——B07 一次消解 5 条（config.adoc→propertySource、whatsNew→propertySource/configImport/customPropertySourceImporter、nullableInjection→valueAnnotation），新增 1 条（propertySource→distributedConfigurationVault）。批次报告须核对豁免增减明细。
-4. reviewer 段落对照的 zh 侧剔除口径：页头溯源段 + `[[…]]` 纯锚点注入段；停用词漏译检测仅检查 paragraph/admonition/heading/table 四类段。B07 用对译脚本 /tmp/b07_reviewer.py（临时，不入库，含术语命中+溯源对账+代码块 diff）执行 4/4 PASS。
-5. **源内已有显式锚点（ANCLINE 占位符）与 shorthand xref（`<<target,label>>`，未被 protect 捕获）均按纪律手保**：锚点行逐字节保留；xref target 逐字节保留、label 译出（产品名 label 如 HashiCorp Vault 保留）。
-6. 表格链路（TABLEDELIM/CELLSEP 占位符）与行内码高密度文件（propertySource.adoc：123 占位符、107 段）一次通过；上游半角引号（'micronaut.config.files'）原样保留，validate ⑦ 不误报。
-7. restore 后必须核对 restored 文件数与输入文件数一致（B04 教训沿用）；B07 restore 4/4 一次通过，0 笔误。
-8. validate ⑦ 邻接规则：反引号/占位符后紧跟全角开括号会被拒（B06 教训）；**宏 `[]` 后接全角开括号不在机检范围（`[`*_~`]（` 正则），既有译文 `]（` 先例可行**。
-9. `dependency::`/`snippet::` 宏不在 protect 显式清单时也会被 RE_DIRECTIVE 捕获为占位符或按指令行纪律逐字节保留（validate ② 逐字节门禁覆盖）。
+1. **锚点注入位置规则（B02 精化，B07/B08 复用验证）**：basename 约定锚点 = 官方站 `core-<basename>` = 片段首内容之前的块锚——对正文先行的文件注入于第一段之前。B07/B08 四处注入一次通过。
+2. **词数口径差异**：M1 inventory 报告值生成于 B01 snippet:: 保护修复之前；后续批次词数以批次执行时实测为准（B02 3055/2991、B03 3417/3377、B04 2588/2545、B05 2074/2076、B06 3482/3445、B07 2540/2484、B08 3400/3336），M1 报告值仅作切分参考。
+3. **批间前向引用消解模式**：先行文件对未译目标的 xref 记为 ⑤ 豁免；后续批次落盘目标文件后豁免自动消解。B07 消解 5 条、B08 消解 5 条；批次报告须核对豁免增减明细。
+4. reviewer 段落对照的 zh 侧剔除口径：页头溯源段 + `[[…]]` 纯锚点注入段；停用词漏译检测仅检查 paragraph/admonition/heading/table 四类段。B08 对译脚本 /tmp/b08_reviewer.py（临时，不入库）4/4 PASS。
+5. **reviewer 术语命中检查必须限定可译段**（B08 教训）：`Dependency Injection` 位于 snippet:: 指令行 title 参数（validate ② 要求逐字节保留），整文件级正则会误报——脚本已改为仅对 translatable 段拼接后检查。
+6. **源内已有显式锚点（ANCLINE 占位符）与 shorthand xref（`<<target,label>>`，未被 protect 捕获）均按纪律手保**：锚点行逐字节保留；xref target 逐字节保留、label 译出（产品名/规范链接 label 保留）。
+7. **validate ⑦ 邻接规则（B08 再次踩坑）**：占位符/行内码后紧跟全角开括号必拒——B08 首轮 `MapTransformation.FLAT`（/`NESTED`（ ×2 违规，占位符后补空格后通过；宏 `[]` 后接全角开括号不在机检范围（`[`*_~`]（` 正则），既有译文 `]（` 先例可行。**占位符后接 `（` 一律预留空格应作为翻译期习惯**。
+8. `[NOTE] ====` 嵌套块与内嵌 `~~~` 小标题（configurationProperties YAML 保留字节）结构保持、标题文本译出；裸代码行（无围栏的 `List<Integer> integers;` 等）逐字节保留。
+9. restore 后必须核对 restored 文件数与输入文件数一致（B04 教训沿用）；B07/B08 restore 8/8 一次通过（占位符笔误 0）。
+10. `dependency::`/`snippet::` 宏不在 protect 显式清单时也会被 RE_DIRECTIVE 捕获为占位符或按指令行纪律逐字节保留（validate ② 逐字节门禁覆盖）。
 
 ## 待办（下一会话）
 
-1. **M2 继续**：B08 起（4 文件：config/evaluatedExpressions + configurationProperties + customTypeConverter + eachProperty，双指标达标），看板改 in-progress 后按 §5.1 SOP + 固化校验链执行；启动提示词见 `docs/新会话启动提示词.md`（需更新至 B08 起）。注意：B08 含 configurationProperties（registry 锚点被 config.adoc 引用）与 evaluatedExpressions（被 beanMappers 引用 ×2）——落盘后预计消解 3 条豁免。
-2. 术语滚动：B05/B06/B07 括注待复核（构造型 stereotype、可保留 retainable、别名 alias、属性源 property source、mixin、规范构造器 canonical constructor、类型使用注解 type-use annotation、可空性注解、banner、kebab case、驼峰式 camel-case、提供者 provider、默认环境 default environment）；context propagation（B01 括注）继续待复核
-3. M3+：断链豁免清零（当前 32 条）、抽检、sync drill、tag v1.0
+1. **M2 继续**：B09 起（8 文件：config 收尾 4（eachBean/immutableConfig/bootstrap/jmx）+ AOP 章开头 4（aop/aroundAdvice/introductionAdvice/adapterAdvice），双指标达标），看板改 in-progress 后按 §5.1 SOP + 固化校验链执行；启动提示词见 `docs/新会话启动提示词.md`（需更新至 B09 起）。注意：B09 含 aop.adoc（registry 锚点被 whatsNew/annotationMetadata/factories 引用 ×3+）——落盘后预计消解 ≥3 条豁免；immutableConfig 亦在 registry（被 containerArch 等引用）。
+2. 术语滚动：B05–B08 括注待复核（构造型 stereotype、可保留 retainable、别名 alias、属性源 property source、mixin、规范构造器 canonical constructor、类型使用注解 type-use annotation、可空性注解、banner、kebab case、驼峰式 camel-case、提供者 provider、默认环境 default environment、求值表达式 evaluated expressions、小驼峰式 lower camel case）；context propagation（B01 括注）继续待复核
+3. M3+：断链豁免清零（当前 27 条）、抽检、sync drill、tag v1.0
 
 ## 调试经验与坑位（累计）
 
@@ -50,7 +52,7 @@
 2. gh api commits?path= 须用全仓路径 `src/main/docs/<rel>`
 3. 网络直连 github.com 失败 → git/curl 走 `http://192.168.33.1:10808`；gh api 直连可用；**11MB 级大页 curl 直连会超时截断，必须代理 + 后台跑**
 4. validate ⑤ 段落对照机检：zh 侧剔除页头溯源段（引用行+注释行合并为一段，恒 +1 偏差）
-5. PreToolUse hook 拒绝 Bash 直写源码/测试文件（heredoc/append/sed -i）→ 一律 Write/Edit 提交
+5. PreToolUse hook 拒绝 Bash 直写源码/测试文件（heredoc/append/sed -i）→ 一律 Write/Edit 提交；**临时 reviewer 脚本同样走 Write**（B08 实测 sed/heredoc 生成被拒）
 6. zh 译文页头 `> ` 引用行与 `<!-- -->` 注释行不参与 ⑦/③ 校验，溯源字段以 ⑥/manifest 对账为准
 7. **translator 必须使用受保护文本中的真实占位符哈希**（B02 臆造、B04 笔误均被门禁拦下）——占位符以 `-protected.txt` 为准逐个复制
 8. restore 输出 JSON 无 ok 字段（成功时含 `restored` 键）；解析时勿以 `ok` 判成败

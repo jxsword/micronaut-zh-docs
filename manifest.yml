@@ -479,18 +479,18 @@ files:
 - file: guide/config/configurationProperties.adoc
   blob_sha: 39683df65243717e40697052860aa98baf82cf69
   size: 11949
-  status: missing
+  status: current
   zh: zh/guide/config/configurationProperties.adoc
   paragraphs: 93
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 141801d51f78801de73ea33aab4592c00e79a3aa
 - file: guide/config/customTypeConverter.adoc
   blob_sha: a31c9f190d9ab2a42554eb82f75caa851d2a2b83
   size: 1891
-  status: missing
+  status: current
   zh: zh/guide/config/customTypeConverter.adoc
   paragraphs: 12
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: cd72cbf2bfa925c44026ed87fb2a96ce9611e73c
 - file: guide/config/eachBean.adoc
   blob_sha: 777cdddab8cb69a56c16642160fdf1d03cf308e9
@@ -503,10 +503,10 @@ files:
 - file: guide/config/eachProperty.adoc
   blob_sha: fa42f7d051445da837d0185f2293590eb937caf5
   size: 2793
-  status: missing
+  status: current
   zh: zh/guide/config/eachProperty.adoc
   paragraphs: 14
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: a15ac7b65796f4b93cd37e0293a2daf8fc3d6687
 - file: guide/config/environments.adoc
   blob_sha: 4c2d7a7792c4c680aa30004fba0afe2a20f2f3d6
@@ -543,10 +543,10 @@ files:
 - file: guide/config/evaluatedExpressions.adoc
   blob_sha: c7fc084c223c8f7b3dc9185fa2d53721145ea0db
   size: 15077
-  status: missing
+  status: current
   zh: zh/guide/config/evaluatedExpressions.adoc
   paragraphs: 141
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 130cfede2d9a325faf7016bf10e0a2060c5a3cbd
 - file: guide/config/immutableConfig.adoc
   blob_sha: 3eef8aca10360c7600554f36a28f8351d3a6bdd8

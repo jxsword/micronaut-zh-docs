@@ -1,0 +1,29 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Custom Type Converters](https://docs.micronaut.io/5.2.x/core/#core-customTypeConverter)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/config/customTypeConverter.adoc  upstream_commit: cd72cbf2bfa925c44026ed87fb2a96ce9611e73c  upstream_hash: a31c9f190d9ab2a42554eb82f75caa851d2a2b83  translated_at: 2026-11-21 -->
+
+Micronaut 框架包含一个可扩展的类型转换机制。要添加额外的类型转换器，您可以注册 api:core.convert.TypeConverter[] 类型的 bean。
+
+下面的示例展示了如何使用内置转换器之一（Map 转对象）或创建您自己的转换器。
+
+请看以下 api:context.annotation.ConfigurationProperties[]：
+
+snippet::io.micronaut.docs.config.converters.MyConfigurationProperties[tags="class", indent=0]
+
+`MyConfigurationProperties` 类型有一个名为 `updatedAt` 的属性，其类型为 link:{jdkapi}/java.base/java/time/LocalDate.html[LocalDate]。
+
+要通过配置从映射绑定该属性：
+
+snippet::io.micronaut.docs.config.converters.MyConfigurationPropertiesSpec[tags="runContext", indent=0]
+
+<1> 注意上面的 `MyConfigurationProperties` 类中是如何匹配 `myapp` 前缀与 `updatedAt` 属性名的
+
+默认情况下这不起作用，因为没有从 `Map` 到 `LocalDate` 的内置转换。要解决此问题，请定义一个自定义的 api:core.convert.TypeConverter[]：
+
+snippet::io.micronaut.docs.config.converters.MapToLocalDateConverter[tags="imports,class", indent=0]
+
+<1> 该类实现了 api:core.convert.TypeConverter[]，它有两个泛型参数：您要转换的源类型与目标类型
+<2> 构造器注入了 Micronaut 4 中引入的 `ConversionService` 类型的 bean，而不是像以前的版本那样对 `ConversionService.SHARED` 进行静态调用
+<3> 该实现委托给注入的转换服务，从用于创建 `LocalDate` 的 Map 中转换值
+<4> 如果绑定过程中发生异常，调用 `reject(..)`，它会向容器传播额外的信息
+
+NOTE: 可以通过服务加载器在 api:core.convert.TypeConverterRegistrar[] 中注册自定义类型转换器，将其添加到 `ConversionService.SHARED` 中。
