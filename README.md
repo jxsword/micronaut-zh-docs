@@ -6,8 +6,15 @@ Micronaut Framework 官方主指南（[docs.micronaut.io/5.2.x](https://docs.mic
 
 ## 翻译基线锚定
 
-- upstream: micronaut-core@v5.2.25（5.2.x 分支），锁定于 2026-11-19
-- 上游变更由每周 sync 检测（--check 对照 5.2.x 分支 HEAD）；初译期（v1.0 tag 前）仅开 issue 记录，`--apply` 门控禁用，避免批次目标漂移
+- upstream: micronaut-core@v5.2.25（5.2.x 分支），锁定于 2026-11-19；**初译完成于 2026-11-21（tag `v1.0`）**
+- 上游变更由每周 sync 检测（`--check` 对照 5.2.x 分支 HEAD）；v1.0 后 `--apply` 门控解除，进入持续增量模式：检测 → issue → 段落级增量复译（只重译变更段，保留已译段）
+
+## 在线对照结构
+
+- 每个译文文件页头附溯源引用块，含官方站对应页链接：`https://docs.micronaut.io/5.2.x/core/#core-<页面 basename>`；引用块后的 HTML 注释记录上游文件/提交/blob 哈希与翻译日期（机读，`--mark-current` 校验对象）
+- 上游主指南在构建期从 micronaut-core 各模块注入真实代码（`source::`/`source[]` 宏）并生成配置属性参考表，纯 .adoc 快照无法单独重建完整官方站点：译文页中代码段与属性表以官方站对应章节为准，相关页已附「官方站锚点提示」
+- 导航目录 `guide/toc.yml` 与 `guide/toc-python.yml`（Python 文档变体）的 386 条页面标题已译（页面路径与文件名不译），键路径与上游逐一对齐，由 `scripts/check_toc.py` 结构校验
+- 上游官网仅渲染主指南部分章节（httpServer/httpClient/certificates 三章未在官方站渲染），译文侧仍完整翻译
 
 ## 署名（TASL 四要素）
 
@@ -22,8 +29,8 @@ Micronaut Framework 官方主指南（[docs.micronaut.io/5.2.x](https://docs.mic
 
 | 路径 | 说明 |
 |---|---|
-| `source/` | 英文原文快照（只读，仅 sync 写入；含 `guide/`、`resources/` 图片、`toc.yml`） |
-| `zh/` | 中文译文（与 source/ 同名 1:1 镜像，未译文件不存在于 zh/） |
+| `source/` | 英文原文快照（只读，仅 sync 写入；含 `guide/` 全量 .adoc、`guide/toc*.yml` 导航、`resources/` 图片） |
+| `zh/` | 中文译文（与 source/ 同名 1:1 镜像；纯 include 壳文件以最小镜像 + 锚点形式存在） |
 | `manifest.yml` | 上游账本（唯一状态源，只允许脚本读写；blob sha + 四态状态机） |
 | `scripts/` | 同步/分段/保护/校验/锚点/进度管线（见各脚本 docstring） |
 | `config/` | 术语表（glossary.yml，含禁用译名黑名单）、风格指南、锚点登记表 |

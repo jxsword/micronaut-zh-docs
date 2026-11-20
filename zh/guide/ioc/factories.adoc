@@ -54,7 +54,7 @@ snippet::io.micronaut.docs.factories.primitive.V8Engine[tags="imports, class",in
 
 请注意，基本 bean 和基本数组 bean 有以下限制：
 
-* <<aop, AOP advice>> 不能应用于基本类型或包装类型
+* <<aop, AOP 通知>> 不能应用于基本类型或包装类型
 * 由于上述原因，不支持使用代理的自定义作用域
 * 不支持 `@Bean(preDestroy=..)` 成员
 

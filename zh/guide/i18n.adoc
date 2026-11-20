@@ -1,0 +1,4 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Internationalization](https://docs.micronaut.io/5.2.x/core/#core-i18n)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/i18n.adoc  upstream_commit: 8b2d30813898ca1d6192f802333270cad6418948  upstream_hash: e69de29bb2d1d6434b8b29ae775ad8c2e48c5391  translated_at: 2026-11-21 -->
+
+[[i18n]]

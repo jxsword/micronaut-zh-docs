@@ -18,6 +18,7 @@ micronaut:
 
 上例设置了 api:http.client.HttpClientConfiguration[] 类的 `readTimeout` 属性。
 
+[[_client_specific_configuration]]
 === 客户端特定配置
 
 要为每个客户端进行单独配置，有几种方式。您可以在配置文件（例如 `application.yml`）中手动配置 <<serviceDiscoveryManual,服务发现>> 并应用每客户端配置：

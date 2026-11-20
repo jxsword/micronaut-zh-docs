@@ -375,6 +375,13 @@ anchors:
   explicit: false
   referenced_by:
   - guide/quickStart/creatingClient.adoc
+- id: _client_specific_configuration
+  file: guide/httpClient/lowLevelHttpClient/clientConfiguration.adoc
+  title: Client Specific Configuration
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/httpClient/lowLevelHttpClient/clientBasics.adoc
 - id: clientStreaming
   file: guide/httpClient/lowLevelHttpClient/clientStreaming.adoc
   title: ''
@@ -495,6 +502,13 @@ anchors:
   explicit: false
   referenced_by:
   - guide/i18n/localizedMessageSource.adoc
+- id: _uri_path_variables
+  file: guide/httpServer/routing.adoc
+  title: URI Path Variables
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/httpServer/routing.adoc
 - id: routing
   file: guide/httpServer/routing.adoc
   title: URI Paths
@@ -929,11 +943,5 @@ anchors:
   - guide/cli/createProject.adoc
   - guide/ioc/scopes/builtInScopes/eagerInit.adoc
   - guide/languageSupport/groovy.adoc
-unresolved:
-- target: _client_specific_configuration
-  from: guide/httpClient/lowLevelHttpClient/clientBasics.adoc
-  reason: anchor-missing
-- target: _uri_path_variables
-  from: guide/httpServer/routing.adoc
-  reason: anchor-missing
+unresolved: []
 scanned_files: 386

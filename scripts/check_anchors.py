@@ -7,6 +7,13 @@
   - 每个被引用锚点登记：锚点 → 所在文件 / 标题 / 引用方清单；
   - 引用目标解析失败的列入 unresolved（登记表内保留，供 M3 断链清零跟踪）。
 
+裸锚点解析优先级（M3 增强）：
+  ① 显式 [[id]]/[#id] 定义；② micronaut 约定——锚 id = include 文件
+  basename（如 <<buildCLI>> → guide/quickStart/buildCLI.adoc）；
+  ③ AsciiDoc 标题自动锚——idprefix/idseparator 均为 "_"（Micronaut
+  文档构建实测口径，如标题 "URI Path Variables" → _uri_path_variables）。
+  三者都失败才记 unresolved。
+
 translator prompt 必读本登记表：翻译被引用标题时原位注入 [[原锚点]]。
 退出码：0 正常；无致命失败分支（unresolved 只登记不阻断）。
 """
@@ -76,6 +83,12 @@ def collect_xrefs(text: str) -> List[str]:
     return targets
 
 
+def _auto_id(title: str, prefix: str = "_", sep: str = "_") -> str:
+    """AsciiDoc 标题自动锚 id：非字母数字段 → 分隔符，折叠后加前缀。"""
+    s = re.sub(r"[^a-z0-9]+", sep, title.lower()).strip(sep)
+    return prefix + s if s else ""
+
+
 def build_registry(source_dir: Path) -> Dict:
     """扫描全量 source/ 构建登记表数据结构。"""
     anchors_by_file: Dict[str, Dict[str, dict]] = {}
@@ -84,11 +97,24 @@ def build_registry(source_dir: Path) -> Dict:
     files = sorted(source_dir.rglob("*.adoc"))
     texts = {}
     basename_index: Dict[str, List[str]] = defaultdict(list)
+    autoid_index: Dict[str, List[str]] = defaultdict(list)  # id → [rel]
+    auto_meta: Dict[tuple, str] = {}  # (rel, id) → 标题文本
+    from segment_adoc import RE_HEADING
     for f in files:
         rel = f.relative_to(source_dir).as_posix()
         texts[rel] = f.read_text(encoding="utf-8", errors="replace")
         anchors_by_file[rel] = scan_file_anchors(texts[rel])
         basename_index[f.stem].append(rel)
+        seen_ids = set()
+        for line in texts[rel].split("\n"):
+            m = RE_HEADING.match(line.strip())
+            if m:
+                title = line.strip()[len(m.group(1)):].strip()
+                aid = _auto_id(title)
+                if aid and aid not in seen_ids:
+                    seen_ids.add(aid)
+                    autoid_index[aid].append(rel)
+                    auto_meta.setdefault((rel, aid), title)
     for rel in sorted(texts):
         for target in collect_xrefs(texts[rel]):
             fpart, sep, anchor = target.partition("#")
@@ -119,6 +145,8 @@ def build_registry(source_dir: Path) -> Dict:
             if fpart:
                 if anchor in anchors_by_file[fpart]:
                     referenced_by[f"{fpart}#{anchor}"].append(rel)
+                elif anchor in autoid_index and fpart in autoid_index[anchor]:
+                    referenced_by[f"{fpart}#{anchor}"].append(rel)
                 else:
                     unresolved.append({"target": target, "from": rel,
                                        "reason": "anchor-missing"})
@@ -126,11 +154,14 @@ def build_registry(source_dir: Path) -> Dict:
                 # 裸锚点全域解析：
                 # ① 显式 [[id]] 定义；② micronaut 约定——锚 id = include 文件
                 # basename（如 <<buildCLI>> → guide/quickStart/buildCLI.adoc，
-                # 标题取该文件首个标题）；都失败才记 unresolved。
+                # 标题取该文件首个标题）；③ 标题自动锚（M3 增强）；
+                # 都失败才记 unresolved。
                 hits = [f for f in sorted(anchors_by_file)
                         if anchor in anchors_by_file[f]]
                 if not hits:
                     hits = sorted(basename_index.get(anchor, []))
+                if not hits:
+                    hits = sorted(set(autoid_index.get(anchor, [])))
                 if hits:
                     for f in hits:
                         referenced_by[f"{f}#{anchor}"].append(rel)
@@ -142,6 +173,9 @@ def build_registry(source_dir: Path) -> Dict:
         fpart, anchor = key.split("#", 1)
         a = anchors_by_file[fpart].get(anchor) or {}
         title = a.get("title", "")
+        if not title and (fpart, anchor) in auto_meta:
+            # 标题自动锚：标题 = 生成该 id 的标题行文本
+            title = auto_meta[(fpart, anchor)]
         if not title:
             # basename 派生锚：标题 = 该文件首个标题行
             from segment_adoc import RE_HEADING

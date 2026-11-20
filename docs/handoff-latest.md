@@ -1,98 +1,62 @@
 # 交接文档（handoff-latest）
 
-> 更新：2026-11-21 ｜ 会话：M2 分批翻译（**B07–B32 共三十二批全部完成并提交——M2 全库 .adoc 初译完成**，386/386 current）｜ 下一会话任务：toc.yml 专项 + M3 全量收尾（sweep/抽检/sync drill/tag v1.0）
+> 更新：2026-11-21 ｜ 会话：M3 全量收尾（**toc 专项 + sweep + 锚点专项 + 抽检 + sync drill + 豁免清零 + README + tag v1.0 全部完成**）｜ 下一会话任务：持续增量（周检测 → issue → 增量复译）
 
-## 已完成清单（全部已提交，main 分支）
+## 已完成清单（M3 会话，全部随收尾提交入库 + tag v1.0）
 
-| 工作单元 | 提交 | 说明 |
-|---|---|---|
-| M0 余项 | `67fd538` | README / LICENSE / LICENSE_TRANSLATION.md |
-| M1 基建（六脚本+tests+config+CI+快照+切分） | `2fb7425`…`e72d9ef` | pytest 86 绿 |
-| **B01–B06 翻译批次** | `b03bf56`…`2e5a662` | 74 文件：Introduction/QuickStart/IoC 全章 + config 开头；详见各自 `reports/batch-B0{1..6}.md`；B06 后 IoC 章 55/55 全章译出 |
-| **B07 翻译批次** | `abef899` | 4 文件（config：defaultEnvironment/banner/propertySource/valueAnnotation）；词数 2540/段落 167；锚点 2 处；⑤ 豁免 36→32 |
-| **B08 翻译批次** | `f1fa4cf` | 4 文件（config：evaluatedExpressions/configurationProperties/customTypeConverter/eachProperty）；词数 3400/段落 260；锚点 2 处；⑦ ×2 修复 |
-| **B09 翻译批次** | `a18c135` | 8 文件（config 收尾 4 + AOP 开头 4）；词数 2852/段落 125；锚点 5 处；**config 章 15/15 全章译出**；advice 统一译「通知」；reviewer 术语检查改与 validate ③ 同源 |
-| **B10 翻译批次** | `cb89326` | 5 文件（AOP：lifecycleAdvice/interceptorLifecycle/validation/caching/retry）；词数 3022/段落 140；锚点 4 处（批内互引）；retry 漏锚点被 reviewer 抓出补齐 |
-| **B11 翻译批次** | `ca907e4` | 7 文件（AOP 收尾 2 + httpServer 章页与前 4 节）；词数 3270/段落 206；锚点 4 处 + **页内标题锚 [[_uri_path_variables]] 原位注入首实践**；**AOP 章 10/10 全章译出** |
-| **B12 翻译批次** | `d1dbc49` | 25 文件（reactiveServer 组 11 + jsonBinding 组 14）；词数 3363/段落 260；锚点 4 处；jsonBinding 漏锚点被 validate ⑤ 拦截补齐；大批次工作法验证 |
-| **B13 翻译批次** | `83a4fa0` | 17 文件（errorHandling 组 8 + form 组 3 等）；词数 3122/段落 179；锚点 3 处（exceptionHandler 批内闭环 + form/formCapable 消解） |
-| **B14 翻译批次** | `9035228` | 13 文件（serverIO/uploads/transfers/filters 组 10）；词数 3410/段落 160；锚点 5 处；B13 组进度口径勘误（46/101 非 55/101） |
-| **B15 翻译批次** | `91686ca` | 13 文件（byteBody 组 4/sessions/sse/websocket 组 3/http2/http3）；词数 3457/段落 168；锚点 2 处 |
-| **B16 翻译批次** | `10c360d` | 24 文件（serverConfiguration 组 21 等）；词数 3265/段落 242；锚点 8 处（9 条豁免消解）；**回溯补注入 [[events]]**（B03 报告与实际不符的遗留缺陷）；httpServer 组 96/101 |
-| **B17 翻译批次** | `d83478f` | 15 文件（httpServer 收尾 5 + httpClient 开头 10）；词数 2893/段落 167；锚点 5 处；restore 拦截译丢段（clientBasics）；**httpServer 章 101/101 全章译出（第六个全章）**；进度过半 |
-| **B18 翻译批次** | `44b2cdf` | 8 文件（clientConfiguration/proxyClient/clientAnnotation 组 4）；词数 3303/段落 209；锚点 2 处；**reviewer 段落对齐第三次拦截真缺陷**（跨文件段错位）；上游 `////` 注释块纪律确立 |
-| **B19 翻译批次** | `10ca3be` | 14 文件（httpClient 注解余下 9 + certificates + contextPropagation 组 3 + cloud 章页）；词数 3471/段落 199；锚点 3 处 + 源内显式锚 certificates 保留；restore 第 4 次拦截译丢段；⑦ ×6 与 ③ ×1 修正；**httpClient 章 26/26 全章译出（第七个全章）** |
-| **B20 翻译批次** | `07a91c7` | 21 文件（cloud/cloudConfiguration 组 9 + serviceDiscovery 组 6 + clientSideLoadBalancing + distributedTracing + serverlessFunctions 组 4）；词数 3512/段落 277；锚点 7 处（6 批间消解 + 1 批内闭环）；restore 第 5 次拦截真缺陷（Route53 占位符丢右花括号）；validate **首轮 21/21 全绿（B01 以来首次批次内零修正）**；**cloud 章 17/17 全章译出（第八个全章）** |
-| **B21 翻译批次** | `ad0f03f` | 35 文件（**全程最大批次**：azureFunction + messaging 组 4 + commandLineApps 组 2 + configurations/reactiveConfigs 组 4 + dataAccess 组 10 + logging 组 5 + languageSupport/java 组 7 + groovy/python 章页 2）；词数 3078/段落 298；锚点 7 处（5 片段锚 + 2 标题锚，2 条豁免消解 + sqlSupport 批内闭环）；restore 35/35 首轮全过；validate 首轮 33/35（③ 物化 + ⑦ 邻接各 1）修复后全绿；reviewer 35/35 首轮零缺陷；占位符多重集校验容忍 6 文件语序重排；**五个组全章译出（第九至第十三个全章）：serverlessFunctions 4/4、messaging、commandLineApps、configurations、logging** |
-| **B22 翻译批次** | `e3938bf` | 5 文件（python 子组：pythonRuntime/pythonThreading/decorators/sourceRoots/typeOrdering）；词数 3045/段落 104；锚点 0 处（registry 实测无登记引用）；validate 首轮 3/5（⑦ 邻接 ×3）修复后全绿；reviewer 5/5 首轮零缺陷；**glossary 滚动回流新错误模式**——新术语 visitor 收录触发既有文件 ③ ×3（含 classImport 旧译「访问器」统一为「访问者」）；glossary +6（现 31 术语）；python 子章 6/24，languageSupport 章 13/50 |
-| **B23 翻译批次** | `837ce5b` | 6 文件（python 子组：interfaces/standardTypes/javaCollections/runtimeTypes/javaImports/keywords）；词数 3353/段落 103；锚点 2 处均为页内标题锚且批内闭环（[[standardTypes]]/[[runtimeTypes]] 注入标题行之前；首轮误按 basename 锚置首行，核对 registry title 后纠正）；validate 首轮 2/6（⑦ 邻接 ×4）修复后全绿；reviewer 6/6 首轮零缺陷；restore 6/6 首轮全过；python 子章 12/24，languageSupport 章 19/50 |
-| **B24 翻译批次** | `bec14a9` | 5 文件（python 子组：nestedTypes/pythonExceptions/functionalInterfaces/javaInterfaces/generatedClasses）；词数 3170/段落 93；锚点 1 处（[[generatedClasses]] 页内标题锚，注入 `== 嵌套类` 之前，B23 title 字段教训落实）；validate 首轮 3/5（⑦ 邻接 ×2）修复后全绿；reviewer 5/5 首轮零缺陷；restore 5/5 首轮全过；python 子章 17/24，languageSupport 章 24/50 |
-| **B25 翻译批次** | `66ed897` | 7 文件（python 子组：aopProxies/extendingJavaClasses/moduleScripts+testing/graalTools/asyncAwait/asyncioRuntime）；词数 2996/段落 111；锚点 2 处（[[extendingJavaClasses]] 标题锚消解 B24 豁免 + [[moduleScripts]] basename 锚消解既有豁免 routing→moduleScripts）；validate 首轮 4/7（⑦ ×3 + ④ 标题未译 ×2——工具名补译名括注）修复后全绿；reviewer 7/7 首轮零缺陷；restore 7/7 首轮全过；**python 子章 24/24 全章译出（第十四个全章）**，languageSupport 章 31/50 |
-| **B26 翻译批次** | `a1e663f` | 14 文件（asyncio 组 3 + kotlin 章 11）；词数 3407/段落 160；锚点 2 处（[[asyncioNetworking]]/[[asyncioStreaming]] 标题锚）；**占位符多重集校验在 restore 前拦截 2 处真缺陷**（原文复指处误重复占位符——新错误模式）；validate 首轮 11/14（⑦ ×3）修复后全绿；reviewer 14/14 首轮零缺陷；**kotlin 子章 14/14 全章译出（第十五个全章组）**；languageSupport 章 45/50 |
-| **B27 翻译批次** | `3546854` | 17 文件（kotlinContextPropagation + graal 组 3 + management 章 13）；词数 3469/段落 273；锚点 6 处（[[graal]] 标题锚消解既有豁免 + 5 处批内/半批内闭环；beansEndpoint/infoEndpoint 首轮误置文件首，自查 registry title 后纠正）；validate 首轮 13/17（⑦ ×5）修复后全绿；reviewer 17/17 首轮零缺陷；graalServices 78 段/761 词批次最重；**languageSupport 章 49/50（仅剩 overloads@B32）**；management 章 12/27 |
-| **B28 翻译批次** | `ec7b9be` | 21 文件（management 余 15 + security + multitenancy + cli 组 3）；词数 3023/段落 213；锚点 8 处（[[cli]] 标题锚消解既有豁免 ×2 + 7 处批内/半批内闭环）；validate 逐个 --file **首轮 21/21 全绿（与 B20 并列批次内零修正纪录）**；reviewer 21/21 首轮零缺陷；**management 章 27/27 全章译出（第十六个全章）**；**⑤ 豁免 11→7（−4 消解 +0 新增）——清零在射程内**；cli 章 3/10 起步 |
-| **B29 翻译批次** | `7baebf3` | 14 文件（cli 组 7 + i18n 组 2 + resources + architecture 组 4）；词数 3252/段落 191；锚点 5 处（[[proxy]] basename 锚消解既有豁免 + 4 处批内/半批内闭环；annotationArch 首轮漏注入，锚点 grep 核对发现后补齐——B16 教训复用）；validate 首轮 9/14（⑦ ×9 + ③ visitor ×3）修复后全绿；reviewer 13/14（唯一 FAIL 为 xref 顺序的合法语序重排，多重集一致非缺陷）；**cli 章 10/10 全章译出（第十七个全章）**；i18n 组 2/2；appendix 章 4/12；⑤ 豁免 7→6（−1 消解 +0 新增） |
-| **B30 翻译批次** | `ac214bb` | 4 文件（appendix/architecture：iocArch/aopArch/containerArch/httpServerArch）；词数 3390/段落 146；锚点 2 处（containerArch basename 锚 + iocArch 标题锚批内闭环；**iocArch 首轮误置标题之后，reviewer 拦截后纠正——title 教训第三次生效**）；**⑤ 硬拦 1 处——[[config]] 锚点在 B09 已译 config.adoc 缺失，回溯补注入（B16 先例第 2 次）**；validate 首轮 ⑦ ×5 修复后全绿；reviewer 4/4 PASS；**architecture 组 6/6 译出**；appendix 章 8/12；⑤ 豁免维持 6 条 |
-| **B31 翻译批次** | 本次提交（与 B32 同批提交） | 3 文件（faq/usingsnapshots/problems）；词数 960/段落 44；锚点 0 处（languageSupport/serverlessFunctions 引用锚点在位，落盘即闭环）；faq 首轮 ⑦ ×1 修复后全绿；reviewer 3/3 PASS；appendix 11/12；⑤ 豁免维持 6 条 |
-| **B32 翻译批次（M2 收官）** | 本次提交（与 B31 同批提交） | 2 文件（appendix/breaks + languageSupport/python/overloads）；词数 3181/段落 181；锚点 1 处（[[breaks]] 标题锚）；breaks 首轮 ④ ×2（模块名标题补译名括注）+ ⑦ ×4 修复后全绿；reviewer 2/2 PASS（breaks 145 译段全对齐）；**breaks 129 占位符/2908 词/166 段为全库单文件之最，零花括号缺陷**；**⑤ 豁免 6→3：breaks ×3 随落盘消解，剩余 i18n（M3 专项）+ 裸锚点 ×2（M3）**；**386/386 .adoc 全部 current——M2 全库 .adoc 初译完成** |
+| 工作单元 | 说明 |
+|---|---|
+| toc.yml / toc-python.yml 翻译专项 | 385+301 条标题译出（handoff 旧口径「76 条」仅数 title 行）；键/注释逐字节保留；YAML 注释版溯源投影过 mark-current；新增 scripts/check_toc.py + 5 项 pytest；manifest 核销 current |
+| 断链豁免 3 条收尾 | zh/guide/i18n.adoc 最小壳镜像（0 字节源 + `[[i18n]]` 锚）核销；clientConfiguration 回溯补注入 `[[_client_specific_configuration]]`；routing 的 `_uri_path_variables` B11 已在位。⑤ 豁免 **3 → 0** |
+| check_anchors.py 增强 | 标题自动锚解析（第三优先级，idprefix/separator 均 `_`）；registry 重生成 121 → 123，unresolved 2 → 0，既有条目零变化 |
+| 全量 sweep | spdlog 口径段级比对（4048 段）：errors 3（均为 B18 已文档化的 `////` 注释块误报）、warns 93（全部合法不译），**真漏译 0** |
+| 锚点专项 | registry 123 条逐一 grep zh/：**123/123 实锚在位**，同 id 无歧义 |
+| 抽检 ≥10% | 分层抽样（seed 20261121）39 文件（10.2%）五项机检 **39/39 PASS**；人工精读 4 文件（ideaSetup/producesAnnotation/methodInjection/pythonThreading）合格 |
+| sync drill 八步 | --check 全量（上游 cca2a1ce：388 文件 0 变更）→ --file 单文件 → --apply --dry-run → 门控拒绝验证 → --collect-commits（already=388）→ --mark-current 幂等 → --check 复跑幂等 → tag 后门控解除验证（--apply 0 变更 no-op） |
+| 术语滚动复核 | 57 组扫描：**14 条转正** glossary（advice/property source/event loop/service discovery/declarative client/health indicator/distributed tracing/circuit breaker/validation group/exception handler/error handler/camel-case/nullability annotations/data classes）；**advice 真缺陷 3 处修复**（whatsNew「重试建议」旧译、factories xref label 未译、constructorInjection 正文保留英文）；转正后 ③ 回流 387 文件 0 失败 |
+| README 在线结构 | 新增「在线对照结构」节（#core-<basename> 对照、构建期注入边界、toc 校验、官方站未渲染三章说明）；基线节更新 v1.0；结构表 toc 路径勘误；B14 看板状态笔误修正 |
+| tag `v1.0` | 指向 M3 收尾提交；`--apply` 门控（`v1.0^{commit}` 可解析即解禁）实测解除 |
 
-## 状态快照（2026-11-21，B32 收尾——M2 全库 .adoc 处置完成）
+## 状态快照（2026-11-21，M3 收尾）
 
-- 分支 main；基线 v5.2.25（`0b46d27afdfa`，快照日期 2026-11-20）；全部 32 批冻结窗口遵守（未跑 --apply）
-- manifest：388 条目 = **384 current + 2 skipped（appendix.adoc / i18n.adoc 纯 include 壳文件，无需翻译）+ 2 missing（guide/toc.yml 与 guide/toc-python.yml，YAML 导航文件，见待办 1）**；即 386 个 .adoc 全部处置完成（384 译出 + 2 skipped），全库仅剩 2 个 toc.yml 待 M3 专项
-- 看板：**B01–B32 全部 current（32/32）**——M2 完成
-- anchor-registry：121 条（不变）；validate 全量跑：PASSED（384 文件，⑤ 豁免警告 **3 条**——B32 breaks ×3 随落盘消解：剩余 i18n.adoc（skipped 壳文件，M3 专项）+ 裸锚点 ×2（clientBasics `_client_specific_configuration`、routing `_uri_path_variables`，M3 跟踪））
-- 页头溯源投影：页名=toc 英文原题、URL=`https://docs.micronaut.io/5.2.x/core/#core-<basename>`、基线锁定日期 2026-11-19、translated_at=2026-11-21
-- reports/progress.md 已重新生成（**十七个全章全部 100%**：introduction、quickStart、IoC 55/55、config 15/15、aop 10/10、httpServer 101/101、httpClient 26/26、cloud 17/17、serverlessFunctions 4/4、messaging 3/3、commandLineApps 1/1、configurations 13/13、logging 4/4、languageSupport/python 24/24、languageSupport/kotlin 14/14、management 27/27、cli 10/10；languageSupport 50/50、appendix 12/12（含 skipped 的 appendix.adoc）、i18n 2/2、guide 行 21/25+2 skipped）
-- **会话累计**：本会话完成 B07–B32 二十六批共 311 文件，进度 73→384 current（+311 文件，18.8%→99.5%；386 个 .adoc 全部处置完成）
+- 分支 main；manifest：**388 条目 = 387 current + 1 skipped（appendix.adoc 0 字节壳，无引用）+ 0 missing**；全量 validate 387 文件 PASSED（0 警告 0 失败，⑤ 豁免清零）；pytest **100 绿**（+5 check_toc）
+- anchor-registry：123 条（+2 标题自动锚），unresolved 0；toc 结构校验 `scripts/check_toc.py` PASSED（686 页）
+- glossary：45 术语（31 → 45）+ 6 banned；三处 advice 旧译修复已入库
+- **tag v1.0 已打标**——初译期基线锁定解除，进入持续增量模式（PLAN §8）：
+  1. 周期性 `memgate 2048 python3 scripts/sync_upstream.py --check`（远程托管后由 sync-upstream.yml cron 驱动；本地无远程时手动/自动化均可）
+  2. 检出变更 → 开 issue（`[upstream-sync] <sha>: 同步待处理`）
+  3. issue 目标 48h 内响应：`--apply`（v1.0 后已解禁）→ 生成增量工作项 → 按 PLAN §5.1 SOP 走修订批次（只重译变更段，保留已译段）→ validate 全绿 → `--mark-current` → squash commit
+- 退出码约定不变：0=无变更 / 1=有变更待翻译 / 2=环境错误
 
-## 实测结论（累计，下一会话必读）
+## 实测结论（M3 新增，继承 B01–B32 全部结论）
 
-1. **锚点注入规则（B02 精化）**：basename 约定锚点 = 官方站 `core-<basename>` = 片段首内容之前的块锚；页内标题锚按 PLAN §5.6 原位注入于标题行之前（B11/B21 实践——B21 sqlSupport 文件首段为引子段落，锚点行位于 `==` 标题行之前而非文件首行）；源内已有显式锚（ANCLINE 占位符）逐字节保留。B07–B21 共 61 处注入 + 2 处源内锚保留。
-2. **词数口径**：以批次执行时 inventory.py 口径实测为准（B07 2540/2484 … B20 3512/3456、B21 3078/2983，格式 总词/非代码），M1 报告值仅作切分参考；commit message 段落数取 inventory segments 口径（B21 实证 298 与该口径吻合）。实测用 `python3 -c` 调 word_counts（禁止裸跑 inventory.py）。
-3. **批间前向引用消解**：先行文件对未译目标的 xref 记为 ⑤ 豁免，目标落盘后自动消解；每次批次报告必须核对豁免增减明细（最新 22→…→11→10）。B21 预测的 2 条消解全部兑现，+1 新增（groovy→cli）。
-4. **占位符校验口径（B21 精化）**：中文语序重排会导致占位符出现顺序与源不同（如「Configures X for Y」→「为 Y 配置 X」），restore/validate 只要求**哈希多重集一致**；翻译期校验脚本应做多重集比对 + 顺序差异仅提示（/tmp/b21_phcheck.py v2），不应按顺序强校验。
-5. **门禁拦截真缺陷记录**：restore 译丢段 5 次（B10/B12 锚点与 callout/snippet 类、B20 占位符丢右花括号）+ validate ⑤ 锚点缺失 2 次（B10/B12）+ reviewer 段落对齐 3 次 + 回溯补注入 1 次（B16）——四道门禁层层兜底有效。**B21 零拦截：B20 确立的「占位符复制后立即回读核对花括号」习惯生效。**
-6. **validate ⑦ 邻接规则（累计 30 次踩坑）**：占位符/行内码/加粗标记后紧跟全角开括号必拒，中英文间缺空格同查（含 URL 宏直贴汉字与 XREF 宏直贴汉字变体）——一律预留空格，翻译期硬习惯；B27 graalFAQ ×4、endpointMethod ×3、endpointSensitivity ×1、infoEndpoint ×1 再犯。
-7. **③ 必译术语误触三类修法**：宏路径命中→补首现括注；指令行未 strip 命中小写 API 名→正文普通词物化；**正文物化术语（B21：Reactive Streams→响应式流（Reactive Streams））需以正确译法过门禁，不绕过机检**；URL/宏 label 中的产品名（MongoDB Reactive Driver 等）不触发 ③；**新术语收录引发既有文件回流 ③（B22 新模式，见实测结论 13）**。
-8. **上游 `////` 注释块**：按纪律逐字节保留；停用词启发会误报漏译（B18 3 条已文档化）。
-9. **大批次工作法（B12–B21 验证）**：先全量 protect（核对占位符总数）→ 逐组翻译（35 文件按 8 组推进）→ 批量 restore（核对 restored 数 = 输入数）→ 批量 assemble → 逐文件 validate → reviewer → mark-current。B21 全程最大批次（35 文件）顺利收官。
-10. **读 progress.md 必须核对列位**（B13 教训）；「报告声称注入的锚点」须与 zh 实际核对（B16 教训，B21 已执行 7/7 grep 核对）；相邻章节接续语段落须核对归属文件（B18 教训）。
-11. **CLI 语境 feature 保留不译**：B20 Consul + B21 8 文件（sqlSupport/hibernateSupport/mongo/neo4j/postgres/redis/cassandra/groovy）口径一致；B26–B28 cli/createProject 落盘时继续沿用。
-12. **reviewer 模板**：/tmp/b30_reviewer.py 为当前模板（临时不入库；复用 `vt.check_terms` 与 validate ③ 同源；含 NEED_ANCHOR 首行与标题锚前置两种位置检查；xref 检查为多重集口径）。**临时脚本一律用 Write 工具创建并先 py_compile 再运行**。
-17. **回溯补注入第 2 次（B30）**：[[config]] 锚点在 B09 已译 config.adoc 中缺失——「config」锚此前从未被已译文件引用，B30 iocArch 首引即触发 validate ⑤ 硬拦。规律：registry 中每个锚点都要在首次被引用时兑现；已译文件的新引用目标必须回溯补注入（B16 [[events]] 先例）。收尾建议：M3 全量断链清零前，对照 registry 121 条逐一 grep zh/ 核对注入到位。
-18. **执行细节**：reviewer 退出码非零时 `&&` 会短路后续核销命令——核销循环用分号分隔；批次收尾前核对 mark-current 实际 ok 计数（B30 曾出现 ok=0 假象，重跑确认 4/4）。
-15. **commit message 含反引号必须用 `git commit -F <消息文件>`**（消息文件经 Write 工具落盘）：B24 曾因 bash 命令替换吞掉反引号包裹的「== 嵌套类」片段，amend 修复；正文内引用标题/占位符等含反引号或 `$` 内容时一律走 -F。
-16. **占位符出现次数校验拦截复指重复（B26 新错误模式）**：原文用「one/a + 限定的名词」复指前文占位符时（如 "a `sendto` after that, or one whose name resolution..."），译文只能出现一次该占位符，复指处用代词/名词回指；多重集校验（/tmp/b21_phcheck.py）在 restore 前即拦截，是第 6 道门禁。
-13. **glossary 滚动回流（B22 新错误模式）**：新术语写回 glossary.yml 后必须立即跑全量 validate——③ 必译检查扩及全部已译文件，既有文件若源文含该词而译文未用新译名即报错。修法按 B11/B13 先例：宏路径误触→补首现括注；真实命中旧译→统一为新译名（B22 实证 3 处：evaluatedExpressions/annotationMetadata 补「（类型元素访问者）」括注、classImport「访问器」→「访问者」）。收录 Python 章复现术语前先 grep 既有 zh 是否已有旧译，可提前预判回流面。
-14. **锚点注入前必须核对 registry 条目 title 字段（B23 教训）**：title 非空 = 页内标题锚（注入标题行之前）；title 为空 = basename 片段锚（注入文件首内容之前）。B23 曾把 [[runtimeTypes]] 误按 basename 锚置于文件首行，validate 未拦（锚点存在即过），靠注入前自查 registry 纠正。python 子组 standardTypes/runtimeTypes/generatedClasses 等条目多为标题锚。
+1. **源片段 .adoc 无 H1**：页题只存在于 toc.yml（上游构建特性）；toc 标题翻译是对外显示的唯一标题来源。
+2. **toc 标题口径**：385 条 = 76 `title:` 行 + 309 标量叶子；toc-python 与 toc 同键同值（多 1 条 overloads 页）。YAML 文件溯源投影写为 `#` 注释（RE_PROVENANCE 在注释行内匹配，YAML 仍合法）。
+3. **标题自动锚解析**：check_anchors 第三优先级 `idprefix="_"/idseparator="_"`（Micronaut 构建实测）；未来上游新增 auto-id 引用可直接解析，不再进 unresolved。
+4. **sweep 误报三源**：上游 `////` 注释块（B18 纪律保留）、dependency/snippet 宏行、路径型 block title 与行内码列表段——人工分诊时按类豁免。
+5. **术语转正回流纪律**：转正前先统计「源文出现文件数 × zh 译名命中」，缺口文件逐一核对语境（API 名/宏/普通行文 → 不动；真旧译 → 先修再转正）；转正后必须全量 validate（③ 回流）。本次 advice 转正抓出 3 处 B01/B02 早期旧译——术语复核确有实效。
+6. **glossary 不宜全量收录低频词**：provider/codec/aspect/connection pool 等存在 API 名或普通行文误触面，保持语境括注；specification 规范/规约两译为语境分工（Bean Validation 规范 vs 协议规约），不统一。
+7. **drill 八步**（PLAN §8「演练八步全通」落地口径，见 reports/m3-final.md §5）：前置盘点 → --check 全量 → --check --file → --apply --dry-run → 门控拒绝验证 → --collect-commits → --mark-current 幂等 → --check 复跑幂等 + 产物出树确认；tag 后补 --apply 解除验证。
+8. **0 字节壳文件的断链处置**：被 xref 引用的壳页建最小 zh 镜像（投影块 + basename 锚）；validate ①–⑦ 全过；未被引用的壳页维持 skipped。
 
-## 待办（下一会话）
+## 待办（下一会话：持续增量阶段）
 
-1. **toc.yml / toc-python.yml 翻译专项（M3 首项）**：两文件 status=missing（各 paragraphs=1），实测含 76 条英文导航标题（PLAN §1.2 M1 实测项），M1 批次切分未排批。处置：创建 zh/guide/toc.yml（及 toc-python.yml）镜像、翻译 title 值（对照 zh/ 各文件页头英文原题与各章标题译名），补充轻量 YAML 结构校验（键路径与 source 逐一对齐），manifest 核销。属轻量决策，无需 DR；若决定维持英文原样则需在 README 声明
-2. **M3 全量收尾（PLAN §8）**：全量 sweep（漏译检测：译文与源文逐字节相同且英文停用词 ≥3）；抽检 ≥10%（含锚点注入报告与实际一致性专项——对照 registry 121 条逐一 grep zh/）；sync 全链路演练（drill 八步，可安全跑 --check）；断链豁免 3 条收尾（i18n.adoc skipped 壳文件专项 + 裸锚点 clientBasics/routing ×2 处置）；补 README 在线结构；**tag v1.0**（初译期基线锁定解除开关，--apply 门控随之开放）
-3. 术语滚动复核：B05–B32 累计首现括注见各批次报告（构造型 stereotype、可保留 retainable、别名 alias、属性源 property source、mixin、规范构造器 canonical constructor、类型使用注解 type-use annotation、可空性注解、banner、kebab case、驼峰式 camel-case、提供者 provider、默认环境 default environment、求值表达式 evaluated expressions、小驼峰式 lower camel case、通知 advice、切面 aspect、环绕通知/引入通知、存根值 stubbed value、校验通知 validation advice、缓存拦截器 CacheInterceptor、weigher 权重计算器、断路器 Circuit Breaker、规约 specification、展开操作符 exploded operator、编解码器 codec、事件循环 Event Loop、数据类 Data Classes、校验组 validation groups、局部/全局错误处理器、异常处理器 exception handler、背压 backpressure、流式上传/完成上传、部件 part、管道断裂 broken pipe、主操作 primary operation、拆分/认领 split/claim、服务器发送事件 SSE、原生传输 native transports、事件循环载体 event loop carrier、跨源资源共享 CORS、证书提供者、密钥库 key store、ACME、服务器端视图渲染、访问日志记录器、主机名验证、中间人攻击、连接池 connection pool、应用层协议协商 ALPN、声明式客户端 declarative client、绑定器 binder、传播上下文 Propagated Context、服务发现 Service Discovery、冷启动 cold start、轮询 Round Robin、心跳 pulsation、分布式追踪 distributed tracing、托管区域 hosted zone、消息代理 message broker、发布者确认 publisher confirms、访问者 visitor、装饰器 decorator、全局解释器锁 GIL、上下文池 context pool、虚拟线程 virtual thread、仪表 gauge、外部 dict foreign dict、导入查找器 import finder、宿主互操作 host interop、直写 write-through、朴素 naive/带时区的 aware、元数 arity、宿主适配器 host adapter、结构化并发 structured concurrency、水位线 water mark、健康指示器 health indicator、原生镜像 native image 等）——复核后转正或修订
-4. 词数核对：B32 与 B08/B10 曾现 M1 值与实测微差（口径基数）；M3 抽检时以 word_counts 实测为准
+1. **周检测例行**：跑 `--check`；有变更则开 issue 并按 §5.1 SOP 走增量复译批次（首批可顺带把 B 系列批次报告的目录索引补进 reports/ 便于追溯）。
+2. 远程仓库托管时（另议）：README 免责与 Pages 配置一并做；CI workflows（validate.yml / sync-upstream.yml）本地门禁迁 CI。
+3. 5.3.x 正式发布时的基线切换：届时按重大决策走 decision_log（DR-004 起）。
+4. 二期 guides（CC-BY-4.0）开工前须新决策。
 
-## 调试经验与坑位（累计）
+## 调试经验与坑位（M3 增补）
 
-1. 长输出损坏处置：立即读回文件 → 修损坏行 → pytest 全绿 → 再提交（M1 经验）
-2. gh api commits?path= 须用全仓路径 `src/main/docs/<rel>`
-3. 网络直连 github.com 失败 → git/curl 走 `http://192.168.33.1:10808`；gh api 直连可用；11MB 级大页 curl 直连会超时截断，必须代理 + 后台跑
-4. validate ⑤ 段落对照机检：zh 侧剔除页头溯源段（引用行+注释行合并为一段，恒 +1 偏差）
-5. PreToolUse hook 拒绝 Bash 直写文件（heredoc/append/sed -i）→ 一律 Write/Edit 提交（含 /tmp 临时脚本）
-6. zh 译文页头 `> ` 引用行与 `<!-- -->` 注释行不参与 ⑦/③ 校验，溯源字段以 ⑥/manifest 对账为准
-7. translator 必须使用受保护文本中的真实占位符哈希——占位符以 `-protected.txt` 为准逐个复制；**复制后回读核对花括号成对（B20 教训，B21 生效零缺陷）**
-8. restore 输出 JSON 无 ok 字段（成功时含 `restored` 键）；restore 报「映射项在译文中缺失」时，占位符可能仍在但格式残缺，直接在译文文件中定位哈希前缀即可找到断点
-9. validate_translation.py `--file` 为单参数，多文件逐个跑；不同 cwd 下注意路径
-10. **inventory.py 无 --help 参数，裸跑即执行 main()**：会按当前 manifest 重算并覆写 `reports/inventory-5.2.25.md`——查口径请读源码或用 `python3 -c` 调 word_counts
-11. **protect 脚本路径按文件系统解析**：传 `source/guide/<rel>`（带 source/ 前缀，从仓库根执行），产出落在 `workdir/protect/source/guide/…` 镜像路径；validate/assemble/sync 的 `--file` 则用 `guide/<rel>`（不带 source/ 前缀）——两类脚本路径前缀不同，勿混用
-12. workdir/protect 下残留历史批次的 map/protected 文件——按文件名/路径精确圈定本批文件再做全库扫描，glob 全扫会混入旧批次（B21 曾误扫出 B07/B08 的 ANCLINE）
+9. **validate 全量循环**：validate_translation.py 仅 `--file` 单参数，全量跑用 python 循环 subprocess（387 文件约 1 分钟）；subprocess 每文件冷启动可接受。
+10. **check_toc 白名单机制**：标题值含 CJK 即视为已译；纯 API/产品名条目进 ALLOWLIST（31 条）；「与源逐字节相同」仅对含 CJK 的值报警（防漏译）。
+11. **YAML 行级变换**：`key:` 节点行/注释行/空行原样保留，仅替换 `key: value` 叶值；带引号值保留引号风格；替换值与原值相同则整行不动（`'@Blocking'`）。
+12. **临时脚本沿用纪律**：Write 工具创建 + py_compile 先行 + memgate 包裹；sweep/抽检/术语扫描脚本口径已固化进 reports/m3-final.md，需要复跑时按报告口径重建即可。
 
-## 硬性纪律清单（继承）
+## 硬性纪律清单（继承，持续有效）
 
 1. `docs/翻译计划.md` 为唯一权威规范；改架构走 decision_log（DR-004 起递增）
-2. 所有脚本 memgate 包裹；`source/` 只读；`manifest.yml` 禁人工直改（--mark-current 除外）
+2. 所有脚本 memgate 包裹；`source/` 只读（仅 sync 写入）；`manifest.yml` 禁人工直改（--mark-current 除外）
 3. 门禁硬性化，禁止 `|| true`
 4. 每批次 squash commit + 批次报告；决策类提交末行 `Decision: DR-编号`
-5. agent 并发上限 = 串行 1；上下文过半立即交接
+5. agent 并发上限 = 串行 1；上下文过半立即交接；里程碑收尾主动建议开新会话

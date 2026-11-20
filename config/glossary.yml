@@ -193,6 +193,91 @@ terms:
     context: "Micrometer/management 语境（B22 收录：pythonThreading.adoc，B27–B28 复现）"
     aliases: ["gauges"]
 
+  # ---- M3 术语滚动复核转正（2026-11-21，扫描 + 全库一致性核实）----
+  - en: "advice"
+    zh: "通知"
+    status: "approved"
+    context: "AOP 章节高频（M3 转正：修复 whatsNew「重试建议」旧译残留 + factories xref label 未译 + constructorInjection 正文保留英文共 3 处）"
+    aliases: []
+
+  - en: "property source"
+    zh: "属性源"
+    status: "approved"
+    context: "Configuration 章节（M3 转正：8 文件全一致；propertySource.adoc 表头「属性来源」为列名表述，非术语冲突）"
+    aliases: ["property sources", "PropertySource"]
+
+  - en: "event loop"
+    zh: "事件循环"
+    status: "approved"
+    context: "httpServer/Netty/asyncio 语境高频（M3 转正：24 文件全一致）"
+    aliases: ["event loops"]
+
+  - en: "service discovery"
+    zh: "服务发现"
+    status: "approved"
+    context: "Cloud 章节（M3 转正：17 文件全一致）"
+    aliases: []
+
+  - en: "declarative client"
+    zh: "声明式客户端"
+    status: "approved"
+    context: "httpClient/clientAnnotation（M3 转正：6 文件一致；「声明式 HTTP 客户端」为标题全称变体）"
+    aliases: []
+
+  - en: "health indicator"
+    zh: "健康指示器"
+    status: "approved"
+    context: "management/healthEndpoint（M3 转正：10 文件全一致）"
+    aliases: []
+
+  - en: "distributed tracing"
+    zh: "分布式追踪"
+    status: "approved"
+    context: "Cloud 章节（M3 转正：5 文件全一致）"
+    aliases: []
+
+  - en: "circuit breaker"
+    zh: "断路器"
+    status: "approved"
+    context: "httpClient/clientRetry、whatsNew（M3 转正：2 文件一致；禁译「熔断器」）"
+    aliases: ["Circuit Breaker"]
+
+  - en: "validation group"
+    zh: "校验组"
+    status: "approved"
+    context: "datavalidation/validationGroups（M3 转正：1 文件，与正文括注一致）"
+    aliases: ["validation groups"]
+
+  - en: "exception handler"
+    zh: "异常处理器"
+    status: "approved"
+    context: "errorHandling 章节（M3 转正：4 文件一致，snippet 宏 title 不计）"
+    aliases: ["exception handlers"]
+
+  - en: "error handler"
+    zh: "错误处理器"
+    status: "approved"
+    context: "errorHandling 章节（M3 转正：4 文件全一致）"
+    aliases: ["error handlers"]
+
+  - en: "camel-case"
+    zh: "驼峰式"
+    status: "approved"
+    context: "configurationProperties（M3 转正：5 文件一致；小驼峰式 lower camel case 同前缀）"
+    aliases: ["camel case", "camel-cased"]
+
+  - en: "nullability annotations"
+    zh: "可空性注解"
+    status: "approved"
+    context: "IoC/nullabilityAnnotations（M3 转正：4 文件全一致）"
+    aliases: ["nullability annotation"]
+
+  - en: "data classes"
+    zh: "数据类"
+    status: "approved"
+    context: "Python 章节（M3 转正：python 章语料稳定，pythonExceptions/functionalInterfaces 复现）"
+    aliases: ["data class"]
+
 banned:
   - bad: "编译时间"
     prefer: "编译期"

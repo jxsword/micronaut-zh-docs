@@ -2,6 +2,7 @@
 
 > 批次切分与文件清单以 reports/inventory-5.2.25.md 为准（32 批，双指标 非代码词 ≤3500 且 总词 ≤5500）。
 > 状态机：pending → in-progress → translated → reviewed → current（核销走 sync --mark-current）。
+> **M3 已收尾（2026-11-21，tag v1.0）**：全库 388 条目 = 387 current + 1 skipped（appendix.adoc 0 字节壳）+ 0 missing；⑤ 断链豁免清零；sweep 真漏译 0；抽检 39/39；drill 八步全通。详见 reports/m3-final.md。
 
 ## 批次总览
 
@@ -20,7 +21,7 @@
 | B11 | 7 | 3350 | 3352 | current |
 | B12 | 25 | 3454 | 3460 | current |
 | B13 | 17 | 3167 | 3185 | current |
-| B14 | 13 | 3482 | 3476 | in-progress |
+| B14 | 13 | 3482 | 3476 | current |
 | B15 | 13 | 3452 | 3485 | current |
 | B16 | 24 | 3223 | 3291 | current |
 | B17 | 15 | 3004 | 3008 | current |

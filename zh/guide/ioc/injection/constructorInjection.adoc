@@ -24,4 +24,4 @@ NOTE: 如果未指定 `@Inject` 或 `@Creator`，Micronaut 将尝试定位类中
 
 如果特定构造器参数存在多个可能的候选 bean，可以指定限定符（qualifier）（例如 `jakarta.inject.Named`）来消歧注入。如果无法消歧，结果将抛出 api:context.exceptions.NonUniqueBeanException[]。更多信息请参阅 <<qualifiers, 限定符>> 一节。
 
-WARNING: `private` 构造器只能通过 Java 反射 API 调用，不推荐这样做。如果在 `private` 构造器上使用 `@Inject` 或 ann:core.annotation.Creator[]，还必须用 ann:core.annotation.ReflectiveAccess[] 对其注解以选择加入反射实例化，否则将发生编译错误。请注意，通过反射实例化的类型无法应用 AOP advice，因为生成的代理必须直接调用构造器。
+WARNING: `private` 构造器只能通过 Java 反射 API 调用，不推荐这样做。如果在 `private` 构造器上使用 `@Inject` 或 ann:core.annotation.Creator[]，还必须用 ann:core.annotation.ReflectiveAccess[] 对其注解以选择加入反射实例化，否则将发生编译错误。请注意，通过反射实例化的类型无法应用 AOP 通知（advice），因为生成的代理必须直接调用构造器。

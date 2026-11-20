@@ -1,0 +1,465 @@
+# > 本文翻译自 Micronaut Core v5.2.25 官方文档（Guide 导航目录，页面标题以本目录为准），翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+# <!-- upstream_file: guide/toc.yml  upstream_commit: 1dad7b4225fb4d2f03e6392bb4d1b404d31505d5  upstream_hash: 4d4f822f053423c3311a29d6d9d5da443e569ddd  translated_at: 2026-11-21 -->
+
+introduction:
+  title: 介绍
+  whatsNew: Micronaut Framework 5.0.x 的新特性
+  upgrading: 升级您的 Micronaut 应用程序
+quickStart:
+  title: 快速开始
+  buildCLI: 安装 CLI
+  creatingServer: 创建服务器应用程序
+  ideSetup:
+    title: 配置 IDE
+    ideaSetup: IntelliJ IDEA
+    vsCodeSetup: Visual Studio Code
+    eclipseSetup: Eclipse
+    netbeansSetup: Apache NetBeans
+  creatingClient: 创建客户端
+  deployingApp: 部署应用程序
+ioc:
+  title: 依赖注入
+  beans: 定义 bean
+  how: 工作原理
+  iocDebugging: 调试依赖注入
+  beanContext: BeanContext
+  injection:
+    title: 依赖注入类型
+    constructorInjection: 构造器注入
+    fieldInjection: 字段注入
+    methodInjection: 方法注入
+    nullableInjection: 可空注入
+  types: 可注入容器类型
+  qualifiers: bean 限定符
+  typed: 限制可注入类型
+  scopes:
+    title: 作用域
+    builtInScopes:
+      title: 内置作用域
+      eagerInit: 单例的饿汉式初始化
+    refreshable: 可刷新作用域
+    metaScopes: 元注解上的作用域
+  factories: bean 工厂
+  conditionalBeans: 条件 bean
+  replaces: bean 替换
+  beanConfigurations: bean 配置
+  lifecycle: 生命周期方法
+  gracefulShutdown: 优雅关闭
+  contextEvents: 上下文事件
+  events: bean 事件
+  introspection:
+    title: bean 内省
+    makingABeanAvailableForIntrospection: 使 bean 可供内省
+    atIntrospected: 使用 @Introspected 注解
+    introspectedAccessorsStyle: 结合 @AccessorsStyle 使用 @Introspected
+    accessKind: bean 字段
+    introspectedProperty: 显式 bean 属性
+    propertyMembers: bean 属性成员
+    atCreator: 构造器方法
+    staticAtCreator: 静态创建器方法
+    introspectionConstructors: 描述构造器
+    introspectionBuilders: 构建器
+    introspectionEnums: 内省枚举
+    introspectionTypeArguments: 类型实参
+    introspectedAnnotationOnAConfigurationClass: 在配置类上使用 @Introspected 注解
+    introspectExistingAnnotations: 编写 AnnotationMapper 以内省既有注解
+    beanWrapperApi: BeanWrapper API
+    kotlinAndBeanIntrospection: Kotlin 与 bean 内省
+  beanMappers:
+    title: bean 映射器
+    beanMappersMerging:
+      title: bean 映射器合并
+      beanMappersMergingStrategy: 合并策略
+  beanValidation: bean 校验
+  annotationMetadata: bean 注解元数据
+  beanImport: 从库导入 bean
+  reflection: 基于反射的元数据
+  classImport: 从库导入类
+  mixin: 使用 Mixin 修改类注解
+  nullabilityAnnotations:
+    title: 可空性注解
+    jspecify: JSpecify 可空性注解
+  springBeans: Micronaut bean 与 Spring
+  android: Android 支持
+config:
+  title: 应用配置
+  environments:
+    title: 环境
+    environmentPriority: 环境优先级
+    disablingEnvironmentDetection: 禁用环境检测
+    defaultEnvironment: 默认环境
+  banner: Micronaut Banner
+  propertySource: 使用 PropertySource 外部化配置
+  valueAnnotation: 配置注入
+  evaluatedExpressions: 表达式语言
+  configurationProperties: 配置属性
+  customTypeConverter: 自定义类型转换器
+  eachProperty: 使用 @EachProperty 驱动配置
+  eachBean: 使用 @EachBean 驱动配置
+  immutableConfig: 不可变配置
+  # validation: Validating Configuration
+  bootstrap: bootstrap 配置
+  jmx:
+    title: JMX 支持
+aop:
+  title: 面向切面编程
+  aroundAdvice: 环绕通知
+  introductionAdvice: 引入通知
+  adapterAdvice: 方法适配器通知
+  lifecycleAdvice: bean 生命周期通知
+  interceptorLifecycle: 拦截器生命周期
+  validation:
+    title: 校验通知
+  caching:
+    title: 缓存通知
+  retry:
+    title: 重试通知
+  scheduling:
+    title: 计划任务
+  springAop:
+    title: 桥接 Spring AOP
+httpServer:
+  title: HTTP 服务器
+  runningServer: 运行内嵌服务器
+  runningSpecificPort: 在指定端口上运行服务器
+  routing: HTTP 路由
+  binding: 简单请求绑定
+  customArgumentBinding: 自定义参数绑定
+  hostResolution: 主机解析
+  localeResolution: 语言区域解析
+  clientIpAddress: 客户端 IP 地址
+  requestResponse: HttpRequest 与 HttpResponse
+  statusAnnotation: 响应状态
+  producesAnnotation: 响应 Content-Type
+  consumesAnnotation: 可接受的请求 Content-Type
+  reactiveServer:
+    title: 响应式 HTTP 请求处理
+    bodyAnnotation: 使用 @Body 注解
+    reactiveResponses: 响应式响应
+  jsonBinding:
+    title: JSON 绑定
+    serializeUsingMicronautSerialization: 使用 Micronaut Serialization 序列化
+    serializationUsingJacksonDatabind: 使用 Jackson Databind 序列化
+    jsonMapper: JsonMapper
+    bindingUsingReactiveFrameworks: 使用响应式框架绑定
+    bindingUsingCompletableFuture: 使用 CompletableFuture 绑定
+    bindingUsingPOJOs: 使用 POJO 绑定
+    jacksonConfiguration:
+      title: Jackson 配置
+      jacksonConfigurationFeatures: 特性
+      jacksonConfigurationFurtherCustomisingJsonFactory: 进一步定制 `JsonFactory`
+      jacksonConfigurationSupportForJsonView: 支持 `@JsonView`
+      jacksonConfigurationBeans: bean
+      jacksonConfigurationServiceLoader: Service Loader
+      jacksonConfigurationNumberPrecision: 数字精度
+  plainTextResponses: 纯文本响应
+  datavalidation:
+    title: 数据校验
+    validationGroups: 校验组
+  staticResources: 提供静态资源服务
+  errorHandling:
+    title: 错误处理
+    statusHandlers: 状态处理器
+    localErrorHandling: 局部错误处理
+    globalErrorHandling: 全局错误处理
+    exceptionHandler:
+      title: ExceptionHandler
+      builtInExceptionHandlers: 内置异常处理器
+      customExceptionHandler: 自定义异常处理器
+    errorFormatting: 错误格式化
+  apiVersioning: API 版本控制
+  formData: 处理表单数据
+  form:
+    title: 表单
+    formBinding: 表单数据绑定
+    formCapable: 详细的 Form API
+  serverIO: 写入响应数据
+  uploads: 文件上传
+  transfers: 文件传输
+  filters:
+    title: HTTP 过滤器
+    filterPatterns: 过滤器模式
+    filtermethods:
+      title: 过滤器方法
+      filtermethodsexample: 带过滤器方法的服务器过滤器
+      filtermethodproceed: 继续执行过滤器方法
+      errorStates: 错误状态
+      continuations: Continuation
+      order: 过滤器顺序
+    httpServerFilter:
+      title: HttpServerFilter
+      httpServerFilterExample: HttpServerFilter 示例
+      httpServerFilterErrorStates: HttpServerFilter 错误状态
+    responseHeaderPopulator: 响应头 Populator
+  byteBody:
+    title: 高级请求体访问
+    byteBodyPrimary: 主操作
+    byteBodySplitting: 拆分
+    byteBodyExample: 示例
+  sessions: HTTP 会话
+  sse: 服务器发送事件
+  websocket:
+    title: WebSocket 支持
+    websocketServer: 使用 @ServerWebSocket
+    websocketClient: 使用 @ClientWebSocket
+  http2Server: HTTP/2 支持
+  http3Server: HTTP/3 支持
+  serverEvents: 服务器事件
+  serverConfiguration:
+    title: 配置 HTTP 服务器
+    threadPools:
+      title: 配置服务器线程池
+      blockingOperations: 阻塞操作
+      virtualThreads: 虚拟线程
+      atBlocking: '@Blocking'
+    nettyClientPipeline: 配置 Netty 客户端管道
+    nettyServerPipeline: 配置 Netty 服务器管道
+    listener: 高级监听器配置
+    corsCrossOriginEmbedderPolicy: Cross-Origin-Embedder-Policy
+    corsCrossOriginResourcePolicy: Cross-Origin-Resource-Policy
+    cors:
+      title: 配置 CORS
+      annotationBasedCors: 基于注解的 CORS 配置
+      corsConfiguration: 通过配置设置 CORS
+      corsAllowedOrigins: 允许的来源
+      corsAllowedMethods: 允许的方法
+      corsAllowedHeaders: 允许的标头
+      corsExposedHeaders: 暴露的标头
+      corsAllowCredentials: 允许凭证
+      corsAllowPrivateNetwork: 允许私有网络
+      corsMaxAge: 最大缓存时间
+      corsMultipleHeaderValues: 多个标头值
+    https: 使用 HTTPS 保护服务器
+    dualProtocol: 启用 HTTP 与 HTTPS
+    accessLogger: 启用访问日志记录器
+    secondaryServers: 启动次要服务器
+  views:
+    title: 服务器端视图渲染
+  openapi: OpenAPI / Swagger 支持
+  graphql: GraphQL 支持
+httpClient:
+  title: HTTP 客户端
+  httpClientImplementations:
+    title: HTTP 客户端实现
+    nettyHttpClient: 基于 Netty 的 HTTP 客户端
+    jdkHttpClient:
+      title: 基于 Java HTTP Client 的 HTTP 客户端
+  lowLevelOrHighLevel: 低层与高层 API
+  lowLevelHttpClient:
+    title: 使用低层 HTTP 客户端
+    clientBasics: 发送第一个 HTTP 请求
+    clientPostRequests: 发送 POST 请求体
+    clientUploads: 客户端 multipart 上传
+    clientStreaming: 通过 HTTP 流式传输 JSON
+    clientConfiguration: 配置 HTTP 客户端
+    lowLevelClientError: 错误响应
+    bindErrors: 绑定错误
+  proxyClient: 使用 ProxyHttpClient 代理请求
+  clientAnnotation:
+    title: 使用 @Client 的声明式 HTTP 客户端
+    clientParameters: 自定义参数绑定
+    clientAnnotationStreaming: 使用 @Client 流式传输
+    clientError: 错误响应
+    clientHeaders: 自定义请求头
+    clientJackson: 自定义 Jackson 设置
+    clientRetry: 重试与断路器
+    clientFallback: 客户端回退
+  clientFilter: HTTP 客户端过滤器
+  clientHttp2: HTTP/2 支持
+  clientHttp3: HTTP/3 支持
+  clientSample: HTTP 客户端示例
+  nettyPooling: Netty 客户端中的连接池
+certificates: 证书提供者
+contextPropagation:
+  title: 上下文传播
+  reactorContextPropagation: Reactor 上下文传播
+  httpFilterContextPropagation: HTTP 过滤器上下文传播
+cloud:
+  title: 云原生特性
+  cloudConfiguration:
+    title: 云配置
+    distributedConfiguration: 分布式配置
+    distributedConfigurationConsul: HashiCorp Consul 支持
+    distributedConfigurationVault: HashiCorp Vault 支持
+    distributedConfigurationSpringCloud: Spring Cloud Config 支持
+    distributedConfigurationAwsParameterStore: AWS Parameter Store 支持
+    distributedConfigurationOracleCloudVault: Oracle Cloud Vault 支持
+    distributedConfigurationGoogleCloudSecretManager: Google Cloud Secret Manager 支持
+    distributedConfigurationKubernetes: Kubernetes 支持
+  serviceDiscovery:
+    title: 服务发现
+    serviceDiscoveryConsul: Consul 支持
+    serviceDiscoveryEureka: Eureka 支持
+    serviceDiscoveryKubernetes: Kubernetes 支持
+    serviceDiscoveryRoute53: AWS Route 53 支持
+    serviceDiscoveryManual: 手动服务发现配置
+  clientSideLoadBalancing:
+    title: 客户端负载均衡
+  distributedTracing: 分布式追踪
+serverlessFunctions:
+  title: Serverless 函数
+  awsLambda: AWS Lambda
+  gcpFunction: Google Cloud Function
+  gcpCloudRun: Google Cloud Run
+  azureFunction: Azure Function
+messaging:
+  title: 消息驱动的微服务
+  kafka: Kafka 支持
+  rabbitmq: RabbitMQ 支持
+  nats: Nats.io 支持
+commandLineApps:
+  title: 独立命令行应用程序
+  picocli:
+    title: Picocli 支持
+configurations:
+  title: 配置
+  reactiveConfigs:
+    title: 响应式编程配置
+    reactor: Reactor 支持
+    rxjava3: RxJava 3 支持
+  dataAccess:
+    title: 数据访问配置
+    sqlSupport: 配置 SQL 数据源
+    hibernateSupport: 配置 Hibernate
+    mongoSupport: 配置 MongoDB
+    neo4jSupport: 配置 Neo4j
+    postgresSupport: 配置 Postgres
+    redisSupport: 配置 Redis
+    cassandraSupport: 配置 Cassandra
+    liquibaseSupport: 配置 Liquibase
+    flywaySupport: 配置 Flyway
+logging:
+  title: 日志
+  loggingMessages: 记录日志消息
+  loggingConfiguration: 配置
+  logback: Logback
+  loggingSystem: 日志系统
+languageSupport:
+  title: 语言支持
+  java:
+    title: Micronaut for Java
+    java9: 在 Java 9+ 中使用 Micronaut
+    incrementalannotationgradle: Gradle 增量注解处理
+    lombok: 使用 Project Lombok
+    ide: 配置 IDE
+    retainparameternames: 保留参数名
+  groovy: Micronaut for Groovy
+  python:
+    title: Micronaut for Python
+    pythonRuntime: 运行时要求
+    pythonThreading: Python 线程
+    decorators: 作为装饰器的注解
+    sourceRoots: 主源码与测试源码
+    typeOrdering: 类型顺序与前向引用
+    interfaces: 接口与引入通知
+    standardTypes: 标准库类型转换
+    javaCollections: Java 集合与序列化
+    runtimeTypes: 运行时的 Python 类与对象
+    javaImports: 导入 Java 类型
+    keywords: Java API 中的 Python 关键字
+    nestedTypes: 嵌套 Java 类型
+    pythonExceptions: 继承 Java 异常的 Python 异常
+    functionalInterfaces: 作为函数式接口的 Python 可调用对象
+    javaInterfaces: 实现 Java 接口
+    generatedClasses: 生成的 Java 类
+    aopProxies: AOP 代理
+    extendingJavaClasses: 继承 Java 类
+    moduleScripts:
+      title: 模块脚本
+      testing: JUnit 5 模块测试
+    graalTools: GraalPy 工具
+    asyncAwait:
+      title: Async/Await
+      asyncioRuntime: 基于 Netty 的 Asyncio 运行时
+      asyncioNetworking: Asyncio 网络与 TLS
+      asyncioStreaming: Python 原生流式传输
+      asyncioUnsupported: 不支持的 Asyncio API
+  kotlin:
+    title: Micronaut for Kotlin
+    kaptOrKsp: 通过 KAPT 或 KSP 支持 Kotlin
+    kapt: Kotlin 注解处理（KAPT）
+    ksp: Kotlin 符号处理（KSP）
+    controller: Kotlin 中的控制器
+    kaptintellij: Kotlin、Kapt 与 IntelliJ
+    gradlekapt: Gradle 与 Kapt 增量注解处理
+    openandaop: Kotlin 与 AOP 通知
+    kotlinretainparamnames: Kotlin 与保留参数名
+    coroutines: 协程支持
+    coroutineTracingContextPropagation: 协程追踪上下文传播
+    kotlinContextPropagation: 响应式上下文传播
+  graal:
+    title: Micronaut for GraalVM
+    graalServices: 以 GraalVM native image 构建微服务
+    graalFAQ: GraalVM 与 Micronaut 常见问题
+management:
+  title: 管理与监控
+  buildingEndpoints:
+    title: 创建端点
+    endpointAnnotation: 端点注解
+    endpointMethod: 端点方法
+    endpointSensitivity: 端点敏感性
+    endpointConfiguration: 端点配置
+  providedEndpoints:
+    title: 内置端点
+    beansEndpoint: Beans 端点
+    infoEndpoint: Info 端点
+    healthEndpoint:
+      title: Health 端点
+      healthEndpointConfiguration: Health 端点配置
+      healthEndpointStatusCode: 健康状态码
+      healthLogging: 健康日志
+      healthEndpointCustomization: 自定义健康指示器
+      healthMonitoringTask: 健康监控任务
+      healthProvidedIndicators:
+        title: 提供的指示器
+        diskSpaceHealthIndicator: 磁盘空间健康指示器
+        jdbcHealthIndicator: JDBC 健康指示器
+        discoveryClientHealthIndicator: Discovery Client 健康指示器
+        deadlockedThreads: 死锁线程
+    metricsEndpoint: Metrics 端点
+    refreshEndpoint: Refresh 端点
+    routesEndpoint: Routes 端点
+    loggersEndpoint: Loggers 端点
+    cachesEndpoint: Caches 端点
+    stopEndpoint: Server Stop 端点
+    environmentEndpoint: Environment 端点
+    threadDumpEndpoint: ThreadDump 端点
+security:
+  title: 安全
+multitenancy:
+  title: 多租户
+cli:
+  title: Micronaut CLI
+  createProject:
+    title: 创建项目
+    comparingVersions: 比较版本
+  features: Features
+  commands: 命令
+  reloading:
+    title: 重载
+    automaticRestart: 自动重启
+    jrebel: JRebel
+    gradleReload: Gradle 重载
+    ideReload: IDE 重载
+  proxy: 代理配置
+i18n:
+  title: 国际化
+  bundle: 资源包
+  localizedMessageSource: 本地化消息源
+resources:
+  title: 资源
+appendix:
+  title: 附录
+  architecture:
+    title: Micronaut 架构
+    compilerArch: 编译器
+    annotationArch: 注解元数据
+    introspectionArch: bean 内省
+    iocArch: bean 定义
+    aopArch: AOP 代理
+    containerArch: ApplicationContext
+    httpServerArch: HTTP 服务器
+  faq: 常见问题（FAQ）
+  usingsnapshots: 使用快照
+  problems: 常见问题
+  breaks: 破坏性变更

@@ -1751,10 +1751,10 @@ files:
 - file: guide/i18n.adoc
   blob_sha: e69de29bb2d1d6434b8b29ae775ad8c2e48c5391
   size: 0
-  status: skipped
+  status: current
   zh: zh/guide/i18n.adoc
   paragraphs: 0
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 8b2d30813898ca1d6192f802333270cad6418948
 - file: guide/i18n/bundle.adoc
   blob_sha: bf9b081148ffedee1358d283e0e565708eaa419c
@@ -3095,16 +3095,16 @@ files:
 - file: guide/toc-python.yml
   blob_sha: c5dc674a85c3f9c4beb9ef6125165a785a5cbb28
   size: 13465
-  status: missing
+  status: current
   zh: zh/guide/toc-python.yml
   paragraphs: 1
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 4213e5848517ee4d8e80fe665a848ce870beb45c
 - file: guide/toc.yml
   blob_sha: 4d4f822f053423c3311a29d6d9d5da443e569ddd
   size: 17177
-  status: missing
+  status: current
   zh: zh/guide/toc.yml
   paragraphs: 1
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 1dad7b4225fb4d2f03e6392bb4d1b404d31505d5
