@@ -62,6 +62,34 @@ def test_registry_resolves_referenced_anchors(tmp_path):
     assert data["unresolved"] == []
 
 
+def test_registry_resolves_http_prefixed_bare_anchor(tmp_path):
+    # 裸锚点以 "http" 开头（如 httpServer/httpClient）不是 URL，
+    # 不得被 URL 过滤误跳过（B01 实测缺陷回归）
+    src = tmp_path / "source"
+    (src / "guide").mkdir(parents=True)
+    (src / "guide" / "httpServer.adoc").write_text(
+        "text\n", encoding="utf-8")
+    (src / "guide" / "b.adoc").write_text(
+        "see <<httpServer,HTTP server>>\n", encoding="utf-8")
+    data = build_registry(src)
+    assert len(data["anchors"]) == 1
+    ent = data["anchors"][0]
+    assert ent["id"] == "httpServer"
+    assert ent["file"] == "guide/httpServer.adoc"
+    assert data["unresolved"] == []
+
+
+def test_registry_skips_real_url_targets(tmp_path):
+    src = tmp_path / "source"
+    (src / "guide").mkdir(parents=True)
+    (src / "guide" / "a.adoc").write_text(
+        "xref:https://example.com/x[go] and "
+        "link:https://micronaut.io[site]\n", encoding="utf-8")
+    data = build_registry(src)
+    assert data["anchors"] == []
+    assert data["unresolved"] == []
+
+
 def test_registry_unresolved_anchor(tmp_path):
     src = tmp_path / "source"
     (src / "guide").mkdir(parents=True)

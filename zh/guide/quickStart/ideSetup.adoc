@@ -1,0 +1,9 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Setting up an IDE](https://docs.micronaut.io/5.2.x/core/#core-ideSetup)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/quickStart/ideSetup.adoc  upstream_commit: 5280436c47bbcd1a143801fcf266db27b3d6d758  upstream_hash: ede8a32d1e123f39f19f8560d11074c106c19b61  translated_at: 2026-11-20 -->
+
+[[ideSetup]]
+上一节创建的应用程序包含一个位于 `src/main/java` 中的主类，其内容如下：
+
+snippet::io.micronaut.docs.server.intro.Application[tags="imports,class"]
+
+这是通过 Gradle/Maven 或部署方式启动应用程序时所运行的类。您也可以在 IDE 中直接运行该主类。

@@ -1,0 +1,18 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Defining Beans](https://docs.micronaut.io/5.2.x/core/#core-beans)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/ioc/beans.adoc  upstream_commit: 34d2fcb3b9893d6174d3a7edd28a16cf77e15051  upstream_hash: 39fb3c150b5f301119ea480bb46afd4203a51df8  translated_at: 2026-11-20 -->
+
+bean 是由 Micronaut IoC 容器管理其生命周期的对象。该生命周期可能包括创建、执行和销毁。Micronaut 实现了 https://javax-inject.github.io/javax-inject/[JSR-330（jakarta.inject）— Java 依赖注入] 规范，因此使用 Micronaut 时，您只需使用 link:{jakartaapi}/jakarta/inject/package-summary.html[jakarta.inject 提供的注解]。
+
+下面是一个简单的示例：
+
+snippet::io.micronaut.docs.inject.intro.Engine,io.micronaut.docs.inject.intro.V8Engine,io.micronaut.docs.inject.intro.Vehicle[tags="class",indent=0]
+
+<1> 定义了一个通用的 `Engine` 接口
+<2> 定义了一个 `V8Engine` 实现并标记为 `Singleton` 作用域
+<3> `Engine` 通过构造器注入被注入
+
+要执行依赖注入，请使用 `run()` 方法运行 link:{api}/io/micronaut/context/BeanContext.html[BeanContext]，并使用 `getBean(Class)` 查找 bean，如下例所示：
+
+snippet::io.micronaut.docs.inject.intro.VehicleSpec[tags="start",indent="0"]
+
+Micronaut 框架会自动发现类路径上的依赖注入元数据，并根据您定义的注入点将 bean 装配在一起。

@@ -1,0 +1,21 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Eclipse](https://docs.micronaut.io/5.2.x/core/#core-eclipseSetup)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/quickStart/ideSetup/eclipseSetup.adoc  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360  upstream_hash: 373bc17e971a76b258138cb0ca1e8eced696a8b7  translated_at: 2026-11-20 -->
+
+要使用 Eclipse IDE，建议通过 https://projects.eclipse.org/projects/tools.buildship[Gradle BuildShip]（针对 Gradle）或 https://www.eclipse.org/m2e/[M2Eclipse]（针对 Maven）将 Micronaut 项目导入 Eclipse。
+
+NOTE: Micronaut 框架要求 Eclipse IDE 4.9 或更高版本
+
+=== Eclipse 与 Gradle
+
+使用 https://projects.eclipse.org/projects/tools.buildship[Gradle BuildShip] 设置好 Eclipse 4.9 或更高版本后，先在项目根目录运行 `gradle eclipse` 任务，然后通过选择 `File -> Import` 并选中 `Gradle -> Existing Gradle Project`，导航到项目根目录（即 `build.gradle` 文件所在目录）完成导入。
+
+=== Eclipse 与 Maven
+
+对于使用 Maven 的 Eclipse 4.9 及以上版本，您需要以下 Eclipse 插件：
+
+* https://www.eclipse.org/m2e/[M2Eclipse for Maven]
+* https://github.com/jbosstools/m2e-apt[Maven 与 Eclipse JDT 注解处理器工具包的集成]
+
+安装完成后，通过选择 `File -> Import` 并选中 `Maven -> Existing Maven Project`，导航到项目根目录（即 `pom.xml` 文件所在目录）完成导入。
+
+然后打开 `Eclipse -> Preferences`，进入 `Maven -> Annotation Processing` 并选择 `Automatically configure JDT APT` 选项以启用注解处理。

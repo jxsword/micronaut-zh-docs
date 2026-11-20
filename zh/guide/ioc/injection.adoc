@@ -1,0 +1,13 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Dependency Injection Types](https://docs.micronaut.io/5.2.x/core/#core-injection)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/ioc/injection.adoc  upstream_commit: 94f089ad2675abd4ecd2ef5315ff602517d12e3c  upstream_hash: 52cecf03045ed8a1a910c9abba6c8797f9885db1  translated_at: 2026-11-20 -->
+
+Micronaut 框架支持以下几种依赖注入类型：
+
+* 构造器注入（访问级别为 public、protected 或默认；若存在多个构造器，可以用 `@Inject` 注解指定要使用的那一个）
+* 字段注入
+* 属性注入
+* 方法参数注入
+
+NOTE: 通过添加注解 ann:core.annotation.Vetoed[] 可以排除类或特定的字段、方法
+
+TIP: 更多内容请参阅指南 https://guides.micronaut.io/latest/micronaut-dependency-injection-types.html[Micronaut 依赖注入类型]。

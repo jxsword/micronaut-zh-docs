@@ -1,0 +1,35 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Introduction](https://docs.micronaut.io/5.2.x/core/#core-introduction)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/introduction.adoc  upstream_commit: b923377c5557e65395371815dd5f385193a63c84  upstream_hash: c050e89f5eb8d222c5e5ac65af4639162d691c5c  translated_at: 2026-11-20 -->
+
+Micronaut Framework 是一个现代的基于 JVM 的框架，旨在构建模块化、易于测试的 JVM 应用程序，支持 Java、Kotlin、Groovy 和 Python。
+
+Micronaut 框架最初由一支曾参与 Grails 框架开发的团队创建。Micronaut 框架借鉴了多年来使用 Spring、Spring Boot 和 Grails 框架构建从单体到微服务的真实应用所积累的经验教训。核心团队在 Commonhaus Foundation 的支持下持续开发和维护 Micronaut 项目。
+
+Micronaut 框架旨在提供构建 JVM 应用程序所需的全部工具，包括：
+
+* 依赖注入（Dependency Injection）与控制反转（IoC）
+* 面向切面编程（AOP）
+* 合理的默认值与自动配置
+
+借助 Micronaut 框架，您可以构建消息驱动应用、命令行应用、HTTP 服务器等；尤其是对于微服务，Micronaut 还提供了：
+
+* 分布式配置
+* 服务发现
+* HTTP 路由
+* 客户端负载均衡
+
+与此同时，Micronaut 框架通过以下支持来避免其他框架的不足：
+
+* 快速启动
+* 更低的内存占用
+* 尽量少地使用反射
+* 尽量少地使用代理
+* 不在运行时生成字节码
+* 易于单元测试
+* 借助 GraalVM Native Image 编译为本地代码
+
+过去，JVM 框架在设计时并未考虑 Serverless 函数、Android 应用或低内存占用微服务等场景。相比之下，Micronaut 框架的设计目标恰恰是适用于所有这些场景乃至更多。
+
+这一目标通过编译期处理器实现：这些处理器可用于任何支持它们的 JVM 语言；同时还提供一个 HTTP 服务器（支持多种运行时：https://netty.io/[Netty]、link:{micronautservletdocs}#jetty[Jetty]、link:{micronautservletdocs}#tomcat[Tomcat]、link:{micronautservletdocs}#undertow[Undertow] 等）和一个 HTTP 客户端（支持多种运行时：<<nettyHttpClient,Netty>>、<<jdkHttpClient,Java HTTP Client>> 等）。为了提供与 Spring 和 Grails 类似的编程模型，这些注解处理器会预编译执行 DI、定义 AOP 代理所需的元数据，并配置应用程序以在低内存环境中运行。
+
+对于熟悉 Java 生态中既有框架的开发者而言，Micronaut 的 API 十分易于上手。

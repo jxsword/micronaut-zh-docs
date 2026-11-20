@@ -1,0 +1,7 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Install the CLI](https://docs.micronaut.io/5.2.x/core/#core-buildCLI)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/quickStart/buildCLI.adoc  upstream_commit: 1fcfbd95ae7aa98e423b66dfa6b657503c02d075  upstream_hash: 2a75c6d0b107cd6bc1c83c5ba68e7c582f22c10e  translated_at: 2026-11-20 -->
+
+[[buildCLI]]
+Micronaut CLI 是创建 Micronaut 应用程序的一种可选但便捷的方式。在 Unix 系统上安装 Micronaut CLI 的最佳方式是使用 https://sdkman.io/[SDKMAN]，它极大地简化了多个 Micronaut 版本的安装与管理。
+
+要查看所有可用的安装方式，请查阅 https://micronaut-projects.github.io/micronaut-starter/latest/guide/#installation[Micronaut Starter 文档]。

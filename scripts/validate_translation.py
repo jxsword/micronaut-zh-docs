@@ -51,10 +51,12 @@ RE_CODE_FENCE = re.compile(r"^----\s*$", re.MULTILINE)
 RE_QUOTE_LINE = re.compile(r"^> ")
 
 
-# 常见繁体独有字（禁繁体机检，覆盖高频误入字符）
+# 常见繁体独有字（禁繁体机检，覆盖高频误入字符）。
+# 注意：只收繁简字形不同、简体不用的字；形同字（行/息/主/境/景/常 等
+# 简繁共用字）不得收录，否则简体正文必误报（B01 实测缺陷修复）
 TRADITIONAL_CHARS = set(
     "這異們為態軟體語圖難務應當屬實運類連網標誌單億個檔資訊佇設備勢營"
-    "環境變數執行緒質側鏈聲處常駐計劃與專門業務據點選項訊息佈景主題關於讓"
+    "環變數執緒質側鏈聲處駐計劃與專門業務據點選項訊佈題關於讓"
 )
 
 
@@ -175,31 +177,58 @@ def load_anchor_registry() -> Dict:
 
 def check_xrefs(zh_rel: str, zh_text: str, errors: List[str],
                 warnings: List[str]):
-    """⑤ xref/锚点目标存在（未译文件豁免）。"""
+    """⑤ xref/锚点目标存在（未译文件豁免）。
+
+    裸锚点（<<anchor,Label>>，无 # 文件前缀）经 anchor-registry 解析
+    （check_anchors 全域解析：显式 [[id]] + include 文件 basename 约定）；
+    未登记的裸锚点列为豁免警告（M3 断链清零跟踪），不算错误。"""
     registry = load_anchor_registry()
-    reg_ids = {a.get("id") for a in registry.get("anchors", [])
-               if a.get("id")}
+    reg_file = {}
+    for a in registry.get("anchors", []):
+        if a.get("id") and a.get("id") not in reg_file:
+            reg_file[a["id"]] = a.get("file", "")
     for m in RE_XREF.finditer(zh_text):
         target = (m.group(1) or m.group(2) or "").strip()
         if not target:
             continue
-        target = target.split("#", 1)
-        fpart = target[0].strip()
-        anchor = target[1].strip() if len(target) > 1 else ""
-        if fpart.startswith(("http://", "https://", "mailto:")):
+        fpart, sep, anchor = target.partition("#")
+        fpart = fpart.strip()
+        anchor = anchor.strip()
+        if fpart.startswith(("http://", "https://", "ftp://", "mailto:")):
             continue
+        if not fpart and not anchor:
+            continue
+        if not fpart:
+            # <<#anchor>> 与 <<anchor>> 同为裸锚点，全域经登记表解析
+            resolved = reg_file.get(anchor, "")
+            if not resolved:
+                warnings.append(
+                    f"⑤ 裸锚点未登记，豁免（M3 跟踪）：{anchor}")
+                continue
+            fpart = resolved
+        elif not sep and "/" not in fpart and "." not in fpart:
+            # 与 check_anchors 同规则：无 # 且不含 / . → 裸锚点
+            resolved = reg_file.get(fpart, "")
+            if not resolved:
+                warnings.append(
+                    f"⑤ 裸锚点未登记，豁免（M3 跟踪）：{fpart}")
+                continue
+            anchor, fpart = fpart, resolved
+        elif not sep:
+            anchor = ""  # 页级文件引用（含 / 或 .），存在性已验证
         src_file = SOURCE_DIR / fpart if fpart else SOURCE_DIR / zh_rel
         if not src_file.exists():
             errors.append(f"⑤ xref 目标文件不存在于上游：{fpart or zh_rel}")
             continue
         if not anchor:
             continue
-        # 目标文件已译 → zh 中须有该锚点（原位注入）；未译 → 豁免
+        # 目标文件已译 → zh 中须有该锚点（原位注入）；未译 → 豁免。
+        # 注：不做 reg_ids 放行——登记表条目恰是被引锚点，放行会使
+        # 注入机检恒真（B01 实测缺陷修复，对齐 PLAN §5.6 机检本意）
         zh_target = ZH_DIR / fpart if fpart else ZH_DIR / zh_rel
         if zh_target.exists():
             zt = zh_target.read_text(encoding="utf-8")
-            has = (f"[[{anchor}" in zt or f"[#{anchor}]" in zt
-                   or anchor in reg_ids)
+            has = (f"[[{anchor}" in zt or f"[#{anchor}]" in zt)
             if not has:
                 errors.append(
                     f"⑤ 锚点 {anchor} 在已译目标 {fpart} 的译文中不存在")

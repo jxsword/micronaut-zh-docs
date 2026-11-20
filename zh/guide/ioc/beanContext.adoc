@@ -1,0 +1,6 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – The BeanContext](https://docs.micronaut.io/5.2.x/core/#core-beanContext)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/ioc/beanContext.adoc  upstream_commit: 5b1500c6369253b4110f95b7c73f09b21735a255  upstream_hash: e8a7e9f27f858d258423e02bfe9a78e8355a7563  translated_at: 2026-11-20 -->
+
+link:{api}/io/micronaut/context/BeanContext.html[BeanContext] 是承载您所有 bean 定义的容器对象（它同时实现了 link:{api}/io/micronaut/context/BeanDefinitionRegistry.html[BeanDefinitionRegistry]）。
+
+它也是 Micronaut 的初始化起点。不过一般来说，您无需直接与 `BeanContext` API 交互，只需使用 `jakarta.inject` 注解以及 link:{api}/io/micronaut/context/annotation/package-summary.html[io.micronaut.context.annotation] 包中的注解即可满足依赖注入需求。

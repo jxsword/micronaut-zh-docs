@@ -1,0 +1,12 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – IntelliJ IDEA](https://docs.micronaut.io/5.2.x/core/#core-ideaSetup)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/quickStart/ideSetup/ideaSetup.adoc  upstream_commit: 15119ba9ee63100091348d40eaffe708155b53ae  upstream_hash: 572c334721f83a64c54202321075672e05882d58  translated_at: 2026-11-20 -->
+
+要将 Micronaut 项目导入 IntelliJ IDEA，请打开 `build.gradle` 或 `pom.xml` 文件，并按照说明导入项目。
+
+对于 IntelliJ IDEA，如果您打算使用 IntelliJ 编译器，请在 "Build, Execution, Deployment -> Compiler -> Annotation Processors" 下勾选 "Enable annotation processing" 复选框以启用注解处理：
+
+image::intellij-annotation-processors.png[Intellij Settings,1024,768]
+
+在 IntelliJ 中启用注解处理后，您就可以直接在 IDE 中运行应用程序和测试，无需 Gradle 或 Maven 等外部构建工具。
+
+TIP: 更多内容请参阅指南 https://guides.micronaut.io/latest/micronaut-intellij-idea-ide-setup.html[使用 IntelliJ IDEA 开发 Micronaut 应用程序]。

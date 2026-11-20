@@ -1,0 +1,64 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Creating a Server Application](https://docs.micronaut.io/5.2.x/core/#core-creatingServer)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/quickStart/creatingServer.adoc  upstream_commit: 15119ba9ee63100091348d40eaffe708155b53ae  upstream_hash: 9fb540b2695ec30a944d6b570fc8ca8f928761a3  translated_at: 2026-11-20 -->
+
+您可以使用 Micronaut CLI 创建 Groovy、Java 或 Kotlin 的 Micronaut 应用程序（默认为 Java）。
+
+以下命令以 Java 语言、Gradle 构建创建一个新的 "Hello World" 服务器应用程序：
+
+NOTE: 通过我们的 CLI 生成的应用程序已包含 Gradle 或 Maven wrapper，因此开始运行应用程序甚至无需在您的机器上安装 Gradle 或 Maven。只需使用 `mvnw` 或 `gradlew` 命令，下文将详细说明。
+
+[source,bash]
+----
+$ mn create-app hello-world
+----
+
+TIP: 提供参数 `--build maven` 可改为创建基于 Maven 的构建
+
+如果尚未安装 CLI，也可以访问 https://launch.micronaut.io[Micronaut Launch] 并点击 "Generate Project" 按钮，或者在 Unix 系统上使用以下 `curl` 命令来创建相同的应用程序：
+
+[source,bash]
+----
+curl https://launch.micronaut.io/hello-world.zip -o hello-world.zip
+unzip hello-world.zip
+cd hello-world
+----
+
+TIP: 在传给 `curl` 的 URL 中加上 `?build=maven` 即可生成 Maven 项目。
+
+前面的步骤已在名为 `hello-world` 的目录中创建了一个带 Gradle 构建的新 Java 应用程序。您可以使用 `./gradlew run` 运行该应用程序：
+
+[source,bash]
+----
+$ ./gradlew run
+> Task :run
+[main] INFO  io.micronaut.runtime.Micronaut - Startup completed in 540ms. Server Running: http://localhost:28933
+----
+
+如果创建的是基于 Maven 的项目，请改用 `./mvnw mn:run`。
+
+NOTE: 在 Windows 上，命令前无需添加 ./
+
+默认情况下，Micronaut HTTP 服务器配置为在端口 8080 上运行。更多选项请参阅 <<runningSpecificPort,在指定端口上运行服务器>> 一节。
+
+要创建响应 "Hello World" 的服务，首先需要一个控制器。示例如下：
+
+snippet::io.micronaut.docs.server.intro.HelloController[tags="imports,class"]
+
+<1> link:{api}/io/micronaut/http/annotation/Controller.html[@Controller] 注解将该类定义为映射到路径 `/hello` 的控制器
+<2> link:{api}/io/micronaut/http/annotation/Get.html[@Get] 注解将 `index` 方法映射到所有使用 HTTP `GET` 的请求
+<3> 返回字符串 "Hello World" 作为响应
+
+[%hardbreaks]
+如果使用 Java，请将上述文件放在 `src/main/java/hello/world` 中。
+如果使用 Groovy，请将上述文件放在 `src/main/groovy/hello/world` 中。
+如果使用 Kotlin，请将上述文件放在 `src/main/kotlin/hello/world` 中。
+
+启动应用程序并向 `/hello` URI 发送 `GET` 请求后，将返回文本 "Hello World"：
+
+[source,bash]
+----
+$ curl http://localhost:8080/hello
+Hello World
+----
+
+TIP: 更多内容请参阅指南 https://guides.micronaut.io/latest/creating-your-first-micronaut-app.html[创建您的第一个 Micronaut 应用程序]。

@@ -1,0 +1,39 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Creating a Client](https://docs.micronaut.io/5.2.x/core/#core-creatingClient)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/quickStart/creatingClient.adoc  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360  upstream_hash: 12a3d900c645f1e41404b933e120b08bcd6471e5  translated_at: 2026-11-20 -->
+
+如前所述，Micronaut 框架同时包含 <<httpServer,HTTP 服务器>> 与 <<httpClient,HTTP 客户端>>。框架提供了一个 <<lowLevelHttpClient,低层 HTTP 客户端>>，可用于测试上一节创建的 `HelloController`。
+
+.测试 Hello World
+
+snippet::io.micronaut.docs.server.intro.HelloControllerSpec[tags="imports,class",indent=0]
+
+<1> api:runtime.server.EmbeddedServer[] 被配置为共享测试字段
+<2> 同样定义了一个 api:http.client.HttpClient[] 实例的共享字段
+<3> 该测试使用 `toBlocking()` 方法进行阻塞调用
+<4> `retrieve` 方法以 `String` 的形式返回控制器响应
+
+除低层客户端外，Micronaut 框架还提供了由 api:http.client.annotation.Client[] 注解驱动的 <<clientAnnotation,声明式、编译期 HTTP 客户端>>。
+
+要创建客户端，请创建一个标注 `@Client` 的接口，例如：
+
+.src/main/java/hello/world/HelloClient.java
+
+snippet::io.micronaut.docs.server.intro.HelloClient[tags="imports,class",indent=0]
+
+<1> `@Client` 注解所用的值是相对于当前服务器的路径
+<2> 服务器端使用的 ann:http.annotation.Get[] 注解同样用于定义客户端映射
+<3> 返回一个以 `SingleResult` 标注的 `Publisher`，其中包含从服务器读取的值
+
+要测试 `HelloClient`，请从与服务器关联的 api:context.ApplicationContext[] 中获取它：
+
+.测试 HelloClient
+
+snippet::io.micronaut.docs.server.intro.HelloClientSpec[tags="imports,class",indent=0]
+
+<1> `@MicronautTest` 注解定义了该测试
+<2> `HelloClient` 从 api:context.ApplicationContext[] 注入
+<3> 客户端通过 https://projectreactor.io[Project Reactor] 的 `Mono::block` 方法调用
+
+api:http.client.annotation.Client[] 注解会在编译期自动生成实现，无需使用代理或运行时反射。
+
+api:http.client.annotation.Client[] 注解非常灵活。更多信息请参阅 <<httpClient,Micronaut HTTP 客户端>> 一节。

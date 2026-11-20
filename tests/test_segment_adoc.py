@@ -159,3 +159,13 @@ def test_translation_flag_partition():
     for s in segs:
         assert s.translatable == (s.type in {"heading", "paragraph",
                                              "admonition", "table"})
+
+
+def test_snippet_directive_recognized():
+    # snippet:: 是构建期代码注入宏，必须按指令行保护（B01 实测补录）
+    segs = segment_adoc(
+        'para\n\nsnippet::io.micronaut.docs.Foo[tags="imports,class"]\n\npara2\n',
+        "t.adoc")
+    kinds = [s.type for s in segs]
+    assert segs[1].type == "directive"
+    assert "directive" in kinds

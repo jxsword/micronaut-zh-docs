@@ -1,0 +1,26 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Debugging Dependency Injection](https://docs.micronaut.io/5.2.x/core/#core-iocDebugging)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/ioc/iocDebugging.adoc  upstream_commit: 40f5e30ab6ec7ac3b353472007d29035fa1599bd  upstream_hash: 01f819a26d948ef64bf477d7e2dfad9a788b2ccd  translated_at: 2026-11-20 -->
+
+为了帮助您轻松了解 Micronaut 在启动时正在做什么、某个特定的 bean 何时被创建，Micronaut 提供了依赖注入追踪（dependency injection tracing）功能，可以通过多种方式激活，其中包括 api:context.ApplicationContextBuilder[] API。
+
+激活注入追踪模式的最简单方式是使用环境变量。例如，如果您在本地运行应用程序，可以执行：
+
+.启用注入追踪模式
+[source,bash]
+----
+MICRONAUT_INJECT_TRACE=.+ ./gradlew run
+----
+
+对于 Maven 则为：
+
+.启用注入追踪模式
+[source,bash]
+----
+MICRONAUT_INJECT_TRACE=.+ ./mvnw mn:run
+----
+
+追踪模式将输出诸如以下的有用信息：
+
+* 应用程序的配置 profile
+* 适用的配置及其来源
+* 被创建的 bean、创建位置以及创建所耗费的时间

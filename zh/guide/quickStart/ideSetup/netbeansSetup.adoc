@@ -1,0 +1,9 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Apache NetBeans](https://docs.micronaut.io/5.2.x/core/#core-netbeansSetup)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/quickStart/ideSetup/netbeansSetup.adoc  upstream_commit: a501e97f05414797e2873c63ca015035f392a868  upstream_hash: d4cc75b59f5312513578e64673f87f121639a129  translated_at: 2026-11-20 -->
+
+Apache NetBeans 开箱即可打开 Maven 与 Gradle 项目。
+
+请确保在 `Tools -> Plugins -> Installed` 中启用 **Java Web and EE** 功能，
+以获得对 Micronaut 的额外支持，例如配置元素与数据元素的代码补全。
+
+image::netbeans-plugins-java-web-ee.png[NetBeans Plugins,,555]

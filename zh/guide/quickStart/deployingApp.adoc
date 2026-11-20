@@ -1,0 +1,68 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Deploying the Application](https://docs.micronaut.io/5.2.x/core/#core-deployingApp)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/quickStart/deployingApp.adoc  upstream_commit: 15119ba9ee63100091348d40eaffe708155b53ae  upstream_hash: 3f980f709509de2ca615122a274463f7435d7946  translated_at: 2026-11-20 -->
+
+要部署 Micronaut 应用程序，请运行 `./gradlew assemble` 或 `./mvnw package` 创建可执行 JAR 文件。
+
+构建出的 JAR 文件随后可用 `java -jar` 执行。例如：
+
+[source,bash]
+----
+$ java -jar build/libs/hello-world-0.1-all.jar
+----
+
+（使用 Gradle 构建时），或者：
+
+[source,bash]
+----
+$ java -jar target/hello-world.jar
+----
+
+（使用 Maven 构建时）。
+
+可执行 JAR 可以在本地运行，也可以部署到支持可执行 JAR 的虚拟机或托管云服务。
+
+要将分层应用程序发布到 Docker 容器仓库，请在 Gradle 的 `build.gradle` 中配置 Docker 镜像名称：
+
+[source,groovy]
+----
+dockerBuild {
+    images = ["[REPO_URL]/[NAMESPACE]/my-image:$project.version"]
+}
+----
+
+然后使用 `dockerPush` 推送已构建的应用程序镜像：
+
+[source,bash]
+----
+$ ./gradlew dockerPush
+----
+
+对于 Maven，请在 POM 中定义以下插件：
+
+[source,xml]
+----
+<plugin>
+  <groupId>com.google.cloud.tools</groupId>
+  <artifactId>jib-maven-plugin</artifactId>
+  <configuration>
+    <to>
+      <image>docker.io/my-company/my-image:${project.version}</image>
+    </to>
+  </configuration>
+</plugin>
+----
+
+然后调用 `deploy` 生命周期阶段，并将打包类型指定为 `docker` 或 `docker-native`：
+
+[source,bash]
+----
+$ ./mvnw deploy -Dpackaging=docker
+----
+
+=== 部署指南
+
+请参阅以下指南，进一步了解 Micronaut 应用程序的部署：
+
+- https://guides.micronaut.io/latest/executable-jar.html[将 Micronaut 应用程序制作为可执行 Jar]
+- https://guides.micronaut.io/latest/micronaut-creating-first-graal-app.html[创建您的第一个 Micronaut Graal 应用程序]
+- https://guides.micronaut.io/latest/micronaut-docker-image.html[构建 Micronaut 应用程序的 Docker 镜像]

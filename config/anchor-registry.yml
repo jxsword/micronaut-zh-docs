@@ -321,6 +321,15 @@ anchors:
   - guide/appendix/breaks.adoc
   - guide/introduction/whatsNew.adoc
   - guide/languageSupport/kotlin/kotlinContextPropagation.adoc
+- id: httpClient
+  file: guide/httpClient.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/httpServer/formData.adoc
+  - guide/httpServer/serverConfiguration/secondaryServers.adoc
+  - guide/quickStart/creatingClient.adoc
 - id: clientAnnotation
   file: guide/httpClient/clientAnnotation.adoc
   title: ''
@@ -380,6 +389,13 @@ anchors:
   explicit: false
   referenced_by:
   - guide/httpClient/httpClientImplementations/jdkHttpClient.adoc
+- id: httpServer
+  file: guide/httpServer.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/quickStart/creatingClient.adoc
 - id: binding
   file: guide/httpServer/binding.adoc
   title: Binding Annotations
@@ -418,6 +434,13 @@ anchors:
   explicit: false
   referenced_by:
   - guide/introduction/whatsNew.adoc
+- id: httpServerFilter
+  file: guide/httpServer/filters/httpServerFilter.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/httpServer/filters.adoc
 - id: form
   file: guide/httpServer/form.adoc
   title: ''
@@ -428,6 +451,13 @@ anchors:
 - id: formCapable
   file: guide/httpServer/form/formCapable.adoc
   title: Field Metadata
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/introduction/whatsNew.adoc
+- id: http3Server
+  file: guide/httpServer/http3Server.adoc
+  title: Configuring the Server for HTTP/3
   reftext: ''
   explicit: false
   referenced_by:
@@ -517,6 +547,15 @@ anchors:
   explicit: false
   referenced_by:
   - guide/httpServer/filters/responseHeaderPopulator.adoc
+- id: https
+  file: guide/httpServer/serverConfiguration/https.adoc
+  title: Using a valid X.509 certificate (PEM)
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/httpServer/http2Server.adoc
+  - guide/httpServer/serverConfiguration/dualProtocol.adoc
+  - guide/httpServer/serverConfiguration/listener.adoc
 - id: listener
   file: guide/httpServer/serverConfiguration/listener.adoc
   title: systemd socket activation support

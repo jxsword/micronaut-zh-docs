@@ -1,0 +1,65 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Dependency Injection](https://docs.micronaut.io/5.2.x/core/#core-ioc)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/ioc.adoc  upstream_commit: 3ef687b544a87f7458d428fab8b723f61a9dc870  upstream_hash: fd86d91a03310bd905115cbbf7c5bf5ac8885a7e  translated_at: 2026-11-20 -->
+
+https://en.wikipedia.org/wiki/Dependency_injection[依赖注入]（通常也称为 https://en.wikipedia.org/wiki/Inversion_of_control[控制反转]）是一种模式，它使您的代码保持独立于配置，并支持定义松耦合的应用程序。降低耦合度可以确保代码不与外部系统（如数据库）直接绑定，从而提升应用程序的可测试性。
+
+
+与其他依赖运行时反射和代理的框架不同，Micronaut 框架使用编译期数据来实现依赖注入。
+
+这与 Google https://google.github.io/dagger/[Dagger] 等工具采用的思路类似，Dagger 的设计初衷主要面向 Android。而 Micronaut 则面向服务端微服务构建，它提供了与其他框架相同的许多工具和实用程序，却不使用运行时反射，也不缓存大量运行时反射元数据。
+
+Micronaut IoC 容器的目标可以概括为：
+
+* 将运行时反射作为最后的手段
+* 避免运行时生成的代理
+* 优化启动时间
+* 降低内存占用
+* 提供清晰、易于理解的错误处理
+
+[.lang-kotlin.lang-java.lang-groovy]
+--
+请注意，Micronaut 框架的 IoC 部分可以完全独立于 Micronaut 使用，用于构建您想要的任何类型的应用程序。
+
+为此，请在构建配置中加入 `micronaut-inject-java` 依赖作为注解处理器。
+
+如果您正在创建自定义编译期注解或注解映射器（annotation mapper），请参阅 <<annotationMetadata,注解元数据>> 了解有关 `AnnotationMapper`、`NamedAnnotationMapper` 和 `TypedAnnotationMapper` 的额外要求。
+
+最简单的方式是使用 Micronaut 的 Gradle 或 Maven 插件。以 Gradle 为例：
+
+.配置 Gradle
+[source,groovy,subs="attributes+"]
+----
+plugins {
+    id 'io.micronaut.library' version '4.4.4' // get latest version from https://plugins.gradle.org/plugin/io.micronaut.library
+}
+
+version "0.1"
+group "com.example"
+
+repositories {
+    mavenCentral()
+}
+
+micronaut {
+    version = "{version}" // <2>
+}
+----
+<1> 定义 https://plugins.gradle.org/plugin/io.micronaut.library[Micronaut Library 插件]
+<2> 指定要使用的 Micronaut 框架版本
+
+IoC 的入口是 api:context.ApplicationContext[] 接口，其中包含 `run` 方法。以下示例演示了它的用法：
+
+.运行 `ApplicationContext`
+[source,java]
+----
+try (ApplicationContext context = ApplicationContext.run()) { // <1>
+    MyBean myBean = context.getBean(MyBean.class); // <2>
+    // do something with your bean
+}
+----
+
+<1> 运行 api:context.ApplicationContext[]
+<2> 从 `ApplicationContext` 中获取 bean
+
+NOTE: 该示例使用 Java https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html[try-with-resources] 语法，确保应用程序退出时 api:context.ApplicationContext[] 被干净地关闭。
+--

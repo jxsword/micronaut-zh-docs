@@ -7,7 +7,7 @@
 
 | 批次 | 文件数 | 非代码词 | 总词 | 状态 |
 |---|---:|---:|---:|---|
-| B01 | 19 | 3347 | 3355 | pending |
+| B01 | 19 | 3347 | 3355 | current |
 | B02 | 12 | 3049 | 3082 | pending |
 | B03 | 10 | 3443 | 3454 | pending |
 | B04 | 19 | 2591 | 2604 | pending |
@@ -43,6 +43,10 @@
 ## 批次状态明细
 
 批次 → 文件清单：见 inventory 报告「逐批次文件清单」节（B01–B32）。
+
+## 备注
+
+- B01（2026-11-20 完成）：validate 七项全绿 + 19/19 --mark-current 核销 + squash commit。实测修复 M1 缺陷 4 处（check_anchors http 前缀裸锚点误跳过 → registry 116→121；validate ⑤ 裸锚点误报 + reg_ids 放行收紧；禁繁体表简繁共用字误报）与 segment_adoc snippet:: 指令行补录；新增 scripts/assemble_zh.py（溯源投影装配）。官方站单页锚点实测为 core-<basename>；上游 httpServer/httpClient/certificates 三章未被官方站渲染（详见 reports/batch-B01.md）。冻结窗口遵守：批次期间未运行 sync --apply。
 
 ## 硬性纪律（每批次必守）
 

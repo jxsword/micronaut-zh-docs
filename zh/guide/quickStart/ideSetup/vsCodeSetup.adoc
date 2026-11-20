@@ -1,0 +1,30 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Visual Studio Code](https://docs.micronaut.io/5.2.x/core/#core-vsCodeSetup)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/quickStart/ideSetup/vsCodeSetup.adoc  upstream_commit: c1d011a56d02b683a04aff5b06762e169b3a6edd  upstream_hash: dee1f9dfdb3708f6f2ad96a194819c8db20ecb27  translated_at: 2026-11-20 -->
+
+在 Visual Studio Code 中安装以下两个扩展，即可轻松设置 Micronaut 框架的开发环境：
+
+* https://marketplace.visualstudio.com/items?itemName=vscjava.vscode-java-pack[Microsoft Java 扩展包]
+* https://marketplace.visualstudio.com/items?itemName=oracle-labs-graalvm.micronaut-tools[Tools for Micronaut® framework]
+
+这两个扩展可以通过点击上述页面横幅中的 *Install* 按钮安装，也可以在 VS Code 中搜索这些扩展进行安装。
+
+image::installing-tools-for-micronaut-vs-code.gif[Installing Micronaut tools, 1024, 1024]
+
+安装完成后，您将获得大量 Micronaut 专属功能，例如：
+
+* https://marketplace.visualstudio.com/items?itemName=oracle-labs-graalvm.micronaut#create-a-new-micronaut-project[应用程序创建向导]
+* https://marketplace.visualstudio.com/items?itemName=oracle-labs-graalvm.micronaut-tools#view-defined-beans-and-endpoints[查看 bean 与 REST 端点]
+* https://marketplace.visualstudio.com/items?itemName=oracle-labs-graalvm.micronaut-tools#compose-rest-queries[编写 REST 查询并运行]
+* https://marketplace.visualstudio.com/items?itemName=oracle-labs-graalvm.micronaut-tools#editor-support-for-micronaut-expression-language[支持 Micronaut 表达式语言]
+* https://marketplace.visualstudio.com/items?itemName=oracle-labs-graalvm.micronaut-tools#monitor-and-manage-your-micronaut-application[用于运行和监控应用程序的 Micronaut Tools 活动视图]
+* https://marketplace.visualstudio.com/items?itemName=oracle-labs-graalvm.micronaut-tools#observe-your-micronaut-application-using-the-micronaut-control-panel[支持使用 Micronaut Control Panel]
+* https://marketplace.visualstudio.com/items?itemName=oracle-labs-graalvm.micronaut-tools#debug-your-micronaut-application[调试应用程序]
+* https://marketplace.visualstudio.com/items?itemName=oracle-labs-graalvm.micronaut-tools#package-your-micronaut-application[支持将应用程序打包为容器]
+* https://marketplace.visualstudio.com/items?itemName=oracle-labs-graalvm.micronaut-tools#connect-to-an-oracle-autonomous-database[支持连接并使用 Oracle 数据库]
+* https://marketplace.visualstudio.com/items?itemName=oracle-labs-graalvm.micronaut-tools#deploy-your-micronaut-application-to-oracle-cloud-infrastructure[将应用程序部署到 Oracle Cloud Infrastructure 的高级支持]
+* https://marketplace.visualstudio.com/items?itemName=oracle-labs-graalvm.micronaut-tools#create-entity-classes-and-repository-interfaces-from-an-existing-database-schema[基于既有数据库 schema 创建 Micronaut Data 实体、仓库与控制器的高级支持]
+* https://marketplace.visualstudio.com/items?itemName=oracle-labs-graalvm.micronaut-tools#create-tests-for-micronaut-controller-endpoints[为 Micronaut Data 控制器端点创建测试]
+
+扩展安装完成后，在任何 Micronaut 项目目录中输入 `code .` 即可在 VS Code 中打开该项目。
+
+NOTE: 在 macOS 上，您需要 https://code.visualstudio.com/docs/setup/mac[按照这些说明] 安装 `code` 命令。

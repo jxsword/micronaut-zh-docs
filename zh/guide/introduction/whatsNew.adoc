@@ -1,0 +1,42 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – What's New in Micronaut Framework 5.0.x](https://docs.micronaut.io/5.2.x/core/#core-whatsNew)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/introduction/whatsNew.adoc  upstream_commit: 851c00bd0149f7103a5b7a164d1ce6f8d27f0ade  upstream_hash: c7ccfbff0dae838086982f05c70166ed69898975  translated_at: 2026-11-20 -->
+
+Micronaut Framework 5.0.x 延续了最初 5.0 里程碑版本启动的工作，在核心容器、HTTP 协议栈、配置系统以及面向开发者的 API 等方面新增了大量改进。
+
+本页精选概述了 `5.0.x` 线上最重要的新增内容。升级指南请参阅 <<upgrading,升级您的 Micronaut 应用程序>>；不兼容变更请查阅 <<breaks,破坏性变更>>。
+
+=== Micronaut Framework 5.0.x 的核心主题
+
+Micronaut Framework 5 通过更新的 JVM 与语言支持实现核心平台现代化，包括全新的 JDK 25 基线、Apache Groovy 5 基线、Kotlin 2.3 基线、对当前 JDK 能力更广泛的支持，以及对编译期元数据的更深入投入。各版本特定的迁移说明另请参阅 <<breaks,破坏性变更>>。
+
+框架 API 现已全面采用 <<nullabilityAnnotations,可空性注解>>，尤其是 <<jspecify,JSpecify 可空性注解>>，在整个代码库中推行 `@NullMarked`，并与静态分析更紧密地集成。其结果是更清晰的 API 契约、更好的 Kotlin 互操作性以及更完善的 IDE 反馈。
+
+IoC 容器与编译期基础设施在 5.0 分支上也得到了大量投入。Bean 解析、限定符（qualifier）处理、替换元数据、饿汉式初始化（eager initialization）与运行时注解处理均得到改进，以减少运行时开销并提升可预测性。
+
+=== 容器、AOP 与运行时改进
+
+Bean 上下文（bean context）在 5.0 开发周期中的多个方面得到重构，包括预计算的 bean 索引、编译期 `@Replaces` 处理以及更广泛的 bean context 优化。这些变更共同延续了 Micronaut 对启动性能与低运行时开销的关注。
+
+当构建期代理生成并不合适时，Micronaut 5 还增加了在运行时创建 AOP 代理的支持。这使得基于 Byte Buddy 的代理、面向接口的 JDK 动态代理，以及面向测试的代理场景（如 mock 与 spy）得以集成。关于 Micronaut AOP 模型的背景，请参阅 <<aop,面向切面编程>>。
+
+最近的 5.0.x 工作还通过增加对 `jakarta.annotation.Priority` 的支持改进了与 Jakarta API 的互操作性，将其映射到 Micronaut 针对 bean 与 HTTP 过滤器的排序语义。相关排序文档参见 <<types,可注入容器类型>> 与 <<order,过滤器顺序>>。
+
+=== HTTP、配置与元数据
+
+在 HTTP 方面，Netty 协议栈上的 HTTP/3 支持已转为稳定。参见 <<http3Server,HTTP/3 支持>> 与 <<clientHttp3,客户端中的 HTTP/3>>。5.0 线还包含一次 multipart/form 处理重构，引入了更底层、更独立于服务器的 form API，并改进了高层 binder 中的资源管理。参见 <<form,表单>>、<<formCapable,详细的 Form API>> 与 <<uploads,文件上传>>。
+
+5.0.x 大幅扩展了配置支持。Micronaut 现已支持配置导入（config imports）与 `PropertySourceImporter` SPI，支持从文件、类路径位置、环境变量、配置树以及自定义导入器实现等来源加载配置。参见 <<configImport,导入额外的配置>>、<<customPropertySourceImporter,实现自定义 PropertySourceImporter>> 与 <<propertySource,基于 PropertySource 的外部化配置>>。
+
+配置元数据对工具链也更加有用。Micronaut 5 可以从 `@ConfigurationProperties` 生成 JSON Schema 文档，从而更容易基于框架所用的同一配置模型驱动 IDE 补全、校验和外部工具。关于底层配置模型，请参阅 <<configurationProperties,配置属性>>。
+
+JSON 与序列化协议栈也已更新，涵盖 `JsonMapper`、升级到 Jackson 3 以及更多配置项覆盖，使应用程序能够更顺利地采用新的 JSON 基础设施。
+
+=== 弹性与上下文传播
+
+除 <<retry,重试建议>> 中记载的既有注解驱动模型外，Micronaut Retry 还新增了编程式重试与断路器 API。这使得可以在代码中定义类型化的重试与断路器策略，并在同步、响应式与异步流程中复用。
+
+5.0.x 线还扩展了上下文传播能力，包括对 scoped values 的支持，并持续对齐现代 JDK 上下文传播模式。参见 <<contextPropagation,上下文传播>>。
+
+=== 总结
+
+对于采用 Micronaut Framework 5.0.x 的团队而言，最大的收益是更强的空安全、更灵活的 AOP 与重试模型、更好的 HTTP 与 multipart 能力、更丰富的配置工具，以及容器「编译期优先」运行时模型的持续改进。

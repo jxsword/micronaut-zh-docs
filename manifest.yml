@@ -1775,7 +1775,7 @@ files:
 - file: guide/introduction.adoc
   blob_sha: c050e89f5eb8d222c5e5ac65af4639162d691c5c
   size: 2459
-  status: missing
+  status: current
   zh: zh/guide/introduction.adoc
   paragraphs: 11
   updated_at: '2026-11-20'
@@ -1783,7 +1783,7 @@ files:
 - file: guide/introduction/upgrading.adoc
   blob_sha: 87c63b0b218cc347f537733acdb68b8258c24d07
   size: 472
-  status: missing
+  status: current
   zh: zh/guide/introduction/upgrading.adoc
   paragraphs: 5
   updated_at: '2026-11-20'
@@ -1791,7 +1791,7 @@ files:
 - file: guide/introduction/whatsNew.adoc
   blob_sha: c7ccfbff0dae838086982f05c70166ed69898975
   size: 4856
-  status: missing
+  status: current
   zh: zh/guide/introduction/whatsNew.adoc
   paragraphs: 20
   updated_at: '2026-11-20'
@@ -1799,7 +1799,7 @@ files:
 - file: guide/ioc.adoc
   blob_sha: fd86d91a03310bd905115cbbf7c5bf5ac8885a7e
   size: 3053
-  status: missing
+  status: current
   zh: zh/guide/ioc.adoc
   paragraphs: 21
   updated_at: '2026-11-20'
@@ -1831,7 +1831,7 @@ files:
 - file: guide/ioc/beanContext.adoc
   blob_sha: e8a7e9f27f858d258423e02bfe9a78e8355a7563
   size: 579
-  status: missing
+  status: current
   zh: zh/guide/ioc/beanContext.adoc
   paragraphs: 2
   updated_at: '2026-11-20'
@@ -1879,7 +1879,7 @@ files:
 - file: guide/ioc/beans.adoc
   blob_sha: 39fb3c150b5f301119ea480bb46afd4203a51df8
   size: 1233
-  status: missing
+  status: current
   zh: zh/guide/ioc/beans.adoc
   paragraphs: 7
   updated_at: '2026-11-20'
@@ -1935,7 +1935,7 @@ files:
 - file: guide/ioc/how.adoc
   blob_sha: 17bd589deb88fd7e76df2773c0c9ea43c5dcd35e
   size: 1336
-  status: missing
+  status: current
   zh: zh/guide/ioc/how.adoc
   paragraphs: 5
   updated_at: '2026-11-20'
@@ -1943,7 +1943,7 @@ files:
 - file: guide/ioc/injection.adoc
   blob_sha: 52cecf03045ed8a1a910c9abba6c8797f9885db1
   size: 601
-  status: missing
+  status: current
   zh: zh/guide/ioc/injection.adoc
   paragraphs: 4
   updated_at: '2026-11-20'
@@ -2119,7 +2119,7 @@ files:
 - file: guide/ioc/iocDebugging.adoc
   blob_sha: 01f819a26d948ef64bf477d7e2dfad9a788b2ccd
   size: 892
-  status: missing
+  status: current
   zh: zh/guide/ioc/iocDebugging.adoc
   paragraphs: 11
   updated_at: '2026-11-20'
@@ -2959,7 +2959,7 @@ files:
 - file: guide/quickStart.adoc
   blob_sha: 8fab74330fc808213d37650483f2636e143534ec
   size: 463
-  status: missing
+  status: current
   zh: zh/guide/quickStart.adoc
   paragraphs: 10
   updated_at: '2026-11-20'
@@ -2967,7 +2967,7 @@ files:
 - file: guide/quickStart/buildCLI.adoc
   blob_sha: 2a75c6d0b107cd6bc1c83c5ba68e7c582f22c10e
   size: 423
-  status: missing
+  status: current
   zh: zh/guide/quickStart/buildCLI.adoc
   paragraphs: 2
   updated_at: '2026-11-20'
@@ -2975,7 +2975,7 @@ files:
 - file: guide/quickStart/creatingClient.adoc
   blob_sha: 12a3d900c645f1e41404b933e120b08bcd6471e5
   size: 2148
-  status: missing
+  status: current
   zh: zh/guide/quickStart/creatingClient.adoc
   paragraphs: 15
   updated_at: '2026-11-20'
@@ -2983,7 +2983,7 @@ files:
 - file: guide/quickStart/creatingServer.adoc
   blob_sha: 9fb540b2695ec30a944d6b570fc8ca8f928761a3
   size: 2797
-  status: missing
+  status: current
   zh: zh/guide/quickStart/creatingServer.adoc
   paragraphs: 25
   updated_at: '2026-11-20'
@@ -2991,7 +2991,7 @@ files:
 - file: guide/quickStart/deployingApp.adoc
   blob_sha: 3f980f709509de2ca615122a274463f7435d7946
   size: 1806
-  status: missing
+  status: current
   zh: zh/guide/quickStart/deployingApp.adoc
   paragraphs: 24
   updated_at: '2026-11-20'
@@ -2999,7 +2999,7 @@ files:
 - file: guide/quickStart/ideSetup.adoc
   blob_sha: ede8a32d1e123f39f19f8560d11074c106c19b61
   size: 358
-  status: missing
+  status: current
   zh: zh/guide/quickStart/ideSetup.adoc
   paragraphs: 3
   updated_at: '2026-11-20'
@@ -3007,7 +3007,7 @@ files:
 - file: guide/quickStart/ideSetup/eclipseSetup.adoc
   blob_sha: 373bc17e971a76b258138cb0ca1e8eced696a8b7
   size: 1370
-  status: missing
+  status: current
   zh: zh/guide/quickStart/ideSetup/eclipseSetup.adoc
   paragraphs: 9
   updated_at: '2026-11-20'
@@ -3015,7 +3015,7 @@ files:
 - file: guide/quickStart/ideSetup/ideaSetup.adoc
   blob_sha: 572c334721f83a64c54202321075672e05882d58
   size: 791
-  status: missing
+  status: current
   zh: zh/guide/quickStart/ideSetup/ideaSetup.adoc
   paragraphs: 5
   updated_at: '2026-11-20'
@@ -3023,7 +3023,7 @@ files:
 - file: guide/quickStart/ideSetup/netbeansSetup.adoc
   blob_sha: d4cc75b59f5312513578e64673f87f121639a129
   size: 336
-  status: missing
+  status: current
   zh: zh/guide/quickStart/ideSetup/netbeansSetup.adoc
   paragraphs: 3
   updated_at: '2026-11-20'
@@ -3031,7 +3031,7 @@ files:
 - file: guide/quickStart/ideSetup/vsCodeSetup.adoc
   blob_sha: dee1f9dfdb3708f6f2ad96a194819c8db20ecb27
   size: 3290
-  status: missing
+  status: current
   zh: zh/guide/quickStart/ideSetup/vsCodeSetup.adoc
   paragraphs: 8
   updated_at: '2026-11-20'

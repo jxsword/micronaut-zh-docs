@@ -94,7 +94,9 @@ def build_registry(source_dir: Path) -> Dict:
             fpart, sep, anchor = target.partition("#")
             fpart = fpart.strip()
             anchor = anchor.strip()
-            if fpart.startswith(("http", "mailto")):
+            if fpart.startswith(("http://", "https://", "ftp://", "mailto:")):
+                # 仅按协议头识别 URL；裸锚点如 httpServer/httpClient 以
+                # "http" 开头但并非 URL，不得误跳过（B01 实测缺陷修复）
                 continue
             if not sep and fpart:
                 # 无 #：页级文件引用（含 / 或 .adoc）或裸锚点

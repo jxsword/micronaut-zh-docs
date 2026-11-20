@@ -48,7 +48,7 @@ RE_ATTRDEF = re.compile(r"^:([\w\-\.@]+):\s*(.*)$")
 RE_BLOCK_ATTR = re.compile(r"^\[(?!\[)[^\]]+\]\s*$")        # [source,java] / [cols=".."]
 RE_CONDITIONAL = re.compile(r"^(ifdef|ifndef|ifeval|endif)::\S*\s*$")
 RE_DIRECTIVE = re.compile(
-    r"^(include\d*|xref|image|source|toc|pass|link|video|audio)::"
+    r"^(include\d*|xref|image|source|toc|pass|link|video|audio|snippet)::"
     r"(\S*?)\[[^\]]*\]\s*$")
 RE_ADMONITION = re.compile(r"^(NOTE|TIP|IMPORTANT|WARNING|CAUTION):\s+\S")
 

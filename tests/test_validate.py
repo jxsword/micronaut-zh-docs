@@ -216,6 +216,68 @@ def test_check5_target_file_missing_in_source(tmp_path, monkeypatch):
     assert any("⑤" in e for e in errs)
 
 
+def test_check5_bare_anchor_resolves_via_registry(tmp_path, monkeypatch):
+    # 裸锚点 <<httpServer,Label>> 经登记表解析到文件；目标未译 → 豁免警告
+    zh_with_xref = GOOD_ZH + "\nsee <<httpServer,HTTP server>>\n"
+    make_tree(tmp_path, GOOD_SRC, zh_with_xref)
+    (tmp_path / "source" / "guide" / "httpServer.adoc").write_text(
+        "text\n", encoding="utf-8")
+    patch_vt(monkeypatch, tmp_path, registry=[
+        {"id": "httpServer", "file": "guide/httpServer.adoc"}])
+    errs, warns = vt.validate_file(
+        tmp_path / "source/guide/a.adoc", tmp_path / "zh/guide/a.adoc",
+        "guide/a.adoc", {}, [], None, "a" * 40)
+    assert not any("⑤" in e for e in errs)
+    assert any("豁免" in w for w in warns)
+
+
+def test_check5_bare_anchor_unregistered_is_warning(tmp_path, monkeypatch):
+    # 未登记裸锚点 → 豁免警告（M3 断链清零跟踪），不算错误
+    zh_with_xref = GOOD_ZH + "\nsee <<ghostAnchor,Label>>\n"
+    make_tree(tmp_path, GOOD_SRC, zh_with_xref)
+    patch_vt(monkeypatch, tmp_path)
+    errs, warns = vt.validate_file(
+        tmp_path / "source/guide/a.adoc", tmp_path / "zh/guide/a.adoc",
+        "guide/a.adoc", {}, [], None, "a" * 40)
+    assert not any("⑤" in e for e in errs)
+    assert any("裸锚点未登记" in w for w in warns)
+
+
+def test_check5_bare_anchor_translated_target_needs_injection(
+        tmp_path, monkeypatch):
+    # 裸锚点解析到已译目标文件：缺注入 → 报错；有注入 → 通过
+    zh_with_xref = GOOD_ZH + "\nsee <<upgrading,Upgrading>>\n"
+    make_tree(tmp_path, GOOD_SRC, zh_with_xref)
+    (tmp_path / "source" / "guide" / "b.adoc").write_text(
+        "=== Upgrading between versions\n", encoding="utf-8")
+    zh_b = ("> 译文。\n\n" + PROVENANCE.format("a" * 40, "b" * 40) +
+            "\n\n[[upgrading]]\n=== 升级\n")
+    (tmp_path / "zh" / "guide" / "b.adoc").write_text(zh_b, encoding="utf-8")
+    patch_vt(monkeypatch, tmp_path, registry=[
+        {"id": "upgrading", "file": "guide/b.adoc"}])
+    errs, _ = vt.validate_file(
+        tmp_path / "source/guide/a.adoc", tmp_path / "zh/guide/a.adoc",
+        "guide/a.adoc", {}, [], None, "a" * 40)
+    assert not any("⑤" in e for e in errs)
+    (tmp_path / "zh" / "guide" / "b.adoc").write_text(
+        zh_b.replace("[[upgrading]]\n", ""), encoding="utf-8")
+    errs, _ = vt.validate_file(
+        tmp_path / "source/guide/a.adoc", tmp_path / "zh/guide/a.adoc",
+        "guide/a.adoc", {}, [], None, "a" * 40)
+    assert any("⑤" in e for e in errs)
+
+
+def test_check5_url_target_skipped(tmp_path, monkeypatch):
+    zh_with_url = GOOD_ZH + "\nsee xref:https://example.com/x[go]\n"
+    make_tree(tmp_path, GOOD_SRC, zh_with_url)
+    patch_vt(monkeypatch, tmp_path)
+    errs, warns = vt.validate_file(
+        tmp_path / "source/guide/a.adoc", tmp_path / "zh/guide/a.adoc",
+        "guide/a.adoc", {}, [], None, "a" * 40)
+    assert not any("⑤" in e for e in errs)
+    assert not any("⑤" in w for w in warns)
+
+
 def test_check6_provenance_mismatch(tmp_path, monkeypatch):
     make_tree(tmp_path, GOOD_SRC, GOOD_ZH)
     patch_vt(monkeypatch, tmp_path)
@@ -261,6 +323,19 @@ def test_check7_traditional_char(tmp_path, monkeypatch):
         tmp_path / "source/guide/a.adoc", tmp_path / "zh/guide/a.adoc",
         "guide/a.adoc", {}, [], None, "a" * 40)
     assert any("⑦ 疑似繁体" in e for e in errs)
+
+
+def test_check7_shared_shape_chars_not_flagged(tmp_path, monkeypatch):
+    # 行/息/主/境/景/常 为简繁共用字，简体正文常用，不得误报
+    # （B01 实测缺陷回归：执行/信息/主题/环境/背景/正常）
+    zh_ok = GOOD_ZH.replace("关于 bean 的第一段。",
+                            "正常执行并输出信息，主题背景环境如常。")
+    make_tree(tmp_path, GOOD_SRC, zh_ok)
+    patch_vt(monkeypatch, tmp_path)
+    errs, _ = vt.validate_file(
+        tmp_path / "source/guide/a.adoc", tmp_path / "zh/guide/a.adoc",
+        "guide/a.adoc", {}, [], None, "a" * 40)
+    assert not any("疑似繁体" in e for e in errs)
 
 
 def test_check7_adjacency(tmp_path, monkeypatch):

@@ -1,0 +1,13 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Upgrading your Micronaut Application](https://docs.micronaut.io/5.2.x/core/#core-upgrading)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/introduction/upgrading.adoc  upstream_commit: a2a522cc6dd46d4ed38e876e2ec8fb3d9f7246e4  upstream_hash: 87c63b0b218cc347f537733acdb68b8258c24d07  translated_at: 2026-11-20 -->
+
+[[upgrading]]
+=== 在 Micronaut Framework 版本之间升级
+
+查阅 https://micronaut-projects.github.io/micronaut-upgrade/snapshot/[Micronaut Upgrade] 文档，帮助您升级 Micronaut 应用程序。
+
+要了解新特性，请查看您所关注的每个模块的 GitHub Release 说明，其中包含按类型划分的全部变更摘要。
+
+=== 破坏性变更
+
+请查阅 <<breaks,破坏性变更>> 一节，并更新受影响的应用程序代码。

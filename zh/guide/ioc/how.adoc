@@ -1,0 +1,12 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – How Does it Work?](https://docs.micronaut.io/5.2.x/core/#core-how)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/ioc/how.adoc  upstream_commit: 51650efcb97939ef02bf726bdcb28266b7ca20d1  upstream_hash: 17bd589deb88fd7e76df2773c0c9ea43c5dcd35e  translated_at: 2026-11-20 -->
+
+至此，您可能想知道 Micronaut 框架是如何在无需反射的情况下完成上述依赖注入的。
+
+关键在于一组 AST 转换（针对 Groovy）和注解处理器（针对 Java），它们会生成实现 link:{api}/io/micronaut/inject/BeanDefinition.html[BeanDefinition] 接口的类。
+
+Micronaut 框架使用 ASM 字节码库来生成类。由于 Micronaut 提前知晓注入点，因此无需像 Spring 等其他框架那样在运行时扫描所有方法、字段、构造器等。
+
+此外，由于构建 bean 时不使用反射，JVM 可以更好地内联和优化代码，从而带来更好的运行时性能和更低的内存消耗。这对非单例（non-singleton）作用域尤为重要，因为应用程序性能取决于 bean 的创建性能。
+
+另外，与使用反射的框架不同，使用 Micronaut 框架时，应用程序的启动时间和内存消耗不会随代码库规模的增大而受到同样影响。基于反射的 IoC 框架会为代码中的每一个字段、方法和构造器加载并缓存反射数据。因此，随着代码规模的增长，内存需求也会随之增加；而使用 Micronaut 时情况并非如此。
