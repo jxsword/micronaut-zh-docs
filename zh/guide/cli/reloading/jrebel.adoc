@@ -1,0 +1,102 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – JRebel](https://docs.micronaut.io/5.2.x/core/#core-jrebel)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/cli/reloading/jrebel.adoc  upstream_commit: e0bdce7561988da0c16da4ca21ff767d46004968  upstream_hash: e20cdb0970f123c7846e477cdfbd27bc537ec0d1  translated_at: 2026-11-21 -->
+
+https://www.jrebel.com/products/jrebel[JRebel] 是一种专有的重载解决方案，涉及一个代理库以及完善的 IDE 支持。JRebel 文档包含 IDE 集成与使用的详细步骤。本节展示如何为 Maven 与 Gradle 项目安装和配置该代理。
+
+[TIP]
+.使用 CLI
+====
+如果您使用 Micronaut CLI 创建项目，请提供 `jrebel` feature 以在项目中预配置 JRebel 重载。注意，您需要安装 JRebel，并在 `gradle.properties` 文件（Gradle）或 `pom.xml` （Maven）中提供指向代理的正确路径。所需步骤如下所述。
+
+----
+$ mn create-app my-app --features jrebel
+----
+====
+
+== 安装/配置 JRebel 代理
+
+安装 JRebel 最简单的方式是从 https://www.jrebel.com/products/jrebel/download[JRebel 下载页面] 下载「standalone」安装包。将下载的文件解压到方便的位置，例如 `~/bin/jrebel`
+
+安装目录中包含一个存放代理文件的 `lib` 目录。适用于您的操作系统的代理请参见下表：
+
+.JRebel 代理
+|===
+|操作系统|代理
+
+|Windows 64 位 JDK
+| `[jrebel directory]\lib\jrebel64.dll`
+|Windows 32 位 JDK
+| `[jrebel directory]\lib\jrebel32.dll`
+|Mac OS X 64 位 JDK
+| `[jrebel directory]/lib/libjrebel64.dylib`
+|Mac OS X 32 位 JDK
+| `[jrebel directory]/lib/libjrebel32.dylib`
+|Linux 64 位 JDK
+| `[jrebel directory]/lib/libjrebel64.so`
+|Linux 32 位 JDK
+| `[jrebel directory]/lib/libjrebel32.so`
+|===
+
+记下相应代理的路径，并将该值添加到项目构建中。
+
+=== Gradle
+
+将路径添加到 `gradle.properties` （必要时创建该文件）中，作为 `rebelAgent` 属性。
+
+.gradle.properties
+[source,properties]
+----
+#Assuming installation path of ~/bin/jrebel/
+rebelAgent= -agentpath:~/bin/jrebel/lib/libjrebel64.dylib
+----
+
+将相应的 JVM 参数添加到 `build.gradle` （使用 CLI feature 时无需此步）
+
+[source,groovy]
+----
+run.dependsOn(generateRebel)
+if (project.hasProperty('rebelAgent')) {
+    run.jvmArgs += rebelAgent
+}
+----
+
+您可以用 `./gradlew run` 启动应用，应用将包含该代理。设置重新编译请参阅 <<gradleReload,Gradle 重载>> 或 <<ideReload,IDE 重载>> 章节。
+
+=== Maven
+
+相应地配置 Micronaut Maven 插件：
+
+[source,xml]
+----
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <!-- ... -->
+  <build>
+    <plugins>
+      <!-- ... -->
+      <plugin>
+        <groupId>io.micronaut.maven</groupId>
+        <artifactId>micronaut-maven-plugin</artifactId>
+          <configuration>
+            <jvmArguments>-agentpath:~/bin/jrebel/lib/jrebel6/lib/libjrebel64.dylib</jvmArguments>
+          </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.zeroturnaround</groupId>
+        <artifactId>jrebel-maven-plugin</artifactId>
+        <version>1.1.10</version>
+        <executions>
+          <execution>
+            <id>generate-rebel-xml</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <!-- ... -->
+    </plugins>
+  </build>
+</project>
+----

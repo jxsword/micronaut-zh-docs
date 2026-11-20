@@ -1,0 +1,13 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Recompiling with an IDE](https://docs.micronaut.io/5.2.x/core/#core-ideReload)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/cli/reloading/ideReload.adoc  upstream_commit: ede1891bd681062e0992d54fd437b71a40782343  upstream_hash: 77d7367ef33239dad12028c0aa46738e10ef5709  translated_at: 2026-11-21 -->
+
+如果使用的是 Maven 这类不支持文件变更时自动重新编译的构建工具，您可以结合重载代理（按上述章节配置）用 IDE 重新编译类。
+
+[[ideReload]]
+=== IntelliJ
+
+遗憾的是，IntelliJ 没有对运行中应用有效的自动重建选项。不过，您可以用 `CMD-F9` （Mac）或 `CTRL-F9` （Windows/Linux）触发项目的「重建」。
+
+=== Eclipse
+
+在 `Project` 菜单下，勾选 `Build Automatically` 选项。这样每当文件变更保存到磁盘时，都会触发项目的重新编译。

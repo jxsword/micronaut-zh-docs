@@ -35,7 +35,7 @@
 | B26 | 14 | 3416 | 3439 | current |
 | B27 | 17 | 3478 | 3538 | current |
 | B28 | 21 | 2955 | 3023 | current |
-| B29 | 14 | 3226 | 3257 | pending |
+| B29 | 14 | 3226 | 3257 | current |
 | B30 | 4 | 3387 | 3401 | pending |
 | B31 | 3 | 955 | 960 | pending |
 | B32 | 2 | 3180 | 3183 | pending |
@@ -74,6 +74,7 @@
 - B26（2026-11-21 完成）：validate 全量 323 文件 PASSED + 14/14 --mark-current 核销 + squash commit；进度 323/388（83.7%，剔 skipped 口径）。锚点注入 2 处（[[asyncioNetworking]]/[[asyncioStreaming]] 标题锚，前者消解豁免、后者含 asyncioUnsupported 批内闭环）；**占位符多重集校验在 restore 前拦截 2 处真缺陷**（原文复指处误重复占位符，新错误模式）；validate 首轮 11/14（⑦ ×3，含中英文缺空格变体）修复后全绿；reviewer 14/14 PASS 首轮零缺陷；asyncioNetworking 116 占位符/1215 词为 python 章最重。词数实测 3407/3379（M1 值 3439/3416）；段落 160。⑤ 豁免 11→11（−2 消解 +1 新增 kotlin→cli）。冻结窗口遵守。**kotlin 子章 14/14 全章译出（第十五个全章组）**；asyncio 组 6/6 译出；languageSupport 章 45/50（90%）。
 - B27（2026-11-21 完成）：validate 全量 340 文件 PASSED + 17/17 --mark-current 核销 + squash commit；进度 340/388（88.0%，剔 skipped 口径）。锚点注入 6 处（[[graal]] 标题锚消解既有豁免 + endpointConfiguration/healthEndpoint basename 锚 + providedEndpoints/beansEndpoint/infoEndpoint 标题锚，多数批内闭环；**beansEndpoint/infoEndpoint 首轮误置文件首，自查 registry title 后纠正——B23 教训二次生效**）；validate 首轮 13/17（⑦ ×5，URL 宏直贴汉字变体 4 处）修复后全绿；reviewer 17/17 PASS 首轮零缺陷；graalServices 78 段/761 词为批次最重。词数实测 3469/3399（M1 值 3538/3478）；段落 273。⑤ 豁免 11→11（−1 消解 graal +1 新增 stopEndpoint，B28 消解）。冻结窗口遵守。**graal 组 3/3 译出；languageSupport 章 49/50（98%，仅剩 overloads@B32）**；management 章 12/27（44%）。
 - B28（2026-11-21 完成）：validate 全量 361 文件 PASSED + 21/21 --mark-current 核销 + squash commit；进度 361/388（93.5%，剔 skipped 口径）。锚点注入 8 处（[[cli]] 标题锚消解既有豁免 ×2 + caches/metrics basename 锚 + environment/loggers/refresh/routes/stop 标题锚批内闭环）；validate 逐个 --file **首轮 21/21 全绿（与 B20 并列批次内零修正纪录）**；reviewer 21/21 PASS 首轮零缺陷；createProject 51 段/883 词批次最重（5×5 命令大表+单元格内嵌代码块）。词数实测 3023/2955（与 M1 inventory 一致）；段落 213。**⑤ 豁免 11→7（−4 消解 +0 新增）：剩余 proxy（B29）+ i18n（M3）+ breaks ×3（B32）+ 裸锚点 ×2（M3）——清零在射程内**。冻结窗口遵守。**management 章 27/27 全章译出（第十六个全章）**；cli 章 3/10 起步。
+- B29（2026-11-21 完成）：validate 全量 375 文件 PASSED + 14/14 --mark-current 核销 + squash commit；进度 375/388（97.0%，剔 skipped 口径）。锚点注入 5 处（[[proxy]] basename 锚消解既有豁免 jdkHttpClient→proxy + compilerArch/annotationArch/gradleReload basename 锚 + ideReload 标题锚批内闭环；**annotationArch 首轮漏注入，锚点 grep 核对环节发现后补齐**——B16 教训复用）；validate 首轮 9/14（⑦ ×9 + ③ visitor ×3——TypeElementVisitor 宏触发，补「类型元素访问者」括注）修复后全绿；reviewer 13/14——唯一 FAIL 为 xref 目标顺序的合法语序重排（多重集一致，按 B21 口径判定非缺陷）；commands 38 段/564 词批次最重（7 组命令表格）。词数实测 3252/3217（M1 值 3257/3226）；段落 191。⑤ 豁免 7→6（−1 消解 +0 新增）。冻结窗口遵守。**cli 章 10/10 全章译出（第十七个全章）**；i18n 组 2/2；appendix 章 4/12。
 
 ## 硬性纪律（每批次必守）
 

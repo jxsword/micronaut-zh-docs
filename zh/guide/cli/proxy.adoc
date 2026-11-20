@@ -1,0 +1,16 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Proxy Configuration](https://docs.micronaut.io/5.2.x/core/#core-proxy)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/cli/proxy.adoc  upstream_commit: 9b6da4ec1602e499125970b1e7734a79a3a4782c  upstream_hash: fed7f3dbc85856fb67a42161e10fbb384a0fc6ff  translated_at: 2026-11-21 -->
+
+[[proxy]]
+要将 CLI 配置为使用 HTTP 代理，需要两个步骤。配置选项可以通过 `MN_OPTS` 环境变量传给 CLI。
+
+例如在 *nix 系统上：
+
+[source,bash]
+----
+export MN_OPTS="-Dhttps.proxyHost=127.0.0.1 -Dhttps.proxyPort=3128 -Dhttp.proxyUser=test -Dhttp.proxyPassword=test"
+----
+
+profile 依赖通过 HTTPS 解析，因此代理端口与主机用 `https.` 配置，而用户名与密码用 `http.` 指定。
+
+Windows 系统可在 `My Computer/Advanced/Environment Variables` 下配置该环境变量。

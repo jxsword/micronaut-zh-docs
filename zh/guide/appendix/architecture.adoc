@@ -1,0 +1,8 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Micronaut Architecture](https://docs.micronaut.io/5.2.x/core/#core-architecture)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/appendix/architecture.adoc  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360  upstream_hash: 261cb9068fc2437c04c53b67a79da1e6e3fea00f  translated_at: 2026-11-21 -->
+
+以下文档描述 Micronaut 框架的架构，面向希望了解 Micronaut 框架内部工作机制及其架构设计的读者。它并非面向最终用户的开发者文档，而是写给对 Micronaut 框架内部运作感兴趣的读者。
+
+本文档分为若干小节，分别描述编译器、内省、应用容器、依赖注入等内容。
+
+WARNING: 由于本文档涵盖 Micronaut 的内部工作机制，其中引用与描述的许多 API 被视为内部非公开 API，并以 ann:core.annotation.Internal[] 标注。内部 API 可能随 Micronaut 的补丁版本而变化，且不受 Micronaut 语义化版本发布策略保护。

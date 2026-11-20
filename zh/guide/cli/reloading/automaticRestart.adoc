@@ -1,0 +1,36 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Automatic Restart](https://docs.micronaut.io/5.2.x/core/#core-automaticRestart)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/cli/reloading/automaticRestart.adoc  upstream_commit: ede1891bd681062e0992d54fd437b71a40782343  upstream_hash: 1a584cf2b0eba4acb0a5ba931fabf2ba5d3f5f69  translated_at: 2026-11-21 -->
+
+在 JVM 上实现类重载有多种方式，各有优缺点。以下是不重启 JVM 即可实现重载的几种可能途径：
+
+* *JVM 代理* - 可以使用 JRebel 这类 JVM 代理，但它们可能产生异常错误、不一定支持所有 JDK 版本，并可能导致类被缓存或过时。
+* *ClassLoader 重载* - 基于 ClassLoader 的重载是大多数 JVM 框架采用的流行方案；但如果使用了错误的类加载器，同样可能导致类被缓存或过时、内存泄漏以及各种怪异错误。
+* *调试器热替换* - Java 调试器支持在运行时热替换变更，但只支持少数使用场景。
+
+鉴于现有方案的种种问题以及 JVM 内置缺少重载变更的机制，最安全、最佳的重载方案——也是 Micronaut 团队推荐的方案——是通过第三方工具自动重启应用。
+
+Micronaut 启动速度快，自动重启会带来一个干净的状态，避免出现难以调试的问题或内存泄漏。
+
+=== Maven 重启
+
+要使用 Maven 实现应用自动重启，请使用 Micronaut Maven 插件（创建新的 Maven 项目时默认包含），并运行以下命令：
+
+.使用 Micronaut Maven 插件
+[source,bash]
+----
+$ ./mvnw mn:run
+----
+
+每次更改类时，插件都会自动重启服务器。
+
+=== Gradle 重启
+
+使用 Micronaut Gradle 插件时，可以通过 `-t` flag 启用 Gradle 对持续构建（continuous builds）的支持来激活 Gradle 自动重启：
+
+.使用 Gradle 实现自动重启
+[source,bash]
+----
+./gradlew run -t
+----
+
+每次更改类或资源时，Gradle 都会重新编译并重启应用。

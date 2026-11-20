@@ -1,0 +1,28 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Resource Bundles](https://docs.micronaut.io/5.2.x/core/#core-bundle)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/i18n/bundle.adoc  upstream_commit: 556b9ef0bb0b04f1edcaa51934c1b91945ee68f2  upstream_hash: bf9b081148ffedee1358d283e0e565708eaa419c  translated_at: 2026-11-21 -->
+
+资源包（resource bundle）是一个包含特定语言区域数据的 Java .properties 文件。
+
+给定如下资源包：
+
+[source, properties]
+.src/main/resources/io/micronaut/docs/i18n/messages_en.properties
+----
+include::test-suite/src/test/resources/io/micronaut/docs/i18n/messages_en.properties[]
+----
+
+[source, properties]
+.src/main/resources/io/micronaut/docs/i18n/messages_es.properties
+----
+include::test-suite/src/test/resources/io/micronaut/docs/i18n/messages_es.properties[]
+----
+
+您可以使用 api:context.i18n.ResourceBundleMessageSource[]——一个便于访问 link:{jdkapi}/java.base/java/util/ResourceBundle.html[资源包] 并提供缓存功能的 api:context.MessageSource[] 实现——来访问上述消息。
+
+WARNING: 请不要在每次检索消息时都实例化一个新的 `ResourceBundleMessageSource`。请只实例化一次，例如在工厂中实例化。
+
+snippet::io.micronaut.docs.i18n.MessageSourceFactory[tags="imports,clazz",indent=0,title="MessageSource Factory Example"]
+
+然后即可在提供语言区域的情况下检索消息：
+
+snippet::io.micronaut.docs.i18n.I18nSpec[tags="test",indent=0,title="ResourceBundleMessageSource Example"]

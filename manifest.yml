@@ -103,18 +103,18 @@ files:
 - file: guide/appendix/architecture.adoc
   blob_sha: 261cb9068fc2437c04c53b67a79da1e6e3fea00f
   size: 843
-  status: missing
+  status: current
   zh: zh/guide/appendix/architecture.adoc
   paragraphs: 3
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/appendix/architecture/annotationArch.adoc
   blob_sha: 734cdc5b75a0173237349166819e53e51672961d
   size: 5273
-  status: missing
+  status: current
   zh: zh/guide/appendix/architecture/annotationArch.adoc
   paragraphs: 16
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 130cfede2d9a325faf7016bf10e0a2060c5a3cbd
 - file: guide/appendix/architecture/aopArch.adoc
   blob_sha: 37756e2b2d7490ba0b834d69061512cc934de912
@@ -127,10 +127,10 @@ files:
 - file: guide/appendix/architecture/compilerArch.adoc
   blob_sha: 6d717b9dc8cb35ad9fdf1edd09af2bd7de85a42d
   size: 1446
-  status: missing
+  status: current
   zh: zh/guide/appendix/architecture/compilerArch.adoc
   paragraphs: 7
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 130cfede2d9a325faf7016bf10e0a2060c5a3cbd
 - file: guide/appendix/architecture/containerArch.adoc
   blob_sha: f7c85a60777dd47481a27a2c236a85f36a86a139
@@ -151,10 +151,10 @@ files:
 - file: guide/appendix/architecture/introspectionArch.adoc
   blob_sha: b727a6cc2c95eaa79f530aa2d895888fc6c5ddc8
   size: 5049
-  status: missing
+  status: current
   zh: zh/guide/appendix/architecture/introspectionArch.adoc
   paragraphs: 22
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: b1bd3ffac1dd0c987769a0e4d0e0cb2f3ecd3349
 - file: guide/appendix/architecture/iocArch.adoc
   blob_sha: 44be74099248ef2662765655ea511ff0808dbd2b
@@ -215,10 +215,10 @@ files:
 - file: guide/cli/commands.adoc
   blob_sha: 0bfc6a10ff87521823071e6f0f5f6b2ce97c7ad2
   size: 7211
-  status: missing
+  status: current
   zh: zh/guide/cli/commands.adoc
   paragraphs: 56
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 400e272bf3fbf33a3489e17760ea3a590accf852
 - file: guide/cli/createProject.adoc
   blob_sha: bb228133847e294a2375cc2db9c1afa954a2e74a
@@ -247,50 +247,50 @@ files:
 - file: guide/cli/proxy.adoc
   blob_sha: fed7f3dbc85856fb67a42161e10fbb384a0fc6ff
   size: 606
-  status: missing
+  status: current
   zh: zh/guide/cli/proxy.adoc
   paragraphs: 6
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 9b6da4ec1602e499125970b1e7734a79a3a4782c
 - file: guide/cli/reloading.adoc
   blob_sha: e18d0bf171d3d6777fa0be3f739e42ee05dcc3aa
   size: 528
-  status: missing
+  status: current
   zh: zh/guide/cli/reloading.adoc
   paragraphs: 3
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: ede1891bd681062e0992d54fd437b71a40782343
 - file: guide/cli/reloading/automaticRestart.adoc
   blob_sha: 1a584cf2b0eba4acb0a5ba931fabf2ba5d3f5f69
   size: 1826
-  status: missing
+  status: current
   zh: zh/guide/cli/reloading/automaticRestart.adoc
   paragraphs: 16
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: ede1891bd681062e0992d54fd437b71a40782343
 - file: guide/cli/reloading/gradleReload.adoc
   blob_sha: 8afc2e87f0b15bf2d1b86b73214176fd635fdf45
   size: 650
-  status: missing
+  status: current
   zh: zh/guide/cli/reloading/gradleReload.adoc
   paragraphs: 8
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: ede1891bd681062e0992d54fd437b71a40782343
 - file: guide/cli/reloading/ideReload.adoc
   blob_sha: 77d7367ef33239dad12028c0aa46738e10ef5709
   size: 611
-  status: missing
+  status: current
   zh: zh/guide/cli/reloading/ideReload.adoc
   paragraphs: 5
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: ede1891bd681062e0992d54fd437b71a40782343
 - file: guide/cli/reloading/jrebel.adoc
   blob_sha: e20cdb0970f123c7846e477cdfbd27bc537ec0d1
   size: 3454
-  status: missing
+  status: current
   zh: zh/guide/cli/reloading/jrebel.adoc
   paragraphs: 26
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: e0bdce7561988da0c16da4ca21ff767d46004968
 - file: guide/cloud.adoc
   blob_sha: 5ef3d008266958e61ae984d4eff30b60db172d29
@@ -1759,18 +1759,18 @@ files:
 - file: guide/i18n/bundle.adoc
   blob_sha: bf9b081148ffedee1358d283e0e565708eaa419c
   size: 1190
-  status: missing
+  status: current
   zh: zh/guide/i18n/bundle.adoc
   paragraphs: 13
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 556b9ef0bb0b04f1edcaa51934c1b91945ee68f2
 - file: guide/i18n/localizedMessageSource.adoc
   blob_sha: 86792941a25ded66724ca5e21e395e78e4ca8e1d
   size: 363
-  status: missing
+  status: current
   zh: zh/guide/i18n/localizedMessageSource.adoc
   paragraphs: 2
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 15119ba9ee63100091348d40eaffe708155b53ae
 - file: guide/introduction.adoc
   blob_sha: c050e89f5eb8d222c5e5ac65af4639162d691c5c
@@ -3039,10 +3039,10 @@ files:
 - file: guide/resources.adoc
   blob_sha: 69032a640497b2b86728521c1d696571c7777e8a
   size: 1387
-  status: missing
+  status: current
   zh: zh/guide/resources.adoc
   paragraphs: 8
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 130cfede2d9a325faf7016bf10e0a2060c5a3cbd
 - file: guide/security.adoc
   blob_sha: a2e6045108330d7e09bf04f56702f732e2354b97

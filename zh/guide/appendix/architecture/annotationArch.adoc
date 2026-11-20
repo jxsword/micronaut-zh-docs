@@ -1,0 +1,41 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Annotation Metadata](https://docs.micronaut.io/5.2.x/core/#core-annotationArch)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/appendix/architecture/annotationArch.adoc  upstream_commit: 130cfede2d9a325faf7016bf10e0a2060c5a3cbd  upstream_hash: 734cdc5b75a0173237349166819e53e51672961d  translated_at: 2026-11-21 -->
+
+[[annotationArch]]
+Micronaut 框架是基于注解的编程模型的一种实现。也就是说，注解构成了框架 API 设计的基本部分。
+
+基于这一设计决策，框架制定了一个编译期模型，以应对在运行时评估注解的各种挑战。
+
+api:core.annotation.AnnotationMetadata[] API 是一个在编译期与运行时都被框架组件使用的构造。`AnnotationMetadata` 表示为特定类型、字段、构造器、方法或 bean 属性计算的注解信息融合体，既可包含源码中声明的注解，也可包含可在运行时用于实现框架逻辑的合成元注解。
+
+使用 link:../api/io/micronaut/inject/ast/package-summary.html[Element API] 访问 <<compilerArch,Micronaut 编译器>> 中的源码时，会为每个 api:inject.ast.ClassElement[]、api:inject.ast.FieldElement[]、api:inject.ast.MethodElement[]、api:inject.ast.ConstructorElement[] 与 api:inject.ast.PropertyElement[] 计算出一个 api:core.annotation.AnnotationMetadata[] 实例。
+
+`AnnotationMetadata` API 力图应对以下挑战：
+
+* 注解可以从类型与接口继承到实现类中。为避免在运行时遍历类/接口层次结构，Micronaut 会在构建期计算继承的注解并处理成员覆盖规则。
+* 注解可以被其他注解标注。这些注解通常被称为元注解（meta-annotations）或构造型（stereotype）。`AnnotationMetadata` API 提供方法来判断某个注解是否被声明为元注解，以及查明哪些注解被其他注解元标注。
+* 常常需要把来自不同来源的注解元数据融合在一起。例如，对于 JavaBean 属性，您希望把私有字段、公共 getter 与公共 setter 的元数据组合成单一视图，否则就必须在运行时运行逻辑来以某种方式合并来自 3 个不同来源的元数据。
+* 被 api:core.annotation.Retainable[] 元标注的注解，除了被扁平化进元素的构造型之外，还会作为树保留在组合它们的注解之下，从而可以把单次出现归因于引入它的注解。
+* 可重复注解会被合并并规范化。如果被继承，注解会从父接口或父类合并，提供单一 API 来评估可重复注解，而不需要在运行时执行规范化逻辑。
+
+访问某个类型的源码时，会通过 api:inject.ast.ElementFactory[] API 构造一个 api:inject.ast.ClassElement[] 实例。
+
+api:inject.ast.ElementFactory[] 使用一个 api:inject.annotation.AbstractAnnotationMetadataBuilder[] 实例，其中包含语言特定的实现，用于为 AST 中的底层原生类型构造 `AnnotationMedata`。就 Java 而言，它是一个 `javax.model.element.TypeElement`。
+
+基本流程可视化如下：
+
+image::arch/annotationmetadata.png[]
+
+此外，api:inject.annotation.AbstractAnnotationMetadataBuilder[] 会经 link:{jdkapi}/java.base/java/util/ServiceLoader.html[标准 Java 服务加载器机制] 加载以下类型的一个或多个实例，这些类型允许操纵注解在 `AnnotationMetadata` 中的表示方式：
+
+* api:inject.annotation.AnnotationMapper[] - 可以把一个注解的值映射到另一个注解的类型，并在 `AnnotationMetadata` 中保留原始注解。
+* api:inject.annotation.AnnotationTransformer[] - 可以把一个注解的值转换为另一个注解的类型，并从 `AnnotationMetadata` 中消除原始注解。
+* api:inject.annotation.AnnotationRemapper[] - 可以转换给定包中所有注解的值的类型，并从 `AnnotationMetadata` 中消除原始注解。
+
+注意，在编译期 api:core.annotation.AnnotationMetadata[] 是可变的，可以通过调用 api:inject.ast.Element[] API 的 `annotate(..)` 方法被 api:inject.visitor.TypeElementVisitor[]（类型元素访问者）的实现进一步修改。然而，在运行时 api:core.annotation.AnnotationMetadata[] 是不可变且固定的。这一设计的目的是允许扩展编译器，并让 Micronaut 能够解释不同的源码级基于注解的编程模型。
+
+在实践中，这实际上解耦了源码级注解模型与运行时使用的模型，使得不同的注解可以表示同一个注解。
+
+例如，`jakarata.inject.Inject` 或 Spring 的 `@Autowired` 被支持作为 `jakarta.inject.Inject` 的同义词，做法是把源码级注解转换为 `jakarta.inject.Inject`——它是运行时唯一表示的注解。
+
+最后，Java 中的注解还允许定义默认值。这些默认值不会保留在 `AnnotationMetadata` 的各个实例中，而是存储在一个共享的、应用级静态映射中，供稍后为已知被应用使用的注解检索。

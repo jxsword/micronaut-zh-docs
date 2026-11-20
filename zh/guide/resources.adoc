@@ -1,0 +1,27 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Resources](https://docs.micronaut.io/5.2.x/core/#core-resources)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/resources.adoc  upstream_commit: 130cfede2d9a325faf7016bf10e0a2060c5a3cbd  upstream_hash: 69032a640497b2b86728521c1d696571c7777e8a  translated_at: 2026-11-21 -->
+
+Micronaut 框架支持把文件中的资源加载到内存，以 api:core.io.ResourceLoader[] API 为根基。内置实现包括：
+
+* api:core.io.file.DefaultFileSystemResourceLoader[]
+* api:core.io.scan.DefaultClassPathResourceLoader[]
+* api:core.io.value.StringResourceLoader[]
+* api:core.io.value.Base64ResourceLoader[]
+
+框架提供了一个便捷类 api:core.io.ResourceResolver[] 来调用这些实现。以下示例演示使用该 API 从类路径读取文本文件。
+
+snippet::io.micronaut.docs.resources.MyResourceLoader[tags="class",indent=0,title="ResourceResolver Example"]
+
+<1> 注入一个 `ResourceResolver` 实例
+<2> 使用 `ResourceResolver` API 获取指向类路径中某文件（若存在）的 `URL`
+<3> api:core.io.IOUtils[] 为 I/O 操作提供进一步支持，此处是把文件内容读入字符串。
+
+框架中使用 `ResourceResolver` 加载资源的部分包括：
+
+* 静态 HTTP 资源
+* SSL 密钥与信任库
+* 动态配置
+
+要为资源使用固定值而不是从文件系统或类路径加载，请使用 `string:` 与
+`base64:` 前缀。`string:` 原样返回该值（按 UTF-8 解码），而 `base64:` 先从
+Base64 解码该值。这使您可以例如把小型二进制文件作为静态 HTTP 文件提供。

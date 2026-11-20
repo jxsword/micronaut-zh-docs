@@ -1,0 +1,19 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Recompiling with Gradle](https://docs.micronaut.io/5.2.x/core/#core-gradleReload)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/cli/reloading/gradleReload.adoc  upstream_commit: ede1891bd681062e0992d54fd437b71a40782343  upstream_hash: 8afc2e87f0b15bf2d1b86b73214176fd635fdf45  translated_at: 2026-11-21 -->
+
+[[gradleReload]]
+Gradle 支持 https://docs.gradle.org/current/userguide/command_line_interface.html#sec:continuous_build[持续构建（continuous builds）]，让您运行一个每当源文件变更就会重新执行的任务。要将其与重载代理（按上文所述配置）结合使用，请正常启动应用（带代理），然后在另一个终端以持续模式运行一个重新编译任务。
+
+.运行应用
+[source,bash]
+----
+$ ./gradlew run
+----
+
+.运行重新编译
+[source,bash]
+----
+$ ./gradlew -t classes
+----
+
+每当源文件被修改时，`classes` 任务都会重新执行，让重载代理拾取变更。

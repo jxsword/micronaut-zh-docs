@@ -1,0 +1,6 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Localized Message Source](https://docs.micronaut.io/5.2.x/core/#core-localizedMessageSource)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/i18n/localizedMessageSource.adoc  upstream_commit: 15119ba9ee63100091348d40eaffe708155b53ae  upstream_hash: 86792941a25ded66724ca5e21e395e78e4ca8e1d  translated_at: 2026-11-21 -->
+
+api:context.LocalizedMessageSource[] 是一个 `@RequestScope` bean，您可以将其注入控制器，它会使用 <<localeResolution,Micronaut 语言区域解析>> 为当前 HTTP 请求解析本地化消息。
+
+TIP: 更多信息请参阅 https://guides.micronaut.io/latest/localized-message-source.html[本地化您的应用] 指南。

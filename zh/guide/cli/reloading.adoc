@@ -1,0 +1,8 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Reloading](https://docs.micronaut.io/5.2.x/core/#core-reloading)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/cli/reloading.adoc  upstream_commit: ede1891bd681062e0992d54fd437b71a40782343  upstream_hash: e18d0bf171d3d6777fa0be3f739e42ee05dcc3aa  translated_at: 2026-11-21 -->
+
+重载（或「热加载」）指框架在检测到源文件变更时重新初始化类（及应用的各部分）。
+
+由于 Micronaut 优先考虑启动时间，且大多数 Micronaut 应用可以在数秒内启动，通过在变更时重启应用（例如在 IDE 中运行一个测试类）通常就能获得高效的工作流。
+
+不过，若要让变更自动重载，Micronaut 支持自动重启以及使用第三方重载代理。

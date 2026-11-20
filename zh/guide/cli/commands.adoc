@@ -1,0 +1,244 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Commands](https://docs.micronaut.io/5.2.x/core/#core-commands)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/cli/commands.adoc  upstream_commit: 400e272bf3fbf33a3489e17760ea3a590accf852  upstream_hash: 0bfc6a10ff87521823071e6f0f5f6b2ce97c7ad2  translated_at: 2026-11-21 -->
+
+您可以使用 help flag 查看可用命令的完整列表，例如：
+
+[source,bash]
+----
+$ mn -h
+Usage: mn [-hvVx] [COMMAND]
+Micronaut CLI command line interface for generating projects and services.
+Application generation commands are: # <1>
+
+*  create-app NAME
+*  create-cli-app NAME
+*  create-function-app NAME
+*  create-grpc-app NAME
+*  create-messaging-app NAME
+
+Options:
+  -h, --help         Show this help message and exit.
+  -v, --verbose      Create verbose output.
+  -V, --version      Print version information and exit.
+  -x, --stacktrace   Show full stack trace when exceptions occur.
+
+Commands: # <2>
+  create-app               Creates an application
+  create-cli-app           Creates a CLI application
+  create-function-app      Creates a Cloud Function
+  create-grpc-app          Creates a gRPC application
+  create-messaging-app     Creates a messaging application
+  create-job               Creates a job with scheduled method
+  create-bean              Creates a singleton bean
+  create-websocket-client  Creates a Websocket client
+  create-client            Creates a client interface
+  create-controller        Creates a controller and associated test
+  feature-diff             Produces the diff of an original project with an original project with
+                             additional features.
+  create-websocket-server  Creates a Websocket server
+  create-test              Creates a simple test for the project's testing framework
+----
+
+<1> 这里可以看到项目生成命令列表
+<2> 这里列出了当前目录中所有可用的命令
+<3> **注意：** 项目创建命令（始终可用）之后列出的内容取决于当前目录的上下文
+
+所有代码生成命令都会遵循 `micronaut-cli.yml` 中写入的值。例如，假设有如下 `micronaut-cli.yml` 文件。
+
+.micronaut-cli.yml
+[source,yaml]
+----
+defaultPackage: example
+---
+testFramework: spock
+sourceLanguage: java
+----
+
+使用上述设置时，`create-bean` 命令（默认）会在 `example` 包中生成一个 Java 类及关联的 Spock 测试。命令接受实参，这些默认值可以按命令单独覆盖。
+
+== 基础命令
+
+这些命令在 micronaut 项目的上下文中始终可用。
+
+=== Create-Bean
+
+.Create-Bean 的 flag
+|===
+|flag|描述|示例
+
+|`-l`, `--lang`
+|bean 类使用的语言
+|`--lang groovy`
+
+|`-f`, `--force`
+|是否覆盖现有文件
+|`--force`
+
+|
+|===
+
+`create-bean` 命令生成一个简单的 {jakartaapi}/jakarta/inject/Singleton.html[Singleton] 类。它不会创建关联测试。
+
+[source,bash]
+----
+$ mn create-bean EmailService
+| Rendered template Bean.java to destination src/main/java/example/EmailService.java
+----
+
+=== Create-Job
+
+.Create-Job 的 flag
+|===
+|flag|描述|示例
+
+|`-l`, `--lang`
+|job 类使用的语言
+|`--lang groovy`
+
+|`-f`, `--force`
+|是否覆盖现有文件
+|`--force`
+
+|
+|===
+
+`create-job` 命令生成一个简单的 api:scheduling.annotation.Scheduled[] 类。生成类名时遵循 `*Job` 约定。它不会创建关联测试。
+
+[source,bash]
+----
+$ mn create-job UpdateFeeds --lang groovy
+| Rendered template Job.groovy to destination src/main/groovy/example/UpdateFeedsJob.groovy
+----
+
+== HTTP 相关命令
+
+=== Create-Controller
+
+.Create-Controller 的 flag
+|===
+|flag|描述|示例
+
+|`-l`, `--lang`
+|控制器使用的语言
+|`--lang groovy`
+
+|`-f`, `--force`
+|是否覆盖现有文件
+|`--force`
+
+|
+|===
+
+`create-controller` 命令生成一个 link:{api}/io/micronaut/http/annotation/Controller.html[Controller] 类。生成类名时遵循 `*Controller` 约定。它会创建一个关联测试，该测试运行应用并实例化一个 HTTP 客户端，可以向控制器发起请求。
+
+[source,bash]
+----
+$ mn create-controller Book
+| Rendered template Controller.java to destination src/main/java/example/BookController.java
+| Rendered template ControllerTest.java to destination src/test/java/example/BookControllerTest.java
+----
+
+=== Create-Client
+
+.Create-Client 的 flag
+|===
+|flag|描述|示例
+
+|`-l`, `--lang`
+|客户端使用的语言
+|`--lang groovy`
+
+|`-f`, `--force`
+|是否覆盖现有文件
+|`--force`
+
+|
+|===
+
+`create-client` 命令生成一个简单的 api:http.client.annotation.Client[] 接口。生成类名时遵循 `*Client` 约定。它不会创建关联测试。
+
+[source,bash]
+----
+$ mn create-client Book
+| Rendered template Client.java to destination src/main/java/example/BookClient.java
+----
+
+=== Create-Websocket-Server
+
+.Create-Websocket-Server 的 flag
+|===
+|flag|描述|示例
+
+|`-l`, `--lang`
+|服务器使用的语言
+|`--lang groovy`
+
+|`-f`, `--force`
+|是否覆盖现有文件
+|`--force`
+
+|
+|===
+
+`create-websocket-server` 命令生成一个简单的 api:websocket.annotation.ServerWebSocket[] 类。生成类名时遵循 `*Server` 约定。它不会创建关联测试。
+
+[source,bash]
+----
+$ mn create-websocket-server MyChat
+| Rendered template WebsocketServer.java to destination src/main/java/example/MyChatServer.java
+----
+
+=== Create-Websocket-Client
+
+.Create-Websocket-Client 的 flag
+|===
+|flag|描述|示例
+
+|`-l`, `--lang`
+|客户端使用的语言
+|`--lang groovy`
+
+|`-f`, `--force`
+|是否覆盖现有文件
+|`--force`
+
+|
+|===
+
+`create-websocket-client` 命令生成一个简单的 api:websocket.WebSocketClient[] 抽象类。生成类名时遵循 `*Client` 约定。它不会创建关联测试。
+
+[source,bash]
+----
+$ mn create-websocket-client MyChat
+| Rendered template WebsocketClient.java to destination src/main/java/example/MyChatClient.java
+----
+
+== CLI 项目命令
+
+=== Create-Command
+
+.Create-Command 的 flag
+|===
+|flag|描述|示例
+
+|`-l`, `--lang`
+|命令使用的语言
+|`--lang groovy`
+
+|`-f`, `--force`
+|是否覆盖现有文件
+|`--force`
+
+|
+|===
+
+`create-command` 命令生成一个可按 https://picocli.info[picocli] link:https://picocli.info/apidocs/picocli/CommandLine.Command.html[Command] 执行的独立应用。生成类名时遵循 `*Command` 约定。它会创建一个关联测试，该测试运行应用并验证命令行选项已被设置。
+
+[source,bash]
+----
+$ mn create-command print
+| Rendered template Command.java to destination src/main/java/example/PrintCommand.java
+| Rendered template CommandTest.java to destination src/test/java/example/PrintCommandTest.java
+----
+
+此列表只是 Micronaut CLI 中代码生成命令的一小部分。要查看 CLI 在不同上下文中可用的全部命令（以及在何种情况下适用），请查看 https://github.com/micronaut-projects/micronaut-starter[micronaut-starter] 项目，找到继承 `CodeGenCommand` 的类。`applies` 方法决定命令是否可用。

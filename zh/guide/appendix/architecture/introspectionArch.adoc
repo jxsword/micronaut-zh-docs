@@ -1,0 +1,72 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Bean Introspections](https://docs.micronaut.io/5.2.x/core/#core-introspectionArch)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/appendix/architecture/introspectionArch.adoc  upstream_commit: b1bd3ffac1dd0c987769a0e4d0e0cb2f3ecd3349  upstream_hash: b727a6cc2c95eaa79f530aa2d895888fc6c5ddc8  translated_at: 2026-11-21 -->
+
+<<introspection,Bean 内省>> 的目标是提供反射以及 JDK link:{jdkapi}/java.desktop/java/beans/Introspector.html[Introspector API] 的替代方案——后者在近期的 Java 版本中与 `java.desktop` 模块耦合。
+
+Java 中的许多库需要以编程方式发现哪些方法以某种方式表示类的属性。虽然 https://en.wikipedia.org/wiki/JavaBeans[JavaBeans 规范] 曾试图建立标准约定，但语言本身已演进，引入了 Records 等把属性表示为组件的其他构造。
+
+此外，Kotlin 与 Groovy 等其他语言对类属性有一等支持，需要在框架层面予以支持。
+
+api:inject.beans.visitor.IntrospectedTypeElementVisitor[]（类型元素访问者）会访问类型上 ann:core.annotation.Introspected[] 注解的声明，并在编译期生成与每个被标注类型关联的 api:core.beans.BeanIntrospection[] 实现：
+
+image::arch/introspections.png[]
+
+这一生成经由 `io.micronaut.inject.beans.visitor.BeanIntrospectionWriter` 完成——它是一个内部类，使用 ASM 字节码生成库生成附加类。
+
+例如，给定一个名为 `example.Person` 的类，Micronaut 会生成以下类：
+
+* `example.$Person$Introspection` - api:core.beans.BeanIntrospection[] 的实现，包含实际的运行时内省信息。由于引用经 link:{jdkapi}/java.base/java/util/ServiceLoader.html[ServiceLoader] 加载，编译期还会在生成的 `META-INF/micronaut/io.micronaut.core.beans.BeanIntrospectionReference` 中生成一个指向该类型的条目。
+
+以下示例演示 api:core.beans.BeanIntrospection[] API 的用法：
+
+snippet::io.micronaut.docs.ioc.beans.IntrospectionSpec[tags="usage", indent="0"]
+
+<1> 按类型查找 api:core.beans.BeanIntrospection[]。此时会在经 link:{jdkapi}/java.base/java/util/ServiceLoader.html[ServiceLoader] 加载的 api:core.beans.BeanIntrospectionReference[] 实例中搜索内省。
+<2> `instantiate` 方法允许创建实例
+<3> bean 的属性可通过任一可用方法加载，此处是 `getRequiredProperty`
+<4> 被引用的 api:core.beans.BeanProperty[] 可用于写入可变属性
+<5> 以及读取可读属性
+
+NOTE: `Person` 类只有在调用 `getBeanType()` 方法时才会被初始化。如果该类不在类路径上，则会发生 `NoClassDefFoundError`；为避免这种情况，开发者可以在尝试获取类型之前先调用 api:core.beans.BeanIntrospectionReference[] 上的 `isPresent()` 方法。
+
+api:core.beans.BeanIntrospection[] 的实现执行两项关键功能：
+
+1. 内省持有关于特定类型的属性与构造器实参的 bean 元数据，这些元数据抽象于具体实现（JavaBean 属性、Java 17+ Record、Kotlin 数据类、Groovy 属性等）之上，还提供对 api:core.annotation.AnnotationMetadata[] 的访问，而无需用反射加载注解本身。
+2. 内省使实例化与读/写 bean 属性成为可能，且完全不使用 Java 反射，仅基于构建期生成的信息子集。
+
+通过重写 api:inject.beans.AbstractInitializableBeanIntrospection[] 的 `dispatchOne` 方法，会生成免反射的优化方法分发，例如：
+
+[source,java]
+----
+protected final Object dispatchOne(int propertyIndex, Object bean, Object value
+) {
+    switch(propertyIndex) { // <1>
+    case 0:
+        return ((Person) bean).getName(); // <2>
+    case 1:
+        ((Person) bean).setName((String) value); // <3>
+        return null;
+    default:
+        throw this.unknownDispatchAtIndexException(propertyIndex); // <4>
+    }
+}
+----
+
+<1> 每个读或写方法都被分配一个索引
+<2> 读方法利用索引直接取值，而不依赖反射
+<3> 写方法利用索引设置属性而不使用反射
+<4> 若索引处不存在属性则抛出异常，不过这是实现细节，代码路径不应到达此处。
+
+NOTE: 采用带索引的分发方法，是为了避免为每个方法生成一个类（那会消耗更多内存），或引入 lambda 的开销。
+
+为了支持类型实例化，`io.micronaut.inject.beans.visitor.BeanIntrospectionWriter` 还会生成 `instantiateInternal` 方法的实现，其中包含基于已知合法实参类型来实例化给定类型的免反射代码：
+
+[source,java]
+----
+public Object instantiateInternal(Object[] args) {
+    return new Person(
+        (String)args[0],
+        (Integer)args[1]
+    );
+}
+----
