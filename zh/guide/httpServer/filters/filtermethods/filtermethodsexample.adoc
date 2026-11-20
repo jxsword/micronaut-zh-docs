@@ -1,0 +1,24 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Server Filter with Filter Methods](https://docs.micronaut.io/5.2.x/core/#core-filtermethodsexample)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/filters/filtermethods/filtermethodsexample.adoc  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360  upstream_hash: cb768594786065404021aae1db417ce8b53423a4  translated_at: 2026-11-21 -->
+
+假设您希望使用某个外部系统追踪对「Hello World」示例的每个请求。该系统可以是数据库或分布式追踪服务，可能需要 I/O 操作。
+
+您不应在过滤器中阻塞底层的 Netty 事件循环；相反，过滤器应在任何 I/O 完成后再继续执行。
+
+作为示例，考虑这个执行 I/O 操作的 `TraceService`：
+
+snippet::io.micronaut.docs.server.filters.filtermethods.TraceService[tags="imports,class", indent=0, title="A TraceService Example using Reactive Streams"]
+
+<1> 由于这只是一个示例，逻辑尚未做任何事
+
+下面的代码示例展示如何使用过滤器方法编写过滤器：
+
+snippet::io.micronaut.docs.server.filters.filtermethods.TraceFilter[tags="imports,clazz", indent=0, title="An Example ServerFilter"]
+
+<1> api:http.annotation.ServerFilter[] 注解定义过滤器匹配的 URI 模式
+<2> 之前定义的 `TraceService` 通过构造器注入
+<3> 请求过滤器被标记为在单独的线程上执行，这样 `TraceService` 中的阻塞代码不会造成问题
+<4> 调用 `TraceService` 来追踪请求
+<5> 最后，一个单独的响应过滤器方法向响应添加 `X-Trace-Enabled` 请求头。
+
+前面的示例展示了一些关键概念，例如在继续处理请求之前在工作线程中执行阻塞逻辑，以及修改发出的响应。

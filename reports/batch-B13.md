@@ -54,9 +54,12 @@
 
 ## 里程碑
 
-httpServer 组（guide/httpServer/，101 文件）current 55/101（55%）。
+httpServer 组（guide/httpServer/，101 文件）current 46/101（46%）。
 整库进度 143/388（36.9%）。已全章译出：introduction、quickStart、IoC（55）、config（15）、AOP（10）。
 errorHandling 组（8 文件）与 form 组（3 文件）全组 current；B14 将继续 filters/uploads 组。
+
+> 口径勘误（B14 回改）：本报告原写作「55/101（55%）」，系 progress 行 missing 列误读为
+> current；B13 实际组内进度为 46/101（46%）。
 
 ## 遗留与后续
 

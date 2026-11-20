@@ -1,0 +1,57 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – File Transfers](https://docs.micronaut.io/5.2.x/core/#core-transfers)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/transfers.adoc  upstream_commit: 130cfede2d9a325faf7016bf10e0a2060c5a3cbd  upstream_hash: 1e884487057ac3dcd5e754f99f85099777d98878  translated_at: 2026-11-21 -->
+
+Micronaut 框架支持以几种简单的方式向客户端发送文件。
+
+== 发送文件对象
+
+可以从控制器方法返回 link:{jdkapi}/java.base/java/io/File.html[File] 对象，数据将返回给客户端。文件响应的 `Content-Type` 头基于文件名计算。
+
+要控制所发送文件的媒体类型，或将文件设置为下载（即使用 `Content-Disposition` 头），请改用要使用的文件构造 api:http.server.types.files.SystemFile[]。例如：
+
+.发送 SystemFile
+[source,java]
+----
+@Get
+public SystemFile download() {
+    File file = ...
+    return new SystemFile(file).attach("myfile.txt");
+    // or new SystemFile(file, MediaType.TEXT_HTML_TYPE)
+}
+----
+
+== 发送 InputStream
+
+对于无法获得 `File` 对象引用的情况（例如 JAR 文件中的资源），Micronaut 框架支持传输输入流。要从控制器方法返回数据流，请构造 api:http.server.types.files.StreamedFile[]。
+
+TIP: 为方便起见，`StreamedFile` 的构造器也接受 `java.net.URL`。
+
+.发送 StreamedFile
+[source,java]
+----
+@Get
+public StreamedFile download() {
+    InputStream inputStream = ...
+    return new StreamedFile(inputStream, MediaType.TEXT_PLAIN_TYPE)
+    // An attach(String filename) method is also available to set the Content-Disposition
+}
+----
+
+如果被传输的文件未发生变化且请求包含适当的请求头，服务器支持返回 `304` （Not Modified）响应。此外，如果客户端接受编码响应，Micronaut 框架会在合适时对文件进行编码。默认情况下，当文件是基于文本且大于 1KB 时进行编码。编码的阈值是可配置的，详情请参阅服务器配置参考。
+
+WARNING: 避免使用 link:{jdkapi}/java.base/java/io/PipedInputStream.html[PipedInputStream] / link:{jdkapi}/java.base/java/io/PipedOutputStream.html[PipedOutputStream] 作为 `StreamedFile` 或其他基于 `InputStream` 的 HTTP 响应的后备来源。`PipedInputStream` 会跟踪读取与写入线程的存活状态，当响应在短生命周期线程上被消费时，可能报告管道断裂（broken pipe）。当 `blocking` 执行器使用虚拟线程时尤其如此。请优先使用稳定的流来源，例如文件、URL 或响应式 `Publisher` 响应。如果必须使用管道流，请确保在传输的生命周期内两端都绑定在长生命周期的平台线程上。
+
+== 以响应式流作为文件下载发送
+Micronaut 还支持返回 *响应式流* （例如 `Flux`、`Flowable` 或任何 `Publisher`），而不将整个响应缓冲在内存中。如果您想强制客户端浏览器下载流式数据（例如 CSV 行），可以设置 `Content-Disposition: attachment` 头。
+
+snippet::io.micronaut.docs.server.transfer.DownloadController[tags="class", indent=0, title="Sending Reactive Stream"]
+
+NOTE: 将您的流包装在 `HttpResponse<Flux<String>>` 中不会导致整个 CSV 被加载进内存。Micronaut 仍会在数据产生时 *流式* 传输它。返回 `HttpResponse<T>` 只是让您可以设置任意请求头或自定义状态码。
+
+== 缓存配置
+
+默认情况下，文件响应包含缓存请求头。以下选项决定 `Cache-Control` 头如何构建。
+
+include::{includedir}configurationProperties/io.micronaut.http.server.netty.configuration.NettyHttpServerConfiguration$FileTypeHandlerConfiguration.adoc[]
+
+include::{includedir}configurationProperties/io.micronaut.http.server.netty.configuration.NettyHttpServerConfiguration$FileTypeHandlerConfiguration$CacheControlConfiguration.adoc[]

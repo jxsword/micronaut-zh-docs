@@ -1,0 +1,23 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Error States](https://docs.micronaut.io/5.2.x/core/#core-errorStates)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/filters/filtermethods/errorStates.adoc  upstream_commit: 28c03b94f70c18a2a760248f27136d5320101144  upstream_hash: 1556a163c539d45ed65cc0cc346afbf9780178c6  translated_at: 2026-11-21 -->
+
+原则上，下游过滤器与控制器可能产生异常，响应过滤器应准备好处理它们。要在有异常时调用响应过滤器，它必须将异常类型声明为参数。
+
+.@Filter 响应过滤器声明
+|===
+|声明|何时调用？
+
+|`void responseFilter(HttpResponse<?> response)`
+|仅在非异常响应时调用
+
+|`void responseFilter(Throwable failure)`
+|仅在异常响应时调用
+
+|`void responseFilter(IOException failure)`
+|仅在异常响应且异常为 `IOException` 时调用
+
+|`void responseFilter(HttpResponse<?> response, @Nullable Throwable failure)`
+|始终调用。如果没有错误，`failure` 将为 `null`；如果有错误，`response` 将为 `null`。
+|===
+
+错误是否以异常形式出现取决于过滤器的上下文。对于 Micronaut HTTP 服务器，任何异常都会被映射为带有错误状态码的非异常 api:http.HttpResponse[]。此映射发生在每个过滤器之前，因此服务器过滤器实际上永远不会看到异常。如果您仍想访问响应的原始原因，它存储在属性 api:http.HttpAttributes#EXCEPTION[] 中。

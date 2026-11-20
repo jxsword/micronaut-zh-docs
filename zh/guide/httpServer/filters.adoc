@@ -1,0 +1,18 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – HTTP Filters](https://docs.micronaut.io/5.2.x/core/#core-filters)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/filters.adoc  upstream_commit: 28c03b94f70c18a2a760248f27136d5320101144  upstream_hash: e21f056a12dba55b6caecd280efd987907a4854e  translated_at: 2026-11-21 -->
+
+[[filters]]
+Micronaut HTTP 服务器支持将过滤器应用于请求/响应处理，方式与传统 Java 应用中的 Servlet 过滤器类似（但是响应式的）。
+
+过滤器支持以下用例：
+
+* 装饰传入的 api:http.HttpRequest[]
+* 修改发出的 api:http.HttpResponse[]
+* 实现横切关注点，例如安全、追踪等。
+
+有两种实现过滤器的方式：
+
+- <<httpServerFilter,用 api:http.annotation.Filter[] 标注类并实现 api:http.filter.HttpServerFilter[] 或 api:http.filter.HttpClientFilter[]>>。
+- 使用 <<filtermethods,过滤器方法>>。
+
+NOTE: 我们建议 Micronaut 开发者使用 Micronaut Framework 4.0 引入的 <<filtermethods,过滤器方法>> 来实现过滤器。

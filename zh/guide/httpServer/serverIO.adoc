@@ -1,0 +1,84 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Writing Response Data](https://docs.micronaut.io/5.2.x/core/#core-serverIO)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/serverIO.adoc  upstream_commit: dd0b2892ce8fb77703fad18d5150d45d9874bc49  upstream_hash: f17ab1a25868056aa936211e3825e43d1fdf69e1  translated_at: 2026-11-21 -->
+
+=== 以响应式方式写响应数据
+
+Micronaut 的 HTTP 服务器支持通过返回一个发出可编码到 HTTP 响应的对象的 rs:Publisher[]，分块写入响应数据。
+
+下表汇总了示例返回类型签名以及服务器处理它们时的行为：
+
+|===
+|返回类型 | 说明
+
+|`Publisher<String>`
+|一个以 String 形式发出每个内容块的 rs:Publisher[]
+|`Flux<byte[]>`
+|一个以 `byte[]` 形式无阻塞地发出每个内容块的 reactor:Flux[]
+|`Flux<ByteBuf>`
+|一个以 Netty `ByteBuf` 形式发出每个块的 Reactor `Flux`
+|`Flux<Book>`
+|发出 POJO 时，默认无阻塞地将每个发出的对象编码为 JSON
+
+|`Flowable<byte[]>`
+|一个以 `byte[]` 形式无阻塞地发出每个内容块的 reactor:Flux[]
+|`Flowable<ByteBuf>`
+|一个以 Netty `ByteBuf` 形式发出每个块的 Reactor `Flux`
+|`Flowable<Book>`
+|发出 POJO 时，默认无阻塞地将每个发出的对象编码为 JSON
+
+|===
+
+返回响应式类型时，服务器使用 `chunked` 的 `Transfer-Encoding`，并持续写入数据，直到调用 rs:Publisher[] 的 `onComplete` 方法。
+
+服务器从 rs:Publisher[] 请求单个条目，写入它，再请求下一个，从而控制背压。
+
+NOTE: 订阅 rs:Publisher[] 可能引发的阻塞 I/O 工作，由其实现自行调度。
+
+NOTE: 要使用 https://projectreactor.io[Project Reactor] 的 `Flux` 或 `Mono`，您需要在项目中添加 Micronaut Reactor 依赖以包含必要的转换器。
+
+NOTE: 要使用 https://github.com/ReactiveX/RxJava[RxJava] 的 `Flowable`、`Single` 或 `Maybe`，您需要在项目中添加 Micronaut RxJava 依赖以包含必要的转换器。
+
+=== 执行阻塞 I/O
+
+某些情况下，您可能希望集成一个不支持非阻塞 I/O 的库。
+
+==== Writable
+
+在这种情况下，您可以从任何控制器方法返回 api:core.io.Writable[] 对象。api:core.io.Writable[] 接口有多种签名，允许写入传统的阻塞流，例如 link:{jdkapi}/java.base/java/io/Writer.html[Writer] 或 link:{jdkapi}/java.base/java/io/OutputStream.html[OutputStream]。
+
+返回 api:core.io.Writable[] 时，阻塞 I/O 操作会转移到 I/O 线程池，因此 Netty 事件循环不会被阻塞。
+
+TIP: 有关如何配置 I/O 线程池以满足应用需求，请参阅 <<threadPools,服务器线程池>> 配置一节。
+
+下面的示例演示如何用 Groovy 的 `SimpleTemplateEngine` 编写服务端模板：
+
+snippet::io.micronaut.docs.writable.TemplateController[tags="imports,clazz", indent=0, title="Performing Blocking I/O With Writable"]
+
+<1> 控制器创建一个简单的模板
+<2> 控制器方法返回一个 api:core.io.Writable[]
+<3> 返回的函数接收一个 link:{jdkapi}/java.base/java/io/Writer.html[Writer]，并对模板调用 `writeTo`。
+
+==== InputStream
+
+另一种选择是返回输入流。这对许多与其他暴露流的 API 交互的场景很有用。
+
+snippet::io.micronaut.docs.http.server.stream.StreamController[tags="write", indent=0, title="Performing Blocking I/O With InputStream"]
+
+<2> 返回输入流，其内容将作为响应体
+
+NOTE: 如果控制器方法在事件循环上执行，流的读取会被转移到 IO 线程池。
+
+=== 404 响应
+
+通常，当在持久层中找不到某个条目或遇到类似场景时，您希望响应 404（Not Found）。
+
+参见下面的示例：
+
+snippet::io.micronaut.docs.respondingnotfound.BooksController[tags="clazz", indent=0]
+
+<1> 返回 `null` 会触发 404（Not Found）响应。
+<2> 返回空的 `Mono` 会触发 404（Not Found）响应。
+
+NOTE: 以空的 `Publisher` 或 `Flux` 响应是流式响应，当内容类型为 JSON 时会返回空数组。要禁用流式传输，请用 api:core.async.annotation.SingleResult[] 标注该方法。
+
+要禁用对 null 请求体或空发布者返回 404，请将 `micronaut.server.not-found-on-missing-body` 设置为 `false`。

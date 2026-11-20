@@ -1,0 +1,29 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – HttpServerFilter Example](https://docs.micronaut.io/5.2.x/core/#core-httpServerFilterExample)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/filters/httpServerFilter/httpServerFilterExample.adoc  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360  upstream_hash: abe38de566d2a961733eb8bac9d4f2c4dac4111f  translated_at: 2026-11-21 -->
+
+假设您希望使用某个外部系统追踪对「Hello World」示例的每个请求。该系统可以是数据库或分布式追踪服务，可能需要 I/O 操作。
+
+您不应在过滤器中阻塞底层的 Netty 事件循环；相反，过滤器应在任何 I/O 完成后再继续执行。
+
+作为示例，考虑这个使用 https://projectreactor.io[Project Reactor] 组合 I/O 操作的 `TraceService`：
+
+snippet::io.micronaut.docs.server.filters.TraceService[tags="imports,class", indent=0, title="A TraceService Example using Reactive Streams"]
+
+<1> reactor:Mono[] 类型创建的逻辑会执行可能阻塞的操作，以写入来自请求的追踪数据
+<2> 由于这只是一个示例，逻辑尚未做任何事
+<3> `Schedulers.boundedElastic` 执行该逻辑
+
+下面的代码示例展示如何实现 api:http.filter.HttpServerFilter[] 接口。
+
+snippet::io.micronaut.docs.server.filters.TraceFilter[tags="imports,clazz", indent=0, title="An Example HttpServerFilter"]
+
+<1> api:http.annotation.Filter[] 注解定义过滤器匹配的 URI 模式
+<2> 该类实现 api:http.filter.HttpServerFilter[] 接口
+<3> 之前定义的 `TraceService` 通过构造器注入
+<4> 调用 `TraceService` 来追踪请求
+<5> 如果调用成功，过滤器使用 https://projectreactor.io[Project Reactor] 的 `switchMap` 方法恢复请求处理，该方法调用 api:http.filter.ServerFilterChain[] 的 `proceed` 方法
+<6> 最后，https://projectreactor.io[Project Reactor] 的 `doOnNext` 方法向响应添加 `X-Trace-Enabled` 请求头。
+
+前面的示例展示了一些关键概念，例如在继续处理请求之前以非阻塞方式执行逻辑，以及修改发出的响应。
+
+TIP: 这些示例使用 https://projectreactor.io[Project Reactor]，不过您可以使用任何支持 Reactive Streams 规范的响应式框架

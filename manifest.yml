@@ -1095,74 +1095,74 @@ files:
 - file: guide/httpServer/filters.adoc
   blob_sha: e21f056a12dba55b6caecd280efd987907a4854e
   size: 786
-  status: missing
+  status: current
   zh: zh/guide/httpServer/filters.adoc
   paragraphs: 6
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 28c03b94f70c18a2a760248f27136d5320101144
 - file: guide/httpServer/filters/filterPatterns.adoc
   blob_sha: d3aaa285bfa1457ec0c3a2b6c8d163d341b73480
   size: 1582
-  status: missing
+  status: current
   zh: zh/guide/httpServer/filters/filterPatterns.adoc
   paragraphs: 7
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 98deb9ebdf280e267a9bb6fb7f64a43281184e15
 - file: guide/httpServer/filters/filtermethods.adoc
   blob_sha: eed401187e4c320a11bf25c57c230a04cf3e99cd
   size: 1852
-  status: missing
+  status: current
   zh: zh/guide/httpServer/filters/filtermethods.adoc
   paragraphs: 9
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 130cfede2d9a325faf7016bf10e0a2060c5a3cbd
 - file: guide/httpServer/filters/filtermethods/continuations.adoc
   blob_sha: 02f79919da537d383160c679925d02fa3a6bcc56
   size: 1309
-  status: missing
+  status: current
   zh: zh/guide/httpServer/filters/filtermethods/continuations.adoc
   paragraphs: 4
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 28c03b94f70c18a2a760248f27136d5320101144
 - file: guide/httpServer/filters/filtermethods/errorStates.adoc
   blob_sha: 1556a163c539d45ed65cc0cc346afbf9780178c6
   size: 1226
-  status: missing
+  status: current
   zh: zh/guide/httpServer/filters/filtermethods/errorStates.adoc
   paragraphs: 4
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 28c03b94f70c18a2a760248f27136d5320101144
 - file: guide/httpServer/filters/filtermethods/filtermethodproceed.adoc
   blob_sha: 0dfa2eaa95309b0fe38368e1ec754ee03d353719
   size: 467
-  status: missing
+  status: current
   zh: zh/guide/httpServer/filters/filtermethods/filtermethodproceed.adoc
   paragraphs: 3
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: c233fcbaa9017c670deb5dc43454f671e03136df
 - file: guide/httpServer/filters/filtermethods/filtermethodsexample.adoc
   blob_sha: cb768594786065404021aae1db417ce8b53423a4
   size: 1475
-  status: missing
+  status: current
   zh: zh/guide/httpServer/filters/filtermethods/filtermethodsexample.adoc
   paragraphs: 9
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/httpServer/filters/filtermethods/order.adoc
   blob_sha: 0721bc3cf34683ad8a27b9402e31581d6f18f6f9
   size: 1460
-  status: missing
+  status: current
   zh: zh/guide/httpServer/filters/filtermethods/order.adoc
   paragraphs: 6
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: cfa82d22642c6ea6f26b6ce2a869bee256d9f50a
 - file: guide/httpServer/filters/httpServerFilter.adoc
   blob_sha: 72c375c5ed68f2d6b721f2d909c8fb888113f4d9
   size: 1129
-  status: missing
+  status: current
   zh: zh/guide/httpServer/filters/httpServerFilter.adoc
   paragraphs: 7
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 28c03b94f70c18a2a760248f27136d5320101144
 - file: guide/httpServer/filters/httpServerFilter/httpServerFilterErrorStates.adoc
   blob_sha: b9b2aedc00f2b82c2d322f8eff3b3bded4804919
@@ -1175,10 +1175,10 @@ files:
 - file: guide/httpServer/filters/httpServerFilter/httpServerFilterExample.adoc
   blob_sha: abe38de566d2a961733eb8bac9d4f2c4dac4111f
   size: 2046
-  status: missing
+  status: current
   zh: zh/guide/httpServer/filters/httpServerFilter/httpServerFilterExample.adoc
   paragraphs: 10
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/httpServer/filters/responseHeaderPopulator.adoc
   blob_sha: 86dab2035f3e27b34c93095c65f987f42489ce87
@@ -1663,10 +1663,10 @@ files:
 - file: guide/httpServer/serverIO.adoc
   blob_sha: f17ab1a25868056aa936211e3825e43d1fdf69e1
   size: 4313
-  status: missing
+  status: current
   zh: zh/guide/httpServer/serverIO.adoc
   paragraphs: 30
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: dd0b2892ce8fb77703fad18d5150d45d9874bc49
 - file: guide/httpServer/sessions.adoc
   blob_sha: 12cc50c1d3a19c81f0453f76cb9295fd4b3272f4
@@ -1703,18 +1703,18 @@ files:
 - file: guide/httpServer/transfers.adoc
   blob_sha: 1e884487057ac3dcd5e754f99f85099777d98878
   size: 3865
-  status: missing
+  status: current
   zh: zh/guide/httpServer/transfers.adoc
   paragraphs: 23
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 130cfede2d9a325faf7016bf10e0a2060c5a3cbd
 - file: guide/httpServer/uploads.adoc
   blob_sha: 7ec9d4a16cf4016ff6b027cf5ded51ca45e5e459
   size: 6790
-  status: missing
+  status: current
   zh: zh/guide/httpServer/uploads.adoc
   paragraphs: 42
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: a78be2fa265a697cafb29700333e836d0aa4ca6e
 - file: guide/httpServer/views.adoc
   blob_sha: 680dee54869b3efca92b9351463738a52a2cb593

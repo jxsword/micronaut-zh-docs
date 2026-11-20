@@ -1,0 +1,107 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – File Uploads](https://docs.micronaut.io/5.2.x/core/#core-uploads)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/uploads.adoc  upstream_commit: a78be2fa265a697cafb29700333e836d0aa4ca6e  upstream_hash: 7ec9d4a16cf4016ff6b027cf5ded51ca45e5e459  translated_at: 2026-11-21 -->
+
+[[uploads]]
+Micronaut 对文件上传的处理有特殊对待。通过流式上传（streaming uploads）或完成上传（completed uploads），支持以非阻塞方式对上传进行流式处理。
+
+要从 multipart 请求接收数据，请将方法注解的 `consumes` 参数设置为 api:http.MediaType#MULTIPART_FORM_DATA[]。例如：
+
+[source,java]
+----
+@Post(consumes = MediaType.MULTIPART_FORM_DATA)
+HttpResponse upload( ... )
+----
+
+== 路由参数
+
+方法参数类型决定文件如何被接收。数据可以分块接收，也可以在上传完成时接收。
+
+TIP: 如果路由参数名不能或不应该匹配请求中的部件（part）名称，请为该参数添加 api:http.annotation.Part[@Part] 注解，并在其中指定请求中的预期名称。
+
+=== 分块数据类型
+
+api:io.micronaut.http.multipart.PartData[] 表示在 multipart 请求中接收到的一个数据块。api:io.micronaut.http.multipart.PartData[] 接口的方法可以将数据转换为 `byte[]`、link:{jdkapi}/java.base/java/io/InputStream.html[InputStream] 或 link:{jdkapi}/java.base/java/nio/ByteBuffer.html[ByteBuffer]。
+
+NOTE: 数据只能从 api:io.micronaut.http.multipart.PartData[] 中获取一次。底层缓冲区会被释放，进一步尝试将失败。
+
+类型为 rs:Publisher[Publisher<PartData>] 的路由参数被视为打算接收单个文件，接收文件的每个数据块都会向下游发送。如果泛型类型不是 api:io.micronaut.http.multipart.PartData[]，将尝试使用 Micronaut 的转换服务进行转换。默认支持转换为 `String` 与 `byte[]`。
+
+如果您需要了解上传文件的元数据，api:http.multipart.StreamingFileUpload[] 类是一个 rs:Publisher[Publisher<PartData>]，还带有文件信息，例如内容类型与文件名。
+
+snippet::io.micronaut.docs.server.upload.UploadController[tags="class,file,endclass", title="Streaming file upload"]
+
+<1> 该方法消费 api:http.MediaType#MULTIPART_FORM_DATA[]
+<2> 方法参数与表单属性名匹配。在本例中，`file` 将匹配例如 `<input type="file" name="file">`
+<3> api:http.multipart.StreamingFileUpload.transferTo(File)[] 方法将文件传输到服务器。该方法返回一个 rs:Publisher[]
+<4> 返回的 reactor:Mono[] 订阅 rs:Publisher[]，并在上传完成后输出响应，不阻塞。
+
+也可以通过 `transferTo` 方法传入输出流。
+
+NOTE: 文件或流的读取会被转移到 IO 线程池，以防止阻塞事件循环的可能性。
+
+snippet::io.micronaut.docs.server.upload.UploadController[tags="class,outputStream,endclass", title="Streaming file upload"]
+
+<1> 该方法消费 api:http.MediaType#MULTIPART_FORM_DATA[]
+<2> 方法参数与表单属性名匹配。在本例中，`file` 将匹配例如 `<input type="file" name="file">`
+<3> 创建一个用于输出数据的流。在真实场景中，它来自其他来源。
+<4> api:http.multipart.StreamingFileUpload.transferTo(OutputStream)[] 方法将文件传输到服务器。该方法返回一个 rs:Publisher[]
+<5> 返回的 reactor:Mono[] 订阅 rs:Publisher[]，并在上传完成后输出响应，不阻塞。
+
+=== 整体数据类型
+
+非发布者类型的路由参数会导致路由执行延迟到上传完成。接收到的数据会尝试转换为请求的类型。默认支持转换为 `String` 或 `byte[]`。此外，如果注册了支持该文件媒体类型的媒体类型编解码器，文件可以转换为 POJO。默认包含一个允许将 JSON 文件转换为 POJO 的媒体类型编解码器。
+
+snippet::io.micronaut.docs.server.upload.BytesUploadController[tags="class", indent=0, title="Receiving a byte array"]
+
+如果您需要了解上传文件的元数据，api:http.multipart.CompletedFileUpload[] 类有检索文件数据的方法，还有文件信息，例如内容类型与文件名。
+
+snippet::io.micronaut.docs.server.upload.CompletedUploadController[tags="class", indent=0, title="File upload with metadata"]
+
+<1> 该方法消费 api:http.MediaType#MULTIPART_FORM_DATA[]
+<2> 方法参数与表单属性名匹配。在本例中，`file` 将匹配例如 `<input type="file" name="file">`
+<3> `CompletedFileUpload` 实例提供对上传元数据以及文件内容的访问。
+
+IMPORTANT: 如果不会读取文件，则 *必须* 调用文件对象上的 `discard` 方法以防止内存泄漏。
+
+== 多个上传
+
+=== 不同名称
+
+如果 multipart 请求包含多个具有不同部件名称的上传，请为路由创建一个接收每个部件的参数。例如：
+
+[source,java]
+----
+HttpResponse upload(String title, String name)
+----
+
+如上所示的路由方法签名预期两个不同的部件，一个名为 "title"，另一个名为 "name"。
+
+=== 同名
+
+要接收多个具有相同部件名称的部件，参数必须是 rs:Publisher[]。以下列方式之一使用时，发布者会为找到的每个具有指定名称的部件发出一个条目。发布者必须接受以下类型之一：
+
+* api:http.multipart.StreamingFileUpload[]
+* api:http.multipart.CompletedFileUpload[]
+* 属性用 api:http.multipart.CompletedPart[]
+* 任何 POJO（假设存在支持该内容类型的媒体编解码器）
+* 接受上述分块数据类型之一的另一个 rs:Publisher[]
+
+例如：
+[source,java]
+----
+HttpResponse upload(Publisher<StreamingFileUpload> files)
+HttpResponse upload(Publisher<CompletedFileUpload> files)
+HttpResponse upload(Publisher<MyObject> files)
+HttpResponse upload(Publisher<Publisher<PartData>> files)
+HttpResponse upload(Publisher<CompletedPart> attributes)
+----
+
+== 整体请求体绑定
+
+当请求部件名称事先未知，或要读取整个请求体时，可以使用一个特殊类型来表示需要整个请求体。
+
+如果路由有一个类型为 api:io.micronaut.http.server.multipart.MultipartBody[]（不要与客户端的同名类混淆）并以 ann:http.annotation.Body[] 标注的参数，请求的每个部件都会通过该参数发出。api:io.micronaut.http.server.multipart.MultipartBody[] 是 api:io.micronaut.http.multipart.CompletedPart[] 实例的发布者。
+
+例如：
+
+snippet::io.micronaut.docs.server.upload.WholeBodyUploadController[tags="class", indent=0, title="Binding to the entire multipart body"]

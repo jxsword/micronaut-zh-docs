@@ -1,0 +1,21 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Filter Methods](https://docs.micronaut.io/5.2.x/core/#core-filtermethods)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/filters/filtermethods.adoc  upstream_commit: 130cfede2d9a325faf7016bf10e0a2060c5a3cbd  upstream_hash: eed401187e4c320a11bf25c57c230a04cf3e99cd  translated_at: 2026-11-21 -->
+
+[[filtermethods]]
+过滤器方法必须声明在以 api:http.annotation.ServerFilter[] 标注的 bean 中——如果它要拦截的是 HTTP 客户端发出的请求，则声明在以 api:http.annotation.ClientFilter[] 标注的 bean 中。每个过滤器方法还必须以 api:http.annotation.RequestFilter[]（在请求处理之前运行）或 api:http.annotation.ResponseFilter[]（在请求完成后运行以处理响应）标注。
+
+NOTE: 如果以 api:http.server.annotation.PreMatching[] 标注，请求过滤器可以在路由匹配之前执行。
+
+过滤器方法可以接受各种参数，例如 api:http.HttpRequest[] 与 api:http.HttpResponse[]（仅响应过滤器）。返回类型可以是 `void` 或 `null` 以照常继续执行，或返回更新后的 api:http.HttpRequest[]（仅请求过滤器）或 api:http.HttpResponse[]。不同的受支持参数与返回类型在 api:http.annotation.RequestFilter[] 与 api:http.annotation.ResponseFilter[] 的文档中说明。
+
+请求过滤器可以使用 api:http.annotation.Body[] 注解绑定完整请求体。这很有用，例如校验经过签名的请求体。
+
+IMPORTANT: 访问完整请求体应谨慎。它会强制完整缓冲请求体，即使控制器支持流式传输（例如 `@Body InputStream` 参数），可能带来负面的性能影响。
+
+IMPORTANT: 请求体绑定由基于 Netty 的 HTTP 服务器支持，但并非所有其他 HTTP 服务器后端都支持。
+
+要编写异步过滤器，您可以返回响应式发布者。
+
+为了将这些概念付诸实践，让我们看一个示例。
+
+IMPORTANT: 过滤器方法默认在事件循环中执行。如果您需要执行阻塞操作，可以用 api:scheduling.annotation.ExecuteOn[] 标注过滤器。

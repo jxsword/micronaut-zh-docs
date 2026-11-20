@@ -1,0 +1,17 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Filter Order](https://docs.micronaut.io/5.2.x/core/#core-order)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/filters/filtermethods/order.adoc  upstream_commit: cfa82d22642c6ea6f26b6ce2a869bee256d9f50a  upstream_hash: 0721bc3cf34683ad8a27b9402e31581d6f18f6f9  translated_at: 2026-11-21 -->
+
+[[order]]
+可以通过以 api:order.Order[] 或 link:{jakartaapi}/jakarta/annotation/Priority.html[jakarta.annotation.Priority] 标注过滤器方法或过滤器类，或在过滤器类中实现 api:order.Ordered[] 来为过滤器排序。
+
+. 过滤器方法上的 api:order.Order[] 或 link:{jakartaapi}/jakarta/annotation/Priority.html[@Priority] 注解
+. 过滤器类上的 api:order.Order[] 或 link:{jakartaapi}/jakarta/annotation/Priority.html[@Priority] 注解
+. 在过滤器类中实现 api:order.Ordered[]
+
+请求过滤器按从最高优先级（最小的整数值，由 `Ordered.HIGHEST_PRECEDENCE` 定义）到最低优先级（最大的整数值，由 `Ordered.LOWEST_PRECEDENCE` 定义）的顺序执行。响应过滤器以相反顺序执行。
+
+Micronaut 对 link:{jakartaapi}/jakarta/annotation/Priority.html[jakarta.annotation.Priority] 应用相同的数值优先级规则，因为 link:{jakartaapi}/jakarta/annotation/Priority.html[@Priority] 在注解处理期间被映射为 ann:core.annotation.Order[]。
+
+image::filter-order.svg[]
+
+请求过滤器 A 先执行，因为它具有更高的优先级（-100），随后是优先级较低（100）的请求过滤器 B。然后执行控制器。响应过滤器 C 先执行，因为它具有较低的优先级（100），最后执行优先级较高（-100）的响应过滤器 D。

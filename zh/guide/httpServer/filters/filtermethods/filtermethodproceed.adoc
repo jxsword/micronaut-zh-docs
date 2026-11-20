@@ -1,0 +1,9 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Proceeding with Filter Methods](https://docs.micronaut.io/5.2.x/core/#core-filtermethodproceed)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/filters/filtermethods/filtermethodproceed.adoc  upstream_commit: c233fcbaa9017c670deb5dc43454f671e03136df  upstream_hash: 0dfa2eaa95309b0fe38368e1ec754ee03d353719  translated_at: 2026-11-21 -->
+
+如果您需要编写一个过滤器（例如与安全相关），需要在某些场景下继续处理请求，或停止请求执行并直接在过滤器中返回 HTTP 响应；您可以使用例如 `CompletableFuture` 作为过滤器方法的响应类型。
+
+[source, java]
+----
+include::http-server-tck/src/main/java/io/micronaut/http/server/tck/tests/filter/RequestFilterCompletableFutureFutureProceedTest.java[tags=clazz;methods,indent=0]
+----

@@ -1,0 +1,18 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – HttpServerFilter](https://docs.micronaut.io/5.2.x/core/#core-httpServerFilter)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/filters/httpServerFilter.adoc  upstream_commit: 28c03b94f70c18a2a760248f27136d5320101144  upstream_hash: 72c375c5ed68f2d6b721f2d909c8fb888113f4d9  translated_at: 2026-11-21 -->
+
+[[httpServerFilter]]
+WARNING: 我们建议 Micronaut 开发者使用 Micronaut Framework 4.0 引入的 <<filtermethods,过滤器方法>>，而不是 `HttpServerFilter` 来实现过滤器。
+
+
+对于服务器应用，可以实现 api:http.filter.HttpServerFilter[] 接口的 `doFilter` 方法。
+
+`doFilter` 方法接受 api:http.HttpRequest[] 与一个 api:http.filter.ServerFilterChain[] 实例。
+
+`ServerFilterChain` 接口包含一个已解析的过滤器链，链中的最后一项是匹配的路由。api:http.filter.ServerFilterChain.proceed(io.micronaut.http.HttpRequest)[] 方法恢复对请求的处理。
+
+`proceed(..)` 方法返回一个 Reactive Streams rs:Publisher[]，它发出要返回给客户端的响应。过滤器的实现者可以订阅 rs:Publisher[] 并修改发出的 api:http.MutableHttpResponse[]，在将响应返回给客户端之前修改响应。
+
+为了将这些概念付诸实践，让我们看一个示例。
+
+IMPORTANT: 过滤器在事件循环中执行，因此阻塞操作必须转移到另一个线程池。

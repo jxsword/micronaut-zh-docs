@@ -1,0 +1,13 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Continuations](https://docs.micronaut.io/5.2.x/core/#core-continuations)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/httpServer/filters/filtermethods/continuations.adoc  upstream_commit: 28c03b94f70c18a2a760248f27136d5320101144  upstream_hash: 02f79919da537d383160c679925d02fa3a6bcc56  translated_at: 2026-11-21 -->
+
+请求过滤器可以定义一个特殊的 api:http.filter.FilterContinuation[] 参数，以获得对下游执行更多的控制，并在其完成后运行后续操作。例如，上面的 `TraceFilter` 可以用单个请求过滤器表达：
+
+snippet::io.micronaut.docs.server.filters.filtermethods.continuations.TraceFilter[tags="doFilter", indent=0, title="Single request filter"]
+
+<1> 请求过滤器声明一个 api:http.filter.FilterContinuation[] 参数。continuation 将返回一个 api:http.MutableHttpResponse[]
+<2> 请求处理完成后，过滤器调用阻塞的 `proceed` 来运行下游过滤器与控制器
+<3> 当下游处理完成后，过滤器向 continuation 返回的响应添加 `X-Trace-Enabled` 请求头
+<4> 整个过滤器在工作线程上执行，以避免在 `proceed` 调用中阻塞事件循环
+
+IMPORTANT: 对 `FilterContinuation.proceed` 的调用默认是阻塞的，因此绝不应在事件循环上进行。此类过滤器应如上所述在工作线程上运行。或者，也可以将 continuation 声明为返回响应式类型（`Publisher<HttpResponse<?>>`），以类似于旧的 api:http.filter.FilterChain[] API 的方式异步进行。
