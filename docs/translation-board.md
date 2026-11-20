@@ -31,7 +31,7 @@
 | B22 | 5 | 3062 | 3057 | current |
 | B23 | 6 | 3378 | 3353 | current |
 | B24 | 5 | 3257 | 3199 | current |
-| B25 | 7 | 3096 | 3070 | pending |
+| B25 | 7 | 3096 | 3070 | current |
 | B26 | 14 | 3416 | 3439 | pending |
 | B27 | 17 | 3478 | 3538 | pending |
 | B28 | 21 | 2955 | 3023 | pending |
@@ -70,6 +70,7 @@
 - B22（2026-11-21 完成）：validate 全量 291 文件 PASSED + 5/5 --mark-current 核销 + squash commit；进度 291/388（75.4%，剔 skipped 口径）。锚点注入 0 处（registry 实测该 5 文件无登记引用）；validate 首轮 3/5（pythonRuntime ⑦ ×2、pythonThreading ⑦ ×1——行内码/占位符后紧跟全角开括号）修复后全绿；reviewer 5/5 PASS 首轮零缺陷。**glossary 滚动回流新错误模式**：新术语 visitor 收录触发既有文件 ③ ×3（evaluatedExpressions/annotationMetadata 宏路径误触补括注、classImport B06 旧译「访问器」统一为「访问者」）。词数实测 3045/3048（M1 值 3057/3062，口径基数差异以实测为准）；段落 104。glossary +6（访问者/装饰器/GIL/上下文池/虚拟线程/仪表，现 31 术语）。⑤ 豁免维持 10 条（0 消解 0 新增）。冻结窗口遵守。python 子章 6/24（B23–B25 继续 18 文件）；languageSupport 章 13/50（26%）。
 - B23（2026-11-21 完成）：validate 全量 297 文件 PASSED + 6/6 --mark-current 核销 + squash commit；进度 297/388（77.1%，剔 skipped 口径）。锚点注入 2 处，**均为页内标题锚且批内闭环**（[[standardTypes]]/[[runtimeTypes]] 注入各自标题行之前——首轮曾误按 basename 锚置文件首行，核对 registry title 后纠正，教训：注入前必须核对条目 title 是否为空）；validate 首轮 2/6（⑦ 邻接 ×4）修复后全绿；reviewer 6/6 PASS 首轮零缺陷；restore 6/6 首轮全过。词数实测 3353/3378（与 M1 inventory 一致）；段落 103。⑤ 豁免 10→11 条（+1 新增 interfaces→generatedClasses，B24 消解）。冻结窗口遵守。python 子章 12/24；languageSupport 章 19/50（38%）。
 - B24（2026-11-21 完成）：validate 全量 302 文件 PASSED + 5/5 --mark-current 核销 + squash commit；进度 302/388（78.1%，剔 skipped 口径）。锚点注入 1 处（[[generatedClasses]] 页内标题锚，title='Nested Classes'，注入 `== 嵌套类` 之前；B23 title 字段教训落实）；validate 首轮 3/5（⑦ 邻接 ×2）修复后全绿；reviewer 5/5 PASS 首轮零缺陷；restore 5/5 首轮全过。词数实测 3170/3224（M1 值 3199/3257，以实测为准）；段落 93。⑤ 豁免 11→11（−1 消解 interfaces→generatedClasses +1 新增 javaInterfaces→extendingJavaClasses，B25 消解）。冻结窗口遵守。python 子章 17/24；languageSupport 章 24/50（48%）。
+- B25（2026-11-21 完成）：validate 全量 309 文件 PASSED + 7/7 --mark-current 核销 + squash commit；进度 309/388（80.1%，剔 skipped 口径）。锚点注入 2 处（[[extendingJavaClasses]] 标题锚消解 B24 豁免 + [[moduleScripts]] basename 锚**消解既有豁免** routing→moduleScripts）；validate 首轮 4/7（⑦ 邻接 ×3 + **④ 标题未译 ×2**——Chrome Inspector/Debug Adapter Protocol 补译名括注）修复后全绿；reviewer 7/7 PASS 首轮零缺陷；restore 7/7 首轮全过；asyncAwait 11 处 snippet:: 逐字节保留。词数实测 2996/3007（M1 值 3070/3096）；段落 111。⑤ 豁免 11→11（−2 消解 +2 新增 asyncio{Networking,Streaming}，B26 消解）。冻结窗口遵守。**python 子章 24/24 全章译出（第十四个全章）**；languageSupport 章 31/50（62%）。
 
 ## 硬性纪律（每批次必守）
 

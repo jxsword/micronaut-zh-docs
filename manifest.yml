@@ -2439,18 +2439,18 @@ files:
 - file: guide/languageSupport/python/aopProxies.adoc
   blob_sha: 5ce15ee8220f18e71405bb1768f06dcded52c6f9
   size: 5879
-  status: missing
+  status: current
   zh: zh/guide/languageSupport/python/aopProxies.adoc
   paragraphs: 20
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 9675d1f4be8e9f00dd1a07be0ebc8cd9f68e6df1
 - file: guide/languageSupport/python/asyncAwait.adoc
   blob_sha: 21e464209e5a46c76d2a708985ca01858259b327
   size: 5309
-  status: missing
+  status: current
   zh: zh/guide/languageSupport/python/asyncAwait.adoc
   paragraphs: 28
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: d7013dd914463fbc9a63ffb82c45fe54ca2ce854
 - file: guide/languageSupport/python/asyncAwait/asyncioNetworking.adoc
   blob_sha: ce649255d4e0b4838de078798374ef43543711dc
@@ -2463,10 +2463,10 @@ files:
 - file: guide/languageSupport/python/asyncAwait/asyncioRuntime.adoc
   blob_sha: cb245f860384ac45338d01f3161639436720fccb
   size: 2166
-  status: missing
+  status: current
   zh: zh/guide/languageSupport/python/asyncAwait/asyncioRuntime.adoc
   paragraphs: 7
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 57cb63d7baf8667cf7a7fba74bb0efc497184a98
 - file: guide/languageSupport/python/asyncAwait/asyncioStreaming.adoc
   blob_sha: 54b15b21881fd37bfad59d6f0320e9e087c17f0d
@@ -2495,10 +2495,10 @@ files:
 - file: guide/languageSupport/python/extendingJavaClasses.adoc
   blob_sha: d8ec9e56fb490dd2a48562d7bb187dd8682804c1
   size: 7522
-  status: missing
+  status: current
   zh: zh/guide/languageSupport/python/extendingJavaClasses.adoc
   paragraphs: 21
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 46a762b7346456a5bcaea9a20a842b2c095ac3ff
 - file: guide/languageSupport/python/functionalInterfaces.adoc
   blob_sha: 57de17a6220475adac34ee6448f8271e57f8d65f
@@ -2519,10 +2519,10 @@ files:
 - file: guide/languageSupport/python/graalTools.adoc
   blob_sha: 10ab4ed57819e896200618be8f53b08cdf771288
   size: 2170
-  status: missing
+  status: current
   zh: zh/guide/languageSupport/python/graalTools.adoc
   paragraphs: 26
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 6b95dcd6f7ba1101b4d78c61c6862e9ecab47a74
 - file: guide/languageSupport/python/interfaces.adoc
   blob_sha: b139ce5108a78de3b80747695747efa4c5a683a7
@@ -2567,18 +2567,18 @@ files:
 - file: guide/languageSupport/python/moduleScripts.adoc
   blob_sha: 0a72aa1ff8579ade67b0c2fd151138685f0e9842
   size: 832
-  status: missing
+  status: current
   zh: zh/guide/languageSupport/python/moduleScripts.adoc
   paragraphs: 5
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: ee76087d1a392696f3e92a6d3ed092b2ecfc44b1
 - file: guide/languageSupport/python/moduleScripts/testing.adoc
   blob_sha: 3e87c3e0af16bd1a4582769610797108f6d71fca
   size: 778
-  status: missing
+  status: current
   zh: zh/guide/languageSupport/python/moduleScripts/testing.adoc
   paragraphs: 4
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: ee76087d1a392696f3e92a6d3ed092b2ecfc44b1
 - file: guide/languageSupport/python/nestedTypes.adoc
   blob_sha: 039a1cf3a83c1f80bab1b802ca478826c7b5aecd

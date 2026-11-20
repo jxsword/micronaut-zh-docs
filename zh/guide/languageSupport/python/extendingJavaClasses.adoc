@@ -1,0 +1,77 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Extending Java Classes](https://docs.micronaut.io/5.2.x/core/#core-extendingJavaClasses)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/languageSupport/python/extendingJavaClasses.adoc  upstream_commit: 46a762b7346456a5bcaea9a20a842b2c095ac3ff  upstream_hash: d8ec9e56fb490dd2a48562d7bb187dd8682804c1  translated_at: 2026-11-21 -->
+
+Python 类可以像继承 Python 类一样继承 Java 类（无论抽象还是具体类）。编译器会生成一个继承该 Java 类并委托给 Python 对象的 Java 类，因此 Python 类可以注入到任何期望该 Java 基类的位置使用，Java 代码调用基类方法时会到达 Python 重写。
+
+给定如下 Java 基类：
+
+[source,java]
+----
+package docs.javabases;
+
+public abstract class AbstractGreeter {
+
+    private final String greeting;
+    private int count;
+
+    protected AbstractGreeter(String greeting) {
+        this.greeting = greeting;
+    }
+
+    protected abstract String name();
+
+    public String greet() {
+        count++;
+        return greeting + ", " + name() + " (" + count + ")";
+    }
+
+    public int count() {
+        return count;
+    }
+}
+----
+
+Python 类按如下方式继承它：
+
+snippet::micronaut.docs.javabases.PythonGreeter[tags="imports,class", indent=0, title="Extending a Java class"]
+
+<1> `super().__init__(...)` 的实参会传给 Java 基类的构造器
+<2> 基类的抽象方法在 Python 中实现
+<3> 基类的方法在 Python 中重写；`super().greet()` 调用 Java 实现
+<4> Python 对象在自身上调用继承的 Java 方法
+
+[[extendingJavaClasses]]
+== 受检异常（Checked exceptions）
+
+Java 基类中声明受检异常的方法与其他方法一样可以被重写；生成的 Java 重写声明相同的异常。Python 重写抛出的 Java 异常（从 Java 导入的 `java.io.IOException`，或继承它的 Python 异常类）会以该异常的形式到达 Java 调用方，因此基类或调用该方法的框架的 `catch` 块会像处理 Java 实现一样处理它。通过 `super()` 调用时基类方法自身抛出的异常，可在 Python 中用 `except` 捕获：
+
+snippet::micronaut.docs.javabases.QueueInitializer[tags="imports,class", indent=0, title="Overriding a method declaring a checked exception"]
+
+<1> `ChannelInitializer.initialize(String, String)` 声明了 `throws IOException`
+<2> 在 Python 中抛出的 `IOException` 由生成的重写抛出
+<3> Java 实现也可能抛出 `IOException`；Python 代码用 `except IOException` 捕获它
+
+不在声明异常之列的 Python 异常（例如 `ValueError`）会以 `PolyglotException` 的形式传播到 Java，与其他任何桥接方法一样。
+
+== 工作原理
+
+生成的 Java 类是基类唯一的 Java 实例。编译器根据 Python 构造器传给 `super().__init__(...)` 的实参解析基类的 Java 构造器，因此这些实参必须是位置实参，且最好是构造器参数或字面量：编译器匹配它们的数量与静态类型（Python `int` 可匹配 `long`/`Long` 与 `double`/`Double` 参数，正如 Java `int` 会加宽到这些类型），没有构造器匹配或有多个构造器匹配时报错。在多个分支上调用 `super().__init__(...)` 的构造器必须在每个分支传入相同实参。没有 `super().__init__(...)` 调用的类使用基类的无参构造器。
+
+当该构造器无参时，生成的构造器会先创建 Python 对象（不运行 `__init__`）、构造基类，然后再运行 `__init__`——因此 `__init__` 可以在 Java 实例上调用继承方法（`self.add(...)`）。若 Java 构造器调用了 Python 类重写的方法（例如通过钩子自初始化的请求处理器基类），它会在 `__init__` 运行之前到达 Python 重写，因此重写不得依赖 `__init__` 设置的属性。当构造器带参数、或类被内省、是引入类或测试类时，生成的构造器会先运行 `__init__`，再用记录的实参调用基类构造器。此时不能从 `__init__` 调用基类方法：Java 实例在 `__init__` 返回之后才存在。调用重写方法的 Java 构造器看到的是完整的 Python 对象。
+
+运行时，Java 基类不在 Python 类层次结构中，由一个生成的 Python 基类代替它。它定义了 Java 基类的每个公共与受保护实例方法，因此 `self.baseMethod(...)` 与 `super().baseMethod(...)` 都会在 Java 实例上调用 Java 实现，并让 Python 对基类方法的重写成为 Java 调用方触达的实现。基类的状态保存在该 Java 实例中，无论哪一侧访问。以 Python 关键字命名的 Java 方法通过其尾部下划线别名调用（`self.from_()`），与其他位置一致。
+
+继承的可变参数方法（`add(Component... components)`）接受任意数量的尾随实参（`self.add(header, body, footer)`，或为空），它们会被转换为组件类型的数组。单个组件类型的 Java 数组作为该数组原样传递，与 Java 一致。方法有多个重载时，匹配实参的固定元数（arity）重载先于可变参数重载被选中。
+
+Java 类在 Python 类从 Java 侧实例化时创建（例如作为注入的 bean），以及在 Python 代码创建的对象上首次调用继承方法时创建。传给 Java（期望基类的位置）的 Python 对象，每次都由同一个 Java 实例表示。
+
+== 局限性
+
+* final Java 类、非静态内部类以及没有公共或受保护构造器的类无法被继承；编译器会为该类报错并继续处理其他类。
+* Java 基类的公共字段无法从 Python 访问；请使用访问器方法。
+* `isinstance(obj, JavaBase)` 在 Python 中是 `False`：Java 基类不在 Python 类层次结构中。请使用 `isinstance(obj, PythonClass)`，或从 Java 检查 Java 视图（把 `obj` 转换为基类型）。
+* 继承 Java 类的 Python 测试类（带 `@Test` 方法的类）会在应用上下文存在之前由测试框架实例化，因此基类必须有无参构造器；Python 对象在第一个测试方法运行时创建并绑定到 Java 实例。
+* 嵌套在另一类中的类以同样方式继承 Java 类（其生成的 Java 类为 `Outer$Inner`）。在函数内定义的类没有生成的 Java 类；它通过 GraalPy 宿主适配器继承 Java 类（遵循其规则），且不可注入。适配器只支持简单形态：没有 `__init__`、构造器实参在实例化时传入（`Local(5)`）、只重写非抽象方法的类。它无法从 `__init__` 调用基类构造器（`super().__init__("x")` 会以元数错误失败），基类构造器调用类所实现的抽象方法时会以 `UnsupportedOperationException` 失败；这类类应定义在模块层。
+* 函数内定义的类的 GraalPy 宿主适配器只在 JVM 上可用：原生可执行文件（native image 或原生 Pyronaut 启动器）在 class 语句执行时以 `SystemError: Java Class can be extended only in JVM mode` 失败。编译器会对这类类给出警告（`Python class [...] is defined inside a function and extends the Java class [...]`）；请把它定义在模块层——其生成的 Java 类在 JVM 与原生可执行文件中均可使用。
+
+继承 Java 异常类的 Python 类在运行时是 Python 异常；参见异常处理文档。

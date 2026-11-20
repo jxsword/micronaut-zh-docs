@@ -1,0 +1,10 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – JUnit 5 Module Tests](https://docs.micronaut.io/5.2.x/core/#core-testing)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/languageSupport/python/moduleScripts/testing.adoc  upstream_commit: ee76087d1a392696f3e92a6d3ed092b2ecfc44b1  upstream_hash: 3e87c3e0af16bd1a4582769610797108f6d71fca  translated_at: 2026-11-21 -->
+
+通过在模块层声明 `MicronautTest()`，JUnit 5 测试可以写成 Python 模块。注入的模块属性可通过生成的测试对象访问，辅助函数可以使用 `self` 接收者。
+
+名称以 `test` 开头的函数会自动暴露为 JUnit 5 测试方法。需要不同测试命名风格时，仍支持显式的 `@Test` 装饰器。
+
+snippet::example.ModuleSpec[tags="module-test", indent=0, title="JUnit 5 module test"]
+
+生成的 Java 测试类带有 JUnit 5 与 Micronaut 测试扩展所需的运行时 `MicronautTest` 与 `Test` 注解。合成的 `self` 参数会从 Java 方法签名中省略，并在 Python 函数被调用时自动提供。

@@ -1,0 +1,13 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Module Scripts](https://docs.micronaut.io/5.2.x/core/#core-moduleScripts)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/languageSupport/python/moduleScripts.adoc  upstream_commit: ee76087d1a392696f3e92a6d3ed092b2ecfc44b1  upstream_hash: 0a72aa1ff8579ade67b0c2fd151138685f0e9842  translated_at: 2026-11-21 -->
+
+[[moduleScripts]]
+Python 模块可以直接在模块层声明 Micronaut 注解。注解会成为生成的脚本类上的元数据，而模块层函数会成为该类上的方法。
+
+例如，无类控制器无需定义 Python 类即可声明其路由前缀：
+
+snippet::example.module_routes[tags="module-controller", indent=0, title="Module-level controller annotation"]
+
+只有当调用的目标解析为 Micronaut 或 Python 自定义注解时，顶层调用才会被视为注解。普通模块调用仍是普通 Python 代码。
+
+显式控制器注解优先于为包含 HTTP 路由的模块自动添加的隐式控制器注解。显式作用域注解同样优先于未加作用域的路由模块所使用的自动 `ContextPooled` 作用域。

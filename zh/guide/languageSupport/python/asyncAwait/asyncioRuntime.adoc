@@ -1,0 +1,21 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Netty-Backed Asyncio Runtime](https://docs.micronaut.io/5.2.x/core/#core-asyncioRuntime)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/languageSupport/python/asyncAwait/asyncioRuntime.adoc  upstream_commit: 57cb63d7baf8667cf7a7fba74bb0efc497184a98  upstream_hash: cb245f860384ac45338d01f3161639436720fccb  translated_at: 2026-11-21 -->
+
+`micronaut-context-python-netty` 模块将 Python `asyncio` 执行与 Micronaut Netty HTTP 服务器集成。当该模块位于类路径且 asyncio 支持已启用时，Micronaut 会把 Python 协程执行绑定到正在处理请求的 Netty 事件循环。定时器、回调、被等待的客户端调用以及受支持的网络 API 都由该事件循环调度，而不是借用阻塞式 Python 线程池。在异步控制器中等待异步 Python `@Client` 调用时，客户端响应在途期间不会阻塞 Netty 事件循环线程。
+
+dependency:io.micronaut:micronaut-context-python-netty[scope="runtimeOnly"]
+
+没有该模块时，协程没有 Micronaut 事件循环：由标准 Python 循环在调用线程上驱动其完成，`run_in_executor(None, ...)` 仍使用 Micronaut 的阻塞执行器。此时在 Netty 事件循环线程上启动的协程会改在阻塞执行器上运行并伴随警告——因为在该线程上驱动它会阻塞事件循环及所有需要它的客户端调用。
+
+该模块提供 Python 可见的事件循环行为。其 Java 运行时类属于框架内部实现，应用不应直接使用。
+
+活跃的 Python 桥接执行会参与 Micronaut 优雅关闭。当 `micronaut.lifecycle.graceful-shutdown.enabled=true` 时，关闭过程会等待活跃的 Python 协程桥接与池化的 Python 执行，使用与其他 Micronaut 运行时组件相同的 `GracefulShutdownCapable` 生命周期与 `micronaut.lifecycle.graceful-shutdown.grace-period` 超时。
+
+受支持的事件循环 API 包括：
+
+* `asyncio.get_running_loop()`
+* `loop.create_future()` 与 `loop.create_task(...)`
+* `loop.call_soon(...)`、`loop.call_soon_threadsafe(...)`、`loop.call_later(...)` 与 `loop.call_at(...)`
+* `asyncio.sleep(...)`、`asyncio.gather(...)`、`asyncio.TaskGroup` 以及正常任务取消
+* `loop.run_in_executor(None, ...)` （使用 Micronaut 的阻塞执行器）
+* `loop.getaddrinfo(...)` 与 `loop.getnameinfo(...)` （当套接字回退代码需要名称解析时，使用 Micronaut 的阻塞执行器）

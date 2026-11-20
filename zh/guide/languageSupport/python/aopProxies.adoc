@@ -1,0 +1,98 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – AOP Proxies](https://docs.micronaut.io/5.2.x/core/#core-aopProxies)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/languageSupport/python/aopProxies.adoc  upstream_commit: 9675d1f4be8e9f00dd1a07be0ebc8cd9f68e6df1  upstream_hash: 5ce15ee8220f18e71405bb1768f06dcded52c6f9  translated_at: 2026-11-21 -->
+
+Python bean 对 <<aop,AOP 通知>> 的支持方式与 Java bean 相同：校验、缓存、重试或追踪等环绕通知（around advice）、引入通知与生命周期通知。Java bean 由编译期子类代理，而 Python bean 由委托给 Python 对象的运行时代理代理，以下规则保证语义一致。
+
+=== 隐式校验通知
+
+成员带约束的 Java bean 无需声明 `@Validated` 即可完成校验：方法参数或返回值上的 `jakarta.validation` 约束或 `@Valid` 就足以让方法被拦截。Python bean 同样如此：
+
+[source,python]
+----
+from typing import Annotated
+
+from jakarta.inject import Singleton
+from jakarta.validation import Valid
+from jakarta.validation.constraints import NotBlank
+
+from .Person import Person
+
+
+@Singleton
+class PersonService:
+    def say_hello(self, name: Annotated[str, NotBlank]) -> str:  # <1>
+        return f"Hello {name}"
+
+    def greet(self, person: Annotated[Person, Valid]) -> str:  # <2>
+        return f"Hello {person.name}"
+----
+
+<1> 带约束的参数使方法获得校验；bean 会被代理，Java 与 Python 调用方在名称为空时都会得到 `ConstraintViolationException`
+<2> `@Valid` 级联进入 `@Introspected` dataclass 的属性
+
+带约束的构造器参数在 bean 创建时校验，配置属性在 bean 构造完成后校验——同样与 Java bean 一致。
+
+=== 关键字实参与默认值实参
+
+Python 调用方调用另一个 bean 的被通知方法时，与调用任何 Python 方法一样：使用关键字实参、省略有默认值的实参。代理通过 Python 方法的签名绑定调用，因此拦截器能看到方法的每个实参——省略的实参带着其 Python 默认值：
+
+[source,python]
+----
+from jakarta.inject import Singleton
+from micronaut.cache.annotation import Cacheable, CacheConfig
+
+
+@Singleton
+@CacheConfig("schedules")
+class ScheduleCache:
+
+    @Cacheable(parameters=["key"])
+    async def schedule(self, key: str, interests: str, progress: ProgressListener | None = None) -> Schedule:
+        ...
+
+
+@Singleton
+class ScheduleClient:
+    def __init__(self, cache: ScheduleCache):
+        self.cache = cache
+
+    async def fetch(self, key: str, interests: str) -> Schedule:
+        return await self.cache.schedule(key, interests)  # <1>
+----
+
+<1> `progress` 被省略：缓存拦截器将其视为 `None`，并仅以 `key` 作为缓存键
+
+无法绑定到签名的调用（缺少必填实参、未知或重复的关键字实参、以关键字传递仅限位置参数）会在任何拦截器运行之前引发 `TypeError`，与普通 Python 调用一致。仅限位置参数（`/` 之前的参数）与普通参数一样是生成的 Java 方法的参数，省略时应用其默认值。声明了 `*args`、`**kwargs` 或关键字专用参数的方法没有固定的实参布局，其实参按原样到达代理。
+
+=== 通过 `self` 的调用
+
+在 Java bean 中，代理是 bean 的子类，因此 `this` 就是代理，从 bean 另一方法发起的 `this.greet(...)` 会运行 `greet` 的拦截器。Python bean 是代理背后的普通对象；为使 `self.greet(...)` 获得同样行为，运行时会在代理首次解析它时，为每个被拦截方法在 Python 对象上安装一个属性。该属性经由代理分发，因此嵌套调用也会运行拦截器链，而 `self` 仍是 bean 对象：其属性、同一性以及 `type(self)` 均保持不变。
+
+[source,python]
+----
+from jakarta.inject import Singleton
+from micronaut.tracing.annotation import ContinueSpan, NewSpan
+
+
+@Singleton
+class HelloService:
+
+    @NewSpan("hello-world")
+    def hello(self, name: str) -> str:
+        return self.greet("Hello " + name)  # <1>
+
+    @ContinueSpan
+    def greet(self, greeting: str) -> str:
+        return greeting
+----
+
+<1> `greet` 的 `@ContinueSpan` 拦截器会为嵌套调用运行
+
+经由代理分发的规则如下：
+
+* 只有被拦截的方法受影响。无通知的方法通过 `self` 调用时仍是直接的 Python 调用，与此前一致。
+* 拦截器链在发起调用的对象上运行：对于会发放多个对象的作用域（`@Prototype`、`@ThreadLocal`、可刷新 bean），发起调用的方法所设置的状态得以保留。
+* 支持关键字实参与省略的默认值实参：`self.format(value, suffix="!")` 以方法声明的方式把实参布局传递给 `format` 的拦截器。
+* 声明 `*args` 或 `**kwargs` 的方法没有固定实参布局，关键字专用参数（裸 `*` 之后的参数）在生成的 Java 方法上也没有对应参数，因此这类方法保持直接 `self` 调用：只有经由代理的调用会被拦截。
+* 经 `self` 调用的被拦截 `async def` 方法返回 awaitable，与在代理上调用时一样。拦截器看到的仍是 `CompletionStage` （与 Java bean 相同），调用方 await 结果。方法体作为独立任务运行：它对 `contextvars` 的修改不会为调用方设置状态，取消调用方只有在拦截器交回方法自身的 stage 时才会取消嵌套调用。方法抛出的异常以同一对象到达等待中的调用方，因此即使拦截器链经由 `CompletionStage` 传递，`except MyError` 也能匹配它。
+* bean 对象必须有 `__dict__`；声明 `__slots__` 的类保持直接 `self` 调用。这些属性在 `vars(self)` 中可见，但不属于 bean 的状态：bean 对象的副本仍会向原对象分发。

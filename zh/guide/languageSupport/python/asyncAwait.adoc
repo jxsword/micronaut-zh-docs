@@ -1,0 +1,62 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Async/Await](https://docs.micronaut.io/5.2.x/core/#core-asyncAwait)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/languageSupport/python/asyncAwait.adoc  upstream_commit: d7013dd914463fbc9a63ffb82c45fe54ca2ce854  upstream_hash: 21e464209e5a46c76d2a708985ca01858259b327  translated_at: 2026-11-21 -->
+
+Python 控制器、客户端与无类路由可以使用普通的 `async def` 函数。Micronaut 将 `async def` 返回注解建模为被等待（awaited）的结果类型，并把生成的 Java 桥接方法生成为 `CompletionStage<T>`。
+
+下面的控制器方法在不阻塞 Netty 事件循环线程的情况下休眠：
+
+snippet::micronaut.docs.asyncio.AsyncBackendController[tags="backend", indent=0, title="Async controller method"]
+
+Python HTTP 客户端也可以声明 `async def` 方法：
+
+snippet::micronaut.docs.asyncio.BackendClient[tags="asyncClient", indent=0, title="Async Python HTTP client"]
+
+于是异步控制器可以 await 注入的客户端：
+
+snippet::micronaut.docs.asyncio.AsyncDemoController[tags="awaitClient", indent=0, title="Awaiting an async Python client"]
+
+异步 Python 代码也可以直接 await Micronaut 的具体 `HttpClient` API。例如，控制器可以注入以 `@Client("/")` 限定的 `HttpClient`，调用 `exchange(...)`，并等待 `HttpResponse`：
+
+snippet::micronaut.docs.asyncio.AsyncDemoController[tags="httpClientInjection", indent=0, title="Injecting the concrete HttpClient"]
+
+snippet::micronaut.docs.asyncio.AsyncDemoController[tags="awaitHttpClientExchange", indent=0, title="Awaiting HttpClient.exchange"]
+
+无类路由支持同样的协程桥接：
+
+snippet::micronaut.docs.asyncio.async_routes[tags="classless", indent=0, title="Classless async route"]
+
+异步 Python 代码还可以 await 注入的服务与客户端返回的 Java 异步值。`CompletionStage<T>` 等待后得到 `T`。响应式 `Publisher<T>` 与 Reactor `Mono<T>` 值被视为标量 awaitable：
+
+snippet::micronaut.docs.asyncio.AsyncBackendController[tags="publisherBackend", indent=0, title="Publisher backend"]
+
+snippet::micronaut.docs.asyncio.BackendClient[tags="publisherClient", indent=0, title="Publisher client"]
+
+snippet::micronaut.docs.asyncio.AsyncDemoController[tags="awaitPublisher", indent=0, title="Awaiting a scalar Publisher"]
+
+Java 调用返回的任何 `CompletionStage` 或 `Publisher` 都是可等待的，不限于注入 bean 的值：`await Mono.just(value)` 与 `await Mono.from_(publisher).toFuture()` 都可以工作。
+
+await 失败时会抛出 Java 异常本身，与等效的阻塞调用一样，因此 `except HttpClientResponseException` 处理被等待的客户端调用的方式与处理 `toBlocking()` 完全相同。与阻塞式 Java 调用一样，`except Exception` 捕获不到 Java 异常：请捕获 Java 类型、像 `java.lang.RuntimeException` 这样的 Java 父类，或 `BaseException`。保存在 future 上的失败（`future.exception()`，或 `asyncio.gather(..., return_exceptions=True)` 的结果）是一个 `micronaut_asyncio.MicronautJavaException`，其 `java_exception` 属性是 Java 异常。asyncio 网络 API 的网络故障会以 asyncio 代码期望的 `OSError` 子类抛出（参见 <<asyncioNetworking>>）。
+
+被等待值背后的协程抛出的 Python 异常——例如带有 `@Cacheable` 等 AOP 通知的 bean 的 `async def` 方法——会以原始异常对象的形式抛出，而不是以携带它穿过拦截器链的 Java 异常的形式，因此 `except MyError` 能匹配它。
+
+对于 `Publisher`，Micronaut 请求一个条目、以第一个条目完成等待并取消订阅。若发布者以空完成，被等待的值是 `None`；若它发出错误信号，则等待失败。多条目的 `Flux` 值不会隐式收集成列表。需要全部发出条目时，请使用 `collectList()` 这类响应式操作符，或按 <<asyncioStreaming>> 所述以 `async for` 逐个消费条目。
+
+实现了声明返回 `Publisher`、`Mono` 或 `Flux` 的 Java 方法的 `async def`，会被适配到该类型，且协程只在发布者被订阅时才开始运行：它所等待的发布者在订阅者的 Reactor 上下文中订阅（例如由 `@Transactional` 调用方启动的响应式事务），而协程的每一步都在该订阅者的 `PropagatedContext` 中运行，无论由哪个任务或线程恢复它。由此可得：无人订阅时协程从不运行（Python 会警告协程从未被 await）；运行它的事件循环是订阅线程的事件循环，因此 `subscribeOn` 决定由哪个循环运行协程；首次订阅的结果会与后续订阅者共享。声明为 `CompletionStage` 的方法则在方法被调用时即时启动协程，使用调用方的 `PropagatedContext`。
+
+无类异步路由可以 await 相同的标量响应式客户端结果：
+
+snippet::micronaut.docs.asyncio.async_routes[tags="classlessPublisher", indent=0, title="Classless async route awaiting a Publisher"]
+
+支持用 `asyncio.TaskGroup` 进行结构化并发（structured concurrency）的常规任务创建、完成与取消。组创建的任务运行在 Micronaut 管理的基于 Netty 的事件循环上：
+
+snippet::micronaut.docs.asyncio.AsyncDemoController[tags="taskGroup", indent=0, title="TaskGroup on the Micronaut event loop"]
+
+asyncio 桥接支持默认启用。可用以下配置禁用：
+
+[configuration]
+----
+micronaut:
+  python:
+    asyncio:
+      enabled: false
+----

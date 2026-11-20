@@ -1,0 +1,78 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – GraalPy Tools](https://docs.micronaut.io/5.2.x/core/#core-graalTools)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/languageSupport/python/graalTools.adoc  upstream_commit: 6b95dcd6f7ba1101b4d78c61c6862e9ecab47a74  upstream_hash: 10ab4ed57819e896200618be8f53b08cdf771288  translated_at: 2026-11-21 -->
+
+Micronaut 的 GraalPy 支持包含用于调试、性能剖析（profiling）和检查 GraalPy 应用的 GraalVM 工具。请通过 GraalPy 引擎选项配置这些工具。
+
+可用工具概览请参阅 https://www.graalvm.org/latest/reference-manual/tools/[GraalVM tools documentation]。
+
+== CPU 采样器
+
+在 `application.toml` 中添加以下内容即可启用 CPU 采样器（CPU sampler）：
+
+[source,toml]
+----
+[graalpy.engine.options]
+cpusampler = true
+"cpusampler.DumpInterval" = 1000
+----
+
+要包含解析器和其他内部元素，请启用 `SampleInternal` 并使用更短的采样周期：
+
+[source,toml]
+----
+[graalpy.engine.options]
+cpusampler = true
+"cpusampler.SampleInternal" = true
+"cpusampler.Period" = 1
+"cpusampler.DumpInterval" = 1000
+----
+
+以启用实验性选项的方式运行应用：
+
+[source,bash]
+----
+-Dpolyglot.engine.AllowExperimentalOptions=true ...
+----
+
+有关 CPU 采样器、CPU 追踪器与内存追踪器的更多选项，请参阅 https://www.graalvm.org/latest/tools/profiling/[GraalVM profiling documentation]。
+
+== Chrome 检查器（Chrome Inspector）
+
+使用以下配置启用 Chrome Inspector 调试器：
+
+[source,toml]
+----
+[graalpy.engine.options]
+inspect = true
+----
+
+启动应用并在 Chrome 中打开 GraalVM 打印的 DevTools 链接。该检查器支持设置断点、检查变量、单步调试 Python 代码以及求值表达式。详情请参阅 https://www.graalvm.org/latest/tools/chrome-debugger/[GraalVM Chrome Debugger documentation]。
+
+== 调试适配协议（Debug Adapter Protocol）
+
+GraalPy 还可以为 IDE 集成暴露一个 Debug Adapter Protocol 端点：
+
+[source,toml]
+----
+[graalpy.engine.options]
+dap = true
+----
+
+例如，使用以下 VS Code `launch.json` 配置附加到调试服务器：
+
+[source,json]
+----
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Attach",
+            "type": "node",
+            "request": "attach",
+            "debugServer": 4711
+        }
+    ]
+}
+----
+
+支持的具体选项取决于 GraalVM 版本。请使用 `graalpy --help:tools` 或查阅 https://www.graalvm.org/latest/reference-manual/tools/[GraalVM tools documentation]。
