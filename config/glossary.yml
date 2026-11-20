@@ -1,0 +1,135 @@
+# Micronaut 中文翻译术语表（glossary.yml）
+# 结构：terms（en/zh/status/context/aliases）+ banned（禁用译名黑名单）
+# 规则（计划 §6）：
+#   - 术语表为唯一来源；翻译中滚动修订，先写回再继续（§5.1 第 3 步）
+#   - API 名/类名/注解/配置 key/flag 不译；术语首现括注原文
+#   - banned 由 validate ③ 机器扫描（0 命中硬门禁）
+#   - status: approved / provisional（provisional 条目批次复核后转正）
+
+terms:
+  - en: "compile-time dependency injection"
+    zh: "编译期依赖注入"
+    status: "approved"
+    context: "全库高频"
+    aliases: ["compile-time DI"]
+
+  - en: "dependency injection"
+    zh: "依赖注入"
+    status: "approved"
+    context: "全库高频"
+    aliases: ["DI"]
+
+  - en: "bean definition"
+    zh: "bean 定义"
+    status: "approved"
+    context: "全库高频"
+    aliases: []
+
+  - en: "BeanContext"
+    zh: "BeanContext"
+    status: "approved"
+    context: "不译；API 类名"
+    aliases: []
+
+  - en: "BeanLifecycle"
+    zh: "BeanLifecycle"
+    status: "approved"
+    context: "不译；API 类名"
+    aliases: []
+
+  - en: "interceptor"
+    zh: "拦截器"
+    status: "approved"
+    context: "AOP 章节"
+    aliases: []
+
+  - en: "configuration properties"
+    zh: "配置属性"
+    status: "approved"
+    context: "Configuration 章节"
+    aliases: ["config properties"]
+
+  - en: "executable method"
+    zh: "可执行方法"
+    status: "approved"
+    context: "AOP 章节"
+    aliases: []
+
+  - en: "reactive"
+    zh: "响应式"
+    status: "approved"
+    context: "全库高频"
+    aliases: []
+
+  - en: "classpath"
+    zh: "类路径"
+    status: "approved"
+    context: "Quick Start 等"
+    aliases: []
+
+  - en: "GraalVM native image"
+    zh: "GraalVM native image"
+    status: "approved"
+    context: "GraalVM/CLI 章节"
+    aliases: []
+
+  - en: "Serverless"
+    zh: "Serverless"
+    status: "approved"
+    context: "不译"
+    aliases: []
+
+  - en: "AOT"
+    zh: "AOT"
+    status: "approved"
+    context: "不译（Ahead-of-Time 编译）"
+    aliases: ["ahead-of-time"]
+
+  - en: "AOP"
+    zh: "AOP"
+    status: "approved"
+    context: "不译"
+    aliases: []
+
+  - en: "IOCN"
+    zh: "IOCN"
+    status: "approved"
+    context: "不译（API 缩写）"
+    aliases: []
+
+  - en: "netty"
+    zh: "Netty"
+    status: "approved"
+    context: "产品名，不译；统一拼写 Netty"
+    aliases: []
+
+  - en: "bean"
+    zh: "bean"
+    status: "approved"
+    context: "小写保留（上游惯例）"
+    aliases: []
+
+banned:
+  - bad: "编译时间"
+    prefer: "编译期"
+    reason: "compile-time 统一译「编译期」"
+
+  - bad: "Bean 上下文环境"
+    prefer: "BeanContext"
+    reason: "BeanContext 不译"
+
+  - bad: "Bean 环境"
+    prefer: "BeanContext"
+    reason: "BeanContext 不译"
+
+  - bad: "类似 Spring 的"
+    prefer: ""
+    reason: "禁止类比表述进入译文正文（译者注须显式标记）"
+
+  - bad: "类似 Django 的"
+    prefer: ""
+    reason: "禁止类比表述"
+
+  - bad: "类似 Rails 的"
+    prefer: ""
+    reason: "禁止类比表述"
