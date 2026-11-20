@@ -1,0 +1,19 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Unsupported Asyncio APIs](https://docs.micronaut.io/5.2.x/core/#core-asyncioUnsupported)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/languageSupport/python/asyncAwait/asyncioUnsupported.adoc  upstream_commit: 1dad7b4225fb4d2f03e6392bb4d1b404d31505d5  upstream_hash: d62d4a768746c7c787afac078777ccb429b711ee  translated_at: 2026-11-21 -->
+
+当前 Micronaut asyncio 桥未实现以下 API，调用会确定性地失败：
+
+* Micronaut 管理的循环上的 `loop.run_forever()` 与 `loop.run_until_complete(...)`
+* `loop.run_in_executor(executor, ...)` 中的自定义执行器
+* 用 `loop.create_task(..., eager_start=...)` 或 `asyncio.TaskGroup.create_task(..., eager_start=...)` 进行即时任务执行
+* Python `ssl.SSLContext` 对象
+* `sendfile` 与 `start_tls`
+* 选择器注册 API：`add_reader`、`remove_reader`、`add_writer` 与 `remove_writer`
+* 子进程 API：`subprocess_exec` 与 `subprocess_shell`
+* 调用方提供的 Python 套接字：`create_connection`、`create_server` 与 `create_datagram_endpoint` 上的 `sock=...`，以及传给 `connect_accepted_socket` 的 Python 套接字
+* `create_server` 上的 `keep_alive`
+* `create_connection` 上的 `happy_eyeballs_delay` 与 `interleave`
+* 传输上的 `set_protocol`
+* `shutdown_asyncgens()` 与 `shutdown_default_executor()` 直接返回、不做任何事：阻塞执行器属于 Micronaut，而异步生成器除非支撑某个 `Publisher` （参见 <<asyncioStreaming>>）——其取消时会关闭生成器——否则由垃圾回收器收尾
+
+每种地址族都由 Netty 服务；没有套接字轮询回退，因此不支持的实参会在调用处失败，而不是静默走更慢的路径。`micronaut-context-python-netty` 生效期间，HTTP 请求协程执行始终绑定当前 Netty 事件循环。

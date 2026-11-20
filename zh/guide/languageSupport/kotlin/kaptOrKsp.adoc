@@ -1,0 +1,21 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Kotlin support via KAPT or KSP](https://docs.micronaut.io/5.2.x/core/#core-kaptOrKsp)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/languageSupport/kotlin/kaptOrKsp.adoc  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360  upstream_hash: 8aa13a9094c662acd984e27ed41741ae70fefc8d  translated_at: 2026-11-21 -->
+
+Micronaut 框架曾通过 https://kotlinlang.org/docs/reference/kapt.html[Kapt] 提供 Kotlin 支持。
+
+从 4.0 版本起，Micronaut 框架还通过 https://kotlinlang.org/docs/ksp-overview.html[Kotlin Symbol Processing (KSP) API] 支持 Kotlin。
+
+请注意 KAPT 处于维护模式。Micronaut 框架 4 包含对 KSP 的实验性支持，Kotlin 用户应考虑在未来迁移过去。
+
+____
+kapt 处于维护模式。我们会让它与最近的 Kotlin 和 Java 发布保持同步，但没有实现新功能的计划。
+____
+
+KAPT 通过生成 Java 存根（stub）并将其交给 Java 注解处理器，来支持现有的 Java 注解处理器。
+
+由于省去了存根生成，KSP 提供若干优势：
+
+* 更快的编译。
+* 对 Kotlin 原生语法更好的支持。
+
+WARNING: 如果您除 Micronaut 注解处理器之外还使用其他注解处理器，它们将无法与 KSP 一起工作。

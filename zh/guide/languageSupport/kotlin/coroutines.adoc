@@ -1,0 +1,60 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Coroutines Support](https://docs.micronaut.io/5.2.x/core/#core-coroutines)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/languageSupport/kotlin/coroutines.adoc  upstream_commit: 130cfede2d9a325faf7016bf10e0a2060c5a3cbd  upstream_hash: 09c1dd05a4022a0122eb78ccb4c29ebf7595e9d6  translated_at: 2026-11-21 -->
+
+Kotlin 协程让您可以用命令式风格代码构建异步应用。Micronaut 控制器方法可以是 `suspend` 函数：
+
+.控制器 suspend 函数示例
+[source, kotlin]
+----
+include::{testsuitekotlin}/server/suspend/SuspendController.kt[tags="suspend", indent=0]
+----
+
+<1> 函数被标记为 `suspend`，尽管实际上它不会被挂起。
+
+.控制器 suspend 函数示例
+[source, kotlin]
+----
+include::{testsuitekotlin}/server/suspend/SuspendController.kt[tags="suspendDelayed", indent=0]
+----
+
+<1> 函数被标记为 `suspend`。
+<2> 调用 `delay` 以确保函数被挂起、响应从另一个线程返回。
+
+.控制器 suspend 函数示例
+[source, kotlin]
+----
+include::{testsuitekotlin}/server/suspend/SuspendController.kt[tags="suspendStatus", indent=0]
+----
+
+<1> 当我们只想返回一个状态时，`suspend` 函数同样适用。
+
+.控制器 suspend 函数示例
+[source, kotlin]
+----
+include::{testsuitekotlin}/server/suspend/SuspendController.kt[tags="suspendStatusDelayed", indent=0]
+----
+
+您还可以为流式服务器与客户端使用 `Flow` 类型。流式控制器可以返回 `Flow`，例如：
+
+.服务器上以 Flow 流式输出 JSON
+[source, kotlin]
+----
+include::{testsuitekotlin}/streaming/HeadlineFlowController.kt[tags="streamingWithFlow", indent=0]
+----
+
+<1> 定义了产生 `application/x-json-stream` 的方法 `streamHeadlinesWithFlow`
+<2> 使用 `flow` 创建了一个 `Flow`
+<3> 该 `Flow` 发出 100 条消息
+<4> 发出动作通过 `emit` `suspend` 函数完成
+<5> 消息之间有 1 秒的 _延迟_
+
+流式客户端可以直接返回一个 `Flow`，例如：
+
+.以 Flow 流式处理的客户端
+[source, kotlin]
+----
+include::{testsuitekotlin}/streaming/HeadlineFlowClient.kt[tags="imports,class, streamingWithFlow", indent=0]
+----
+
+<1> `@Get` 方法定义为处理 `APPLICATION_JSON_STREAM` 类型的响应
+<2> 返回类型为 `Flow`

@@ -1,0 +1,31 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Coroutine Tracing Context Propagation](https://docs.micronaut.io/5.2.x/core/#core-coroutineTracingContextPropagation)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/languageSupport/kotlin/coroutineTracingContextPropagation.adoc  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360  upstream_hash: d881548a35d661ad6ce136d3092d6f5f381a3ab2  translated_at: 2026-11-21 -->
+
+Micronaut 框架支持追踪上下文传播。如果您从控制器方法一路到所有服务都使用 `suspend` 函数，则无需做任何特殊处理。但是，当您在普通函数中创建协程时，追踪传播不会自动发生。
+您必须使用 `HttpCoroutineContextFactory<CoroutineTracingDispatcher>` 创建一个新的 `CoroutineTracingDispatcher`，并将其用作 `CoroutineContext`。
+
+下面的示例展示了大致形态：
+
+[source,kotlin]
+----
+@Controller
+class SimpleController(
+    private val coroutineTracingDispatcherFactory: HttpCoroutineContextFactory<CoroutineTracingDispatcher>
+) {
+    @Get("/runParallelly")
+    fun runParallelly(): String = runBlocking {
+        val a = async(Dispatchers.Default + coroutineTracingDispatcherFactory.create()) {
+            val traceId = MDC.get("traceId")
+            println("$traceId: Calculating sth...")
+            calculateSth()
+        }
+        val b = async(Dispatchers.Default + coroutineTracingDispatcherFactory.create()) {
+            val traceId = MDC.get("traceId")
+            println("$traceId: Calculating sth else...")
+            calculateSthElse()
+        }
+
+        a.await() + b.await()
+    }
+}
+----

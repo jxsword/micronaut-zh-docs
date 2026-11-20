@@ -1,0 +1,44 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Kotlin and Retaining Parameter Names](https://docs.micronaut.io/5.2.x/core/#core-kotlinretainparamnames)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/languageSupport/kotlin/kotlinretainparamnames.adoc  upstream_commit: 17da29d2e04fc2fa6f8d6b53a00fd62d5372fa45  upstream_hash: 963f6dea8e6b046482b0a85ce2cbf3269d8a608d  translated_at: 2026-11-21 -->
+
+与 Java 一样，使用 Kotlin 时方法参数的参数名数据在编译期不会被保留。如果您没有显式定义参数名，并且依赖的是已编译的外部 JAR，这对 Micronaut 框架来说可能是个问题。
+
+要在 Kotlin 中启用参数名数据的保留，请在 `build.gradle` 中把 `javaParameters` 选项设为 `true`：
+
+.Gradle 中的配置
+[source,groovy]
+----
+compileTestKotlin {
+    kotlinOptions {
+        javaParameters = true
+    }
+}
+----
+
+NOTE: 如果您使用带 default 方法的接口，请添加 `freeCompilerArgs = ["-Xjvm-default=all"]`，以便 Micronaut 框架能够识别它们。
+
+或者，如果使用 Maven，请相应地配置 Micronaut Maven 插件：
+
+.Maven 中的配置
+[source,xml]
+----
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <!-- ... -->
+  <build>
+    <plugins>
+      <!-- ... -->
+      <plugin>
+        <artifactId>kotlin-maven-plugin</artifactId>
+        <groupId>org.jetbrains.kotlin</groupId>
+        <configuration>
+            <javaParameters>true</javaParameters>
+            <!-- ... -->
+        </configuration>
+        <!-- ... -->
+      </plugin>
+      <!-- ... -->
+    </plugins>
+  </build>
+</project>
+----

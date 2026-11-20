@@ -1,0 +1,19 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Incremental Annotation Processing with Gradle and Kapt](https://docs.micronaut.io/5.2.x/core/#core-gradlekapt)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/languageSupport/kotlin/gradlekapt.adoc  upstream_commit: 5280436c47bbcd1a143801fcf266db27b3d6d758  upstream_hash: 1f5cb63baf38d94910d5a16a633cb7aea623b9c2  translated_at: 2026-11-21 -->
+
+要在 Kapt 中启用 Gradle 增量注解处理，必须把 <<incrementalannotationgradle,Gradle 增量注解处理>> 一节指定的参数传给 Kapt。
+
+以下示例演示如何为您在 `com.example` 与 `io.example` 包下定义的注解启用并配置增量注解处理：
+
+.在 Kapt 中启用增量注解处理
+[source,kotlin]
+----
+kapt {
+    arguments {
+        arg("micronaut.processing.incremental", true)
+        arg("micronaut.processing.annotations", "com.example.*,io.example.*")
+    }
+}
+----
+
+WARNING: 如果您未为自定义注解启用处理，它们将被 Micronaut 忽略，这可能会破坏您的应用。

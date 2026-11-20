@@ -1,0 +1,12 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Micronaut for Kotlin](https://docs.micronaut.io/5.2.x/core/#core-kotlin)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/languageSupport/kotlin.adoc  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360  upstream_hash: a17ae9f2ece7c8832f57259e8ef19e3c970dd77a  translated_at: 2026-11-21 -->
+
+TIP: Micronaut 框架的 <<cli,命令行界面>> 为 Kotlin 提供了特别支持。要创建 Kotlin 应用，请使用 `kotlin` lang 选项。例如：
+
+[source,bash]
+.创建 Micronaut Kotlin 应用
+----
+$ mn create-app hello-world --lang kotlin
+----
+
+自 4.0 版本起，Micronaut 框架通过 https://kotlinlang.org/docs/reference/kapt.html[Kapt] 或 https://kotlinlang.org/docs/ksp-overview.html[Kotlin Symbol Processing API] 提供 Kotlin 支持。

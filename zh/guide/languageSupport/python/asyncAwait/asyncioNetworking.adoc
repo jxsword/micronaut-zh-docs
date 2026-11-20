@@ -1,0 +1,92 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Asyncio Networking and TLS](https://docs.micronaut.io/5.2.x/core/#core-asyncioNetworking)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/languageSupport/python/asyncAwait/asyncioNetworking.adoc  upstream_commit: dfface2cc2178afdc141f21258af9d09d271de3f  upstream_hash: ce649255d4e0b4838de078798374ef43543711dc  translated_at: 2026-11-21 -->
+
+受支持的网络 API 包括：
+
+* `loop.create_connection(...)`
+* `loop.create_server(...)`
+* `loop.connect_accepted_socket(...)`
+* `asyncio.open_connection(...)`
+* `asyncio.start_server(...)`
+* `loop.create_unix_connection(...)`
+* `loop.create_unix_server(...)`
+* `loop.create_datagram_endpoint(...)`
+* 套接字协程辅助函数，例如 `sock_recv`、`sock_recv_into`、`sock_recvfrom`、`sock_recvfrom_into`、`sock_sendall`、`sock_sendto`、`sock_connect` 与 `sock_accept`
+
+[[asyncioNetworking]]
+== 地址族与名称解析
+
+`create_connection`、`create_server`、`open_connection`、`start_server`、`create_unix_connection`、`create_unix_server` 与 `create_datagram_endpoint` 对每种地址族均由 Netty 通道支撑：IPv6 字面量（如 `::1`）或解析到 IPv6 的名称，其连接方式与 IPv4 相同。
+
+* `family` 实参会以 asyncio 自身查找的方式收窄名称解析：`family=socket.AF_INET` 会选择解析到双栈的名称的某个 IPv4 地址，`family=socket.AF_INET6` 选择 IPv6 地址；若名称没有所请求族的地址，调用失败。
+* 解析到多个地址的主机名会按解析器顺序逐个尝试；`all_errors=True` 会引发一个携带每次尝试失败的 `ExceptionGroup`。
+* `local_addr` 名称会与同族的每个本地地址逐次配对作为每次尝试，数据报端点则按顺序尝试匹配族的本地与远程候选。
+* IPv6 地址以 `(host, port, flowinfo, scope_id)` 形式报告，传给 `sendto` 的 scope id 会被保留。
+* 在 `flags` 中，`AI_NUMERICHOST` 会拒绝非字面量地址的主机、`local_addr`、服务器主机或数据报地址；其余 flags 对 Netty 的解析器没有影响。
+* `happy_eyeballs_delay` 与 `interleave` 会引发 `NotImplementedError`；`proto` 必须是 `0` 或 `IPPROTO_TCP`。
+
+== 服务器
+
+带主机列表的 `create_server` 会为每个主机绑定一个 Netty 服务器，并在 `server.sockets` 中暴露每个监听套接字；带主机名时，它会为每个解析出的地址绑定一个监听套接字，与 asyncio 一致。
+
+* 不带主机（`None` 或 `""`）时，它会在 IPv6 通配地址上绑定一个双栈监听器，同时服务 IPv4（JDK 与 Netty 原生传输会在其创建的套接字上清除 `IPV6_V6ONLY`）。无法打开 IPv6 套接字的 JVM（包括设置了 `java.net.preferIPv4Stack=true` 的 JVM）改为绑定 IPv4 通配地址。绑定失败（包括端口被占用）会使调用失败。
+* `start_serving=False` 会先绑定但不接受连接，直到 `await server.start_serving()` 运行。
+* 服务器遵循 `asyncio.Server` 契约：`start_serving()` 与 `wait_closed()` 是协程；取消 `serve_forever()` 会关闭服务器，而 `close()` 会取消正在运行的 `serve_forever()`；`wait_closed()` 会等待监听套接字与每个已接受连接关闭（3.12 语义）；`async with server:` 在退出时关闭它；`get_loop()` 返回事件循环；服务器关闭后 `sockets` 为空。
+* 由 `asyncio.start_server(...)`、`loop.create_server(...)` 或 `loop.create_unix_server(...)` 返回的服务器是 Netty 支撑的服务器，其接受的连接使用 Netty 支撑的传输。
+* 协议工厂只为已建立的连接调用，每个传输一次。
+* 调用方提供的 Python 套接字（`sock=...`）无法被 Netty 事件循环接纳，会引发 `NotImplementedError`。`loop.connect_accepted_socket(...)` 接受的是 Netty 循环已接受的通道而非 Python 套接字，且通道必须属于接纳它的循环。
+* 不带地址的 `create_datagram_endpoint(factory, family=...)` 会绑定该族的通配套接字。
+
+== 传输
+
+交给 `connection_made` 的传输是 Netty 通道之上的 `asyncio.Transport` 与 `asyncio.DatagramTransport` 子类，因此关键字实参与 `isinstance` 检查都能工作。
+
+* TCP 与 Unix 域套接字传输支持 `write`、`writelines`、`write_eof`、`can_write_eof`、`is_reading`、`pause_reading`、`resume_reading`、`get_write_buffer_size`、`get_write_buffer_limits`、`set_write_buffer_limits`、`close`、`abort`、`is_closing`、`get_protocol` 与 `get_extra_info`。
+* `get_write_buffer_size()` 报告通道上排队的字节数，其上限即 Netty 的写缓冲水位线：`set_write_buffer_limits()` 恢复 asyncio 的默认值（高水位 64 KiB，低水位为高水位的四分之一），协议的 `pause_writing`/`resume_writing` 跟随通道的可写性。
+* 数据报传输支持 `sendto`、`close`、`abort`、`is_closing`、`get_protocol` 与 `get_extra_info`。`sendto` 在未连接的传输上需要一个地址，在已连接的传输上只接受已连接地址，比较时使用完整的 `(host, port, flowinfo, scope_id)` 元组——因此仅 scope 不同的两个 IPv6 地址互不相同，与 asyncio 一致。关闭数据报传输会调用一次 `connection_lost(None)`。
+* 传输被自身、对端或提供者关闭之后，`is_closing()` 为 `True`；在此之后的 `sendto`，或名称解析在关闭之后才完成的那次发送，会被丢弃且不触发 `error_received`。
+
+== 错误与参数校验
+
+* 网络故障会引发 asyncio 代码期望的异常：`ConnectionRefusedError`、名称无法解析时的 `socket.gaierror`、连接/名称解析/TLS 握手超时时的 `TimeoutError`，以及其他 I/O 故障时的 `OSError`——每个异常都以 `java_exception` 携带 Java throwable。
+* 未带 `ssl` 的 `server_hostname`、`ssl_handshake_timeout` 与 `ssl_shutdown_timeout` （空映射等同于 `ssl`），以及既无地址也无显式 `family` 的数据报端点，会像 asyncio 一样引发 `ValueError`。TLS 超时必须是正数，默认为 asyncio 的 60 秒与 30 秒。
+* 循环本身与其 Netty 事件循环同寿：`close()` 与 `stop()` 会引发 `RuntimeError`。
+* 抛出异常的已调度回调会报告给循环的异常处理器。默认处理器通过 Micronaut 的 logger 记录它，失败的自定义处理器也以同样方式报告。
+
+== 回调、执行帧与关闭
+
+* 以 `call_soon`、`call_later` 与 `call_at` 调度的回调，在调度它们的代码的 `contextvars` 上下文中运行。
+* 协议回调与已调度回调在 Netty 事件循环线程上的 Python 执行帧内运行，因此优雅关闭等待一个正在运行的回调的方式与等待控制器相同。
+* 运行时一旦为某个上下文选定关闭，其上就不会再启动新的回调或桥接调用：已调度的回调被跳过，桥接调用以 `IllegalStateException` 失败；而在更早开始的执行中嵌套的调用仍会完成。协议回调只在其上下文开放时运行；一旦选定关闭，通道的回调失败且通道被关闭。
+* 由 Netty 事件循环打开的通道，由打开它们的提供者的关闭过程关闭。关闭会等待仍在途的连接与绑定，并拒绝新的。
+* 从 Python 等待的 Java stage 会在执行帧内的循环上完成，因此等待方协程返回之后到达的完成仍会被跟踪，上下文进入关闭后则被跳过。
+
+== 传输选择
+
+Python 事件循环使用其所在 Netty 事件循环的传输：到处是 NIO，macOS 上为 kqueue，Linux 上在原生传输位于类路径时为 epoll 或 io_uring。`reuse_port=True` 需要原生传输之一。
+
+主机名连接使用 Netty DNS 解析器 API 与未解析的远程地址，因此名称解析与连接处理留在 Netty future 上，不阻塞事件循环线程。`loop.getaddrinfo(...)` 在 Micronaut 的阻塞执行器上运行。`sock_*` 协程辅助函数通过从事件循环重试操作，驱动调用方提供的非阻塞 Python 套接字；它们服务于自行管理套接字的代码，Netty 支撑的传输不使用它们。
+
+== TLS
+
+`loop.create_connection(...)`、`asyncio.open_connection(...)`、`loop.create_server(...)`、`asyncio.start_server(...)`、`loop.connect_accepted_socket(...)` 以及 Unix 域套接字客户端/服务器 API 支持 TLS。客户端 TLS 接受 `ssl=True`、`server_hostname`、`ssl_handshake_timeout` 与 `ssl_shutdown_timeout`。客户端与服务器 TLS 还接受显式的 Micronaut 映射：
+
+[source,python]
+----
+ssl_options = {
+    "certfile": "/path/to/certificate.pem",
+    "keyfile": "/path/to/private-key.pem",
+    "key_password": "optional-password",
+    "cafile": "/path/to/ca.pem",
+    "trust_all": False,
+    "client_auth": "none", # one of none, optional, required
+    "protocols": ["TLSv1.3", "TLSv1.2"],
+    "ciphers": ["TLS_AES_128_GCM_SHA256"],
+}
+----
+
+服务器 TLS 要求 `certfile` 与 `keyfile`。`trust_all` 仅适用于测试与受控的内部环境。完整的 Python `ssl.SSLContext` 对象不会被检查，会以 `NotImplementedError` 失败；默认客户端 TLS 请使用 `ssl=True`，或使用上文所示的显式映射。TLS 传输报告 `can_write_eof() == False`。
+
+== 传输附加信息
+
+传输附加信息（transport extras）暴露的是套接字式的信息而非原始 Netty 通道。获取地址请使用 `transport.get_extra_info("sockname")`、`transport.get_extra_info("peername")` 或 `server.sockets[0].getsockname()`。原始 Netty `Channel` 特意不作为 Python 应用 API。

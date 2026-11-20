@@ -1,0 +1,18 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Kotlin, Kapt and IntelliJ](https://docs.micronaut.io/5.2.x/core/#core-kaptintellij)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/languageSupport/kotlin/kaptintellij.adoc  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360  upstream_hash: 98e21ac514b4152575f2b882cb774696c08280d2  translated_at: 2026-11-21 -->
+
+截至撰写本文时，IntelliJ 内置编译器并不直接支持 Kapt 与注解处理。您必须改为配置 IntelliJ，在运行测试或应用类之前将 Gradle（或 Maven）编译作为构建步骤执行。
+
+首先，编辑测试或应用的运行配置，选择「Run Gradle task」作为构建步骤：
+
+image::kotlin-run-1.png[Intellij Settings,1024,768]
+
+然后添加 `classes` 任务作为应用要执行的任务，或为测试添加 `testClasses` 任务：
+
+image::kotlin-run-2.png[Intellij Settings,1024,768]
+
+现在运行测试或启动应用时，Micronaut 框架会在编译期生成类。
+
+或者，您也可以将 IntelliJ 的构建/运行操作完全 https://www.jetbrains.com/help/idea/gradle.html#delegate_build_gradle[委托给 Gradle]：
+
+image::delegatetogradle.png[]

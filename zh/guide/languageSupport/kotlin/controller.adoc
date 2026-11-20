@@ -1,0 +1,21 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Controller in Kotlin](https://docs.micronaut.io/5.2.x/core/#core-controller)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/languageSupport/kotlin/controller.adoc  upstream_commit: 270734a035b8da357b2be9fb572466ac5eb208b0  upstream_hash: 17e7c8a1cf970bd5ee04f5cb89ca095f0e507d9d  translated_at: 2026-11-21 -->
+
+下面是一个用 Kotlin 编写的控制器示例：
+
+[source, kotlin]
+.src/main/kotlin/example/HelloController.kt
+----
+package example
+
+import io.micronaut.http.annotation.*
+
+@Controller("/")
+class HelloController {
+
+    @Get("/hello/{name}")
+    fun hello(name: String): String {
+        return "Hello $name"
+    }
+}
+----

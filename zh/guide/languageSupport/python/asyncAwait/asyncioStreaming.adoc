@@ -1,0 +1,56 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Python-Native Streaming](https://docs.micronaut.io/5.2.x/core/#core-asyncioStreaming)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/languageSupport/python/asyncAwait/asyncioStreaming.adoc  upstream_commit: 57cb63d7baf8667cf7a7fba74bb0efc497184a98  upstream_hash: 54b15b21881fd37bfad59d6f0320e9e087c17f0d  translated_at: 2026-11-21 -->
+
+Python 原生流式处理让协程可以用 `async for` 逐条消费 Java `Publisher`，也让异步生成器提供 Java `Publisher` 或 HTTP 流式响应，而无需编写 Reactor 管道。需求（demand）、取消、顺序、错误与解释器归属都会跨语言边界保留：流的 Python 侧只在拥有它的 Micronaut 管理的 asyncio 循环上运行，其他线程到达的响应式信号会先排队到该循环。
+
+适配器由 Python 运行时提供的 `micronaut_asyncio` 模块导出：
+
+snippet::micronaut.docs.asyncio.streaming.StreamController[tags="imports", indent=0, title="Importing the streaming adapters"]
+
+流需要一个在调用函数返回后仍持续运行的循环，Micronaut 管理的循环正好提供。因此两个适配器都要求 asyncio 桥已启用（`micronaut.python.asyncio.enabled`，默认值），且请求由类路径上有 `micronaut-context-python-netty` 的 Netty 事件循环处理，或协程已运行在这类循环上。不满足这些条件的调用会引发指名该要求的 `RuntimeError`，而不是退回同步驱动生成器。
+
+[[asyncioStreaming]]
+== 以 async for 消费 Publisher
+
+`as_async_iterable(publisher)` 返回一个异步迭代器，它同时也是异步上下文管理器。请与 `async with` 搭配使用，以便提前退出循环时取消订阅：
+
+snippet::micronaut.docs.asyncio.streaming.StreamController[tags="consume", indent=0, title="Consuming a streaming client"]
+
+<1> 声明式客户端返回条目的 `Publisher`；适配器在首次迭代时才惰性订阅。
+<2> 每次迭代恰好向上游请求一个条目；至多缓冲一个条目。
+<3> `break` 离开 `async with` 块，恰好取消订阅一次。迭代耗尽同样会关闭它，`aclose()` 则显式关闭。
+
+上文使用的客户端是普通流式客户端：
+
+snippet::micronaut.docs.asyncio.streaming.TickClient[tags="client", indent=0, title="A streaming client"]
+
+<1> Python dataclass 类型的 JSON 流。
+
+发布者错误会从 `__anext__` 以 Java 异常本身抛出（或以网络故障使用的 `OSError` 子类抛出，其 `java_exception` 属性为 Java 原因）。任务取消、超时以及迭代挂起期间的请求取消都会取消订阅。同一迭代器上重叠的 `__anext__` 调用会被拒绝；发出条目多于所请求条目的发布者会被取消且迭代失败，内存因此保持有界。
+
+如上文所述直接等待 `Publisher` 的语义保持不变：请求一个条目、以它完成等待并取消订阅。消费全部条目请用 `as_async_iterable`。
+
+== 由异步生成器提供 Publisher
+
+`as_publisher(factory)` 把异步生成器函数（或任何其他异步可迭代对象的工厂）暴露为冷 `Publisher`。每次订阅都会调用工厂获得自己的迭代器，且只有订阅者请求元素时迭代器才会推进：
+
+snippet::micronaut.docs.asyncio.streaming.StreamController[tags="explicit", indent=0, title="A JSON stream from an async generator"]
+
+<1> 异步生成器函数；每次订阅调用一次。
+<2> 在生成器内 await 会使其在事件循环上挂起；需求到来之前不缓冲任何内容。
+<3> 发布者由普通 `def` 路由返回；路由的 `Publisher[Tick]` 注解为序列化给出元素类型。
+
+传入异步迭代器对象（而非工厂）会得到只能订阅一次的发布者。取消订阅会取消挂起的 `__anext__`，随后在其循环上以 `aclose()` 关闭迭代器，因此 HTTP 客户端断开或应用关闭时，生成器中的 `finally` 块与 `async with` 清理会运行。耗尽只完成一次流；异常则以携带 Python 失败及其回溯的错误结束流。yield 出 `None` 会使流失败——Reactive Streams 不允许 null 元素；若空负载是协议的一部分，请使用显式信封对象。
+
+打开的流算作活跃的 Python 执行，因此优雅关闭会像等待运行中的协程一样等待其清理。
+
+== 异步生成器路由
+
+以 `async def` 声明、包含 `yield` 的控制器方法、客户端方法或无类路由是异步生成器，会被自动桥接为 `Publisher`；无需 `as_publisher`。请用 `AsyncIterator[T]`、`AsyncIterable[T]` 或 `AsyncGenerator[T, None]` 标注返回类型以声明元素类型，或直接标注 `Publisher[T]`。未标注的异步生成器流式输出 `object` 元素。
+
+snippet::micronaut.docs.asyncio.streaming.StreamController[tags="generator", indent=0, title="A server-sent event stream from an async generator route"]
+
+<1> 路由以 `text/event-stream` 流式输出 `Event[Tick]` 元素。
+<2> 每个 `yield` 产生一个事件，在客户端请求之后。
+
+显式适配器与自动路由行为一致：HTTP 写入器在连接可写时请求元素，生成器运行在请求的事件循环上，客户端断开会取消订阅并关闭生成器。同步生成器（带 `yield` 的 `def`）不会被桥接为流；请返回列表，或使用异步生成器。

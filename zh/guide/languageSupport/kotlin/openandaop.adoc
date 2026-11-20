@@ -1,0 +1,30 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Kotlin and AOP Advice](https://docs.micronaut.io/5.2.x/core/#core-openandaop)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/languageSupport/kotlin/openandaop.adoc  upstream_commit: 691c87d8316430f04e4cda81c450a47631176360  upstream_hash: dd298fa275436af7a846563c0c6088a7277a287d  translated_at: 2026-11-21 -->
+
+Micronaut 框架提供了一个不使用反射的编译期 AOP API。当您使用任何 Micronaut <<aop,AOP 通知>> 时，它会在编译期创建一个子类来提供 AOP 行为。这可能带来问题，因为 Kotlin 类默认是 final 的。如果应用是使用 Micronaut CLI 创建的，Kotlin link:https://kotlinlang.org/docs/reference/compiler-plugins.html#all-open-compiler-plugin[all-open] 插件已为您配置好，会在使用 AOP 注解时自动把类改为 `open`。若要自行配置，请把 api:io.micronaut.aop.Around[] 类加入受支持注解的列表。
+
+如果您不想或无法使用 `all-open` 插件，则必须把以 AOP 注解标注的类声明为 open：
+
+[source, java]
+----
+import io.micronaut.http.annotation.Controller
+import io.micronaut.http.annotation.Get
+import io.micronaut.http.HttpStatus
+import io.micronaut.validation.Validated
+import jakarta.validation.constraints.NotBlank
+
+@Validated
+@Controller("/email")
+open class EmailController { // <1>
+
+    @Get("/send")
+    fun index(@NotBlank recipient: String, // <1>
+              @NotBlank subject: String): HttpStatus {
+        return HttpStatus.OK
+    }
+}
+----
+
+<1> 如果您使用 `@Validated` 这类 AOP 通知，需要在类级与方法级都使用 `open`。
+
+NOTE: `all-open` 插件不处理方法。如果在方法上声明 AOP 注解，必须手动将其声明为 open。

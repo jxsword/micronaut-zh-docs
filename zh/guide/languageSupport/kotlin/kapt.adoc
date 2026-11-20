@@ -1,0 +1,29 @@
+> 本文翻译自 Micronaut Core v5.2.25 官方文档 [Guide – Kotlin Annotation Processing (KAPT)](https://docs.micronaut.io/5.2.x/core/#core-kapt)，翻译基线锁定于 2026-11-19，非官方译文，以英文原文为准。
+<!-- upstream_file: guide/languageSupport/kotlin/kapt.adoc  upstream_commit: 270734a035b8da357b2be9fb572466ac5eb208b0  upstream_hash: 985ef4c63dc55fd09746d7382a80acdb735b1d2e  translated_at: 2026-11-21 -->
+
+https://kotlinlang.org/docs/reference/kapt.html[Kapt] 编译器插件包含对 Java 注解处理器的支持。要在 Micronaut 应用中使用 Kotlin，请添加相应的依赖来配置 kapt 并在您的 `kt` 源文件上运行它。Kapt 会为您的 Kotlin 类创建 Java「存根」类，Micronaut 的 Java 注解处理器随后即可处理它们。这些存根不会包含在最终编译的应用中。
+
+TIP: 更多关于 kapt 及其特性的信息，请参阅 https://kotlinlang.org/docs/reference/kapt.html[官方文档。]
+
+使用 Gradle 时，Micronaut 注解处理器声明在 `kapt` 作用域中。例如：
+
+[source,groovy]
+.build.gradle 示例
+----
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion" //<1>
+    compile "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
+    kapt "io.micronaut:micronaut-inject-java" //<2>
+    kaptTest "io.micronaut:micronaut-inject-java" //<3>
+    ...
+}
+----
+
+<1> 添加 Kotlin 标准库
+<2> 在 `kapt` 作用域下添加 `micronaut-inject-java` 依赖，使 `src/main` 中的类得到处理
+<3> 在 `kaptTest` 作用域下添加 `micronaut-inject-java` 依赖，使 `src/test` 中的类得到处理。
+
+有了与上文类似的 `build.gradle` 文件后，您现在可以使用 `run` 任务（由 https://docs.gradle.org/current/userguide/application_plugin.html[Application 插件] 提供）运行 Micronaut 应用：
+
+[source,bash]
+$ ./gradlew run

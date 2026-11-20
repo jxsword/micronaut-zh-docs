@@ -2335,66 +2335,66 @@ files:
 - file: guide/languageSupport/kotlin.adoc
   blob_sha: a17ae9f2ece7c8832f57259e8ef19e3c970dd77a
   size: 493
-  status: missing
+  status: current
   zh: zh/guide/languageSupport/kotlin.adoc
   paragraphs: 5
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/languageSupport/kotlin/controller.adoc
   blob_sha: 17e7c8a1cf970bd5ee04f5cb89ca095f0e507d9d
   size: 330
-  status: missing
+  status: current
   zh: zh/guide/languageSupport/kotlin/controller.adoc
   paragraphs: 4
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 270734a035b8da357b2be9fb572466ac5eb208b0
 - file: guide/languageSupport/kotlin/coroutineTracingContextPropagation.adoc
   blob_sha: d881548a35d661ad6ce136d3092d6f5f381a3ab2
   size: 1264
-  status: missing
+  status: current
   zh: zh/guide/languageSupport/kotlin/coroutineTracingContextPropagation.adoc
   paragraphs: 4
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/languageSupport/kotlin/coroutines.adoc
   blob_sha: 09c1dd05a4022a0122eb78ccb4c29ebf7595e9d6
   size: 2018
-  status: missing
+  status: current
   zh: zh/guide/languageSupport/kotlin/coroutines.adoc
   paragraphs: 26
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 130cfede2d9a325faf7016bf10e0a2060c5a3cbd
 - file: guide/languageSupport/kotlin/gradlekapt.adoc
   blob_sha: 1f5cb63baf38d94910d5a16a633cb7aea623b9c2
   size: 757
-  status: missing
+  status: current
   zh: zh/guide/languageSupport/kotlin/gradlekapt.adoc
   paragraphs: 6
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 5280436c47bbcd1a143801fcf266db27b3d6d758
 - file: guide/languageSupport/kotlin/kapt.adoc
   blob_sha: 985ef4c63dc55fd09746d7382a80acdb735b1d2e
   size: 1504
-  status: missing
+  status: current
   zh: zh/guide/languageSupport/kotlin/kapt.adoc
   paragraphs: 10
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 270734a035b8da357b2be9fb572466ac5eb208b0
 - file: guide/languageSupport/kotlin/kaptOrKsp.adoc
   blob_sha: 8aa13a9094c662acd984e27ed41741ae70fefc8d
   size: 959
-  status: missing
+  status: current
   zh: zh/guide/languageSupport/kotlin/kaptOrKsp.adoc
   paragraphs: 10
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/languageSupport/kotlin/kaptintellij.adoc
   blob_sha: 98e21ac514b4152575f2b882cb774696c08280d2
   size: 866
-  status: missing
+  status: current
   zh: zh/guide/languageSupport/kotlin/kaptintellij.adoc
   paragraphs: 8
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/languageSupport/kotlin/kotlinContextPropagation.adoc
   blob_sha: c207cbae4a253677d1f4a250b8ade6afcfd52025
@@ -2407,26 +2407,26 @@ files:
 - file: guide/languageSupport/kotlin/kotlinretainparamnames.adoc
   blob_sha: 963f6dea8e6b046482b0a85ce2cbf3269d8a608d
   size: 1386
-  status: missing
+  status: current
   zh: zh/guide/languageSupport/kotlin/kotlinretainparamnames.adoc
   paragraphs: 10
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 17da29d2e04fc2fa6f8d6b53a00fd62d5372fa45
 - file: guide/languageSupport/kotlin/ksp.adoc
   blob_sha: 75e8179b319b035b9fa56eb5df3d05a4892e2d5e
   size: 3156
-  status: missing
+  status: current
   zh: zh/guide/languageSupport/kotlin/ksp.adoc
   paragraphs: 19
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: bf6df0c89f63556ea6e8e5948d77084a7c1989ae
 - file: guide/languageSupport/kotlin/openandaop.adoc
   blob_sha: dd298fa275436af7a846563c0c6088a7277a287d
   size: 1490
-  status: missing
+  status: current
   zh: zh/guide/languageSupport/kotlin/openandaop.adoc
   paragraphs: 6
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 691c87d8316430f04e4cda81c450a47631176360
 - file: guide/languageSupport/python.adoc
   blob_sha: 0cc7e20af81fc55eb33762a890e25e3fd715645a
@@ -2455,10 +2455,10 @@ files:
 - file: guide/languageSupport/python/asyncAwait/asyncioNetworking.adoc
   blob_sha: ce649255d4e0b4838de078798374ef43543711dc
   size: 9408
-  status: missing
+  status: current
   zh: zh/guide/languageSupport/python/asyncAwait/asyncioNetworking.adoc
   paragraphs: 25
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: dfface2cc2178afdc141f21258af9d09d271de3f
 - file: guide/languageSupport/python/asyncAwait/asyncioRuntime.adoc
   blob_sha: cb245f860384ac45338d01f3161639436720fccb
@@ -2471,18 +2471,18 @@ files:
 - file: guide/languageSupport/python/asyncAwait/asyncioStreaming.adoc
   blob_sha: 54b15b21881fd37bfad59d6f0320e9e087c17f0d
   size: 5527
-  status: missing
+  status: current
   zh: zh/guide/languageSupport/python/asyncAwait/asyncioStreaming.adoc
   paragraphs: 24
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 57cb63d7baf8667cf7a7fba74bb0efc497184a98
 - file: guide/languageSupport/python/asyncAwait/asyncioUnsupported.adoc
   blob_sha: d62d4a768746c7c787afac078777ccb429b711ee
   size: 1483
-  status: missing
+  status: current
   zh: zh/guide/languageSupport/python/asyncAwait/asyncioUnsupported.adoc
   paragraphs: 3
-  updated_at: '2026-11-20'
+  updated_at: '2026-11-21'
   upstream_commit: 1dad7b4225fb4d2f03e6392bb4d1b404d31505d5
 - file: guide/languageSupport/python/decorators.adoc
   blob_sha: 4453593e2f779c24f1c91264e4d18b5218f5bff2
