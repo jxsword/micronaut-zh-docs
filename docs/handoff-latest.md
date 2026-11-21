@@ -19,7 +19,7 @@
 
 ## 状态快照（2026-11-21，M3 收尾）
 
-- 分支 main；**远程 https://github.com/jxsword/micronaut-zh-docs（2026-11-21 建，SSH remote，push 走 SSH——见坑位 14）；在线阅读 https://jxsword.github.io/micronaut-zh-docs/（deploy-pages.yml 自动部署，DR-004）**；manifest：**388 条目 = 387 current + 1 skipped（appendix.adoc 0 字节壳，无引用）+ 0 missing**；全量 validate 387 文件 PASSED（0 警告 0 失败，⑤ 豁免清零）；pytest **100 绿**（+5 check_toc）
+- 分支 main；**远程 https://github.com/jxsword/micronaut-zh-docs（2026-11-21 建，SSH remote，push 走 SSH——见坑位 14）；在线阅读 https://jxsword.github.io/micronaut-zh-docs/（deploy-pages.yml 自动部署；DR-005 起为单页合集形态，左侧编号导航页内跳转）**；manifest：**388 条目 = 387 current + 1 skipped（appendix.adoc 0 字节壳，无引用）+ 0 missing**；全量 validate 387 文件 PASSED（0 警告 0 失败，⑤ 豁免清零）；pytest **100 绿**（+5 check_toc）
 - anchor-registry：123 条（+2 标题自动锚），unresolved 0；toc 结构校验 `scripts/check_toc.py` PASSED（686 页）
 - glossary：45 术语（31 → 45）+ 6 banned；三处 advice 旧译修复已入库
 - **tag v1.0 已打标**——初译期基线锁定解除，进入持续增量模式（PLAN §8）：
@@ -56,6 +56,8 @@
 14. **git push 必须走 SSH**：gh OAuth token 无 `workflow` scope，https push 含 workflow 文件的提交会被拒（`gh auth setup-git` 也无效）；本机 SSH key（id_ed25519_github3）已认证 jxsword，remote 已设 `git@github.com:jxsword/micronaut-zh-docs.git`，直连可达。
 15. **本地预览必须走 HTTP**：沙箱 Firefox 经 xdg-desktop-portal 打开 file:// 时 URL 被重映射到 /run/user/1000/doc/<id>/，portal 只授权用户手动打开的单个文件，页内相对链接全部 404（开发者工具却显示 200）——多文件站点一律 `python3 -m http.server` / 静态服务器提供。起服务用 `setsid memgate … & disown`（nohup 子 shell 与 systemd-run 组合会 hang）。
 16. **actions/deploy-pages 偶发 "Found 0 artifact(s)"**：artifact 已上传成功但同 run 内查询为空（GitHub 侧瞬时延迟），重跑 workflow 即可（实测第 2 次 success）。
+17. **DR-005 单页站机制坑位**：asciidoctor fragment（standalone:false）丢弃 doctitle——章/页标题必须从 `==` 起写（渲染后 postprocess 全局升位 h2→h1）；article/book 模式均无法表达「多个 h1 章带正文」（article level-0 非法、book part 不许直接正文）；官方片段内容零偏移（Astro 拼接），我们 +1 偏移（内部标题深一级，导航/锚点不受影响）；asciidoctor v4 `convert()` 返回 Promise 需 await；asciidoctor 默认样式在包内 `data/asciidoctor-default.css`；中文标题自动锚 slug 保留中文（无害）。
+18. **Bash cwd 漂移**：每次命令后 cwd 可能回到上次 cd 的目录——node/python 调用前先 `cd` 或用绝对路径（两次 MODULE_NOT_FOUND 假失败均由此起）。
 
 ## 硬性纪律清单（继承，持续有效）
 

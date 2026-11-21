@@ -12,9 +12,9 @@ Micronaut Framework 官方主指南（[docs.micronaut.io/5.2.x](https://docs.mic
 
 ## 在线阅读
 
-- **GitHub Pages 在线阅读**：<https://jxsword.github.io/micronaut-zh-docs/>（386 页多页站，含中文导航索引；push 到 main 自动部署）
+- **GitHub Pages 在线阅读**：<https://jxsword.github.io/micronaut-zh-docs/>（单页合集，左侧编号导航页内跳转，交互对齐官方文档站；push 到 main 自动部署）
 - 本地预览：`npm ci --prefix scripts/preview && node scripts/preview/render.mjs` 后用任意静态服务器打开 `build/site/`（如 `python3 -m http.server 8321 --directory build/site`）
-- 渲染为多页静态站（DR-004）：正文/结构/链接/图片全渲染；构建期注入的代码示例与配置属性表按官方站对照提示处理
+- 渲染形态（DR-005）：与官方站同构的单页合集——h1 章 / h2 页（toc 树全路径编号）、`core-<basename>` 页锚与官方锚互通、左侧页面树导航 + scrollspy；构建期注入的代码示例与配置属性表按官方站对照提示处理
 
 ## 在线对照结构
 

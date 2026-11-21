@@ -26,10 +26,18 @@
 - 影响: docs/翻译计划.md 第 2.3、5.2、8 节；CI 不含 deploy workflow。
 - 记录时间 / 会话: 2026-11-19 / micronaut-zh-docs 计划制定会话
 
-## DR-004 2026-11-21 站点形态：轻渲染多页静态站 + GitHub Pages 托管  [状态: 生效]
+## DR-004 2026-11-21 站点形态：轻渲染多页静态站 + GitHub Pages 托管  [状态: 已替代 → DR-005]
 - 背景: M3 收尾后用户提出本地/在线预览需求（DR-003 预留的重新评估点；用户明确指令建仓部署）；GitHub 对 .adoc 的 safe-mode 原生渲染无导航、定制宏残留、相对链接断裂，不满足阅读需求。
 - 选项与权衡: A GitHub 原生 .adoc 渲染（零成本但宏原文/无导航/断链，仅评审视角，弃用）; B asciidoctor.js 适配层轻渲染多页静态站 + GitHub Pages ✓; C 官方 Gradle 管线全仓构建（忠实度最高，但需完整 micronaut-core 仓库与构建期代码注入，重且内存风险高，弃用）
 - 结论: 选 B——scripts/preview/render.mjs 适配层（溯源块正规化 / javadoc 宏族去宏化 / 构建期注入段 TIP 官方站提示 / 裸锚经 anchor-registry 跨页改写 / xref 多页相对化 / imagesdir 深度注入），本地 http.server 与 GitHub Actions deploy-pages 共用同一脚本；本地 http://127.0.0.1:8321，在线 https://jxsword.github.io/micronaut-zh-docs/。
 - 理由: 正文/结构/链接/图片全渲染（386 页 0 失败），构建期注入内容按 DR-003 既定口径降级为官方站对照提示，忠实度定位不变；轻依赖（asciidoctor.js + js-yaml）双端一致。
 - 影响: scripts/preview/、.github/workflows/deploy-pages.yml、README 在线对照结构节；DR-003 状态改为已替代。
 - 记录时间 / 会话: 2026-11-21 / M3 收尾后续会话（用户指令建仓部署）
+
+## DR-005 2026-11-21 站点交互形态：单页合集复刻官方导航（替代 DR-004 多页形态）  [状态: 生效]
+- 背景: 用户实测多页站后指出官方文档为单页（左侧导航页内跳转），多页站查看其他页面需返回索引页，操作不便；经抓取官方 11.4MB 单页核实其机制（toc 顺序拼接、页标题由构建插件插入、全局 core- 前缀锚、内容零偏移）。
+- 选项与权衡: A asciidoctor 单 master 文档渲染（numbered/toc 原生，但 article/book 语义均无法表达「多个 h1 章带正文」，实测 99→30 条 level-0/part 错误，弃用）; B 多页站 + JS hash 路由侧栏（体验接近但 JS 依赖/维护面大/锚点与官方不互通，弃用）; C 逐片段 convert（standalone:false）+ HTML 拼接，伪层级 + postprocess 全局升位 ✓
+- 结论: 选 C——按 toc.yml 顺序逐片段渲染拼接为单页 index.html；章 ==、页 ===（升位后 h1/h2）、片段内容 +1 偏移（内部 == → h3）；每片段插 [[core-<basename>]] 页锚与官方互通；页面树侧栏（toc.yml 展开编号 + scrollspy）注入；渲染后标题全局升位（h2→h1…）对齐官方层级。
+- 理由: 与官方交互一致（单页 + 页内跳转 + 编号导航）；片段级渲染属性隔离、拼接后内部引用天然页内可达；实测 385 片段 0 失败、1.4MB、0.4s。已知差异：内容标题比官方深一级（官方零偏移系 Astro 构建拼接，asciidoctor 无法复现；导航与锚点不受影响）。
+- 影响: scripts/preview/render.mjs 重写；README 在线阅读节；本地 http.server 预览入口不变。
+- 记录时间 / 会话: 2026-11-21 / 同会话（用户确认 A1）
