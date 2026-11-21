@@ -19,7 +19,7 @@
 
 ## 状态快照（2026-11-21，M3 收尾）
 
-- 分支 main；manifest：**388 条目 = 387 current + 1 skipped（appendix.adoc 0 字节壳，无引用）+ 0 missing**；全量 validate 387 文件 PASSED（0 警告 0 失败，⑤ 豁免清零）；pytest **100 绿**（+5 check_toc）
+- 分支 main；**远程 https://github.com/jxsword/micronaut-zh-docs（2026-11-21 建，SSH remote，push 走 SSH——见坑位 14）；在线阅读 https://jxsword.github.io/micronaut-zh-docs/（deploy-pages.yml 自动部署，DR-004）**；manifest：**388 条目 = 387 current + 1 skipped（appendix.adoc 0 字节壳，无引用）+ 0 missing**；全量 validate 387 文件 PASSED（0 警告 0 失败，⑤ 豁免清零）；pytest **100 绿**（+5 check_toc）
 - anchor-registry：123 条（+2 标题自动锚），unresolved 0；toc 结构校验 `scripts/check_toc.py` PASSED（686 页）
 - glossary：45 术语（31 → 45）+ 6 banned；三处 advice 旧译修复已入库
 - **tag v1.0 已打标**——初译期基线锁定解除，进入持续增量模式（PLAN §8）：
@@ -53,6 +53,9 @@
 11. **YAML 行级变换**：`key:` 节点行/注释行/空行原样保留，仅替换 `key: value` 叶值；带引号值保留引号风格；替换值与原值相同则整行不动（`'@Blocking'`）。
 12. **临时脚本沿用纪律**：Write 工具创建 + py_compile 先行 + memgate 包裹；sweep/抽检/术语扫描脚本口径已固化进 reports/m3-final.md，需要复跑时按报告口径重建即可。
 13. **--apply 会改写 source/_upstream_commit**（脚本 apply 收尾写入检测时上游 HEAD，sync_upstream.py:583）：0 变更演练后该文件会偏离基线 sha——M3 收尾时已还原（0b46d27a 与 manifest baseline_commit 一致）；真实增量 apply 后出现此变化属预期行为，配套同步报告会记录当次 HEAD，不必回滚。
+14. **git push 必须走 SSH**：gh OAuth token 无 `workflow` scope，https push 含 workflow 文件的提交会被拒（`gh auth setup-git` 也无效）；本机 SSH key（id_ed25519_github3）已认证 jxsword，remote 已设 `git@github.com:jxsword/micronaut-zh-docs.git`，直连可达。
+15. **本地预览必须走 HTTP**：沙箱 Firefox 经 xdg-desktop-portal 打开 file:// 时 URL 被重映射到 /run/user/1000/doc/<id>/，portal 只授权用户手动打开的单个文件，页内相对链接全部 404（开发者工具却显示 200）——多文件站点一律 `python3 -m http.server` / 静态服务器提供。起服务用 `setsid memgate … & disown`（nohup 子 shell 与 systemd-run 组合会 hang）。
+16. **actions/deploy-pages 偶发 "Found 0 artifact(s)"**：artifact 已上传成功但同 run 内查询为空（GitHub 侧瞬时延迟），重跑 workflow 即可（实测第 2 次 success）。
 
 ## 硬性纪律清单（继承，持续有效）
 

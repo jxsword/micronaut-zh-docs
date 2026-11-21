@@ -7,7 +7,14 @@ Micronaut Framework 官方主指南（[docs.micronaut.io/5.2.x](https://docs.mic
 ## 翻译基线锚定
 
 - upstream: micronaut-core@v5.2.25（5.2.x 分支），锁定于 2026-11-19；**初译完成于 2026-11-21（tag `v1.0`）**
+- 远程仓库：[jxsword/micronaut-zh-docs](https://github.com/jxsword/micronaut-zh-docs)（main 直推，push 触发 validate CI 与 Pages 部署）
 - 上游变更由每周 sync 检测（`--check` 对照 5.2.x 分支 HEAD）；v1.0 后 `--apply` 门控解除，进入持续增量模式：检测 → issue → 段落级增量复译（只重译变更段，保留已译段）
+
+## 在线阅读
+
+- **GitHub Pages 在线阅读**：<https://jxsword.github.io/micronaut-zh-docs/>（386 页多页站，含中文导航索引；push 到 main 自动部署）
+- 本地预览：`npm ci --prefix scripts/preview && node scripts/preview/render.mjs` 后用任意静态服务器打开 `build/site/`（如 `python3 -m http.server 8321 --directory build/site`）
+- 渲染为多页静态站（DR-004）：正文/结构/链接/图片全渲染；构建期注入的代码示例与配置属性表按官方站对照提示处理
 
 ## 在线对照结构
 
