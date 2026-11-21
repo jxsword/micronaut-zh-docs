@@ -1,6 +1,6 @@
 # 交接文档（handoff-latest）
 
-> 更新：2026-11-21 ｜ 会话：M3 全量收尾（**toc 专项 + sweep + 锚点专项 + 抽检 + sync drill + 豁免清零 + README + tag v1.0 全部完成**）｜ 下一会话任务：持续增量（周检测 → issue → 增量复译）
+> 更新：2026-11-21 ｜ 会话：M3 收尾 + DR-006 模块扩展计划定稿（三轮复审 15 项修正）｜ 下一会话任务：**M4.0 多模块基建 + micrometer/validation 试点**（启动提示词见 `docs/新会话启动提示词.md`）
 
 ## 已完成清单（M3 会话，全部随收尾提交入库 + tag v1.0）
 
@@ -39,10 +39,12 @@
 7. **drill 八步**（PLAN §8「演练八步全通」落地口径，见 reports/m3-final.md §5）：前置盘点 → --check 全量 → --check --file → --apply --dry-run → 门控拒绝验证 → --collect-commits → --mark-current 幂等 → --check 复跑幂等 + 产物出树确认；tag 后补 --apply 解除验证。
 8. **0 字节壳文件的断链处置**：被 xref 引用的壳页建最小 zh 镜像（投影块 + basename 锚）；validate ①–⑦ 全过；未被引用的壳页维持 skipped。
 
-## 待办（下一会话：持续增量阶段）
+## 待办（下一会话：M4.0 多模块基建 + 试点）
 
-1. **周检测例行**：跑 `--check`；有变更则开 issue 并按 §5.1 SOP 走增量复译批次（首批可顺带把 B 系列批次报告的目录索引补进 reports/ 便于追溯）。
-2. 远程仓库托管时（另议）：README 免责与 Pages 配置一并做；CI workflows（validate.yml / sync-upstream.yml）本地门禁迁 CI。
+1. **M4.0 全部任务见 `docs/新会话启动提示词.md`**（脚本参数化 / 渲染聚合 / 术语作用域 / check_all / micrometer+validation 试点端到端 / 图片体量实测——LFS 决策）。
+2. **core 持续增量例行**（与模块批次并行，优先级规则：core 增量复译优先）：周 `--check`（扩 check_all.sh 后逐模块）；有变更开 issue `[upstream-sync] …` 并按 §5.1 SOP 增量复译。
+3. 远程仓库后续：README 免责与 Pages 配置已做；CI workflows（validate.yml 已生效、sync-upstream.yml 待远程 cron 启用）。
+4. 5.3.x 基线切换、guides 二期、Maven/Platform 外链模块：届时单独决策（DR-007 起）。
 3. 5.3.x 正式发布时的基线切换：届时按重大决策走 decision_log（DR-004 起）。
 4. 二期 guides（CC-BY-4.0）开工前须新决策。
 
