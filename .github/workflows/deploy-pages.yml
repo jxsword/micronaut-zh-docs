@@ -1,0 +1,38 @@
+name: deploy-pages
+
+# 渲染 zh/ 全量 .adoc 为多页静态站并发布到 GitHub Pages
+# （渲染脚本与本地预览共用：scripts/preview/render.mjs，见 DR-004）
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Render zh docs to static site
+        run: |
+          npm ci --prefix scripts/preview
+          node scripts/preview/render.mjs
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: build/site
+      - id: deployment
+        uses: actions/deploy-pages@v4

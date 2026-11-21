@@ -1,0 +1,13 @@
+{
+  "name": "micronaut-zh-docs-preview",
+  "private": true,
+  "type": "module",
+  "description": "zh/ .adoc 全量渲染为多页静态站（本地预览与 GitHub Pages 共用）",
+  "scripts": {
+    "render": "node render.mjs"
+  },
+  "dependencies": {
+    "@asciidoctor/core": "^4.3.0",
+    "js-yaml": "^5.5.0"
+  }
+}
