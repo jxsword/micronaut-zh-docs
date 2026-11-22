@@ -370,9 +370,9 @@
     "hibernate-validator": {
       "title": "Hibernate Validator",
       "group": "Validation",
-      "repo": null,
+      "repo": "micronaut-projects/micronaut-hibernate-validator",
       "branch": "5.2.x",
-      "batch_prefix": null,
+      "batch_prefix": "HV",
       "page": "hibernate-validator.html"
     },
     "http": {
@@ -682,9 +682,9 @@
     "session": {
       "title": "Session",
       "group": "Misc",
-      "repo": null,
+      "repo": "micronaut-projects/micronaut-session",
       "branch": "5.2.x",
-      "batch_prefix": null,
+      "batch_prefix": "SESSION",
       "page": "session.html"
     },
     "sourcegen": {
@@ -738,9 +738,9 @@
     "tracing": {
       "title": "Tracing",
       "group": "Analytics",
-      "repo": null,
-      "branch": "5.2.x",
-      "batch_prefix": null,
+      "repo": "micronaut-projects/micronaut-tracing",
+      "branch": "8.4.x",
+      "batch_prefix": "TRACING",
       "page": "tracing.html"
     },
     "validation": {

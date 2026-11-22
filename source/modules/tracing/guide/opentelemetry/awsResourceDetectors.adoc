@@ -1,0 +1,9 @@
+https://aws-otel.github.io/docs/getting-started/java-sdk/trace-manual-instr#using-the-aws-resource-detectors[AWS Resource detectors] enrich traces with AWS infrastructure information.
+
+To use AWS resource detectors include the following dependency:
+
+dependency:opentelemetry-aws-resources[groupId=io.opentelemetry.contrib]
+
+and provide a bean of type api:tracing.opentelemetry.ResourceProvider[]
+
+snippet::io.micronaut.tracing.docs.AwsResourceProvider[project-base="test-suite", tags="imports,clazz"]
