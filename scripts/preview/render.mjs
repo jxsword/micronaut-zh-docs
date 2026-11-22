@@ -149,9 +149,9 @@ async function renderModule(site, mod, cfg, links) {
       const p = prefixKeys ? `${prefixKeys}.${k}` : k;
       const rel = p.replace(/\./g, '/') + '.adoc';
       if (typeof v === 'string') {
-        FRAGMENTS.push({ basename: k, title: v, num, depth, chapter: depth === 0, rel });
+        FRAGMENTS.push({ basename: k, title: v, num, depth, chapter: depth === 0, group: false, rel });
       } else {
-        FRAGMENTS.push({ basename: k, title: v.title || k, num, depth, chapter: depth === 0, rel });
+        FRAGMENTS.push({ basename: k, title: v.title || k, num, depth, chapter: depth === 0, group: true, rel });
         walkToc(v, p, [...nums, idx], depth + 1);
       }
     }
@@ -159,6 +159,22 @@ async function renderModule(site, mod, cfg, links) {
   walkToc(toc, '', [], 0);
 
   const available = new Set(walk(zhGuide));
+  // 未入 toc 的 include 片段（如 security 的根层 securityRule/ldap.adoc）：官方站
+  // 将其内容渲染在同名分组键标题之下；此处按 basename 匹配挂载到对应分组片段，
+  // 避免已译页面静默缺失（SEC-04 全量冒烟实测发现，对齐官方行为）
+  const fragRels = new Set(FRAGMENTS.map(f => f.rel));
+  const loose = walk(zhGuide).filter(rel => !fragRels.has(rel));
+  const looseByBasename = new Map();
+  for (const rel of loose) {
+    const base = rel.split('/').pop().replace(/\.adoc$/, '');
+    const host = FRAGMENTS.find(f => f.basename === base && f.rel.endsWith(`/${base}.adoc`));
+    if (host) looseByBasename.set(base, rel);
+  }
+  for (const rel of loose) {
+    if (!looseByBasename.has(rel.split('/').pop().replace(/\.adoc$/, ''))) {
+      console.warn(`WARN: 未入 toc 且无同名分组键可挂载的片段: ${site}/${rel}（内容未渲染）`);
+    }
+  }
   const anchorPfx = `${site}-`;
   const imagesdir = site === 'core' ? 'resources/img/' : `modules/${site}/img/`;
   const CONVERT_ATTRS = {
@@ -176,11 +192,18 @@ async function renderModule(site, mod, cfg, links) {
   const renderedRel = new Set();
   for (const f of FRAGMENTS) {
     let src;
-    if (!available.has(f.rel)) {
-      // skipped 壳（0 字节/纯 include）：章页仅输出标题；叶页缺失=部分翻译的
-      // 预期中间态，计 missingPage 警告并跳过片段，不计入渲染失败（SEC-01 起
-      // 模块多批次推进，整页上线前 CI 不因未译页阻塞全站部署）
-      if (!f.chapter) { missingPage += 1; continue; }
+    const looseRel = looseByBasename.get(f.basename);
+    if (!available.has(f.rel) && looseRel) {
+      // 分组键无自身页面，但存在同名未入 toc 片段：内容挂在分组标题下（官方口径）
+      src = fs.readFileSync(path.join(zhGuide, looseRel), 'utf-8');
+      src = preprocessFragment(src, f.basename, site, modTitle);
+    } else if (!available.has(f.rel)) {
+      // skipped 壳（0 字节/纯 include）：章页仅输出标题；分组键（dict 节点）同样
+      // 仅输出标题级页头（官方站为无页 toc 键生成 h2 锚，如 security 的 flows/
+      // oauth-endpoints/reader/securityRule/ldap——保证导航 href 闭环）；叶页缺失=
+      // 部分翻译的预期中间态，计 missingPage 警告并跳过片段，不计入渲染失败
+      //（SEC-01 起模块多批次推进，整页上线前 CI 不因未译页阻塞全站部署）
+      if (!f.chapter && !f.group) { missingPage += 1; continue; }
       src = '';
       missingChapter += 1;
     } else {
@@ -238,7 +261,7 @@ async function renderModule(site, mod, cfg, links) {
   const pageTitle = site === 'core'
     ? 'Micronaut Framework 中文文档（v5.2.25 基线，非官方译文）'
     : `Micronaut ${esc(modTitle)} 中文文档（${(mod && mod.branch) || '5.2.x'} 基线，非官方译文）`;
-  const partialNote = (missingPage + missingChapter > 0)
+  const partialNote = (missingPage > 0)
     ? ` 本页为部分译文（已覆盖 ${ok}/${FRAGMENTS.length} 页，未译页不在导航显示）。`
     : '';
   const topNote = site === 'core'
