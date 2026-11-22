@@ -53,14 +53,15 @@
 | security | SEC-03 | 29 | 3456 | 3503 | — | current |
 | security | SEC-04 | 28 | 2833 | 2842 | — | current |
 
-- SEC-03（2026-11-23 完成）：29 文件七步全流程，validate 112 文件全绿（豁免 3 条均为既有跟踪：loginController 悬空 + wwwAuthenticate 上游不平衡 xref ×2）；**注入 4 锚**（[[oauth]]/[[openid-authorization-code]]/[[keys]] 消解 SEC-01/02 遗留豁免 3 条 + [[openid-configuration]] 批内闭环）；批内裸 xref 3 处走 SEC-01 口径；validate 拦 ⑦ 邻接 ×1 与 ③ bean 口径 ×13 文件（新译大写 Bean 统一改小写，SEC-01 先例）；术语 +4（refresh token→刷新令牌、access token→访问令牌、Client Credentials Grant→客户端凭证许可、nonce 不译；state/issuer 试用撤回——词形通用致 ③ 误报）。详见 reports/batch-SEC-03.md。
+- SEC-03（2026-11-23 完成）：29 文件七步全流程，validate 112 文件全绿（豁免 3 条均为既有跟踪：loginController 悬空 + wwwAuthenticate 上游不平衡 xref ×2）；**注入 4 锚**（[[oauth]]/[[openid-authorization-code]]/[[keys]] 消解 SEC-01/02 遗留豁免新消解 3 条 + [[openid-configuration]] 批内闭环）；批内裸 xref 3 处走 SEC-01 口径；validate 拦 ⑦ 邻接 ×1 与 ③ bean 口径 ×13 文件（新译大写 Bean 统一改小写，SEC-01 先例）；术语 +4（refresh token→刷新令牌、access token→访问令牌、Client Credentials Grant→客户端凭证许可、nonce 不译；state/issuer 试用撤回——词形通用致 ③ 误报）。详见 reports/batch-SEC-03.md。
+- **SEC-04（2026-11-23 完成，security 收口）**：28 文件七步全流程，validate 140 文件全绿；**security 145 条目全部处置完成（140 current + 5 skipped = 100%）**。注入 [[protectedResourceMetadata]] + **回溯补注入 5 锚**（runAs/jwks/ipPattern/interceptUrlMap/builtInEndpointsAccess——批内引用触发的既有页缺锚，B16/B30/SEC-02 先例第 3 次复用）；③ bean 口径修正 ×4。**全量渲染冒烟**：144/144 片段、10 锚闭环、failureCount 0；实测发现 render.mjs 两处内容缺口（无页分组键无标题页头致 5 导航死链 + 根层 securityRule/ldap 未入 toc 内容静默缺失）并修复（3ee6dde，回归对照四页逐字节一致）；「部分译文」横幅随 missingPage=0 消失。详见 reports/batch-SEC-04.md。
 - 模块导航 toc.yml 标题随首批一并译出核销（micrometer 30 / validation 12 / security 145 条目中 SEC-01 的 43 条 current）。
 - SEC-02（2026-11-23 完成）：40 文件七步全流程，validate 83 文件全绿（豁免 6 条均为预期中间态/既有跟踪）；restore 拦 2 处译丢段；**回溯补注入 4 处**（[[basicAuth]]/[[session]]/[[micronautSecurityAuthenticationCookie]]/[[micronautSecurityAuthenticationIdToken]]，B16/B30 先例——SEC-01 的 11 页级目标中被引用而未注入的子集全部闭环）；批内 [[csrfConfiguration]] 译文首行注入；上游不平衡 xref（`<<basicAuth, basic auth>` 缺右 `>`）registry 扫描未捕获走豁免分支、渲染闭环由锚注入保证；术语 +2（sanitizer→净化器、token propagation→令牌传播，modules.security 现 13 条）。详见 reports/batch-SEC-02.md。
 - 模块进度报表：reports/progress.md（多账本聚合，按模块分组）；模块注册表 config/modules.json（官方导航 18 组，2026-11-23 实抓）。
 - 优先级规则（DR-006 §6）：core 增量复译优先于模块新批次；同会话不混排。
 - security 裸 `<<target>>` xref 口径（SEC-01 确立，SEC-02/03/04 沿用）：译显示文本、保留目标，目标页片段首内容之前原位注入 [[basename]]；上游悬空引用（loginController 类）保持原样走 ⑤ 豁免跟踪。
 - 图片体量实测（M4.0 验收项）：试点两模块 0 图；抽样 security 8.9MB/34 图、oracle-cloud 4.5MB/28 图、aws 0.9MB/4 图、openapi/data ≤0.1MB——外推 71 模块 <300MB，**暂不启用 git-lfs**，P0/P1 里程碑（security 快照落地时）复测。
-- M4.1（P0 安全与观测）待办：security（2–3 会话）+ hibernate-validator + tracing + session；validation/micrometer 已完成。
+- M4.1（P0 安全与观测）待办：hibernate-validator + tracing + session；core/security/micrometer/validation 已完成。P0 全部 100% 后 tag v1.1。
 
 ## 批次状态明细
 

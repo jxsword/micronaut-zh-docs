@@ -27,3 +27,15 @@
 - 本批后遗留豁免跟踪（security 模块终态）：endpoints→loginController（上游悬空，M3 跟踪）+ wwwAuthenticate ×2（上游不平衡 xref，registry 盲区，渲染闭环已由锚注入保证）
 
 *批次收尾：squash commit（本文件 + zh/modules/security/ 整目录 + manifests/security.yml + progress.md）*
+
+## 全量渲染冒烟（三批统一，本批后执行）
+
+- 产物：security.html 144/144 片段全渲染（含 5 个 skipped 壳的标题级页头），failureCount 0；产物时间戳实测更新（坑位 19）
+- **本会话注入的 10 锚全部 href↔id 闭环**（oauth/openid-authorization-code/openid-configuration/keys/protectedResourceMetadata/runAs/jwks/ipPattern/interceptUrlMap/builtInEndpointsAccess）
+- 悬空 href 终态 1 条：loginController（上游悬空，官方站亦无该 id，M3 跟踪维持）
+- **冒烟发现并修复 render.mjs 两处内容缺口**（基建修复单独提交，冒烟纪律实跑）：
+  1. 无页 toc 分组键（reader/flows/oauth-endpoints/securityRule/ldap）官方站生成 `<h2 id="security-<键>">`，本站此前不生成 → 5 条导航死链；修复：分组键（dict 节点）缺页时输出标题级页头，导航闭环
+  2. 根层 securityRule.adoc/ldap.adoc 未入 toc → 不在片段清单 → **已译内容静默缺失**（官方站渲染在同名分组标题下）；修复：未入 toc 片段按 basename 挂载到同名分组键
+  3. 「部分译文」横幅改以 missingPage（真实未译叶页）为条件——security 100% 后横幅不再误显（此前 139/144 系把 5 个 skipped 壳计入分母）
+- 回归对照：core/micrometer/validation/landing 四页修复前后逐字节一致（备份 /tmp/render-smoke-before）；security 修复前后 missingPage 5→0、rendered 139→144
+- 已知噪音（预存在，非本批回归）：重复自动 id（多模块同名 CJK 标题，core 8 处/micrometer 1 处，无 href 指向）；asciidoctor「no callout found」警告（M4.0 起即有）

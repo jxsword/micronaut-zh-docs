@@ -1,8 +1,20 @@
 # 交接文档（handoff-latest）
 
-> 更新：2026-11-23 ｜ 会话：M4.1 会话 2——SEC-02 完成（模块 59.3%）｜ 下一会话任务：**SEC-03（29 文件，oauth 组）→ SEC-04（28 文件）**（启动提示词见 `docs/新会话启动提示词.md`）
+> 更新：2026-11-23 ｜ 会话：M4.1 会话 3——**security 收口（145 条目 100%）**，M4.1 仅剩 hibernate-validator + tracing + session｜ 下一会话任务：**hibernate-validator / tracing / session 三模块**（启动提示词见 `docs/新会话启动提示词.md`）
 
-## 已完成清单（M4.1 会话 2，全部随收尾提交入库）
+## 已完成清单（M4.1 会话 3，全部随收尾提交入库）
+
+| 工作单元 | 说明 |
+|---|---|
+| 周检 | check_all 四快照模块全 0 变更（core cca2a1ce / security cc524538 / micrometer c4d064ee / validation 079f75dc），无需开 issue |
+| SEC-03（35bb691） | 29 文件七步全流程；validate 112 文件全绿；注入 4 锚（[[oauth]]/[[openid-authorization-code]]/[[keys]] 消解 SEC-01/02 遗留豁免 3 条 + [[openid-configuration]] 批内闭环）；validate 拦 ⑦ 邻接 ×1、③ bean 口径 ×13 文件 18 处（新译大写 Bean 统一改小写）；术语 +4（refresh token/access token/Client Credentials Grant/nonce 不译；state/issuer 试用撤回）；批次报告 reports/batch-SEC-03.md |
+| SEC-04（0289b8d） | 28 文件七步全流程；validate 140 文件全绿；**security 145 条目全部处置完成（140 current + 5 skipped = 100%）**；注入 [[protectedResourceMetadata]] + 回溯补注入 5 锚（runAs/jwks/ipPattern/interceptUrlMap/builtInEndpointsAccess）；③ bean 口径修正 ×4；批次报告 reports/batch-SEC-04.md |
+| 全量渲染冒烟 + render 修复（3ee6dde） | security.html 144/144 片段全渲染、failureCount 0、产物时间戳实测更新；**10 锚 href↔id 全闭环**；实测发现 render.mjs 两处内容缺口并修复：①无页 toc 分组键官方站有 h2 锚而本站无 → 5 导航死链 → 分组键缺页输出标题级页头；②根层 securityRule/ldap.adoc 未入 toc → 已译内容静默缺失 → 未入 toc 片段按 basename 挂载同名分组键；③「部分译文」横幅改 missingPage 条件（100% 模块不再误显 139/144）；回归对照 core/micrometer/validation/landing 四页修复前后逐字节一致；悬空 href 终态 1 条（loginController，上游悬空官方亦无，M3 跟踪） |
+
+## 已完成清单（M4.1 会话 2，全部随收尾提交入库；保留供追溯）
+
+| 工作单元 | 说明 |
+|---|---|
 
 | 工作单元 | 说明 |
 |---|---|
@@ -17,17 +29,18 @@
 | 渲染上线 | security.html（SEC-01 片段，55/144 渲染）0 真实失败；id="login"/"authenticationProviders"/"secured" 与对应 href 闭环实测通过；core/micrometer/validation 页无回归；**render 门禁修复（ca0c0f8）**：部分翻译模块不再硬拦 CI（missingPage 警告+诚实导航+部分译文提示），deploy-pages 曾被 8 条「zh 镜像缺失」拦死 |
 | 图片体量复测 | security 单模块 resources 5.9MB（不含 .sketch）；71 模块外推 <300MB 结论维持，**git-lfs 不启用** |
 
-## 状态快照（2026-11-23，M4.1 会话 2 收尾）
+## 状态快照（2026-11-23，M4.1 会话 3 收尾）
 
-- 分支 main，本会话 2 个提交（32c25a0 SEC-02 → 本 docs 收尾），待推送（SSH）；远程 https://github.com/jxsword/micronaut-zh-docs（push 走 SSH——坑位 14）
+- 分支 main，本会话 4 个提交（35bb691 SEC-03 → 0289b8d SEC-04 → 3ee6dde render 修复 → 本 docs 收尾），待推送（SSH）；远程 https://github.com/jxsword/micronaut-zh-docs（push 走 SSH——坑位 14）
 - core：388 条目 = 387 current + 1 skipped，validate/pytest 123 绿无回归
-- micrometer 30/30、validation 12/12 current；security 145 条目 = **83 current（SEC-01 43 + SEC-02 40）** + 57 missing（SEC-03/04）+ 5 skipped，进度 **59.3%**
-- 聚合站：index.html + micrometer.html + validation.html + security.html（SEC-01+02 片段，85/144 渲染）+ landing.html——**SEC-02 片段尚未跑 render 冒烟**（本批未动 render.mjs，线上仍为 SEC-01 版 security.html，无回归风险；三批完成后统一全量冒烟）
-- glossary：45 通用 + 6 banned + modules.terms 16 条（micrometer 2、validation 1、security 13——SEC-02 新增 sanitizer→净化器、token propagation→令牌传播）
-- anchor-registry：148 锚（本批重扫数量不变；wwwAuthenticate 两处不平衡 xref 未被扫描捕获，见实测结论 12）
-- 下一会话首要：**SEC-03（29 文件 3456 词，oauth 组）**：注入 [[oauth]]（消解 loginHandler 豁免）+ [[openid-authorization-code]]（消解 jwks 豁免）+ [[keys]]（消解 jwks 豁免）→ SEC-04（28 文件，注入 [[protectedResourceMetadata]] 消解 wwwAuthenticate 豁免；含 guide 根层 securityRule.adoc 与 ldap.adoc，toc 键错位已在账本覆盖；ojdbcExtensions 组术语届时定夺）→ 三批完成后 security.html 全量渲染冒烟 + 看板收口 → hibernate-validator + tracing + session 接续 → P0 全部 100% 后 tag v1.1
+- **P0 安全与观测层进度：core 100%、security 100%（140 current + 5 skipped）、micrometer 100%（30/30）、validation 100%（12/12）；M4.1 剩余：hibernate-validator、tracing、session（均未快照，开工先核实 repo/分支补填 modules.json，分支优先 5.2.x）**
+- 聚合站：index.html + micrometer.html + validation.html + **security.html（144/144 片段全渲染，100% 完成态）** + landing.html；本会话已跑全量渲染冒烟 + render 修复（3ee6dde），回归对照四页逐字节一致
+- glossary：45 通用 + 6 banned + modules.terms **20 条**（micrometer 2、validation 1、security 17——SEC-03 新增 refresh token→刷新令牌、access token→访问令牌、Client Credentials Grant→客户端凭证许可、nonce 不译；state/issuer 试用后撤回并留注）
+- anchor-registry：148 锚未重扫（wwwAuthenticate 两处不平衡 xref 仍为扫描盲区，见实测结论 12；本会话回溯注入的 5 锚由渲染冒烟实测闭环）
+- security 模块终态豁免跟踪 3 条：endpoints→loginController（上游悬空，官方站亦无，M3 跟踪）+ wwwAuthenticate ×2（上游不平衡 xref registry 盲区，渲染闭环已由 [[basicAuth]]/[[protectedResourceMetadata]] 锚注入保证并经冒烟实测）
+- 下一会话首要：**hibernate-validator / tracing / session 三模块**（详见待办）
 
-## 实测结论（M4.0 结论 1–7 + M4.1 会话 1 结论 8–10 + 会话 2 结论 12–13，继承 M3 结论 1–8 与 B01–B32 全部结论）
+## 实测结论（M4.0 结论 1–7 + M4.1 会话 1 结论 8–10 + 会话 2 结论 12–14 + 会话 3 结论 15–17，继承 M3 结论 1–8 与 B01–B32 全部结论）
 
 1. **dest 前缀约定**：`--manifest manifests/<site>.yml` ⇔ `source/modules/<site>/` ⇔ `zh/modules/<site>/` ⇔ 账本 file 字段 `modules/<site>/…` ⇔ 页 `<site>.html` ⇔ 锚 `<site>-<basename>`——全部由 manifest 文件名 stem 一一推导，无第二处配置。
 2. **模块结构同构性**：micrometer/validation 与 core 完全同构（guide/toc.yml + 嵌套 dict + title 键），segment/protect/validate/assemble/inventory 零改动复用成立；但**源文件可能是纯导读页**（metricsAndReporters.adoc 仅标题+一段，21 个 reporter 各为独立页）——切批后先 cat 源文件确认边界，勿按文件名推测内容。
@@ -43,16 +56,18 @@
 12. **上游不平衡 xref 是 check_anchors 的扫描盲区**：security 上游存在 `<<basicAuth, basic auth>` 缺右 `>` 的笔误（wwwAuthenticate.adoc），check_anchors 的 xref 正则按平衡括号匹配，扫描不到该引用 → registry 无条目 → validate ⑤ 走「裸锚点未登记，豁免（M3 跟踪）」警告分支而非目标存在性检查。渲染层闭环不依赖 registry：显式锚注入（[[basicAuth]]）后 href↔id 天然闭环，由渲染冒烟实测兜底。SEC-04 的 protectedResourceMetadata 同型（`<<protectedResourceMetadata, Resource Metadata>`），届时同口径处理。不为此改 check_anchors 正则（上游笔误语义等价保留，改脚本需走基建冒烟纪律）。
 13. **批内目标锚走译文首行注入路径**：被批内文件引用的目标页（如 csrfConfiguration），其 [[basename]] 写在 `-translated.txt` 首行，restore→assemble 后自动落位于 zh 片段首内容之前——与 SEC-01 直接 Edit zh 片段等价且对后续 re-assemble 幂等（SEC-01 直接 Edit zh 的注入会在该页被重新 assemble 时丢失，本批 4 处回溯注入亦落 zh，若未来 re-assemble 需按批次报告口径重放）。
 14. **restore 门禁对 URL 显示文本占位符同样生效**：译显示文本时若把 {{PROTECTED_URL_*}}[...] 的占位符整体丢弃（只译了文字），restore 按「映射项在译文中缺失」拦截——本批 jwtValidation（qualified）与 doubleSubmitCookiePattern（Cookie prefix）各 1 处。自查模式：翻译带 [显示文本] 的 URL/XREF 占位符时，占位符必须原样保留在译文中。
+15. **render.mjs 对无页 toc 分组键的官方口径**（SEC-04 全量冒烟实测）：官方构建为无自身 .adoc 的 toc 分组键（如 security 的 flows/oauth-endpoints/reader/securityRule/ldap）生成 `<h2 id="security-<键>">` 标题页头；模块渲染此前不生成 → 导航分组标签死链。修复口径：toc dict 节点（group）缺页时输出标题级页头（depth>0 用 `===` 模板，h2 与官方一致；depth=0 走原章页路径），missingChapter 计数、missingPage 不计。同批实测发现根层 securityRule.adoc/ldap.adoc 未入 toc → 片段清单不含 → **已译内容静默缺失**；官方站将其内容渲染在同名分组标题下——修复为未入 toc 片段按 basename 匹配挂载同名分组键（host = f.rel.endsWith("/<basename>.adoc") 的缺页分组），无匹配打印 WARN。回归纪律：改动后 core/micrometer/validation/landing 逐字节对照（备份 /tmp/render-smoke-before 口径）全一致才可提交。
+16. **「部分译文」横幅条件以 missingPage（真实未译叶页）为准**：skipped 壳与分组键页头不计入分母/条件——security 100% 后横幅自动消失；模块推进中途真实未译页存在时横幅仍按设计出现。重复自动 id（多模块同名 CJK 标题如「自定义」，core 8 处/micrometer 1 处）为预存在噪音，无 href 指向、导航不受影响，暂不处理。
+17. **③ 必译术语对通用英文词会系统性误报**（B22 滚动回流教训的通用化）：SEC-03 曾将 state/issuer 写入 glossary 又撤回——"state"/"issuer" 在既有 7 文件散文中各有语境（csrfMitigations「状态」、whatsNew 等），③ 按「en 词出现→zh 词必须命中」检查必然误报。收录判定口径：**词形独特（nonce/Claims 级）或限定词组（refresh token/Client Credentials Grant 级）才收；单词通用词（state/issuer/bean 除外——bean 有 glossary 显式口径）不收**，句内首现括注即可。另：新译文件中大写「Bean」是 ③ 高频误报源（SEC-03 ×13 文件 18 处、SEC-04 ×3 文件 4 处），译文遇 bean 概念一律小写「bean」（glossary 上游惯例口径）。
 
-## 待办（下一会话：SEC-03/04）
+## 待办（下一会话：hibernate-validator / tracing / session → tag v1.1）
 
-1. **SEC-03（29 文件 3456 词，首要）**：tokenendpoints 组 3（refresh/keys/introspectionendpoint）+ retrievingAuthenticatedUser 组 4 + dataAuditing 组 3 + securityEvents + oauth 组 18（oauth 根 + installation/openid + flows/authorization-code 全树 + clientcredentials）。文件清单以 `reports/inventory-security.md` 的 SEC-03 节为准；七步流程；裸 xref 沿用实测结论 8/13 口径（目标锚写译文首行）。**开工即注入 3 锚**：[[oauth]]（消解 loginHandler 豁免）、[[openid-authorization-code]]（消解 jwks 豁免）、[[keys]]（消解 jwks 豁免）。
-2. **SEC-04（28 文件 2833 词）**：oauth flows/clientcredentials 尾部 4 + oauth-endpoints 组 6 + custom-client/proxyToAuthServer/oauthGuides + ojdbcExtensions 组 8 + aot 组 4 + repository/ldap/securityRule 根层 3。**注入 [[protectedResourceMetadata]]**（消解 wwwAuthenticate 豁免，实测结论 12 口径）；ojdbcExtensions 组术语（End User Security Context 等）届时定夺写回 glossary。
-3. **三批完成后**：security.html 全量渲染冒烟（145 条目 59.3%→100%，核对产物时间戳——坑位 19）；SEC-02/03/04 片段首次上线；看板收口 + progress 100%。
-4. **周检例行**：`bash scripts/check_all.sh`；检出变更开 issue `[upstream-sync][<site>] <sha>`；core 增量优先（DR-006 §6，同会话不混排）。
-5. hibernate-validator + tracing + session：SEC 三批完成后接续（各模块开工前先核实 repo/分支并补填 modules.json，分支优先 5.2.x）。
-6. 层间收尾 tag v1.1（P0 全部 100% 后）。
-7. 5.3.x 基线切换、guides 二期、Maven/Platform 外链、configuration-reference：届时单独决策（DR-007 起）。
+1. **三模块开工前置**（SOP §4 第 1 步）：逐一核实 repo slug 与分支（hibernate-validator / tracing / session——modules.json 均 repo=null，分支优先 5.2.x，缺失用默认分支），补填 modules.json；快照（账本顶层 ref + locked_at）；inventory 切批（双指标 非代码词 ≤3500）。
+2. **批次推进**：inventory 切批后逐批七步流程（protect 加 `source/` 前缀 → 翻译落盘 -translated.txt → restore 参数是译文路径（坑位 26）→ assemble → validate 全绿 → mark-current）；裸 xref 沿用实测结论 8/13 口径；锚注入开工前先核对 registry + 批内引用双向清单；bean 一律小写（实测结论 17）；术语按实测结论 17 口径收录。
+3. **渲染冒烟**：每模块收口跑 render + 回归对照（core/micrometer/validation/security/landing 五页备份对照；render.mjs 已按实测结论 15 支持分组键页头与未入 toc 挂载，新模块若出现未入 toc 片段会打 WARN，需人工核对）。
+4. **P0 层收口**：三模块 100% 后 progress 全绿 → 看板收口 → **tag v1.1**（层间收尾，主动产出交接并建议开新会话——纪律 9）。
+5. **周检例行**：`bash scripts/check_all.sh`；检出变更开 issue `[upstream-sync][<site>] <sha>`；core 增量优先（DR-006 §6，同会话不混排）。
+6. 5.3.x 基线切换、guides 二期、Maven/Platform 外链、configuration-reference、render 重复自动 id 噪音治理：届时单独决策（DR-007 起）。
 
 ## 调试经验与坑位（M4.1 会话 1 增补 24–25，继承 1–23）
 
