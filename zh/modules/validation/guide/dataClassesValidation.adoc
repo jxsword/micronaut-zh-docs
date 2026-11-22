@@ -1,0 +1,50 @@
+> 本文翻译自 Micronaut Validation 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Validation – Validating Data Classes](https://docs.micronaut.io/5.2.x/validation/#validation-dataClassesValidation)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/validation/guide/dataClassesValidation.adoc  upstream_commit: a1427ffef1a9385185602d5ddef8c4e7e21aed7e  upstream_hash: d17ba805f63b9aa4a553a75cff12d69fe5913c67  translated_at: 2026-11-23 -->
+
+要校验数据类（data class），例如 POJO（常用于 JSON 交换），类必须标注 {coreDocsUrl}core/annotation/Introspected[@Introspected]（参见 link:https://docs.micronaut.io/latest/guide/#introspection[Micronaut 指南内省一节]）；如果类是外部的，则需通过 `@Introspected` 注解导入。
+
+.POJO 校验示例
+snippet::io.micronaut.docs.validation.Person[tags="class"]
+
+TIP: {coreDocsUrl}core/annotation/Introspected[@Introspected] 注解可用作元注解；`@jakarta.persistence.Entity` 等常见注解会被当作 `@Introspected` 处理
+
+上例定义了一个 `Person` 类，其中两个属性（`name` 与 `age`）施加了约束。注意：Java 中注解可标注在字段或 getter 上；Kotlin data class 的注解应作用于字段；Python 中约束通过 `typing.Annotated` 声明在 `dataclass` 的属性上。
+
+要手动校验类，注入一个 api:validation.validator.Validator[] 实例：
+
+.手动校验示例
+
+snippet::io.micronaut.docs.validation.pojo.PersonServiceSpec[tags="validator", indent="0"]
+
+<1> 校验器校验 person 对象
+<2> 验证约束违反结果
+
+另外，在 bean 方法上可使用 `jakarta.validation.Valid` 触发级联校验：
+
+.ConstraintViolationException 示例
+snippet::io.micronaut.docs.validation.pojo.PersonService[tags="class",indent="0"]
+
+`PersonService` 被调用时会校验 `Person` 类：
+
+.手动校验示例
+
+snippet::io.micronaut.docs.validation.pojo.PersonServiceSpec[tags="validate-service",indent="0"]
+
+<1> 调用被校验的方法
+<2> 验证约束违反结果
+
+通过对泛型参数定义校验注解，可以校验 Java 可迭代类型（如 `List`、`Set` 和 `Map`）中的值。
+
+.可迭代类型校验示例
+
+snippet::io.micronaut.docs.validation.iterable.BookInfoService[tags="validate-iterables",indent="0"]
+
+<1> 列表元素将使用给定注解校验
+<2> Map 的键与值都会被校验
+
+snippet::io.micronaut.docs.validation.iterable.BookInfoSpec[tags="validate-iterables",indent="0"]
+
+<1> List 中第 1 个索引处的违反
+<2> 在 Map 的键中发现的违反
+
+NOTE: Groovy 与 Kotlin 暂不支持该特性

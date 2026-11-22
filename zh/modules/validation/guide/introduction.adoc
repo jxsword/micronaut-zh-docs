@@ -1,0 +1,6 @@
+> 本文翻译自 Micronaut Validation 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Validation – Introduction](https://docs.micronaut.io/5.2.x/validation/#validation-introduction)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/validation/guide/introduction.adoc  upstream_commit: c68e4f60958606cc0ed5432447f8009404cc440c  upstream_hash: 6af177d69b78136db74945511b2429149dd47017  translated_at: 2026-11-23 -->
+
+Micronaut Validation 是一套可为应用定制的校验方案。
+
+NOTE: 从 Micronaut 4.0.0 起，Micronaut Validation 迁移为独立模块。对于更早版本的 Micronaut，请参阅 link:https://docs.micronaut.io/latest/guide/[Micronaut 用户指南]。

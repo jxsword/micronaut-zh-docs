@@ -1,0 +1,27 @@
+> 本文翻译自 Micronaut Validation 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Validation – Validating Annotations at Compile Time](https://docs.micronaut.io/5.2.x/validation/#validation-compileTimeValidation)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/validation/guide/compileTimeValidation.adoc  upstream_commit: b2227b61e8e5f1cc14e90c332aef8830df70dda7  upstream_hash: 70e9783eb4e1bc1aa4d54257a3f2723c1613f4d5  translated_at: 2026-11-23 -->
+
+Micronaut Validation 借助注解处理器类路径中的 `micronaut-validation-processor` 在编译期校验注解元素：
+
+dependency:micronaut-validation-processor[groupId="io.micronaut.validation",scope="annotationProcessor"]
+
+Micronaut Validation 会在编译期校验自身标注了 `jakarta.validation` 的注解值。
+例如考虑以下注解：
+
+.注解校验
+snippet::io.micronaut.docs.validation.custom.TimeOff[tags="imports,class", indent="0"]
+
+如果你尝试在源码中使用 `@TimeOff(duration="junk")`，由于 `duration` 值违反 `DurationPattern` 约束，Micronaut 将使编译失败。
+
+NOTE: 如果 `duration` 是 `@TimeOff(duration="${my.value}")` 之类的属性占位符，校验将推迟到运行期。
+
+注意，要在编译期使用自定义 `ConstraintValidator`，必须改为将校验器定义为类：
+
+.约束校验器示例
+snippet::io.micronaut.docs.validation.custom.DurationPatternValidator[tags="imports,class", indent="0"]
+
+此外：
+
+* 定义一个引用该类的 `META-INF/services/io.micronaut.validation.validator.constraints.ConstraintValidator` 文件
+* 该类必须是 public 且具有 public 无参构造器
+* 被校验的项目必须在注解处理器类路径上包含该类

@@ -1,0 +1,27 @@
+> 本文翻译自 Micronaut Validation 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Validation – Built-In Constraints](https://docs.micronaut.io/5.2.x/validation/#validation-builtInConstraints)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/validation/guide/builtInConstraints.adoc  upstream_commit: 0824cbbbf737b2ce726c37804768b071923133e5  upstream_hash: 859e772d3fb2a1452d7cc29b05a61122bd0c00b5  translated_at: 2026-11-23 -->
+
+Micronaut Validation 在 `io.micronaut.validation.annotation` 包中提供了额外的约束。与其他 Bean Validation 约束一样，这些约束将 `null` 值视为合法；当值必须存在时，请使用 `jakarta.validation.constraints.NotNull`。
+
+[cols="1,3",options="header"]
+|===
+|约束 |说明
+
+|api:validation.annotation.InEnum[]
+|要求 `String` 值匹配通过 `value` 提供的枚举中的常量名。该枚举的实例同样合法。将 `caseSensitive` 设为 `false` 可进行大小写不敏感的字符串比较。
+
+|api:validation.annotation.NotInEnum[]
+|拒绝匹配通过 `value` 提供的枚举中常量名的 `String` 值。将 `caseSensitive` 设为 `false` 可进行大小写不敏感的字符串比较。
+
+|api:validation.annotation.InList[]
+|要求 `String` 值或枚举值匹配通过 `value` 提供的字符串之一。将 `caseSensitive` 设为 `false` 可进行大小写不敏感的比较。
+
+|api:validation.annotation.NotInList[]
+|拒绝匹配通过 `value` 提供的字符串之一的 `String` 值或枚举值。将 `caseSensitive` 设为 `false` 可进行大小写不敏感的比较。
+
+|api:validation.annotation.UniqueElements[]
+|要求数组或 `Iterable` 中所有非空元素唯一。
+
+|api:validation.annotation.URL[]
+|要求字符序列为合法 URL。使用 `protocol`、`host` 与 `port` 限制相应的 URL 组成部分；使用 `regexp` 与 `flags` 施加额外的正则限制。该注解可在同一元素上重复标注。
+|===

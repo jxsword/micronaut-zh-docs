@@ -1,0 +1,35 @@
+> 本文翻译自 Micronaut Validation 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Validation – Quick Start](https://docs.micronaut.io/5.2.x/validation/#validation-quickStart)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/validation/guide/quickStart.adoc  upstream_commit: 07ad17e8aac8bb5eae309b22cdc94ae1703913d2  upstream_hash: 7f2d50fec500100e32ef383448147589c32fa6bc  translated_at: 2026-11-23 -->
+
+要使用 Micronaut 的校验能力，必须将 validation 依赖加入类路径：
+
+dependency:micronaut-validation-processor[scope="annotationProcessor",groupId="io.micronaut.validation"]
+
+dependency:micronaut-validation[groupId="io.micronaut.validation"]
+
+通过在参数上应用 `jakarta.validation` 注解，可以校验类型、字段与方法参数。这些注解由 `jakarta.validation-api` 库提供，但无需将其声明为直接依赖——使用 `micronaut-validation` 时会以传递依赖的方式引入。
+
+== 支持的特性
+
+注意，Micronaut 的实现目前并未完全遵从 https://beanvalidation.org/2.0/spec/[Bean Validator 规范]，因为该规范重度依赖基于反射的 API。
+
+以下特性暂不支持：
+
+* 与 https://beanvalidation.org/2.0/spec/#constraintmetadata[约束元数据 API] 的任何交互，因为 Micronaut 使用编译期生成的元数据
+* 基于 XML 的配置
+* 请使用 api:validation.validator.constraints.ConstraintValidator[]（io.micronaut.validation.validator.constraints.ConstraintValidator）而非 `jakarta.validation.ConstraintValidator` 定义自定义约束，前者支持在编译期校验注解
+
+Micronaut 的实现具有以下优势：
+
+* 无反射、无运行时代理的校验，内存消耗更低
+* JAR 体积更小（Hibernate Validator 会额外增加 1.4MB）
+* 启动更快（Hibernate Validator 会带来 200ms 以上的启动开销）
+* 可通过注解元数据（Annotation Metadata）进行配置
+* 支持响应式 Bean Validation
+* 支持在编译期校验源码 AST
+* 无需额外配置即可与 GraalVM native image 自动兼容
+
+如果你需要完全遵从 Bean Validator 2.0 规范，请在构建中加入 `micronaut-hibernate-validator` 模块，它会替换 Micronaut 的实现。
+
+dependency:micronaut-hibernate-validator[groupId="io.micronaut.beanvalidation"]
+

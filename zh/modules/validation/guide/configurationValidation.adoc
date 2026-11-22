@@ -1,0 +1,6 @@
+> 本文翻译自 Micronaut Validation 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Validation – Validating Configuration Properties](https://docs.micronaut.io/5.2.x/validation/#validation-configurationValidation)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/validation/guide/configurationValidation.adoc  upstream_commit: 7e1446d01106876db32f26277caa1f2eb3cb466f  upstream_hash: 5d8717a6dbd6999a68ea7fe5022b517d2b1462c3  translated_at: 2026-11-23 -->
+
+你还可以校验标注了 {coreDocsUrl}context/annotation/ConfigurationProperties[@ConfigurationProperties] 的类的属性，以确保配置正确。
+
+NOTE: 建议为带校验的 {coreDocsUrl}context/annotation/ConfigurationProperties[@ConfigurationProperties] 类添加 {coreDocsUrl}context/annotation/Context[@Context] 注解，以确保校验在启动时进行。

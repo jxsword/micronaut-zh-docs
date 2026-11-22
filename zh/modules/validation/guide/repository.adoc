@@ -1,0 +1,6 @@
+> 本文翻译自 Micronaut Validation 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Validation – Repository](https://docs.micronaut.io/5.2.x/validation/#validation-repository)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/validation/guide/repository.adoc  upstream_commit: 7d3c61788bf11821ae98a4a516a5aaf4f8c5110a  upstream_hash: c44680d761fc97722ba730443c2296b49e60755a  translated_at: 2026-11-23 -->
+
+本项目的源代码见以下仓库：
+
+https://github.com/{githubSlug}[https://github.com/{githubSlug}]

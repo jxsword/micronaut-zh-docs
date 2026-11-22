@@ -1,0 +1,55 @@
+> 本文翻译自 Micronaut Validation 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Validation – Defining Additional Constraints](https://docs.micronaut.io/5.2.x/validation/#validation-additionalConstraints)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/validation/guide/additionalConstraints.adoc  upstream_commit: a1427ffef1a9385185602d5ddef8c4e7e21aed7e  upstream_hash: a57e6c6b6a9fa99ba48394b4b3efebb025bf3608  translated_at: 2026-11-23 -->
+
+要定义额外的约束，请创建一个新注解，例如：
+
+.约束注解示例
+snippet::io.micronaut.docs.validation.custom.DurationPattern[tags="imports,class", indent="0"]
+
+<1> 该注解应标注 `jakarta.validation.Constraint`
+<2> 可以如上例以硬编码方式提供 `message` 模板。若未指定，Micronaut 会尝试通过 {coreDocsUrl}context/MessageSource[MessageSource] 接口以 `ClassName.message` 查找消息（可选）
+<3> 要支持可重复注解，可以定义一个内部注解（可选）
+
+[.lang-python]
+--
+NOTE: 在 Python 中，注解是返回装饰器（decorator）的函数；注解的参数即装饰器的成员。由于该注解在 `validatedBy` 中引用了校验器类，校验器把注解类型参数声明为前向引用（`ConstraintValidator["DurationPattern", object]`），并用 `typing.TYPE_CHECKING` 保护导入以避免循环导入。
+--
+
+TIP: 可以使用 {coreDocsUrl}context/MessageSource[MessageSource] 与 {coreDocsUrl}context/i18n/ResourceBundleMessageSource[ResourceBundleMessageSource] 类添加消息与消息束。参见 {guideUrl}#bundle[资源束] 文档。
+
+NOTE: 若约束的 `validatedBy = {}` 为空，将使用 bean 上下文查找泛型值为你的注解的 api:validation.validator.constraints.ConstraintValidator[] bean；也可以设置 `validatedBy = MyConstraintValidator.class`，此时校验器可以是内省的 bean，或从 bean 上下文加载的普通 bean。
+
+定义好注解后，请实现一个校验该注解的 api:validation.validator.constraints.ConstraintValidator[]。你既可以直接创建一个实现该接口的 bean 类，也可以定义一个返回一个或多个校验器的工厂。
+
+前者适用于单个 bean：
+
+.约束校验器 bean 示例
+snippet::io.micronaut.docs.validation.custom.MyValidatorBean[tags="imports,class", indent="0"]
+
+<1> 通过内联调用覆盖默认消息模板，以更精细地控制校验错误消息。（自 `2.5.0` 起）
+
+如果计划定义多个校验器，推荐后者：
+
+.约束校验器工厂示例
+snippet::io.micronaut.docs.validation.custom.MyValidatorFactory[tags="imports,class", indent="0"]
+
+<1> 通过内联调用覆盖默认消息模板，以更精细地控制校验错误消息。（自 `2.5.0` 起）
+
+上例实现了一个校验器，校验任何标注 `DurationPattern` 的字段、参数等，确保字符串可用 `java.time.Duration.parse` 解析。
+
+NOTE: 通常 `null` 被视为合法值，`@NotNull` 用于约束值不得为 `null`。上例将 `null` 视为合法值。
+
+例如：
+
+.自定义约束用法示例
+snippet::io.micronaut.docs.validation.custom.HolidayService[tags="class", indent="0"]
+
+要验证上述示例确实校验了 `duration` 参数，可定义一个测试：
+
+.自定义约束用法测试示例
+snippet::io.micronaut.docs.validation.custom.DurationPatternValidatorSpec[tags="test", indent="0"]
+
+<1> 调用被校验的方法
+<2> 验证约束违反结果
+
+TIP: 更多内容参见 https://guides.micronaut.io/latest/micronaut-custom-validation-annotation.html[自定义约束注解校验] 指南。

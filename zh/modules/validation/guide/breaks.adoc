@@ -1,0 +1,11 @@
+> 本文翻译自 Micronaut Validation 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Validation – Breaking Changes](https://docs.micronaut.io/5.2.x/validation/#validation-breaks)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/validation/guide/breaks.adoc  upstream_commit: bc67a1cffdbf0431831bb5ea9d2116ef082492e1  upstream_hash: ca2ce7cc859802abd075c55744128bf665189844  translated_at: 2026-11-23 -->
+
+本节记录 Micronaut Validation 各版本之间的破坏性变更：
+
+=== Micronaut Validation 5.0.0 的破坏性变更
+
+- api:validation.validator.DefaultValidator[] 的 `requireNonNull(String, T)` 与 `requireNonEmpty(String, String)` 方法此前已标记废弃，不再作为公共 API 暴露。
+
+- api:validation.validator.constraints.ConstraintValidator[]（约束校验器）的 `getMessageTemplate())` 与 `requireNonEmpty(String, String)` 方法此前已废弃，现已移除。它们未被使用，且无替代品。
+

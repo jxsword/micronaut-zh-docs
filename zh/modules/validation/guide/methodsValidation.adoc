@@ -1,0 +1,27 @@
+> 本文翻译自 Micronaut Validation 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Validation – Validating Bean Methods](https://docs.micronaut.io/5.2.x/validation/#validation-methodsValidation)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/validation/guide/methodsValidation.adoc  upstream_commit: a1427ffef1a9385185602d5ddef8c4e7e21aed7e  upstream_hash: a7b560e5ec8b6cfc120c49d038e4e063cf81da53  translated_at: 2026-11-23 -->
+
+通过在参数上应用 `jakarta.validation` 注解，可以校验任何声明为 Micronaut bean 的类的方法：
+
+.校验方法
+snippet::io.micronaut.docs.validation.PersonService[tags="imports,class",indent=0]
+
+[.lang-java.lang-kotlin.lang-groovy]
+--
+上例声明在调用 `sayHello` 方法时会对 `@NotBlank` 注解进行校验。
+--
+
+[.lang-python]
+--
+上例声明在调用 `say_hello` 方法时会校验 `NotBlank` 约束。参数上的约束以 `typing.Annotated` 声明。
+--
+
+WARNING: 如果使用 Kotlin，类与方法必须声明为 `open`，以便 Micronaut 创建编译期子类。也可以为类添加 ann:validation.Validated[] 注解，并配置 Kotlin `all-open` 插件，将该注解标记的类保持为 open。参见 https://kotlinlang.org/docs/reference/compiler-plugins.html[编译器插件] 一节。
+
+发生校验错误时会抛出 `jakarta.validation.ConstraintViolationException`。例如：
+
+.ConstraintViolationException 示例
+snippet::io.micronaut.docs.validation.PersonServiceSpec[tags="imports,test",indent=0]
+
+<1> 以空字符串调用该方法
+<2> 发生异常

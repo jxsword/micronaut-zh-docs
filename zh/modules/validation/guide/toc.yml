@@ -1,0 +1,22 @@
+# > 本文翻译自 Micronaut Validation 官方文档（Guide 导航目录，页面标题以本目录为准，5.2.x 分支基线，2026-11-23 锁定），非官方译文，以英文原文为准。
+# <!-- upstream_file: modules/validation/guide/toc.yml  upstream_commit: 0824cbbbf737b2ce726c37804768b071923133e5  upstream_hash: ebf3dcbe97dce0bcc7f43f78ddee3d05c98f5526  translated_at: 2026-11-23 -->
+
+introduction:
+  title: 介绍
+releaseHistory: 发布历史
+quickStart:
+  title: 快速上手
+methodsValidation:
+  title: 校验 Bean 方法
+dataClassesValidation:
+  title: 校验数据类
+configurationValidation:
+  title: 校验配置属性
+additionalConstraints:
+  title: 定义额外约束
+builtInConstraints:
+  title: 内置约束
+compileTimeValidation:
+  title: 编译期校验注解
+breaks: 破坏性变更
+repository: 仓库
