@@ -308,10 +308,24 @@ banned:
 # core 批次不含模块专属术语（防跨模块回流，B22 教训）。
 # 新术语纪律：翻译中发现先写回本节再继续（PLAN §5.1 第 3 步）。
 modules:
-  terms: []
-#    - en: "示例 term"
-#      zh: "示例译名"
-#      module: "micrometer"
-#      status: "approved"
-#      context: "micrometer 章节"
-#      aliases: []
+  terms:
+    - en: "reporter"
+      zh: "上报器"
+      module: "micrometer"
+      status: "approved"
+      context: "micrometer 全模块高频（MICRO-01/02 实译；registry/reporter 分别译注册表/上报器）"
+      aliases: ["reporters"]
+
+    - en: "Observation"
+      zh: "Observation"
+      module: "micrometer"
+      status: "approved"
+      context: "不译；Micrometer Observation API 名（observation.adoc，observation 小写泛指时随语境）"
+      aliases: ["observations"]
+
+    - en: "constraint"
+      zh: "约束"
+      module: "validation"
+      status: "approved"
+      context: "validation 全模块高频（VALID-01 实译；constraint violation=约束违反）"
+      aliases: ["constraints"]
