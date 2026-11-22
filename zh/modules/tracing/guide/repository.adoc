@@ -1,0 +1,6 @@
+> 本文翻译自 Micronaut Tracing 官方文档（8.4.x 分支基线，2026-11-23 锁定） [Tracing – Repository](https://docs.micronaut.io/5.2.x/tracing/#tracing-repository)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/tracing/guide/repository.adoc  upstream_commit: bfb68ba48c1e0e673e71d5de4ae858bf5bf2a66a  upstream_hash: c44680d761fc97722ba730443c2296b49e60755a  translated_at: 2026-11-23 -->
+
+您可以在此仓库中找到本项目的源代码：
+
+https://github.com/{githubSlug}[https://github.com/{githubSlug}]

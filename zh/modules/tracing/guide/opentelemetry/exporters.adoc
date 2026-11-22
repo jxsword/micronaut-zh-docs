@@ -1,0 +1,46 @@
+> 本文翻译自 Micronaut Tracing 官方文档（8.4.x 分支基线，2026-11-23 锁定） [Tracing – OpenTelemetry Exporters](https://docs.micronaut.io/5.2.x/tracing/#tracing-exporters)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/tracing/guide/opentelemetry/exporters.adoc  upstream_commit: 6cfadba19233338680751ffdaccefae598fea827  upstream_hash: 054a5f6cde784c7ae161971fb8a54b11c60e3496  translated_at: 2026-11-23 -->
+
+在您的项目中可以指定要使用的导出器。默认值设为 "none"，表示默认不注册任何导出器。可用值定义在 https://github.com/open-telemetry/opentelemetry-java/blob/main/sdk-extensions/autoconfigure/README.md[Open Telemetry Autoconfigure SDK 文档] 中。
+
+对于要使用的每个导出器，您都必须在配置中指定它，并添加所需的依赖：
+
+下方不带版本号的导出器依赖交由 Micronaut 依赖管理解析。
+如果您覆盖了 Micronaut Tracing 版本，还应一并引入匹配的 `io.micronaut.tracing:micronaut-tracing-bom`，以便导出器使用追踪插桩所期望的 OpenTelemetry 版本。
+
+- OpenTelemetry Protocol 导出器：`otlp`
+dependency:opentelemetry-exporter-otlp[scope="implementation", groupId="io.opentelemetry"]
+- Logging 导出器：`logging`
+dependency:opentelemetry-exporter-logging[scope="implementation", groupId="io.opentelemetry"]
+- Jaeger 导出器：`jaeger`
+dependency:opentelemetry-exporter-jaeger[scope="implementation", groupId="io.opentelemetry"]
+- Google Cloud Trace：`google_cloud_trace`
+dependency:exporter-auto[scope="implementation", groupId="com.google.cloud.opentelemetry"]
+- Zipkin 导出器：`zipkin`
+dependency:opentelemetry-exporter-zipkin[scope="implementation", groupId="io.opentelemetry"]
+
+有关 Logback 集成的详细信息，请参阅本指南中的 Logback 章节。
+
+Zipkin 导出器的配置示例：
+
+[configuration]
+----
+otel:
+  traces:
+    exporter: zipkin
+----
+
+Micronaut 提供的 Zipkin 导出器将使用 Micronaut 的 HTTP 客户端而非 OKHttp 客户端。这会减小依赖图并使原生可执行文件更小。要使用它，请添加以下依赖：
+
+dependency:micronaut-tracing-opentelemetry-zipkin-exporter[scope="implementation", groupId="io.micronaut.tracing"]
+
+要配置 Micronaut Zipkin 导出器，请添加
+[configuration]
+----
+otel:
+  exporter:
+    zipkin:
+      url: <url-to-zipkin-server>
+----
+
+NOTE: Micronaut Zipkin 导出器要求不定义 `otel.traces.exporter` 属性，以避免与 Open Telemetry 默认的 zipkin 导出器实现冲突。

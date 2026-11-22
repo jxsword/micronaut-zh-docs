@@ -1,0 +1,41 @@
+> 本文翻译自 Micronaut Tracing 官方文档（8.4.x 分支基线，2026-11-23 锁定） [Tracing – HTTP Server and Client](https://docs.micronaut.io/5.2.x/tracing/#tracing-http)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/tracing/guide/opentelemetry/http.adoc  upstream_commit: c7749ac4ee3a306032ec6a596d5b43f91ce3bfea  upstream_hash: fb5f5c4e4ea4586f9126f8dd7194d580f46198cc  translated_at: 2026-11-23 -->
+
+要在每个 HTTP 服务器请求、客户端请求、服务器响应和客户端响应上创建跨度对象，您需要添加以下依赖：
+dependency:micronaut-tracing-opentelemetry-http[scope="implementation", groupId="io.micronaut.tracing"]
+
+
+== 过滤 HTTP 跨度
+
+排除健康检查以及指向您服务的其他 HTTP 请求可能会很有用。
+这可以通过在配置中添加正则表达式模式列表来实现：
+
+.过滤 HTTP 请求跨度
+[configuration]
+----
+otel:
+  exclusions:
+    - /health
+    - /env/.*
+----
+
+== 向请求跨度添加 HTTP 请求头
+
+您可以在跨度对象中添加额外的 HTTP 请求头。可以为客户端请求、客户端响应、服务器请求和服务器响应指定不同的请求头。
+
+.向请求跨度添加 HTTP 请求头
+[configuration]
+----
+otel:
+  http:
+    client:
+      request-headers:
+        - X-From-Client-Request
+      response-headers:
+        - X-From-Client-Response
+    server:
+      request-headers:
+        - X-From-Server-Request
+      response-headers:
+        - X-From-Server-Response
+----

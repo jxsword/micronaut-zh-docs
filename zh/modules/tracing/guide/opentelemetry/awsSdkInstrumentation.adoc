@@ -1,0 +1,12 @@
+> 本文翻译自 Micronaut Tracing 官方文档（8.4.x 分支基线，2026-11-23 锁定） [Tracing – AWS SDK Instrumentation](https://docs.micronaut.io/5.2.x/tracing/#tracing-awsSdkInstrumentation)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/tracing/guide/opentelemetry/awsSdkInstrumentation.adoc  upstream_commit: e01327f8088efb87d82e9af6fef82169b6f94721  upstream_hash: 160f616691f87943843b5e2197a2a2b6f9dc63f4  translated_at: 2026-11-23 -->
+
+要为 https://aws-otel.github.io/docs/getting-started/java-sdk/trace-manual-instr#instrumenting-the-aws-sdk[AWS SDK] 插桩，请加入以下依赖：
+
+dependency:opentelemetry-aws-sdk-2.2[groupId=io.opentelemetry.instrumentation,scope=compile]
+
+此外，请加入 https://micronaut-projects.github.io/micronaut-aws/latest/guide/#sdkv2[Micronaut AWS SDK v2] 依赖：
+
+dependency:micronaut-aws-sdk-v2[groupId=io.micronaut.aws,scope=compile]
+
+`micronaut-aws-sdk-v2` 依赖会创建 `SdkClientBuilder` 类型的 bean。为给 AWS SDK 插桩，Micronaut OpenTelemetry 会通过 bean 创建监听器，为 `SdkClientBuilder` 类型的 bean 注册一个追踪拦截器。

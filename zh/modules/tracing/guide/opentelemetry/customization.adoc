@@ -1,0 +1,10 @@
+> 本文翻译自 Micronaut Tracing 官方文档（8.4.x 分支基线，2026-11-23 锁定） [Tracing – OpenTelemetry SDK Customization](https://docs.micronaut.io/5.2.x/tracing/#tracing-customization)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/tracing/guide/opentelemetry/customization.adoc  upstream_commit: a798d48dc73589f50d6aa85c1066a40310aa40c5  upstream_hash: 91f0493814ba10f6c90c0d269973edfabde9c445  translated_at: 2026-11-23 -->
+
+您可以提供 api:tracing.opentelemetry.OpenTelemetryBuilderCustomizer[] 类型的 bean，在 Micronaut 创建 `io.opentelemetry.api.OpenTelemetry` bean 之前自定义 OpenTelemetry 自动配置的 SDK 构建器。
+
+例如，定制器可以注册一个带显式直方图聚合与自定义桶边界的指标视图：
+
+snippet::io.micronaut.tracing.docs.OpenTelemetryBuilderCustomizerExample[project-base="test-suite", tags="imports,histogramViewCustomizer"]
+
+该定制器接收与 Micronaut 内部使用的相同的 `AutoConfiguredOpenTelemetrySdkBuilder`，因此它还可以使用 OpenTelemetry SDK 自动配置扩展点，例如 tracer provider 定制器、meter provider 定制器、日志记录处理器定制器以及属性提供器。

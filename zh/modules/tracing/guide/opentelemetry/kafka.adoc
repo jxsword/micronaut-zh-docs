@@ -1,0 +1,40 @@
+> 本文翻译自 Micronaut Tracing 官方文档（8.4.x 分支基线，2026-11-23 锁定） [Tracing – Kafka](https://docs.micronaut.io/5.2.x/tracing/#tracing-kafka)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/tracing/guide/opentelemetry/kafka.adoc  upstream_commit: a987b5bf00d24618f118fa61c7b060c8bb82d3c3  upstream_hash: c58a4ea59e658d65edfe07b0729689c4b7c61e89  translated_at: 2026-11-23 -->
+
+要在每个 Kafka 消息上创建跨度对象，请添加以下依赖：
+dependency:micronaut-tracing-opentelemetry-kafka[scope="implementation", groupId="io.micronaut.tracing"]
+
+== 向请求跨度添加 Kafka 消息头
+
+Kafka 消息头纳入跨度对象的方式可按如下方式配置：
+
+.向请求跨度添加 Kafka 消息头
+[configuration]
+----
+otel:
+  instrumentation:
+    kafka:
+      wrapper: true
+      headers-as-lists: false
+      attribute-with-prefix: true
+      attribute-prefix: myPrefix
+      captured-headers: # list of headers which need to send as span attributes
+        - myHeader1
+        - myHeader2
+      included-topics:
+        - topic1
+        - topic2
+      excluded-topics:
+        - topic1
+        - topic2
+----
+
+- `wrapper` - 若为 "true"，将通过对消费者和生产者的对象代理执行追踪。如果禁用包装器，则可以改为通过 Kafka 监听器执行追踪。
+- 如果要将请求头设置为列表，请将 `headers-as-lists` 设为 `true`。
+- `attribute-with-prefix` - 是否为跨度属性名添加前缀（默认：false）
+- `attribute-prefix` - 跨度属性（请求头名称）的自定义前缀。默认：*messaging.header.*
+- `captured-headers` 是要作为跨度属性添加的请求头列表。默认情况下，所有请求头都会被添加为跨度属性。若不将任何请求头添加为跨度属性，请指定 `null` 或空字符串。
+- `included-topics` - 要追踪的主题列表
+- `excluded-topics` - 要排除追踪的主题列表
+
+NOTE: 不能同时使用 `included-topics` 与 `excluded-topics` 属性，二者互斥——请二选一。

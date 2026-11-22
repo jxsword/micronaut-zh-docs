@@ -1,0 +1,6 @@
+> 本文翻译自 Micronaut Tracing 官方文档（8.4.x 分支基线，2026-11-23 锁定） [Tracing – Micronaut Tracing Guides](https://docs.micronaut.io/5.2.x/tracing/#tracing-tracingGuides)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/tracing/guide/tracingGuides.adoc  upstream_commit: e5f73d31b54851dae3da0088b64e773ba26da92e  upstream_hash: 6579caf409623231efcd53a4dad1b0a58d29ce8f  translated_at: 2026-11-23 -->
+
+请参阅以下指南列表，进一步了解如何在 Micronaut Framework 中使用分布式追踪：
+
+https://guides.micronaut.io/latest/tag-distributed_tracing.html

@@ -1,0 +1,18 @@
+> 本文翻译自 Micronaut Tracing 官方文档（8.4.x 分支基线，2026-11-23 锁定） [Tracing – OpenTelemetry Propagators](https://docs.micronaut.io/5.2.x/tracing/#tracing-propagators)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/tracing/guide/opentelemetry/propagators.adoc  upstream_commit: c7749ac4ee3a306032ec6a596d5b43f91ce3bfea  upstream_hash: 41457cac7f3091cde87b5d94031dd42d90f1f837  translated_at: 2026-11-23 -->
+
+在您的项目中可以指定要使用的传播器。默认值设为 "tracecontext, baggage"。可用值定义在 https://github.com/open-telemetry/opentelemetry-java/blob/main/sdk-extensions/autoconfigure/README.md[Open Telemetry Autoconfigure SDK 文档] 中。
+
+要在应用中使用 https://docs.aws.amazon.com/xray/latest/devguide/xray-concepts.html#xray-concepts-tracingheader[AWS X-Ray] 传播器，您需要在项目中添加以下依赖：
+
+dependency:opentelemetry-extension-aws[scope="implementation", groupId="io.opentelemetry"]
+
+并且必须在配置文件中添加 "xray"。
+
+[configuration]
+----
+otel:
+  traces:
+    exporter: otlp
+  propagators: tracecontext, baggage, xray
+----

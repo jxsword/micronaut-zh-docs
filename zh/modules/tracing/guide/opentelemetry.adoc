@@ -1,0 +1,19 @@
+> 本文翻译自 Micronaut Tracing 官方文档（8.4.x 分支基线，2026-11-23 锁定） [Tracing – Tracing with OpenTelemetry](https://docs.micronaut.io/5.2.x/tracing/#tracing-opentelemetry)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/tracing/guide/opentelemetry.adoc  upstream_commit: ce64e01f6de07ee706226ddf8c254b6fa3052bc6  upstream_hash: 02e57ec947d20c5b3ddc04f791a85c9f261889c1  translated_at: 2026-11-23 -->
+
+Micronaut Open Telemetry 模块使用 https://github.com/open-telemetry/opentelemetry-java/blob/main/sdk-extensions/autoconfigure/README.md[Open Telemetry Autoconfigure SDK] 为追踪配置 Open Telemetry。某些功能需要您添加额外的依赖。Micronaut 中定义的默认值如下（其中一些可能与 https://github.com/open-telemetry/opentelemetry-java/blob/main/sdk-extensions/autoconfigure/README.md[Open Telemetry Autoconfigure SDK] 模块中的默认值不同）：
+
+- otel.traces.exporter = none
+- otel.metrics.exporter = none
+- otel.logs.exporter = none
+- otel.service.name = application.name 属性的值
+
+OpenTelemetry 库必须使用与 Micronaut Tracing OpenTelemetry 模块相同的 BOM 或平台依赖管理来解析。
+如果应用覆盖了 Micronaut Platform BOM 所提供的 Micronaut Tracing 版本，还应引入匹配的 `io.micronaut.tracing:micronaut-tracing-bom` 版本。
+这样可使 OpenTelemetry 插桩、语义约定、SDK 与导出器依赖保持一致。
+
+标准的 OpenTelemetry 资源配置同样受支持。例如，您可以设置 `otel.resource.attributes=deployment.environment=prod,service.namespace=payments` 或使用等效的 `OTEL_RESOURCE_ATTRIBUTES` 环境变量。
+
+== OpenTelemetry 注解
+
+pkg:tracing.opentelemetry.processing[] 包包含转换器与映射器，支持使用 Open Telemetry 注解。

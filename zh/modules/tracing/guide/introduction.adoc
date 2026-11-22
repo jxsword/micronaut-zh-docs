@@ -1,0 +1,39 @@
+> 本文翻译自 Micronaut Tracing 官方文档（8.4.x 分支基线，2026-11-23 锁定） [Tracing – Introduction](https://docs.micronaut.io/5.2.x/tracing/#tracing-introduction)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/tracing/guide/introduction.adoc  upstream_commit: a798d48dc73589f50d6aa85c1066a40310aa40c5  upstream_hash: 5c1853c462ee481c93aa8b9b241f5beebef75984  translated_at: 2026-11-23 -->
+
+在生产环境中运营微服务时，排查分布式架构中各微服务之间的交互可能颇具挑战。
+
+为了解决这一问题，能够以分布式方式可视化微服务之间的交互至关重要。当前存在多种分布式追踪解决方案，其中最流行的是 https://zipkin.io/[Zipkin] 与 https://www.jaegertracing.io/[Jaeger]，二者都为 https://opentracing.io/[Open Tracing] API 提供不同层级的支持。
+
+Micronaut 为 Zipkin 与 Jaeger（通过 Open Tracing API）提供了集成。
+
+== 追踪注解
+
+pkg:tracing.annotation[] 包包含用于创建新跨度、延续既有跨度以及添加跨度标签的注解。
+您也可以在类或接口上声明 ann:tracing.annotation.NewSpan[]，为每次方法调用创建一个新跨度。
+
+可用注解如下：
+
+* ann:tracing.annotation.NewSpan[] 注解创建一个新跨度，包裹方法调用或响应式类型。它可以声明在方法、类或接口上。方法级注解优先于类级或接口级注解。
+* ann:tracing.annotation.ContinueSpan[] 注解延续既有跨度，包裹方法调用或响应式类型。
+* ann:tracing.annotation.SpanTag[] 注解可用于方法参数，将参数值包含在跨度的标签中。在参数上使用 `@SpanTag` 时，必须用 `@NewSpan` 或 `@ContinueSpan` 之一标注该方法。
+
+以下代码片段展示了使用这些注解的示例：
+
+snippet::io.micronaut.tracing.docs.HelloService[project-base="test-suite", tags="imports,clazz", title="Using Trace Annotations"]
+
+<1> ann:tracing.annotation.NewSpan[] 注解启动一个新跨度
+<2> 使用 ann:tracing.annotation.SpanTag[] 将方法参数作为跨度标签纳入
+<3> 使用 ann:tracing.annotation.ContinueSpan[] 注解延续既有跨度，并使用 `@SpanTag` 纳入附加标签
+
+=== 追踪插桩
+
+除显式追踪标签之外，Micronaut 还内置多项插桩，确保跨度上下文在线程之间以及微服务边界之间传播。
+
+这些插桩位于 `io.micronaut.tracing.instrument` 包中，包括 https://docs.micronaut.io/latest/guide/#clientFilter[客户端过滤器] 与 https://docs.micronaut.io/latest/guide/#filters[服务器过滤器]，用于通过 HTTP 传播必要的请求头。
+
+== 追踪 bean
+
+如果追踪注解与既有插桩尚不能满足需要，Micronaut 的追踪集成会注册一个 `io.opentracing.Tracer` bean，它暴露 Open Tracing API，可按需进行依赖注入。
+
+根据所选实现，还会有其他 bean 可用。例如使用 Zipkin 时，`brave.Tracing` 与 `brave.SpanCustomizer` bean 也可用。

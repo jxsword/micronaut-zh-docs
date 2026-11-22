@@ -1,0 +1,12 @@
+> 本文翻译自 Micronaut Tracing 官方文档（8.4.x 分支基线，2026-11-23 锁定） [Tracing – AWS Resource Detectors](https://docs.micronaut.io/5.2.x/tracing/#tracing-awsResourceDetectors)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/tracing/guide/opentelemetry/awsResourceDetectors.adoc  upstream_commit: a798d48dc73589f50d6aa85c1066a40310aa40c5  upstream_hash: 6d0c8639f9fa0fbf985802dc8b7750537b856a79  translated_at: 2026-11-23 -->
+
+https://aws-otel.github.io/docs/getting-started/java-sdk/trace-manual-instr#using-the-aws-resource-detectors[AWS 资源探测器] 利用 AWS 基础设施信息丰富追踪数据。
+
+要使用 AWS 资源探测器，请加入以下依赖：
+
+dependency:opentelemetry-aws-resources[groupId=io.opentelemetry.contrib]
+
+并提供一个 api:tracing.opentelemetry.ResourceProvider[] 类型的 bean：
+
+snippet::io.micronaut.tracing.docs.AwsResourceProvider[project-base="test-suite", tags="imports,clazz"]

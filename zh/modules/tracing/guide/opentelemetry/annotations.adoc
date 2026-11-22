@@ -1,0 +1,11 @@
+> 本文翻译自 Micronaut Tracing 官方文档（8.4.x 分支基线，2026-11-23 锁定） [Tracing – OpenTelemetry Annotations](https://docs.micronaut.io/5.2.x/tracing/#tracing-annotations)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/tracing/guide/opentelemetry/annotations.adoc  upstream_commit: 4b4f65f0983f3c05291ff1203f804b3451f470a0  upstream_hash: 19ee5a57fab36dd29a72d5469547fdb07b4c9c2e  translated_at: 2026-11-23 -->
+
+pkg:tracing.opentelemetry.processing[] 包包含转换器与映射器，支持使用 Open Telemetry 注解。
+
+NOTE: 自 Micronaut Tracing `4.5.0` 起，OpenTelemetry 的 `@WithSpan` 与 `@SpanAttribute` 注解必须从 `io.opentelemetry.instrumentation.annotations` 引入。仍在引入 `io.opentelemetry.extension.annotations` 的旧应用在升级时需要更新这些引入。
+
+要启用 Open Telemetry 注解，您需要在依赖块中添加以下注解处理器：
+dependency:micronaut-tracing-opentelemetry-annotation[scope="annotationProcessor", version="{version}", groupId="io.micronaut.tracing"]
+
+pkg:tracing.annotation[] 包中定义的 Open Tracing 注解同样可以在 Open Telemetry 中使用。

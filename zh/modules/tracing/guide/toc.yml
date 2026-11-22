@@ -1,0 +1,29 @@
+# > 本文翻译自 Micronaut Tracing 官方文档（Guide 导航目录，页面标题以本目录为准，8.4.x 分支基线，2026-11-23 锁定），非官方译文，以英文原文为准。
+# <!-- upstream_file: modules/tracing/guide/toc.yml  upstream_commit: fcba541ca60e7e8bf77259043ec9b5fb7cd8f3db  upstream_hash: b4643b14cfbd52f33c86c134ad060adb2dd3cb6a  translated_at: 2026-11-23 -->
+
+introduction:
+  title: 介绍
+releaseHistory: 发布历史
+breaks: 破坏性变更
+jaeger: 使用 Jaeger 追踪
+zipkin: 使用 Zipkin 追踪
+opentelemetry:
+  title: 使用 OpenTelemetry 追踪
+  annotations: OpenTelemetry 注解
+  exporters: OpenTelemetry 导出器
+  logback: Logback
+  customization: OpenTelemetry SDK 自定义
+  propagators: OpenTelemetry 传播器
+  idgenerator: ID 生成器
+  http: HTTP 服务器与客户端
+  mdc: Logback MDC
+  grpc: gRPC 服务器与客户端
+  jdbc: JDBC
+  r2dbc: R2DBC
+  kafka: Kafka
+  ucp: Oracle UCP
+  awsSdkInstrumentation: AWS SDK 插桩
+  awsResourceDetectors: AWS 资源探测器
+  opentelemetryGuides: OpenTelemetry 指南
+tracingGuides: Micronaut Tracing 指南
+repository: 仓库

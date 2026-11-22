@@ -1,0 +1,7 @@
+> 本文翻译自 Micronaut Tracing 官方文档（8.4.x 分支基线，2026-11-23 锁定） [Tracing – R2DBC](https://docs.micronaut.io/5.2.x/tracing/#tracing-r2dbc)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/tracing/guide/opentelemetry/r2dbc.adoc  upstream_commit: c739e066eb194f3dde1a3f4fd0b4e1f279496d5d  upstream_hash: 98d2e9eb35d13b1cde579850e2cec6d9c8d29ea2  translated_at: 2026-11-23 -->
+
+要为每个 R2DBC 查询创建跨度，请添加以下依赖：
+dependency:micronaut-tracing-opentelemetry-r2dbc[scope="implementation", groupId="io.micronaut.tracing"]
+
+该依赖为 `io.r2dbc.spi.ConnectionFactory` bean 插桩，拦截数据库查询。

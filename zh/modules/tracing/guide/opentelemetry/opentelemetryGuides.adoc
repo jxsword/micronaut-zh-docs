@@ -1,0 +1,11 @@
+> 本文翻译自 Micronaut Tracing 官方文档（8.4.x 分支基线，2026-11-23 锁定） [Tracing – OpenTelemetry Guides](https://docs.micronaut.io/5.2.x/tracing/#tracing-opentelemetryGuides)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/tracing/guide/opentelemetry/opentelemetryGuides.adoc  upstream_commit: e5f73d31b54851dae3da0088b64e773ba26da92e  upstream_hash: 0ea993efeaf6e222754d39c9cd085fd8c0fcc46e  translated_at: 2026-11-23 -->
+
+
+请参阅以下指南，进一步了解如何在 Micronaut Framework 中使用 OpenTelemetry 进行分布式追踪：
+
+- https://guides.micronaut.io/latest/micronaut-cloud-trace-google.html[在 Micronaut Framework 中使用 Google Cloud Trace 进行 OpenTelemetry 追踪]
+- https://guides.micronaut.io/latest/micronaut-cloud-trace-oci.html[在 Micronaut Framework 中使用 Oracle Cloud 进行 OpenTelemetry 追踪]
+- https://guides.micronaut.io/latest/micronaut-microservices-distributed-tracing-jaeger-opentelemetry.html[在 Micronaut Framework 中使用 OpenTelemetry 与 Jaeger 实现微服务分布式追踪]
+- https://guides.micronaut.io/latest/micronaut-microservices-distributed-tracing-xray.html[在 Micronaut Framework 中通过 X-Ray 与 OpenTelemetry 实现微服务分布式追踪]
+- https://guides.micronaut.io/latest/micronaut-microservices-distributed-tracing-zipkin-opentelemetry.html[在 Micronaut Framework 中使用 OpenTelemetry 与 Zipkin 实现微服务分布式追踪]

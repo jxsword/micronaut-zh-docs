@@ -7,177 +7,202 @@ files:
 - file: modules/tracing/guide/breaks.adoc
   blob_sha: 6ab5b9e6b6e075649a7ca416db14c04f963793f1
   size: 2714
-  status: missing
+  status: current
   zh: zh/modules/tracing/guide/breaks.adoc
   paragraphs: 16
   updated_at: '2026-11-23'
+  upstream_commit: 6cfadba19233338680751ffdaccefae598fea827
 - file: modules/tracing/guide/introduction.adoc
   blob_sha: 5c1853c462ee481c93aa8b9b241f5beebef75984
   size: 2972
-  status: missing
+  status: current
   zh: zh/modules/tracing/guide/introduction.adoc
   paragraphs: 16
   updated_at: '2026-11-23'
+  upstream_commit: a798d48dc73589f50d6aa85c1066a40310aa40c5
 - file: modules/tracing/guide/jaeger.adoc
   blob_sha: 9db21cea4a269f500ee4874db102f57b4d46abbc
   size: 3260
-  status: missing
+  status: current
   zh: zh/modules/tracing/guide/jaeger.adoc
   paragraphs: 35
   updated_at: '2026-11-23'
+  upstream_commit: e5f73d31b54851dae3da0088b64e773ba26da92e
 - file: modules/tracing/guide/opentelemetry.adoc
   blob_sha: 02e57ec947d20c5b3ddc04f791a85c9f261889c1
   size: 1526
-  status: missing
+  status: current
   zh: zh/modules/tracing/guide/opentelemetry.adoc
   paragraphs: 6
   updated_at: '2026-11-23'
+  upstream_commit: ce64e01f6de07ee706226ddf8c254b6fa3052bc6
 - file: modules/tracing/guide/opentelemetry/annotations.adoc
   blob_sha: 19ee5a57fab36dd29a72d5469547fdb07b4c9c2e
   size: 814
-  status: missing
+  status: current
   zh: zh/modules/tracing/guide/opentelemetry/annotations.adoc
   paragraphs: 4
   updated_at: '2026-11-23'
+  upstream_commit: 4b4f65f0983f3c05291ff1203f804b3451f470a0
 - file: modules/tracing/guide/opentelemetry/awsResourceDetectors.adoc
   blob_sha: 6d0c8639f9fa0fbf985802dc8b7750537b856a79
   size: 501
-  status: missing
+  status: current
   zh: zh/modules/tracing/guide/opentelemetry/awsResourceDetectors.adoc
   paragraphs: 5
   updated_at: '2026-11-23'
+  upstream_commit: a798d48dc73589f50d6aa85c1066a40310aa40c5
 - file: modules/tracing/guide/opentelemetry/awsSdkInstrumentation.adoc
   blob_sha: 160f616691f87943843b5e2197a2a2b6f9dc63f4
   size: 689
-  status: missing
+  status: current
   zh: zh/modules/tracing/guide/opentelemetry/awsSdkInstrumentation.adoc
   paragraphs: 5
   updated_at: '2026-11-23'
+  upstream_commit: e01327f8088efb87d82e9af6fef82169b6f94721
 - file: modules/tracing/guide/opentelemetry/customization.adoc
   blob_sha: 91f0493814ba10f6c90c0d269973edfabde9c445
   size: 785
-  status: missing
+  status: current
   zh: zh/modules/tracing/guide/opentelemetry/customization.adoc
   paragraphs: 4
   updated_at: '2026-11-23'
+  upstream_commit: a798d48dc73589f50d6aa85c1066a40310aa40c5
 - file: modules/tracing/guide/opentelemetry/exporters.adoc
   blob_sha: 054a5f6cde784c7ae161971fb8a54b11c60e3496
   size: 2226
-  status: missing
+  status: current
   zh: zh/modules/tracing/guide/opentelemetry/exporters.adoc
   paragraphs: 14
   updated_at: '2026-11-23'
+  upstream_commit: 6cfadba19233338680751ffdaccefae598fea827
 - file: modules/tracing/guide/opentelemetry/grpc.adoc
   blob_sha: fb1d4e06f036ad5b27b871a146994c93025d44f0
   size: 254
-  status: missing
+  status: current
   zh: zh/modules/tracing/guide/opentelemetry/grpc.adoc
   paragraphs: 1
   updated_at: '2026-11-23'
+  upstream_commit: e5f73d31b54851dae3da0088b64e773ba26da92e
 - file: modules/tracing/guide/opentelemetry/http.adoc
   blob_sha: fb5f5c4e4ea4586f9126f8dd7194d580f46198cc
   size: 1112
-  status: missing
+  status: current
   zh: zh/modules/tracing/guide/opentelemetry/http.adoc
   paragraphs: 11
   updated_at: '2026-11-23'
+  upstream_commit: c7749ac4ee3a306032ec6a596d5b43f91ce3bfea
 - file: modules/tracing/guide/opentelemetry/idgenerator.adoc
   blob_sha: 9bc977e9b11b6399152dbc7a1be246cd4af4aea1
   size: 1068
-  status: missing
+  status: current
   zh: zh/modules/tracing/guide/opentelemetry/idgenerator.adoc
   paragraphs: 4
   updated_at: '2026-11-23'
+  upstream_commit: 2d130f30d4642efe26ba8ca1a49e6e0c195be1eb
 - file: modules/tracing/guide/opentelemetry/jdbc.adoc
   blob_sha: 01c9bebdd0652ba533c6966142bbfdaa90f82d0b
   size: 298
-  status: missing
+  status: current
   zh: zh/modules/tracing/guide/opentelemetry/jdbc.adoc
   paragraphs: 2
   updated_at: '2026-11-23'
+  upstream_commit: f67a3236b420532cc86d5419ce4d9665c07d2bb0
 - file: modules/tracing/guide/opentelemetry/kafka.adoc
   blob_sha: c58a4ea59e658d65edfe07b0729689c4b7c61e89
   size: 1697
-  status: missing
+  status: current
   zh: zh/modules/tracing/guide/opentelemetry/kafka.adoc
   paragraphs: 8
   updated_at: '2026-11-23'
+  upstream_commit: a987b5bf00d24618f118fa61c7b060c8bb82d3c3
 - file: modules/tracing/guide/opentelemetry/logback.adoc
   blob_sha: dae42ad116892e98262f727e9f3271b42affee75
   size: 1035
-  status: missing
+  status: current
   zh: zh/modules/tracing/guide/opentelemetry/logback.adoc
   paragraphs: 9
   updated_at: '2026-11-23'
+  upstream_commit: 0e0123a93a0021f09270db280b9105ffd5b4befb
 - file: modules/tracing/guide/opentelemetry/mdc.adoc
   blob_sha: adc3f7b3a3421512d1627b164288c3e5588ef657
   size: 1362
-  status: missing
+  status: current
   zh: zh/modules/tracing/guide/opentelemetry/mdc.adoc
   paragraphs: 10
   updated_at: '2026-11-23'
+  upstream_commit: 0e99dbb8a2fc1e2be576263c72d3b609cb34432e
 - file: modules/tracing/guide/opentelemetry/opentelemetryGuides.adoc
   blob_sha: 0ea993efeaf6e222754d39c9cd085fd8c0fcc46e
   size: 991
-  status: missing
+  status: current
   zh: zh/modules/tracing/guide/opentelemetry/opentelemetryGuides.adoc
   paragraphs: 2
   updated_at: '2026-11-23'
+  upstream_commit: e5f73d31b54851dae3da0088b64e773ba26da92e
 - file: modules/tracing/guide/opentelemetry/propagators.adoc
   blob_sha: 41457cac7f3091cde87b5d94031dd42d90f1f837
   size: 763
-  status: missing
+  status: current
   zh: zh/modules/tracing/guide/opentelemetry/propagators.adoc
   paragraphs: 6
   updated_at: '2026-11-23'
+  upstream_commit: c7749ac4ee3a306032ec6a596d5b43f91ce3bfea
 - file: modules/tracing/guide/opentelemetry/r2dbc.adoc
   blob_sha: 98d2e9eb35d13b1cde579850e2cec6d9c8d29ea2
   size: 281
-  status: missing
+  status: current
   zh: zh/modules/tracing/guide/opentelemetry/r2dbc.adoc
   paragraphs: 2
   updated_at: '2026-11-23'
+  upstream_commit: c739e066eb194f3dde1a3f4fd0b4e1f279496d5d
 - file: modules/tracing/guide/opentelemetry/ucp.adoc
   blob_sha: 867a151c5c3e3302bbced033bfc100246df55d17
   size: 1071
-  status: missing
+  status: current
   zh: zh/modules/tracing/guide/opentelemetry/ucp.adoc
   paragraphs: 7
   updated_at: '2026-11-23'
+  upstream_commit: fcba541ca60e7e8bf77259043ec9b5fb7cd8f3db
 - file: modules/tracing/guide/releaseHistory.adoc
   blob_sha: 27a32c8d794821198b94792d5480f7985d5dce77
   size: 161
-  status: missing
+  status: current
   zh: zh/modules/tracing/guide/releaseHistory.adoc
   paragraphs: 2
   updated_at: '2026-11-23'
+  upstream_commit: bfb68ba48c1e0e673e71d5de4ae858bf5bf2a66a
 - file: modules/tracing/guide/repository.adoc
   blob_sha: c44680d761fc97722ba730443c2296b49e60755a
   size: 130
-  status: missing
+  status: current
   zh: zh/modules/tracing/guide/repository.adoc
   paragraphs: 2
   updated_at: '2026-11-23'
+  upstream_commit: bfb68ba48c1e0e673e71d5de4ae858bf5bf2a66a
 - file: modules/tracing/guide/toc.yml
   blob_sha: b4643b14cfbd52f33c86c134ad060adb2dd3cb6a
   size: 760
-  status: missing
+  status: current
   zh: zh/modules/tracing/guide/toc.yml
   paragraphs: 1
   updated_at: '2026-11-23'
+  upstream_commit: fcba541ca60e7e8bf77259043ec9b5fb7cd8f3db
 - file: modules/tracing/guide/tracingGuides.adoc
   blob_sha: 6579caf409623231efcd53a4dad1b0a58d29ce8f
   size: 179
-  status: missing
+  status: current
   zh: zh/modules/tracing/guide/tracingGuides.adoc
   paragraphs: 2
   updated_at: '2026-11-23'
+  upstream_commit: e5f73d31b54851dae3da0088b64e773ba26da92e
 - file: modules/tracing/guide/zipkin.adoc
   blob_sha: 8eb6aefa3a798456595f9bc7a900039cd2626939
   size: 3691
-  status: missing
+  status: current
   zh: zh/modules/tracing/guide/zipkin.adoc
   paragraphs: 45
   updated_at: '2026-11-23'
+  upstream_commit: e5f73d31b54851dae3da0088b64e773ba26da92e
 ref: 8.4.x
 locked_at: '2026-11-23'

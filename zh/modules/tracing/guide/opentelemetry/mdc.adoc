@@ -1,0 +1,22 @@
+> 本文翻译自 Micronaut Tracing 官方文档（8.4.x 分支基线，2026-11-23 锁定） [Tracing – Logback MDC](https://docs.micronaut.io/5.2.x/tracing/#tracing-mdc)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/tracing/guide/opentelemetry/mdc.adoc  upstream_commit: 0e99dbb8a2fc1e2be576263c72d3b609cb34432e  upstream_hash: adc3f7b3a3421512d1627b164288c3e5588ef657  translated_at: 2026-11-23 -->
+
+== Logback MDC（映射诊断上下文）
+
+OpenTelemetry 提供 Logback MDC 插桩，可将活跃的跨度上下文添加到日志事件中。
+当您的日志聚合系统独立于追踪读取应用日志，而您希望将日志行与日志事件创建时活跃的追踪和跨度关联时，这很有用。
+
+为应用添加 OpenTelemetry Logback MDC 依赖：
+
+dependency:opentelemetry-logback-mdc-1.0[scope="runtimeOnly", groupId="io.opentelemetry.instrumentation"]
+
+然后用 OpenTelemetry MDC appender 包装您的 Logback appender，并在日志模式中包含 MDC 键：
+
+.配置 Logback MDC 追踪关联
+[source,xml]
+include::src/main/docs/guide/opentelemetry/logback-mdc.xml[]
+
+默认 MDC 键为 `trace_id`、`span_id` 与 `trace_flags`。
+只有当存在有效的当前跨度时才会添加这些值，因此在被追踪执行之外写入的日志可能不包含追踪关联字段。
+
+更多选项（包括自定义 MDC 键名与 baggage 支持）请参阅 https://github.com/open-telemetry/opentelemetry-java-instrumentation/blob/main/docs/logger-mdc-instrumentation.md[OpenTelemetry logger MDC 文档] 与 https://github.com/open-telemetry/opentelemetry-java-instrumentation/tree/main/instrumentation/logback/logback-mdc-1.0/library[OpenTelemetry Logback MDC 库文档]。

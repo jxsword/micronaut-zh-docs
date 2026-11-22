@@ -1,0 +1,8 @@
+> 本文翻译自 Micronaut Tracing 官方文档（8.4.x 分支基线，2026-11-23 锁定） [Tracing – JDBC](https://docs.micronaut.io/5.2.x/tracing/#tracing-jdbc)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/tracing/guide/opentelemetry/jdbc.adoc  upstream_commit: f67a3236b420532cc86d5419ce4d9665c07d2bb0  upstream_hash: 01c9bebdd0652ba533c6966142bbfdaa90f82d0b  translated_at: 2026-11-23 -->
+
+[[jdbc]]
+要在每个 JDBC 查询上创建跨度对象，请添加以下依赖：
+dependency:micronaut-tracing-opentelemetry-jdbc[scope="implementation", groupId="io.micronaut.tracing"]
+
+该依赖为 `javax.sql.DataSource` bean 插桩，拦截对数据库的查询。

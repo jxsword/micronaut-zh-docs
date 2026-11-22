@@ -1,0 +1,100 @@
+> 本文翻译自 Micronaut Tracing 官方文档（8.4.x 分支基线，2026-11-23 锁定） [Tracing – Tracing with Jaeger](https://docs.micronaut.io/5.2.x/tracing/#tracing-jaeger)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/tracing/guide/jaeger.adoc  upstream_commit: e5f73d31b54851dae3da0088b64e773ba26da92e  upstream_hash: 9db21cea4a269f500ee4874db102f57b4d46abbc  translated_at: 2026-11-23 -->
+
+https://www.jaegertracing.io/[Jaeger] 是 Uber 开发的分布式追踪系统，在很大程度上堪称 https://opentracing.io/[Open Tracing] 的参考实现。
+
+== 运行 Jaeger
+
+上手 Jaeger 最简单的方式是使用 Docker：
+
+[source,bash]
+----
+$ docker run -d \
+  -e COLLECTOR_ZIPKIN_HTTP_PORT=9411 \
+  -p 5775:5775/udp \
+  -p 6831:6831/udp \
+  -p 6832:6832/udp \
+  -p 5778:5778 \
+  -p 16686:16686 \
+  -p 14268:14268 \
+  -p 9411:9411 \
+  jaegertracing/all-in-one:1.6
+----
+
+导航到 `http://localhost:16686` 即可访问 Jaeger UI。
+
+更多信息请参阅 https://www.jaegertracing.io/docs/getting-started/[Jaeger 入门]。
+
+== 向 Jaeger 发送追踪
+
+[TIP]
+.使用 CLI
+====
+如果您使用 Micronaut CLI 创建项目，请提供 `tracing-jaeger` 特性，以便在项目中加入 Jaeger 追踪：
+----
+$ mn create-app my-app --features tracing-jaeger
+----
+====
+
+要将追踪跨度发送到 Jaeger，请在构建中添加 `micronaut-tracing-jaeger` 依赖：
+
+dependency:micronaut-tracing-jaeger[groupId="io.micronaut.tracing"]
+
+然后在配置中启用 Jaeger 追踪（可能只需在生产配置中启用）：
+
+[configuration]
+----
+tracing:
+  jaeger:
+    enabled: true
+----
+
+默认情况下，Jaeger 将被配置为把追踪数据发送到本地运行的 Jaeger agent。
+
+== Jaeger 配置
+
+用于向 Jaeger 发送跨度的 Jaeger 客户端有许多可用的配置选项，它们一般通过 api:tracing.jaeger.JaegerConfiguration[] 类暴露。可用选项请参阅 Javadoc。
+
+以下是自定义 JaegerConfiguration 配置的示例：
+
+.自定义 Jaeger 配置
+[configuration]
+----
+tracing:
+  jaeger:
+    enabled: true
+    sampler:
+      probability: 0.5
+    sender:
+      agentHost: foo
+      agentPort: 5775
+    reporter:
+      flushInterval: 2000
+      maxQueueSize: 200
+    codecs: W3C,B3,JAEGER
+----
+
+您也可以将常用配置类（如 `io.jaegertracing.Configuration.SamplerConfiguration`）以定义 bean 的方式可选地依赖注入到 api:tracing.jaeger.JaegerConfiguration[] 中。同样，自定义的 `io.opentracing.ScopeManager` 可以注入到 api:tracing.jaeger.JaegerTracerFactory[] 中。可用的注入点请参阅 api:tracing.jaeger.JaegerConfiguration[] 与 api:tracing.jaeger.JaegerTracerFactory[] 的 API。
+
+== 过滤 HTTP 跨度
+
+排除健康检查以及指向您服务的其他 HTTP 请求可能会很有用。
+这可以通过在配置中添加正则表达式模式列表来实现：
+
+.过滤 HTTP 请求跨度
+[configuration]
+----
+tracing:
+  jaeger:
+    enabled: true
+  exclusions:
+    - /health
+    - /env/.*
+----
+
+== Jaeger 指南
+
+请参阅以下指南，进一步了解如何在 Micronaut Framework 中使用 Jaeger 进行分布式追踪：
+
+- https://guides.micronaut.io/latest/micronaut-microservices-distributed-tracing-jaeger.html[在 Micronaut Framework 中使用 OpenTracing 与 Jaeger 实现微服务分布式追踪]
+- https://guides.micronaut.io/latest/micronaut-microservices-distributed-tracing-jaeger-opentelemetry.html[在 Micronaut Framework 中使用 OpenTelemetry 与 Jaeger 实现微服务分布式追踪]

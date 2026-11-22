@@ -1,0 +1,23 @@
+> 本文翻译自 Micronaut Tracing 官方文档（8.4.x 分支基线，2026-11-23 锁定） [Tracing – Oracle UCP](https://docs.micronaut.io/5.2.x/tracing/#tracing-ucp)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/tracing/guide/opentelemetry/ucp.adoc  upstream_commit: fcba541ca60e7e8bf77259043ec9b5fb7cd8f3db  upstream_hash: 867a151c5c3e3302bbced033bfc100246df55d17  translated_at: 2026-11-23 -->
+
+要启用 https://github.com/open-telemetry/opentelemetry-java-instrumentation/tree/main/instrumentation/oracle-ucp-11.2/library[OpenTelemetry Library Instrumentation for Oracle UCP]，
+请添加以下依赖：
+dependency:micronaut-tracing-opentelemetry-ucp[scope="implementation", groupId="io.micronaut.tracing"]
+
+该依赖将 `oracle.ucp.UniversalConnectionPool` bean 与 Micronaut JDBC 管理的 UCP 池注册到 OpenTelemetry，从而收集 Oracle UCP 连接池指标。
+对于 Micronaut JDBC 管理的 UCP 数据源，该插桩会在应用上下文启动期间注册指标。
+
+该插桩只注册 Oracle UCP 连接池指标；不会为 SQL 查询创建跨度。
+要为 JDBC 查询创建跨度，还须添加 <<jdbc,JDBC>> 一节所述的依赖。
+
+该插桩默认启用，但可以通过 `otel.instrumentation.ucp.enabled` 设置禁用：
+
+.禁用 Oracle UCP 插桩
+[configuration]
+----
+otel:
+  instrumentation:
+    ucp:
+      enabled: false
+----

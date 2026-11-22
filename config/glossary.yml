@@ -434,3 +434,45 @@ modules:
       status: "approved"
       context: "不译；OpenID 认证请求防重放参数（SEC-03 实译；NoncePersistence 等类名不译。注：state/issuer 因词形通用、③ 必译检查系统性误报，不收录）"
       aliases: []
+
+    - en: "distributed tracing"
+      zh: "分布式追踪"
+      module: "tracing"
+      status: "approved"
+      context: "tracing 全模块核心概念（TRACING-01 实译；Micronaut Tracing 等产品名不译）"
+      aliases: ["Distributed Tracing"]
+
+    - en: "span"
+      zh: "跨度"
+      module: "tracing"
+      status: "approved"
+      context: "分布式追踪核心概念（TRACING-01 实译，对齐 OpenTelemetry 中文社区口径；@WithSpan/SpanAttribute 等类名与代码语境不译）"
+      aliases: ["spans", "Span", "Spans"]
+
+    - en: "exporter"
+      zh: "导出器"
+      module: "tracing"
+      status: "approved"
+      context: "OpenTelemetry exporter 配置概念（TRACING-01 实译；otel.traces.exporter 等配置 key 不译）"
+      aliases: ["exporters"]
+
+    - en: "propagator"
+      zh: "传播器"
+      module: "tracing"
+      status: "approved"
+      context: "OpenTelemetry propagator 上下文传播格式选择（TRACING-01 实译；otel.propagators 配置 key 不译）"
+      aliases: ["propagators"]
+
+    - en: "instrumentation"
+      zh: "插桩"
+      module: "tracing"
+      status: "approved"
+      context: "OpenTelemetry/框架对第三方库的自动插桩（TRACING-01 实译；OpenTelemetry Instrumentation 等产品/依赖名不译）"
+      aliases: ["instrumentations", "Instrumentation"]
+
+    - en: "sampler"
+      zh: "采样器"
+      module: "tracing"
+      status: "approved"
+      context: "追踪采样配置概念（TRACING-01 实译；brave.sampler.Sampler 等类名不译）"
+      aliases: ["samplers", "Sampler", "samplers"]

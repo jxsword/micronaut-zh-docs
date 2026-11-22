@@ -1,0 +1,114 @@
+> 本文翻译自 Micronaut Tracing 官方文档（8.4.x 分支基线，2026-11-23 锁定） [Tracing – Tracing with Zipkin](https://docs.micronaut.io/5.2.x/tracing/#tracing-zipkin)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/tracing/guide/zipkin.adoc  upstream_commit: e5f73d31b54851dae3da0088b64e773ba26da92e  upstream_hash: 8eb6aefa3a798456595f9bc7a900039cd2626939  translated_at: 2026-11-23 -->
+
+https://zipkin.io/[Zipkin] 是一个分布式追踪系统。它帮助收集时序数据以排查微服务架构中的延迟问题，并负责这些数据的收集与检索。
+
+== 运行 Zipkin
+
+上手 Zipkin 最快的方式是使用 Docker：
+
+.使用 Docker 运行 Zipkin
+[source,bash]
+----
+$ docker run -d -p 9411:9411 openzipkin/zipkin
+----
+
+导航到 `http://localhost:9411` 即可查看追踪数据。
+
+== 向 Zipkin 发送追踪
+
+[TIP]
+.使用 CLI
+====
+如果您使用 Micronaut CLI 创建项目，请提供 `tracing-zipkin` 特性，以便在项目中加入 Zipkin 追踪：
+----
+$ mn create-app my-app --features tracing-zipkin
+----
+====
+
+要将追踪跨度发送到 Zipkin，请在构建中添加 `micronaut-tracing-brave-http` 依赖：
+
+dependency:micronaut-tracing-brave-http[groupId="io.micronaut.tracing"]
+
+然后在配置中启用 Zipkin 追踪（可能只需在生产配置中启用）：
+
+[configuration]
+----
+tracing:
+  zipkin:
+    enabled: true
+----
+
+== 自定义 Zipkin 发送器
+
+要发送跨度，您需要配置 Zipkin 发送器。您可以配置一个 api:tracing.brave.sender.HttpClientSender[]，它使用 Micronaut 原生 HTTP 客户端并通过 `tracing.zipkin.http.url` 设置异步发送跨度：
+
+.配置多个 Zipkin 服务器
+[configuration]
+----
+tracing:
+  zipkin:
+    enabled: true
+    http:
+      url: http://localhost:9411
+----
+
+将跨度发送到 localhost 通常不适合生产部署，因此一般需要为生产环境配置一个或多个 Zipkin 服务器的位置：
+
+.配置多个 Zipkin 服务器
+[configuration]
+----
+tracing:
+  zipkin:
+    enabled: true
+    http:
+      urls:
+        - https://foo:9411
+        - https://bar:9411
+----
+
+TIP: 在生产环境中，将 `TRACING_ZIPKIN_HTTP_URLS` 环境变量设置为逗号分隔的 URL 列表同样可行。
+
+或者，要使用不同的 `zipkin2.reporter.Sender` 实现，您可以定义一个 `zipkin2.reporter.Sender` 类型的 bean，它将被优先使用。
+
+== Zipkin 配置
+
+用于向 Zipkin 发送跨度的 Brave 客户端有许多可用的配置选项，它们一般通过 api:tracing.brave.BraveTracerConfiguration[] 类暴露。可用选项请参阅 Javadoc。
+
+以下是自定义 Zipkin 配置的示例：
+
+.自定义 Zipkin 配置
+[configuration]
+----
+tracing:
+  zipkin:
+    enabled: true
+    traceId128Bit: true
+    sampler:
+      probability: 1
+----
+
+您也可以将常用配置类（如 `brave.sampler.Sampler`）以定义 bean 的方式可选地依赖注入到 api:tracing.brave.BraveTracerConfiguration[] 中。可用的注入点请参阅 api:tracing.brave.BraveTracerConfiguration[] 的 API。
+
+== 过滤 HTTP 跨度
+
+排除健康检查以及指向您服务的其他 HTTP 请求可能会很有用。
+这可以通过在配置中添加正则表达式模式列表来实现：
+
+.过滤 HTTP 请求跨度
+[configuration]
+----
+tracing:
+  zipkin:
+    enabled: true
+  exclusions:
+    - /health
+    - /env/.*
+----
+
+== Zipkin 指南
+
+请参阅以下指南，进一步了解如何在 Micronaut Framework 中使用 Zipkin 进行分布式追踪：
+
+- https://guides.micronaut.io/latest/micronaut-microservices-distributed-tracing-zipkin.html[在 Micronaut Framework 中使用 OpenTracing 与 Zipkin 实现微服务分布式追踪]
+- https://guides.micronaut.io/latest/micronaut-microservices-distributed-tracing-zipkin-opentelemetry.html[在 Micronaut Framework 中使用 OpenTelemetry 与 Zipkin 实现微服务分布式追踪]

@@ -1,0 +1,31 @@
+> 本文翻译自 Micronaut Tracing 官方文档（8.4.x 分支基线，2026-11-23 锁定） [Tracing – Logback](https://docs.micronaut.io/5.2.x/tracing/#tracing-logback)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/tracing/guide/opentelemetry/logback.adoc  upstream_commit: 0e0123a93a0021f09270db280b9105ffd5b4befb  upstream_hash: dae42ad116892e98262f727e9f3271b42affee75  translated_at: 2026-11-23 -->
+
+要通过 OpenTelemetry 从 Logback 导出日志，请添加 Logback appender 依赖：
+dependency:opentelemetry-logback-appender-1.0[scope="implementation", groupId="io.opentelemetry.instrumentation"]
+
+当 appender 依赖与 `micronaut-tracing-opentelemetry` 同时位于类路径中时，Micronaut 会自动将应用的 `OpenTelemetry` bean 安装到 Logback appender 中，无需自定义引导代码。
+
+配置示例：
+
+[configuration]
+----
+otel:
+  logs:
+    exporter: otlp
+----
+
+[source,xml]
+----
+<configuration>
+    <appender name="OTEL" class="io.opentelemetry.instrumentation.logback.appender.v1_0.OpenTelemetryAppender"/>
+
+    <root level="INFO">
+        <appender-ref ref="OTEL"/>
+    </root>
+</configuration>
+----
+
+如果只想通过 MDC 插桩集成，在继续使用既有 appender 的同时用活跃的追踪与跨度标识符丰富 Logback 输出，请改为添加以下依赖：
+
+dependency:opentelemetry-logback-mdc-1.0[scope="runtimeOnly", groupId="io.opentelemetry.instrumentation"]

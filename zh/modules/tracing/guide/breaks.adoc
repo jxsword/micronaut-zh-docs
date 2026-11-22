@@ -1,0 +1,39 @@
+> 本文翻译自 Micronaut Tracing 官方文档（8.4.x 分支基线，2026-11-23 锁定） [Tracing – Breaking Changes](https://docs.micronaut.io/5.2.x/tracing/#tracing-breaks)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/tracing/guide/breaks.adoc  upstream_commit: 6cfadba19233338680751ffdaccefae598fea827  upstream_hash: 6ab5b9e6b6e075649a7ca416db14c04f963793f1  translated_at: 2026-11-23 -->
+
+本节将记录在里程碑或候选发布版本，以及主版本发布（如 1.x.x → 2.x.x）期间可能出现的破坏性变更。
+
+== Micronaut Tracing 4.5.0 破坏性变更
+
+Micronaut Tracing `4.5.0` 将 OpenTelemetry 注解支持升级到 OpenTelemetry Instrumentation `1.19.0`。
+该版本将 `@WithSpan` 与 `@SpanAttribute` 从 `io.opentelemetry.extension.annotations` 移动到了 `io.opentelemetry.instrumentation.annotations`。
+
+如果您的应用使用了 `micronaut-tracing-opentelemetry-annotation` 并引入了旧包，请在升级到 Micronaut Tracing `4.5.0` 或更新版本之前，将这些引入更新为新包。
+
+如果您在独立于应用所用 Micronaut Platform 版本的情况下升级 Micronaut Tracing `4.5.0`，请在依赖管理中引入匹配的 `io.micronaut.tracing:micronaut-tracing-bom` 版本（与您的 Micronaut Tracing 版本相同）。
+保留较旧 Micronaut Platform 管理的追踪 BOM、同时仅强制指定 Micronaut Tracing OpenTelemetry 模块版本的应用，可能解析到互不兼容的 OpenTelemetry 插桩、语义约定、SDK 与导出器工件。
+
+== Micronaut Tracing 5.0.0-M2 破坏性变更
+
+Micronaut Tracing Zipkin 模块（`io.micronaut.tracing:micronaut-tracing-zipkin`）已重命名并拆分为两个新模块：
+
+- Micronaut Tracing Brave（`io.micronaut.tracing:micronaut-tracing-brave`）
+- Micronaut Tracing Brave HTTP（`io.micronaut.tracing:micronaut-tracing-brave-http`）
+
+如果您正在使用 OpenTracing 和 Micronaut Tracing Zipkin 模块，则需要将 `io.micronaut.tracing:micronaut-tracing-zipkin` 依赖更改为 `io.micronaut.tracing:micronaut-tracing-brave-http`。Micronaut Tracing Brave HTTP 提供了用于对请求自动插桩的 HTTP 过滤器。如果不需要 HTTP 过滤器，则只需添加 `io.micronaut.tracing:micronaut-tracing-brave` 依赖。
+
+== Micronaut Tracing 7.0.0 破坏性变更
+
+以下依赖已更新：
+
+- Open Telemetry 1.36
+- Open Telemetry Instrumentation 1.33.1
+
+此次 Open Telemetry 更新要求将以下 Zipkin 依赖更新到新的主版本：
+
+- Zipkin Reporter 3.3.0
+- Zipkin Brave 6.0.2
+
+上述依赖更新中，唯一可能影响最终用户代码的变更是：由于 `brave.ErrorParser` 类型已不复存在，`io.micronaut.tracing.brave.BraveTracerConfiguration` 中的 `errorParser` 属性已被移除。
+
+`io.micronaut.tracing.zipkin.http.client.HttpClientSender` 类现已弃用，因其实现的是已弃用的 Zipkin API。该类将在未来版本中被基于 Zipkin 3 API 的实现取代。
