@@ -1,0 +1,7 @@
+# > 本文翻译自 Micronaut Hibernate Validator 官方文档（Guide 导航目录，页面标题以本目录为准，5.2.x 分支基线，2026-11-23 锁定），非官方译文，以英文原文为准。
+# <!-- upstream_file: modules/hibernate-validator/guide/toc.yml  upstream_commit: 7d664c4f1f3e658ba80b15667f237478c89e8e2a  upstream_hash: 639a5dbe229820c5b1b049ad72fb90b135c539cc  translated_at: 2026-11-23 -->
+
+introduction: 介绍
+releaseHistory: 发布历史
+setup: 配置 Hibernate Validator
+repository: 仓库

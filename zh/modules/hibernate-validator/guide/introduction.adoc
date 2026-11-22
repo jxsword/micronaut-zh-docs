@@ -1,0 +1,8 @@
+> 本文翻译自 Micronaut Hibernate Validator 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Hibernate Validator – Introduction](https://docs.micronaut.io/5.2.x/hibernate-validator/#hibernate-validator-introduction)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/hibernate-validator/guide/introduction.adoc  upstream_commit: cd4af2250bfbbee9badc7daeb3ef86b6edffa3c5  upstream_hash: 7c3bc038d7a713f4610cf0c0b02c5a206a410971  translated_at: 2026-11-23 -->
+
+`micronaut-hibernate-validator` 模块提供对使用 Hibernate Validator 校验 Micronaut bean 的支持。
+
+使用 Hibernate Validator 将创建一个 `jakarta.validation.ValidatorFactory` bean，它能够校验 Micronaut bean 上的 `jakarta.validation` 注解。
+
+请参阅文档中的 https://docs.micronaut.io/latest/guide/index.html#beanValidation[Bean Validation] 章节，了解如何声明 bean 校验规则。

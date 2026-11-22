@@ -1,0 +1,4 @@
+> 本文翻译自 Micronaut Hibernate Validator 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Hibernate Validator – Configuring Hibernate Validator](https://docs.micronaut.io/5.2.x/hibernate-validator/#hibernate-validator-setup)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/hibernate-validator/guide/setup.adoc  upstream_commit: b27f8e41dafcae7f6903a7769f3dbeb992193c3b  upstream_hash: f98a630a4eca3ac2a645a396b97a6c41d63b309f  translated_at: 2026-11-23 -->
+
+dependency:io.micronaut.beanvalidation:micronaut-hibernate-validator[]

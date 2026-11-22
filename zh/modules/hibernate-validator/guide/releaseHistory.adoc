@@ -1,0 +1,6 @@
+> 本文翻译自 Micronaut Hibernate Validator 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Hibernate Validator – Release History](https://docs.micronaut.io/5.2.x/hibernate-validator/#hibernate-validator-releaseHistory)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/hibernate-validator/guide/releaseHistory.adoc  upstream_commit: 7d664c4f1f3e658ba80b15667f237478c89e8e2a  upstream_hash: 27a32c8d794821198b94792d5480f7985d5dce77  translated_at: 2026-11-23 -->
+
+您可以在此处找到本项目的发布列表（附发布说明）：
+
+https://github.com/{githubSlug}/releases[https://github.com/{githubSlug}/releases]

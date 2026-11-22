@@ -1,0 +1,6 @@
+> 本文翻译自 Micronaut Hibernate Validator 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Hibernate Validator – Repository](https://docs.micronaut.io/5.2.x/hibernate-validator/#hibernate-validator-repository)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/hibernate-validator/guide/repository.adoc  upstream_commit: 47ff3a5aecb4c8addbc7b47d8c98f4f6d4f24064  upstream_hash: c44680d761fc97722ba730443c2296b49e60755a  translated_at: 2026-11-23 -->
+
+您可以在此仓库中找到本项目的源代码：
+
+https://github.com/{githubSlug}[https://github.com/{githubSlug}]

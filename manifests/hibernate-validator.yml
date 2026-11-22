@@ -7,37 +7,42 @@ files:
 - file: modules/hibernate-validator/guide/introduction.adoc
   blob_sha: 7c3bc038d7a713f4610cf0c0b02c5a206a410971
   size: 454
-  status: missing
+  status: current
   zh: zh/modules/hibernate-validator/guide/introduction.adoc
   paragraphs: 3
   updated_at: '2026-11-23'
+  upstream_commit: cd4af2250bfbbee9badc7daeb3ef86b6edffa3c5
 - file: modules/hibernate-validator/guide/releaseHistory.adoc
   blob_sha: 27a32c8d794821198b94792d5480f7985d5dce77
   size: 161
-  status: missing
+  status: current
   zh: zh/modules/hibernate-validator/guide/releaseHistory.adoc
   paragraphs: 2
   updated_at: '2026-11-23'
+  upstream_commit: 7d664c4f1f3e658ba80b15667f237478c89e8e2a
 - file: modules/hibernate-validator/guide/repository.adoc
   blob_sha: c44680d761fc97722ba730443c2296b49e60755a
   size: 130
-  status: missing
+  status: current
   zh: zh/modules/hibernate-validator/guide/repository.adoc
   paragraphs: 2
   updated_at: '2026-11-23'
+  upstream_commit: 47ff3a5aecb4c8addbc7b47d8c98f4f6d4f24064
 - file: modules/hibernate-validator/guide/setup.adoc
   blob_sha: f98a630a4eca3ac2a645a396b97a6c41d63b309f
   size: 71
-  status: missing
+  status: current
   zh: zh/modules/hibernate-validator/guide/setup.adoc
   paragraphs: 1
   updated_at: '2026-11-23'
+  upstream_commit: b27f8e41dafcae7f6903a7769f3dbeb992193c3b
 - file: modules/hibernate-validator/guide/toc.yml
   blob_sha: 639a5dbe229820c5b1b049ad72fb90b135c539cc
   size: 121
-  status: missing
+  status: current
   zh: zh/modules/hibernate-validator/guide/toc.yml
   paragraphs: 1
   updated_at: '2026-11-23'
+  upstream_commit: 7d664c4f1f3e658ba80b15667f237478c89e8e2a
 ref: 5.2.x
 locked_at: '2026-11-23'
