@@ -248,6 +248,7 @@ def check_xrefs(zh_rel: str, zh_text: str, errors: List[str],
             continue
         if not fpart and not anchor:
             continue
+        from_registry = False
         if not fpart:
             # <<#anchor>> 与 <<anchor>> 同为裸锚点，全域经登记表解析
             resolved = reg_file.get(anchor, "")
@@ -256,6 +257,7 @@ def check_xrefs(zh_rel: str, zh_text: str, errors: List[str],
                     f"⑤ 裸锚点未登记，豁免（M3 跟踪）：{anchor}")
                 continue
             fpart = resolved
+            from_registry = True
         elif not sep and "/" not in fpart and "." not in fpart:
             # 与 check_anchors 同规则：无 # 且不含 / . → 裸锚点
             resolved = reg_file.get(fpart, "")
@@ -264,9 +266,14 @@ def check_xrefs(zh_rel: str, zh_text: str, errors: List[str],
                     f"⑤ 裸锚点未登记，豁免（M3 跟踪）：{fpart}")
                 continue
             anchor, fpart = fpart, resolved
+            from_registry = True
         elif not sep:
             anchor = ""  # 页级文件引用（含 / 或 .），存在性已验证
-        src_file = (SOURCE_DIR / doc_prefix / fpart if fpart
+        # 登记表 file 字段为 source/ 相对路径（模块条目自带 modules/<site>/
+        # 前缀），不得再拼 doc_prefix（SEC-01 实测：双前缀致模块裸锚全误报）
+        rel_of = fpart if from_registry else (
+            f"{doc_prefix}/{fpart}" if doc_prefix else fpart)
+        src_file = (SOURCE_DIR / rel_of if fpart
                     else SOURCE_DIR / zh_rel)
         if not src_file.exists():
             errors.append(f"⑤ xref 目标文件不存在于上游：{fpart or zh_rel}")
@@ -276,7 +283,7 @@ def check_xrefs(zh_rel: str, zh_text: str, errors: List[str],
         # 目标文件已译 → zh 中须有该锚点（原位注入）；未译 → 豁免。
         # 注：不做 reg_ids 放行——登记表条目恰是被引锚点，放行会使
         # 注入机检恒真（B01 实测缺陷修复，对齐 PLAN §5.6 机检本意）
-        zh_target = (ZH_DIR / doc_prefix / fpart if fpart
+        zh_target = (ZH_DIR / rel_of if fpart
                      else ZH_DIR / zh_rel)
         if zh_target.exists():
             zt = zh_target.read_text(encoding="utf-8")
