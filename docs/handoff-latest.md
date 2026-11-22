@@ -1,10 +1,55 @@
 # 交接文档（handoff-latest）
 
-> 更新：2026-11-23 ｜ 会话：M4.0 多模块基建 + micrometer/validation 试点（DR-006 落地）｜ 下一会话任务：**M4.1 P0 安全与观测——security 起步（2–3 会话）**（启动提示词见 `docs/新会话启动提示词.md`）
+> 更新：2026-11-23 ｜ 会话：M4.1 会话 1——security 起步（SEC-01 完成）｜ 下一会话任务：**SEC-02（40 文件 3452 词）→ SEC-03 → SEC-04**（启动提示词见 `docs/新会话启动提示词.md`）
 
-## 已完成清单（M4.0 会话，全部随收尾提交入库）
+## 已完成清单（M4.1 会话 1，全部随收尾提交入库）
 
 | 工作单元 | 说明 |
+|---|---|
+| 周检双缺陷修复（a29e59d） | check_all.sh `${MEMGATE}` 引号致 127（4de82c6 起从未真正跑通，意外退出码聚合还会吞掉 127）；sync_upstream.py `--check/--apply` repo 解析曾一律取 --repo 缺省值（core），模块账本误比对 core 文档树产整树伪 diff（micrometer/validation 虚报 22+68 文件变更）——repo 解析改三级：--repo 显式 > 账本 upstream.remote > core 缺省；修复后三模块 check 全 0，无需开 issue |
+| security 快照（0e2a358） | micronaut-security 5.2.x @ cc524538（默认分支实为 5.5.x，按 SOP 优先 5.2.x）；145 条目=144 adoc+toc.yml、33 图 5.9MB、5 壳 skipped；**.sketch 3.3MB 白名单外不入库**（坑位 25）；modules.json 补填 repo/SEC；inventory 切批 SEC-01…04（13173 非代码词） |
+| SEC-01（016ecd3 + 5b2c185） | 42 文件+toc.yml 七步全流程；43 条目全 current；裸 `<<target>>` xref 11 目标确立「译显示文本+目标页注入 [[basename]]」口径（8 处注入，href↔id 渲染闭环实测）；glossary modules 分节 +9 条 security 术语；validate 43 文件全绿（豁免 2 条）；⑤ 登记表路径双前缀缺陷修复（016ecd3） |
+| 渲染上线 | security.html 132KB（SEC-01 片段）0 失败；id="login"/"authenticationProviders"/"secured" 与对应 href 闭环实测通过；core/micrometer/validation 页无回归 |
+| 图片体量复测 | security 单模块 resources 5.9MB（不含 .sketch）；71 模块外推 <300MB 结论维持，**git-lfs 不启用** |
+
+## 状态快照（2026-11-23，M4.1 会话 1 收尾）
+
+- 分支 main，领先 origin 5 个提交（a29e59d → 0e2a358 → 016ecd3 → 5b2c185 + 待提交的 docs/progress 更新）；远程 https://github.com/jxsword/micronaut-zh-docs（push 走 SSH——坑位 14）
+- core：388 条目 = 387 current + 1 skipped，validate/pytest 123 绿无回归
+- micrometer 30/30、validation 12/12 current（check 复测无上游变更）；security 145 条目 = 43 current + 97 missing（SEC-02/03/04）+ 5 skipped，进度 30.7%
+- 聚合站：index.html + micrometer.html + validation.html + **security.html（新增，SEC-01 片段）** + landing.html
+- glossary：45 通用 + 6 banned + modules.terms 12 条（micrometer 2、validation 1、security 9）
+- anchor-registry：148 锚（全域重扫，含 security）
+- 下一会话首要：**SEC-02（40 文件 3452 词，jwt reader/validation/generator/encryption/claims/ldap/x509/rejection/csrf 组）** → SEC-03（29 文件，oauth 组，注意 [[oauth]] 锚注入消解 loginHandler 豁免）→ SEC-04（28 文件，ojdbcExtensions/aot/repository/ldap/securityRule 根层文件）
+
+## 实测结论（M4.0 结论 1–7 + M4.1 会话 1 结论 8–10，继承 M3 结论 1–8 与 B01–B32 全部结论）
+
+1. **dest 前缀约定**：`--manifest manifests/<site>.yml` ⇔ `source/modules/<site>/` ⇔ `zh/modules/<site>/` ⇔ 账本 file 字段 `modules/<site>/…` ⇔ 页 `<site>.html` ⇔ 锚 `<site>-<basename>`——全部由 manifest 文件名 stem 一一推导，无第二处配置。
+2. **模块结构同构性**：micrometer/validation 与 core 完全同构（guide/toc.yml + 嵌套 dict + title 键），segment/protect/validate/assemble/inventory 零改动复用成立；但**源文件可能是纯导读页**（metricsAndReporters.adoc 仅标题+一段，21 个 reporter 各为独立页）——切批后先 cat 源文件确认边界，勿按文件名推测内容。
+3. **模块图片可为零**：试点两模块无 resources/；渲染 imagesdir=modules/<site>/img/ 仅在存在图片时可见（copyImages 摊平 resources/img → site modules/<site>/img/）。
+4. **per-file commit 采集**：模块账本也走 `--collect-commits`（gh api 42 条全成功，串行+缓存按 remote slug 命名）；assemble 在 per-file commit 缺失时回退账本 baseline（与 mark-current 期望一致，两级兜底）。
+5. **⑦ 邻接规则高频违规模式**：reporter 表格「默认值：`X`（1 分钟）」模式——统一改写「…，即 1 分钟」；「`X`（或某个…」枚举括注——重排列举顺序让（ 跟随 CJK 词。模块批次初稿先用 grep `}}（` 自查可省一轮 validate。
+6. **④ 标题未译规则的 API 名处理**：≥2 英文词的标题（Micrometer Observation）保留 API 名 + 中文括注「（观测）」通过；单英文词标题（Configuration）可直接译中文。
+7. **check_all 退出码聚合**：脚本内部逐模块采集退出码不掩码，最终取最严重值（2>1>0）——`set -e` 不能用，采集模式与「禁止 || true」纪律兼容。
+8. **模块裸 `<<target>>` xref 口径**（security 首现，11 个页级目标）：译文译显示文本、保留 `<<target,译文>>` 原样，并在目标页 zh 片段首内容之前原位注入 `[[target]]`（B02 同款规则）；渲染端 href="#target" ↔ id="target" 天然闭环（idprefix=security- 只影响自动 id）；上游悬空引用（如 endpoints.adoc 的 <<loginController>>，官方站亦无此 id）保持原样走 ⑤ 豁免跟踪，不虚构目标。
+9. **sync 模块账本 repo 解析口径**：`--check/--apply` 的上游仓库一律「--repo 显式 > 账本 upstream.remote > core 缺省」三级解析；`--manifest manifests/<site>.yml` 而不传 `--repo` 现在正确比对模块自身仓库（修复前整树伪 diff）。
+10. **快照白名单口径**：read_upstream 仅入库 .adoc + toc/toc-python.yml + 图片白名单（.png/.svg/.gif/.jpg/.jpeg/.webp/.ico/.pdf）；白名单外扩展名（如 security 的 3.3MB .sketch 设计源）跳过并告警不入库——SOP §4「快照仅 .adoc+toc+resources 图片入库」的落地实现；新增类型需求时先在白名单显式添加再重快照。
+
+## 待办（下一会话：SEC-02/03/04）
+
+1. **SEC-02（40 文件 3452 词，首要）**：authenticationStrategies/jwt/reader 组、jwtParser/jwtValidation/jwks 组、jwtGenerator 组、jwtEncryption 组、claimsGeneration/claimsValidation/render/jwtGuides、ldap/configuration+extending、x509、custom、rejection 组、csrf 组 14 文件、htmlSanitizer、tokenPropagation。按 §5.1 七步；裸 xref 沿用实测结论 8 口径；本批引用了 csrfConfiguration（SEC-01 interceptUrlMap/jakartaAnnotations 转投的 <<secured>> 已闭环，无跨批豁免遗留——除 oauth 外）。
+2. **SEC-03（29 文件，oauth 组）**：注入 [[oauth]] 消解 loginHandler.adoc 的豁免；跨组引用按首组去重口径。
+3. **SEC-04（28 文件）**：含 guide 根层 securityRule.adoc（3134 字节实文件，toc 键错位已在账本覆盖）与 ldap.adoc；ojdbcExtensions 组术语（End User Security Context 等）届时定夺写回 glossary。
+4. **三批完成后**：security.html 全量渲染冒烟（145 条目 30.7%→100%）；层收口 tag v1.1 需 P0 其余模块（hibernate-validator/tracing/session）完成。
+5. **周检例行**：`bash scripts/check_all.sh`（修复后已恢复真实检测）；检出变更开 issue `[upstream-sync][<site>] <sha>`；core 增量优先。
+6. 层间收尾 tag v1.1（P0 全部 100% 后）。
+7. 5.3.x 基线切换、guides 二期、Maven/Platform 外链、configuration-reference：届时单独决策（DR-007 起）。
+
+## 调试经验与坑位（M4.1 会话 1 增补 24–25，继承 1–23）
+
+24. **包装变量必须不加引号展开**：check_all.sh `out="$("$MEMGATE" python3 …)"` 中 `"$MEMGATE"` 把 `memgate 2048` 当单个命令名查找 → 127，且聚合 case 无 `0)` 分支时补 `*)` 会把 0 也吞成 2（本次两改三错后收敛）；包装变量一律 `$MEMGATE`（依赖分词语义）。4de82c6 起该脚本从未真正跑通过——**「基建脚本提交前必须实跑一遍带产物核对的冒烟」**升级为硬性纪律。
+25. **快照硬上限与白名单口径**：security 的 resources/img/security_diagramms.sketch（3.3MB）触发 2MB 单文件硬上限导致 --init 直接失败；按 SOP §4 口径改 read_upstream：白名单外扩展名跳过并告警不入库（guide/ 0 引用、core 全为白名单类型实测无回归）。2MB 上限仍护账本跟踪文件（解析保护本意），不再误伤镜像二进制。
+26. **CLI 契约须先 --help 核对再调用**：protect --restore 的 FILE 参数是「译文文件路径」而非源路径——传源路径时 map 路径回退成源文件自身（名称无 -translated.txt 后缀不替换）→ 把 .adoc 当 JSON 解析报 JSONDecodeError，报错形态与真实原因相距甚远。
 |---|---|
 | 基建套件（4de82c6） | sync_upstream.py `--doc-root/--manifest` 参数化（manifests/<site>.yml ↔ modules/<site>/ 前缀一一对应，账本顶层 ref+locked_at，克隆缓存按仓库 slug 分目录）；validate `--manifest` + ⑤ 模块文档树前缀 + ③ 扫描集=通用+当前模块术语；assemble_zh 模块账本/toc/官方 URL（core 引用块格式 385 文件逐字节不变实测）；inventory `--manifest`+批次前缀（modules.json batch_prefix）；progress 多账本聚合按模块分组；render.mjs 聚合（modules.json 驱动逐模块单页 + landing.html 官方 18 组导航复刻 + 各页顶部模块切换条）；新增 check_all.sh；CI validate/sync workflows 模块化；pytest 100→123 绿 |
 | 试点快照（6e33c11） | micrometer（30 文件，基线 c4d064ee3af4）+ validation（12 文件，基线 079f75dc6ba8），ref 5.2.x + locked_at 2026-11-23；无 0 字节壳、无图片；inventory 切批 MICRO-01(27 文件 3239 词)/MICRO-02(2 文件 327 词)/VALID-01(11 文件 1463 词) |
@@ -15,37 +60,7 @@
 | 图片体量实测（LFS 决策） | 试点两模块 0 图；gh api 抽样：security 8.9MB/34 图、oracle-cloud 4.5MB/28 图、aws 0.9MB/4 图、openapi/data ≤0.1MB（jackson-xml/sql/kotlin 等仓库 slug 或分支 404 未计入）——**外推 71 模块 <300MB，暂不启用 git-lfs**；security 快照落地时（P0）复测 |
 | 看板模块维度 | translation-board.md 增「模块批次总览」节（MICRO-01/02、VALID-01 + LFS 结论 + M4.1 待办） |
 
-## 状态快照（2026-11-23，M4.0 收尾）
-
-- 分支 main，5 个新提交（4de82c6 基建 → 6e33c11 快照 → 9fac35a/bdc535c/c9601ae 三批次）；远程 https://github.com/jxsword/micronaut-zh-docs（push 走 SSH——坑位 14）
-- core：388 条目 = 387 current + 1 skipped + 0 missing；validate 387 文件全绿；pytest 123 绿
-- micrometer：30/30 current；validation：12/12 current；两模块 validate 全绿 0 警告
-- 聚合站（DR-006）：index.html（core）+ micrometer.html + validation.html + landing.html；本地预览 http://127.0.0.1:8321（`cd build/site && setsid memgate 2048 python3 -m http.server 8321 & disown`）；在线 https://jxsword.github.io/micronaut-zh-docs/（deploy-pages.yml 自动部署）
-- glossary：45 通用术语 + 6 banned + **modules.terms 3 条**（reporter→上报器、Observation 不译 [micrometer]；constraint→约束 [validation]）
-- config/modules.json：官方导航 18 组实抓（2026-11-23），72 可译条目（core+71）+ gradle 外链；repo 字段仅 core/micrometer/validation 已填，其余开工时核实补填
-- check_all.sh：core + 已快照模块逐模块 `--check`（退出码聚合：0 无变更/1 有变更/2 环境错误），产出 reports/check-all-<date>.md + check-all-latest.jsonl（CI 逐模块开 issue 用）
-
-## 实测结论（M4.0 新增，继承 M3 结论 1–8 与 B01–B32 全部结论）
-
-1. **dest 前缀约定**：`--manifest manifests/<site>.yml` ⇔ `source/modules/<site>/` ⇔ `zh/modules/<site>/` ⇔ 账本 file 字段 `modules/<site>/…` ⇔ 页 `<site>.html` ⇔ 锚 `<site>-<basename>`——全部由 manifest 文件名 stem 一一推导，无第二处配置。
-2. **模块结构同构性**：micrometer/validation 与 core 完全同构（guide/toc.yml + 嵌套 dict + title 键），segment/protect/validate/assemble/inventory 零改动复用成立；但**源文件可能是纯导读页**（metricsAndReporters.adoc 仅标题+一段，21 个 reporter 各为独立页）——切批后先 cat 源文件确认边界，勿按文件名推测内容。
-3. **模块图片可为零**：试点两模块无 resources/；渲染 imagesdir=modules/<site>/img/ 仅在存在图片时可见（copyImages 摊平 resources/img → site modules/<site>/img/）。
-4. **per-file commit 采集**：模块账本也走 `--collect-commits`（gh api 42 条全成功，串行+缓存按 remote slug 命名）；assemble 在 per-file commit 缺失时回退账本 baseline（与 mark-current 期望一致，两级兜底）。
-5. **⑦ 邻接规则高频违规模式**：reporter 表格「默认值：`X`（1 分钟）」模式——统一改写「…，即 1 分钟」；「`X`（或某个…」枚举括注——重排列举顺序让（ 跟随 CJK 词。模块批次初稿先用 grep `}}（` 自查可省一轮 validate。
-6. **④ 标题未译规则的 API 名处理**：≥2 英文词的标题（Micrometer Observation）保留 API 名 + 中文括注「（观测）」通过；单英文词标题（Configuration）可直接译中文。
-7. **check_all 退出码聚合**：脚本内部逐模块采集退出码不掩码，最终取最严重值（2>1>0）——`set -e` 不能用，采集模式与「禁止 || true」纪律兼容。
-
-## 待办（下一会话：M4.1 P0 安全与观测）
-
-1. **security 模块（2–3 会话，24 章 60+ 页最大头部模块）**：开工先 `gh api repos/micronaut-projects/micronaut-security --jq .default_branch` + 分支清单核实 5.2.x；`sync_upstream.py --repo https://github.com/micronaut-projects/micronaut-security --doc-root src/main/docs --manifest manifests/security.yml --ref 5.2.x --init`；inventory 切批 SEC-01…（batch_prefix 在 config/modules.json 补填 `{"security": {"batch_prefix": "SEC", "repo": "micronaut-projects/micronaut-security"}}`，repo 为 null 的模块开工时一律先核实补填）；按 §5.1 七步逐批推进。
-2. **validation 剩余/micrometer 后续增量**：周 check_all 检出变更走 PLAN §5.1 修订批次（core 增量优先）。
-3. **hibernate-validator + tracing + session**：同 security 流程；tracing 跨组引用（Analytics/Cloud）按首组去重口径。
-4. **图片体量复测**：security 快照落地后 du -sh source/modules/security/resources，若单模块接近 9MB 且多模块累加逼近 300MB 再议 LFS（.gitattributes）。
-5. **core 持续增量例行**：周 `bash scripts/check_all.sh`（扩后含模块）；有变更开 issue `[upstream-sync][<site>] <sha>` 并按 §5.1 增量复译。
-6. 层间收尾 tag v1.1（P0 全部 100% 后）。
-7. 5.3.x 基线切换、guides 二期、Maven/Platform 外链、configuration-reference（官方导航分组外新增，DR-006 计划外）：届时单独决策（DR-007 起）。
-
-## 调试经验与坑位（M4.0 增补 19–22，继承 1–18）
+## 调试经验与坑位（M4.0 增补 19–23）
 
 19. **asciidoctor fragment 渲染冒烟要看「产物时间戳」而非退出码**：render.mjs 曾因 `esc` 函数作用域错误在 moduleBar 处 ReferenceError 退出，但旧 index.html 仍在位——「对比无回归」变成新旧同文件的空验证。核对 `ls -la build/site/*.html` 时间戳或 diff 前先确认产物确已重写。
 20. **scripts/preview/.gitignore 相对路径**：其内模式相对该目录解析（`scripts/preview/node_modules/` 写在其内永不生效）；node_modules/ 已上收至根 .gitignore 全局兜底。
@@ -61,3 +76,4 @@
 4. 每批次 squash commit（消息含模块批次号/段数/词数/上游日期）+ 批次报告；决策类提交末行 `Decision: DR-编号`
 5. agent 并发上限 = 串行 1；上下文过半立即交接；里程碑收尾主动建议开新会话
 6. git push 走 SSH；网络直连失败走代理 http://192.168.33.1:10808
+7. 基建脚本提交前必须实跑一遍带产物核对的冒烟（坑位 24：check_all.sh 4de82c6 起从未真正跑通）；调用脚本子命令前先 `--help` 核对参数契约（坑位 26）

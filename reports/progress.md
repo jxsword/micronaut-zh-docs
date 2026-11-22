@@ -1,6 +1,6 @@
 # 翻译进度报表（自动生成，禁手改）
 
-> 生成: 2026-11-23 03:50:29 ｜ 数据源: manifest.yml + manifests/*.yml（DR-006 M4 聚合）
+> 生成: 2026-11-23 05:08:04 ｜ 数据源: manifest.yml + manifests/*.yml（DR-006 M4 聚合）
 
 ## 总览（按模块）
 
@@ -8,6 +8,7 @@
 |---|---:|---:|---:|---:|---:|---:|---:|
 | core | 388 | 0 | 0 | 0 | 387 | 1 | 100.0% |
 | micrometer | 30 | 0 | 0 | 0 | 30 | 0 | 100.0% |
+| security | 145 | 97 | 0 | 0 | 43 | 5 | 30.7% |
 | validation | 12 | 0 | 0 | 0 | 12 | 0 | 100.0% |
 
 ## core
@@ -47,6 +48,28 @@
 | guide | 9 | 0 | 0 | 0 | 9 | 0 | 100% |
 | metricsAndReporters | 21 | 0 | 0 | 0 | 21 | 0 | 100% |
 | **合计** | **30** | **0** | **0** | **0** | **30** | **0** | **100.0%** |
+
+## security
+
+> 基线: cc524538f059，快照 2026-11-23，ref 5.2.x（locked_at 2026-11-23）
+
+| 章节 | 文件数 | missing | stale | partial | current | skipped | 进度 |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| aot | 3 | 3 | 0 | 0 | 0 | 0 | 0% |
+| authenticationProviders | 3 | 0 | 0 | 0 | 3 | 0 | 100% |
+| authenticationStrategies | 27 | 23 | 0 | 0 | 3 | 1 | 12% |
+| csrf | 12 | 12 | 0 | 0 | 0 | 0 | 0% |
+| dataAuditing | 2 | 2 | 0 | 0 | 0 | 0 | 0% |
+| endpoints | 9 | 0 | 0 | 0 | 9 | 0 | 100% |
+| guide | 26 | 13 | 0 | 0 | 11 | 2 | 46% |
+| oauth | 31 | 29 | 0 | 0 | 0 | 2 | 0% |
+| ojdbcExtensions | 8 | 8 | 0 | 0 | 0 | 0 | 0% |
+| rejection | 1 | 1 | 0 | 0 | 0 | 0 | 0% |
+| retrievingAuthenticatedUser | 3 | 3 | 0 | 0 | 0 | 0 | 0% |
+| securityConfiguration | 4 | 0 | 0 | 0 | 4 | 0 | 100% |
+| securityFilter | 13 | 0 | 0 | 0 | 13 | 0 | 100% |
+| tokenendpoints | 3 | 3 | 0 | 0 | 0 | 0 | 0% |
+| **合计** | **145** | **97** | **0** | **0** | **43** | **5** | **30.7%** |
 
 ## validation
 
