@@ -1,0 +1,20 @@
+introduction:
+  title: Introduction
+releaseHistory: Release History
+quickStart:
+  title: Quick Start
+methodsValidation:
+  title: Validating Bean Methods
+dataClassesValidation:
+  title: Validating Data Classes
+configurationValidation:
+  title: Validating Configuration Properties
+additionalConstraints:
+  title: Defining Additional Constraints
+builtInConstraints:
+  title: Built-In Constraints
+compileTimeValidation:
+  title: Validating Annotations at Compile Time
+breaks: Breaking Changes
+repository: Repository
+

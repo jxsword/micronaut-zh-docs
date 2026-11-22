@@ -461,6 +461,8 @@ def sync_init(ctx: SyncContext, repo_url: str, ref: str,
             "paragraphs": segs_n,
             "updated_at": today,
         })
+    # 账本父目录不存在则创建（模块账本 manifests/ 首次 init）
+    ctx.manifest_file.parent.mkdir(parents=True, exist_ok=True)
     save_manifest(ctx.manifest_file, m)
 
     n_missing = sum(1 for f in m.files if f["status"] == "missing")

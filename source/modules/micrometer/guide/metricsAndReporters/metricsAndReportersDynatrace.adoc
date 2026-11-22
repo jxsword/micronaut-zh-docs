@@ -1,0 +1,33 @@
+You can include the Dynatrace reporter via `io.micronaut.micrometer:micronaut-micrometer-registry-dynatrace`
+
+dependency:micronaut-micrometer-registry-dynatrace[groupId="io.micronaut.micrometer"]
+
+You can configure this reporter using `micronaut.metrics.export.dynatrace`. The most commonly changed configuration properties are listed below, but see https://github.com/micrometer-metrics/micrometer/blob/main/implementations/micrometer-registry-dynatrace/src/main/java/io/micrometer/dynatrace/DynatraceConfig.java[DynatraceConfig] for more options.
+
+|=======
+|*Name* |*Description*
+|enabled |Whether to enable the reporter, for example per-environment or for local development. Default: `true`
+|apiToken | Dynatrace API Token. Required.
+|uri | Dynatrace server URI. Required.
+|decideId | Device ID to be reported. Required.
+|step |How frequently to report metrics. Default: `PT1M` (1 min). See `java.time.Duration#parse(CharSequence)`
+|descriptions | Whether meter descriptions should be sent to InfluxDB. Disable to minimize the amount of data sent on each scrape. Default: `true`
+|=======
+
+.Example Dynatrace Config
+[configuration]
+----
+endpoints:
+  prometheus:
+    sensitive: false
+micronaut:
+  metrics:
+    enabled: true
+    export:
+      dynatrace:
+        enabled: true
+        apiToken: ${DYNATRACE_DEVICE_API_TOKEN}
+        uri: ${DYNATRACE_DEVICE_URI}
+        deviceId: ${DYNATRACE_DEVICE_ID}
+        step: PT1M
+----

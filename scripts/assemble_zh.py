@@ -94,6 +94,7 @@ def build_header(rel: str, entry: Dict, translated_at: str,
                  baseline_date: Optional[str]) -> str:
     stem = Path(rel).stem
     site = module_site_of(rel)
+    m = manifest_for(site)
     if site:
         doc_rel = rel[len(f"modules/{site}/"):]
         toc_file = SOURCE_DIR / f"modules/{site}/guide/toc.yml"
@@ -129,7 +130,7 @@ def build_header(rel: str, entry: Dict, translated_at: str,
                   f"{baseline_date or BASELINE_LOCK_DATE}，"
                   f"非官方译文，以英文原文为准。")
     comment = (f"<!-- upstream_file: {rel}  "
-               f"upstream_commit: {entry.get('upstream_commit', '')}  "
+               f"upstream_commit: {entry.get('upstream_commit') or manifest.get('upstream', {}).get('baseline_commit', '')}  "
                f"upstream_hash: {entry.get('blob_sha', '')}  "
                f"translated_at: {translated_at} -->")
     return quote + "\n" + comment

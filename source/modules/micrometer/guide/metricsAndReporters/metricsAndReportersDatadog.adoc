@@ -1,0 +1,26 @@
+You can include the Datadog reporter via `io.micronaut.micrometer:micronaut-micrometer-registry-datadog`
+
+dependency:micronaut-micrometer-registry-datadog[groupId="io.micronaut.micrometer"]
+
+You can configure this reporter using `micronaut.metrics.export.datadog`. The most commonly changed configuration properties are listed below, but see https://github.com/micrometer-metrics/micrometer/blob/main/implementations/micrometer-registry-datadog/src/main/java/io/micrometer/datadog/DatadogConfig.java[DatadogConfig] for more options.
+
+|=======
+|*Name* |*Description*
+|apiKey |Datadog API Key. Required.
+|enabled |Whether to enable the reporter, for example per-environment or for local development. Default: `true`
+|step |How frequently to report metrics. Default: `PT1M` (1 min). See `java.time.Duration#parse(CharSequence)`
+|descriptions | Whether meter descriptions should be sent to Datadog. Disable to minimize the amount of data sent on each scrape. Default: `true`
+|=======
+
+.Example Datadog Config
+[configuration]
+----
+micronaut:
+  metrics:
+    enabled: true
+    export:
+      datadog:
+        apiKey: ${DATADOG_APIKEY}
+        enabled: true
+        step: PT1M
+----
