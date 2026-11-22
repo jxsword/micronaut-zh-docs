@@ -1,0 +1,24 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Double Submit Cookie Pattern](https://docs.micronaut.io/5.2.x/security/#security-doubleSubmitCookiePattern)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/csrf/csrfMitigations/doubleSubmitCookiePattern.adoc  upstream_commit: cbf942deb1945f53591f750b34bb6093fd28115f  upstream_hash: 385dacf171cf1a80eb42d6a6d6f564c3256ce464  translated_at: 2026-11-23 -->
+
+https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html#alternative-using-a-double-submit-cookie-pattern[双重提交 Cookie 模式]。
+
+在双重提交 Cookie 模式中，服务器生成一个 CSRF token，并通过 Cookie 将其发送给客户端。
+
+然后，服务器只需验证后续请求的 Cookie 值是否与通过请求参数（隐藏表单字段）或请求头发送的 CSRF token 匹配。这一过程是无状态的，因为服务器无需存储关于 CSRF token 的任何信息。
+
+[source, bash]
+----
+POST /transfer HTTP/1.1
+Host: vulnerable bank
+Content-Type: application/x-www-form-urlencoded
+Cookie: session=<token>; __Host-csrfToken=o24b65486f506e2cd4403caf0d640024
+[...]
+
+amount=100&toUser=intended&csrfToken=o24b65486f506e2cd4403caf0d640024
+----
+
+当你使用 Micronaut Security 认证的 <<micronautSecurityAuthenticationCookie, `cookie`>> 或
+    <<micronautSecurityAuthenticationIdToken, `idtoken`>> 时，登录时会有一个 CSRF Token 保存到 Cookie 中。
+
+你可以 <<csrfConfiguration, 配置不同的 Cookie 属性>>。例如，默认情况下 Cookie 名称使用 `__Host-` 这样的 https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies#cookie_prefixes[Cookie 前缀]，这可以 https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html#using-cookies-with-host-prefixes-to-identify-origins[增强针对 CSRF 攻击的安全防护]。

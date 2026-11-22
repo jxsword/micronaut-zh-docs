@@ -1,0 +1,30 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Bearer Token Reader](https://docs.micronaut.io/5.2.x/security/#security-bearerToken)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/authenticationStrategies/jwt/reader/bearerToken.adoc  upstream_commit: 3964d006b99c05e9e53d50dec0e1b2a90658ee05  upstream_hash: 6085940a96acd55a5093c2b93f7c1febc34777b8  translated_at: 2026-11-23 -->
+
+Micronaut 支持 https://tools.ietf.org/html/rfc6750[RFC 6750 Bearer Token] 规范来传输 JWT 令牌。下面的时序图展示了 RFC 6750 认证流程：
+
+image::jwt-bearer-token.svg[]
+
+以下配置属性可用于自定义 Bearer Token 的读取方式：
+
+include::{includedir}configurationProperties/io.micronaut.security.token.bearer.BearerTokenConfigurationProperties.adoc[]
+
+== 在请求中发送令牌
+
+下面的代码片段演示了如何借助 https://micronaut-projects.github.io/micronaut-core/latest/api/io/micronaut/http/MutableHttpRequest.html[MutableHttpRequest] 的 `bearerAuth` 方法，在 `Authorization` 请求头中发送 JWT 令牌：
+
+[source, groovy]
+.使用 Authorization 请求头访问受保护资源
+----
+include::security-jwt/src/test/groovy/io/micronaut/security/token/propagation/TokenPropagationSpec.groovy[tag=bearerAuth, indent=0]
+----
+
+[source, bash]
+.使用 Authorization 请求头的 HTTP GET 请求示例
+----
+GET /protectedResource HTTP/1.1
+Host: micronaut.example`
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE0MjI5OTU5MjIsInN1YiI6ImppbWkiLCJyb2xlcyI6WyJST0xFX0FETUlOIiwiUk9MRV9VU0VSIl0sImlhdCI6MTQyMjk5MjMyMn0.rA7A2Gwt14LaYMpxNRtrCdO24RGrfHtZXY9fIjV8x8o
+----
+
+TIP: 请阅读 https://guides.micronaut.io/latest/micronaut-security-jwt.html[Micronaut JWT 认证]，这是一篇关于 Micronaut JWT 支持的教程。

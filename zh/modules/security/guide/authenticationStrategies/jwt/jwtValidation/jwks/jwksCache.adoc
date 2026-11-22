@@ -1,0 +1,24 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – JWKS Caching](https://docs.micronaut.io/5.2.x/security/#security-jwksCache)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/authenticationStrategies/jwt/jwtValidation/jwks/jwksCache.adoc  upstream_commit: f5cd19bb44e564319b61f303010ecf5a7ff4618a  upstream_hash: 4a17b0c3bc9faeceda6abf3baaa127d5e176fed4  translated_at: 2026-11-23 -->
+
+从远程 Web 服务器获取的 Json Web Key Set（JWKS）会被缓存。默认情况下，它们通过内部 bean api:security.token.jwt.signature.jwks.ReactorCacheJwkSetFetcher[] 使用 Project Reactor 的 `Mono::cacheInvalidateIf` 进行缓存。你可以用 `micronaut.security.token.jwt.signatures.jwks.*.cache-expiration` 配置缓存过期时间，默认为 60 秒。
+
+NOTE: 不过，我们建议你通过 https://micronaut-projects.github.io/micronaut-cache/latest/guide/[Micronaut Cache] 启用缓存。将来这将唯一支持的选项。
+
+**通过 Micronaut Cache 缓存**
+
+要用 Micronaut Cache 缓存 JWKS，你需要添加一个 Micronaut Cache 实现（例如 https://micronaut-projects.github.io/micronaut-cache/latest/guide/#caffeine[Caffeine]、https://micronaut-projects.github.io/micronaut-cache/latest/guide/#redis[Redis]、https://micronaut-projects.github.io/micronaut-cache/latest/guide/#ehcache[Ehcache]、https://micronaut-projects.github.io/micronaut-cache/latest/guide/#hazelcast[Hazelcast]、https://micronaut-projects.github.io/micronaut-coherence/latest/guide/#cache[Coherence]、https://micronaut-projects.github.io/micronaut-cache/latest/guide/#infinispan[Infinispan]、https://micronaut-projects.github.io/micronaut-eclipsestore/latest/guide/#cache[EclipseStore] 或 https://micronaut-projects.github.io/micronaut-cache/latest/guide/#microstream[MicroStream]）并配置过期时间。
+
+例如，你可以添加 https://micronaut-projects.github.io/micronaut-cache/latest/guide/#caffeine[Caffeine] 实现：
+
+dependency:micronaut-cache-caffeine[groupId=io.micronaut.cache]
+
+缓存名称为 `jwks`。你可以通过以下配置设置缓存过期时间：
+
+[configuration]
+----
+micronaut:
+  caches:
+    jwks:
+      expire-after-write: 24h
+----

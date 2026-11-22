@@ -1,0 +1,14 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Signed Double Submit Cookie Pattern](https://docs.micronaut.io/5.2.x/security/#security-signedDoubleSubmitCookiePattern)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/csrf/csrfMitigations/signedDoubleSubmitCookiePattern.adoc  upstream_commit: cbf942deb1945f53591f750b34bb6093fd28115f  upstream_hash: 275902dbf439a22db0c0a7d2c75293a2d4de7a77  translated_at: 2026-11-23 -->
+
+IMPORTANT: https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html#signed-double-submit-cookie-recommended[带签名的双重提交 Cookie]。对 CSRF Token 进行签名，以防止攻击者用自己的值覆盖该 Cookie 的值（例如通过子域名接管攻击）。
+
+要对 CSRF Token 签名，请设置属性 `micronaut.security.csrf.signature-key`。
+
+[configuration]
+----
+micronaut:
+  security:
+    csrf:
+      signature-key: pleaseChangeThisSecretForANewOnekoqQ-EstJQLr_T-1qS0gZH75aKtMN3Yj0iPS4hcgUuTwjAzZr1Z9CAow
+----

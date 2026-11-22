@@ -1,0 +1,7 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – CSRF and Session](https://docs.micronaut.io/5.2.x/security/#security-csrfAndSession)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/csrf/csrfMitigations/syncronizerTokenPattern/csrfAndSession.adoc  upstream_commit: cbf942deb1945f53591f750b34bb6093fd28115f  upstream_hash: f5e4ab222f46f3da2613bde1b1ae54b8a48d9399  translated_at: 2026-11-23 -->
+
+如果你使用 <<session, 基于会话的认证>> 和 Micronaut Security CSRF，登录时会自动生成一个 CSRF token 并保存到 HTTP 会话中。<<session, Micronaut Session>> 提供了一个实现
+api:security.csrf.CsrfTokenRepository[]，它会从用户的 HTTP 会话中获取 CSRF token。因此，当应用向服务器发送带有 CSRF token 的新请求时（例如通过隐藏表单字段或 HTTP 请求头），服务器会将所提供的 token 与存储在 HTTP 会话中的值进行校验比对。
+
+你可以通过将 `micronaut.security.csrf.repositories.session.enabled` 设为 false 来禁用 CSRF 会话仓库。

@@ -1,0 +1,14 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – JWT Validation](https://docs.micronaut.io/5.2.x/security/#security-jsonWebTokenValidator)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/authenticationStrategies/jwt/jsonWebTokenValidator.adoc  upstream_commit: 0579b8a9c58ba50e493ce39a38bd3d3ccda233df  upstream_hash: ae120599332a37306902126397e674d5d79cacd8  translated_at: 2026-11-23 -->
+
+API api:io.micronaut.security.token.jwt.validator.JsonWebTokenValidator[] 与 api:io.micronaut.security.token.jwt.validator.ReactiveJsonWebTokenValidator[] 可用于验证 JWT 令牌。
+
+验证会执行以下步骤：
+
+* - 解析令牌（若已加密，则先解密）。
+* - 验证签名
+* - 使用 api:security.token.jwt.validator.GenericJwtClaimsValidator[] 类型的 bean 验证 Claims。
+
+`JsonWebTokenValidator` 不会使用远程签名配置。例如，它不会使用远程 JWK 验证签名。
+只有 api:io.micronaut.security.token.jwt.validator.ReactiveJsonWebTokenValidator[] 实现了
+api:io.micronaut.security.token.validator.TokenValidator[]。

@@ -1,0 +1,16 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – JWT Signature Validation](https://docs.micronaut.io/5.2.x/security/#security-jwtValidation)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/authenticationStrategies/jwt/jwtValidation.adoc  upstream_commit: d7f348edbc17784d3c37752337ab4a4ecf0ebca2  upstream_hash: 4a7a5c6e592e80d7743912f9d4f0058f81f52882  translated_at: 2026-11-23 -->
+
+Micronaut 的安全能力使用符合 https://tools.ietf.org/html/rfc7515[JSON Web Signature] 规范的已签名 JWT。
+
+Micronaut 的 JWT 验证支持多个签名配置。因此，你可以在同一个应用中验证由不同签发者签名的 JSON Web 令牌。
+
+要验证 JWT 令牌的签名，你需要 api:io.micronaut.security.token.jwt.signature.SignatureConfiguration[] 或 api:io.micronaut.security.token.jwt.signature.ReactiveSignatureConfiguration[] 类型的 bean。
+
+创建 api:io.micronaut.security.token.jwt.signature.SignatureConfiguration[] 类型 bean 最简单的方式，是在应用中提供一个 api:io.micronaut.security.token.jwt.signature.rsa.RSASignatureConfiguration[]、api:io.micronaut.security.token.jwt.signature.ec.ECSignatureConfiguration[] 或 api:io.micronaut.security.token.jwt.signature.secret.SecretSignatureConfiguration[] 类型的 bean，它们必须用 `@Named` https://docs.micronaut.io/latest/guide/index.html#qualifiers[加以限定]，因为这些配置 bean 会被工厂（api:io.micronaut.security.token.jwt.signature.rsa.RSASignatureFactory[]、api:io.micronaut.security.token.jwt.signature.ec.ECSignatureConfiguration[]）或其他使用 https://docs.micronaut.io/latest/guide/index.html#eachBean[@EachBean] 驱动配置的 bean（api:io.micronaut.security.token.jwt.signature.secret.SecretSignature[]）所使用。
+
+API api:io.micronaut.security.token.jwt.validator.JsonWebTokenSignatureValidator[] 与 api:io.micronaut.security.token.jwt.validator.ReactiveJsonWebTokenSignatureValidator[] 可用于验证 JWT 令牌的签名。
+
+`ReactiveJsonWebTokenSignatureValidator` 使用 api:io.micronaut.security.token.jwt.signature.SignatureConfiguration[] 或 api:io.micronaut.security.token.jwt.signature.ReactiveSignatureConfiguration[] 两者来验证签名。
+
+`JsonWebTokenSignatureValidator` 使用 api:io.micronaut.security.token.jwt.signature.SignatureConfiguration[] 类型的 bean 验证签名。

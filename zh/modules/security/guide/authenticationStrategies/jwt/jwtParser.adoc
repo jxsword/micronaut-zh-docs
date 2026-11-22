@@ -1,0 +1,5 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – JWT Parser](https://docs.micronaut.io/5.2.x/security/#security-jwtParser)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/authenticationStrategies/jwt/jwtParser.adoc  upstream_commit: 0579b8a9c58ba50e493ce39a38bd3d3ccda233df  upstream_hash: a42ecb28fe8e7c2c33f6db8fd90cfab27c776fe2  translated_at: 2026-11-23 -->
+
+你可以注入 api:security.token.jwt.validator.JsonWebTokenParser[] 类型的 bean 来解析 JWT 令牌。
+若令牌是加密的，解析器会先将其解密。

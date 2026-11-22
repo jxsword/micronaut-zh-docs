@@ -1,0 +1,10 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Synchronizer Token Pattern](https://docs.micronaut.io/5.2.x/security/#security-syncronizerTokenPattern)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/csrf/csrfMitigations/syncronizerTokenPattern.adoc  upstream_commit: d7f348edbc17784d3c37752337ab4a4ecf0ebca2  upstream_hash: a9ba633515431be3685acab96456f08d5aa01cf2  translated_at: 2026-11-23 -->
+
+https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html#synchronizer-token-pattern[同步令牌模式]。
+
+____
+在同步令牌模式中，服务器生成一个 CSRF token 并在返回之前与客户端共享它，
+通常通过关联操作的隐藏表单参数传递。在表单提交时，服务器将该 CSRF token 与用户会话中存储的
+token 进行比对。如果二者匹配，则批准该请求；否则拒绝该请求
+____

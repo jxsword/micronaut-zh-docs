@@ -1,0 +1,6 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – CSRF Dependency](https://docs.micronaut.io/5.2.x/security/#security-csrfDependency)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/csrf/csrfDependency.adoc  upstream_commit: cbf942deb1945f53591f750b34bb6093fd28115f  upstream_hash: cd75033f3b7587f9b1d1dc71d6ab397752127589  translated_at: 2026-11-23 -->
+
+添加 Micronaut Security CSRF 依赖以防范 CSRF：
+
+dependency:micronaut-security-csrf[groupId=io.micronaut.security]

@@ -1,0 +1,13 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Signed JWT Generation](https://docs.micronaut.io/5.2.x/security/#security-jwtGeneratorSignature)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/authenticationStrategies/jwt/jwtGenerator/jwtGeneratorSignature.adoc  upstream_commit: 247168d4d114dec4b61baa9b036ea8a6a3fba09e  upstream_hash: 3c240c142f885d70ad84a2f907e746334593abe8  translated_at: 2026-11-23 -->
+
+要生成已签名的 JWT，你需要在应用中提供一个
+link:{api}/io/micronaut/security/token/jwt/signature/rsa/RSASignatureGeneratorConfiguration.html[RSASignatureGeneratorConfiguration]、
+link:{api}/io/micronaut/security/token/jwt/signature/ec/ECSignatureGeneratorConfiguration.html[ECSignatureGeneratorConfiguration]
+或
+link:{api}/io/micronaut/security/token/jwt/signature/secret/SecretSignatureConfiguration.html[SecretSignatureConfiguration] 类型的 bean，它们必须**用 `@Named` `generator` https://docs.micronaut.io/latest/guide/index.html#qualifiers[限定]**，因为这些配置 bean 会被工厂（
+link:{api}/io/micronaut/security/token/jwt/signature/rsa/RSASignatureGeneratorFactory.html[RSASignatureGeneratorFactory]、
+link:{api}/io/micronaut/security/token/jwt/signature/ec/ECSignatureGeneratorConfiguration.html[ECSignatureGeneratorFactory]）或其他使用
+https://docs.micronaut.io/latest/guide/index.html#eachBean[@EachBean] 驱动配置的 bean（link:{api}/io/micronaut/security/token/jwt/signature/secret/SecretSignature.html[SecretSignature]）所使用。
+
+IMPORTANT: 记得用 `@Named` `generator` 限定你希望用来签名 JSON Web 令牌的签名配置 bean。

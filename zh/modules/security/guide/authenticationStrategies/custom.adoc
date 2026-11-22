@@ -1,0 +1,12 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Custom Authentication Strategies](https://docs.micronaut.io/5.2.x/security/#security-custom)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/authenticationStrategies/custom.adoc  upstream_commit: 2e32218191647a7bec3edbe343abb69317228928  upstream_hash: 026ee0f902b92ff1da34f52c3d65acfa2807b4b7  translated_at: 2026-11-23 -->
+
+所有认证策略都实现 api:security.filters.AuthenticationFetcher[] 接口。该契约的设计目的是从请求中返回 api:security.authentication.Authentication[]。要实现自定义逻辑来获取当前登录的用户，只需创建一个实现该契约的 bean，它就会被自动发现并使用。
+
+例如，如果你使用 https://www.broadcom.com/products/cyber-security/identity/siteminder[SiteMinder] 这样为你处理认证的产品，你可以确信访问你应用的用户已通过认证，并且可以通过 `SM_USER` 请求头访问他们的用户名，并据此构建 `Authentication`：
+
+[source, java]
+.SiteMinder 认证获取器
+----
+include::{testssecurity}/security/authorization/SiteminderAuthenticationFetcher.java[tag=clazz, indent=0]
+----

@@ -1,0 +1,15 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Configuration](https://docs.micronaut.io/5.2.x/security/#security-configuration)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/authenticationStrategies/ldap/configuration.adoc  upstream_commit: b5870a5035962177e2c25f6d1fe08ef0583fc9e3  upstream_hash: 5cca4e4c823cc21967d7b654c24959270e726540  translated_at: 2026-11-23 -->
+
+Micronaut 的 LDAP 认证支持配置一个或多个用于身份验证的 LDAP 服务器。每个服务器都有自己的设置，并且可以启用或禁用。
+
+include::{includedir}configurationProperties/io.micronaut.security.ldap.configuration.LdapConfiguration.adoc[]
+include::{includedir}configurationProperties/io.micronaut.security.ldap.configuration.LdapConfiguration$ContextConfiguration.adoc[]
+include::{includedir}configurationProperties/io.micronaut.security.ldap.configuration.LdapConfiguration$SearchConfiguration.adoc[]
+include::{includedir}configurationProperties/io.micronaut.security.ldap.configuration.LdapConfiguration$GroupConfiguration.adoc[]
+
+TIP: 要使用 SSL 连接 LDAP 服务器，请将标准 Java 系统属性设置为适合你服务器的值。
+```
+-Djavax.net.ssl.trustStore="<path to truststore file>"
+-Djavax.net.ssl.trustStorePassword="<passphrase for truststore>"
+```

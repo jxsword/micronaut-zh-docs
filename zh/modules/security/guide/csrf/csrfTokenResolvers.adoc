@@ -1,0 +1,4 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – CSRF Token Resolvers](https://docs.micronaut.io/5.2.x/security/#security-csrfTokenResolvers)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/csrf/csrfTokenResolvers.adoc  upstream_commit: cbf942deb1945f53591f750b34bb6093fd28115f  upstream_hash: 2fb1ce1b77dd93353f993195a93757579a224414  translated_at: 2026-11-23 -->
+
+Micronaut Security CSRF 使用 api:security.csrf.resolver.CsrfTokenResolver[] 类型的 bean 来解析 CSRF Token

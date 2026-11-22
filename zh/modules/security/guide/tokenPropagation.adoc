@@ -1,0 +1,39 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Token Propagation](https://docs.micronaut.io/5.2.x/security/#security-tokenPropagation)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/tokenPropagation.adoc  upstream_commit: 2e0ecc3888e5cebc415bc168f7914e769f46bdd5  upstream_hash: 11aa094a369e6e4e8457fbba11cc170279b775b9  translated_at: 2026-11-23 -->
+
+想象一下你有一个网关微服务，它消费另外三个微服务：
+
+image::tokenpropagation.svg[]
+
+如果传入的请求 `localhost:8080/api/books` 包含有效的 JWT 令牌，你可能希望将该令牌传播到网络中的其他请求。
+
+你可以配置令牌传播来实现这一点。
+
+[configuration]
+----
+include::{testssecurity}/security/token/propagation/TokenPropagationSpec.groovy[tag=yamlconfig,indent=0]
+----
+
+上面的配置设置了一个 link:{api}/io/micronaut/security/token/propagation/HttpHeaderTokenPropagator.html[HttpHeaderTokenPropagator] 和一个传播过滤器 link:{api}/io/micronaut/security/token/propagation/TokenPropagationHttpClientFilter.html[TokenPropagationHttpClientFilter]，它们
+会无缝地传播安全令牌。
+
+如果你使用 https://micronaut-projects.github.io/micronaut-core/latest/guide/#serviceDiscovery[服务发现] 功能，你可以在服务 id 正则表达式中使用服务 id：
+
+[source, bash]
+----
+micronaut.security.token.propagation.service-id-regex="catalogue|recommendations|inventory"
+----
+
+有多个配置选项可用：
+
+include::{includedir}configurationProperties/io.micronaut.security.token.propagation.TokenPropagationConfigurationProperties.adoc[]
+
+对于通过 HTTP 请求头的传播，你可以配置：
+
+include::{includedir}configurationProperties/io.micronaut.security.token.propagation.HttpHeaderTokenPropagatorConfigurationProperties.adoc[]
+
+令牌传播需要**上下文传播**依赖，如 https://docs.micronaut.io/latest/guide/#reactorContextPropagation[Reactor 上下文传播] 一节所述。
+
+dependency:context-propagation[groupId=io.micrometer]
+
+TIP: 阅读 https://guides.micronaut.io/latest/micronaut-token-propagation.html[Token Propagation 教程] 了解更多。

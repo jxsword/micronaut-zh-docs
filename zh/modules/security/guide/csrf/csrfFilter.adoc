@@ -1,0 +1,9 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – CSRF Filter](https://docs.micronaut.io/5.2.x/security/#security-csrfFilter)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/csrf/csrfFilter.adoc  upstream_commit: cbf942deb1945f53591f750b34bb6093fd28115f  upstream_hash: 201b3c4fd03ef3aef0eb363ca1897e51be1204bb  translated_at: 2026-11-23 -->
+
+Micronaut Security CSRF 实现的核心是 `io.micronaut.security.csrf.filter.CsrfFilter`。
+它是一个 https://docs.micronaut.io/latest/guide/#filters[服务器过滤器]，会尝试使用每个 api:security.csrf.resolvers.CsrfTokenResolver[] 类型的 bean 来解析 CSRF Token，并用 api:security.csrf.validator.CsrfTokenValidator[] 类型的 bean 校验它。
+
+CSRF 过滤器可用的配置选项如下：
+
+include::{includedir}configurationProperties/io.micronaut.security.csrf.filter.CsrfFilterConfigurationProperties.adoc[]

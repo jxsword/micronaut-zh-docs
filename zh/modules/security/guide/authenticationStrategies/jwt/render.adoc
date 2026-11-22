@@ -1,0 +1,27 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Token Render](https://docs.micronaut.io/5.2.x/security/#security-render)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/authenticationStrategies/jwt/render.adoc  upstream_commit: f400f1174fd9e93818dcbaf780cd4793aab44851  upstream_hash: f9a792336635312c05c36c3aae7ce657e8b27bc9  translated_at: 2026-11-23 -->
+
+当你使用 <<loginHandler, `bearer` 认证>> 和内置的 <<login, LoginController>> 时，
+JWT 令牌会作为 OAuth 2.0 https://tools.ietf.org/html/RFC6749[RFC6749] 访问令牌响应的一部分返回给客户端。
+
+这类响应的示例如下：
+
+[source, json]
+----
+HTTP/1.1 200 OK
+Content-Type: application/json;charset=UTF-8
+Cache-Control: no-store
+Pragma: no-cache
+{
+    "access_token":"eyJhbGciOiJIUzI1NiJ9...",
+    "token_type":"Bearer",
+    "expires_in":3600,
+    "refresh_token":"tGzv3JOkF0XG5Qx2TlKWIA...",
+    "username": "euler",
+    "roles": [
+        "ROLE_USER"
+    ],
+}
+----
+
+如果你想自定义前面的 JSON 载荷，可以为 api:security.token.jwt.render.BearerTokenRenderer[] 提供一个替代 bean。如果这还不够，可以查看 api:security.token.jwt.bearer.AccessRefreshTokenLoginHandler[]，以满足你的需求。

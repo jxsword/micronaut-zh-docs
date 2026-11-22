@@ -1,0 +1,20 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Rejection Handling](https://docs.micronaut.io/5.2.x/security/#security-rejection)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/rejection.adoc  upstream_commit: e4273885d828da9dc3eccb66b1856bd240e9395b  upstream_hash: 08af5be347890cba094afdb24abb979fcc1aca36  translated_at: 2026-11-23 -->
+
+Micronaut 允许自定义在以下情况下发送的响应：请求未被授权访问资源；或请求未通过认证而资源要求认证。
+
+当请求被拒绝时，安全过滤器会抛出 api:security.authentication.AuthorizationException[]。默认实现（api:security.authentication.DefaultAuthorizationExceptionHandler[]）只在请求接受 text/html 时，才根据重定向配置进行重定向：
+
+include::{includedir}configurationProperties/io.micronaut.security.config.RedirectConfigurationProperties.adoc[]
+
+对于未授权的请求，如果 `unauthorized.enabled` 为 false，或请求不接受 text/html，则会发送 401 HTTP 响应。
+
+对于被拒绝的请求，如果 `forbidden.enabled` 为 false，或请求不接受 text/html，则会发送 403 HTTP 响应。
+
+要完全自定义该行为，请用你自己的实现替换相关的 bean。
+
+例如：
+[source,java]
+----
+include::{testssecurityjwt}/rejection/MyRejectionHandler.java[tag=clazz,indent=0]
+----

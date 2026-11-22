@@ -1,0 +1,33 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – HTML Sanitizer](https://docs.micronaut.io/5.2.x/security/#security-htmlSanitizer)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/htmlSanitizer.adoc  upstream_commit: 7129cb3c15969448b5e2e1c569d39981f852e0d2  upstream_hash: ca71137678b2fa6d013a866e0ee900a39e440fee  translated_at: 2026-11-23 -->
+
+Micronaut Security 包含一个可选的 HTML 净化器（sanitizer）模块，它将 https://github.com/OWASP/java-html-sanitizer[OWASP Java HTML Sanitizer] 适配到 Micronaut Core 的 api:micronaut.http.util.HtmlSanitizer[] API。
+
+添加依赖以启用基于 OWASP 的净化器：
+
+dependency:micronaut-security-html-sanitizer[groupId=io.micronaut.security]
+
+当该模块存在时，它会提供一个由 OWASP Java HTML Sanitizer 支持的 api:micronaut.http.util.HtmlSanitizer[] bean。该 bean 会替换 Core 的实体编码回退实现，并且其优先级低于应用自行提供的 api:micronaut.http.util.HtmlSanitizer[] bean。
+
+所配置的策略定义了净化后输出的白名单：只有这些 OWASP 策略允许的 HTML 元素和属性才会被保留。
+默认情况下，该模块组合了 https://www.javadoc.io/doc/com.googlecode.owasp-java-html-sanitizer/owasp-java-html-sanitizer/20240325.1/org/owasp/html/Sanitizers.html[OWASP `BLOCKS`、`FORMATTING` 与 `LINKS` 策略]，因此净化后的输出可以包含常见的块级元素、格式化元素和安全链接。默认情况下，它不允许脚本、事件处理属性、`javascript:` URL、CSS 样式处理、图片或表格。
+
+include::{includedir}configurationProperties/io.micronaut.security.html.HtmlSanitizerConfigurationProperties.adoc[]
+
+你可以通过配置选择启用额外的 OWASP 策略。例如，添加 `IMAGES` 会允许 OWASP 图片策略所定义的图片元素和属性：
+
+[configuration]
+----
+micronaut:
+  security:
+    html-sanitizer:
+      policies:
+        - BLOCKS
+        - FORMATTING
+        - LINKS
+        - IMAGES
+----
+
+要完全替换该模块，请提供你自己的 api:micronaut.http.util.HtmlSanitizer[] bean。要在不移除依赖的情况下禁用该模块，请设置 `micronaut.security.html-sanitizer.enabled=false`。
+
+在渲染不可信的 HTML 时，应丢弃原始输入，只渲染 api:micronaut.http.util.HtmlSanitizer[] 返回的净化后输出。保持上下文相关的输出编码和模板转义处于启用状态，并且不要将已移除的标签或属性视为原始输入是安全的证明。

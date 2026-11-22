@@ -1,6 +1,6 @@
 {"site":"core","code":0,"sha8":"cca2a1ce"}
 {"site":"http","code":-1,"sha8":"","note":"not-snapshotted"}
-{"site":"security","code":-1,"sha8":"","note":"not-snapshotted"}
+{"site":"security","code":0,"sha8":"cc524538"}
 {"site":"langchain4j","code":-1,"sha8":"","note":"not-snapshotted"}
 {"site":"mcp","code":-1,"sha8":"","note":"not-snapshotted"}
 {"site":"test","code":-1,"sha8":"","note":"not-snapshotted"}

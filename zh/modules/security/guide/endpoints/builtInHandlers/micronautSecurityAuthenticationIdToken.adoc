@@ -1,6 +1,7 @@
 > 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Authentication Mode ID Token](https://docs.micronaut.io/5.2.x/security/#security-micronautSecurityAuthenticationIdToken)，非官方译文，以英文原文为准。
 <!-- upstream_file: modules/security/guide/endpoints/builtInHandlers/micronautSecurityAuthenticationIdToken.adoc  upstream_commit: cbf942deb1945f53591f750b34bb6093fd28115f  upstream_hash: 396dbeab241dbe3f98f81047f7897ff810ce1c84  translated_at: 2026-11-23 -->
 
+[[micronautSecurityAuthenticationIdToken]]
 设置 `micronaut.security.authentication=idtoken` 后，会启用 api:security.oauth2.endpoint.token.response.IdTokenLoginHandler[]——一个 api:security.handlers.LoginHandler[] 类型的 bean，以及 api:security.token.jwt.cookie.JwtCookieClearerLogoutHandler[]——一个 api:security.handlers.LogoutHandler[] 类型的 bean。
 
 image::micronaut-security-authentication-idtoken.png[]

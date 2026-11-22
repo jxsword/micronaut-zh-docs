@@ -1,0 +1,8 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – JWT Token Generation](https://docs.micronaut.io/5.2.x/security/#security-jwtGenerator)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/authenticationStrategies/jwt/jwtGenerator.adoc  upstream_commit: 3964d006b99c05e9e53d50dec0e1b2a90658ee05  upstream_hash: fb3205e03e27469208d7a2703bf6d1d6a2401d01  translated_at: 2026-11-23 -->
+
+Micronaut 依赖 https://connect2id.com/products/nimbus-jose-jwt[Nimbus JOSE + JWT] 库来提供 JWT 令牌的签名与加密。
+
+可用的配置选项如下：
+
+include::{includedir}configurationProperties/io.micronaut.security.token.generator.AccessTokenConfigurationProperties.adoc[]

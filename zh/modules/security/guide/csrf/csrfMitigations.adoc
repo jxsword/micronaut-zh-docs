@@ -1,0 +1,4 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – CSRF Mitigations](https://docs.micronaut.io/5.2.x/security/#security-csrfMitigations)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/csrf/csrfMitigations.adoc  upstream_commit: cbf942deb1945f53591f750b34bb6093fd28115f  upstream_hash: 5d34dede8a2df99c58d6926ab57b676c9635c3e9  translated_at: 2026-11-23 -->
+
+IMPORTANT: 确保你的应用不通过 GET 请求方法执行改变状态的操作。你的应用应当只通过 POST、PUT、PATCH 或 DELETE 方法执行改变状态的操作。

@@ -1,0 +1,9 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Local JWKS](https://docs.micronaut.io/5.2.x/security/#security-staticJwks)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/authenticationStrategies/jwt/jwtValidation/jwks/staticJwks.adoc  upstream_commit: 6b013399eeb18a62489afbab7b23efa16d5ad60e  upstream_hash: 7743ddebac7c6927ff16bfbc503a4f6b76f951b2  translated_at: 2026-11-23 -->
+
+你可以指定以 `classpath:` 或 `file:` 开头的路径，从磁盘或类路径的任意位置提供 JSON JWKS。例如，要从 `src/main/resources/jwks/certs.json` 提供静态资源，你可以使用 `classpath:jwks/certs.json` 作为路径。
+
+[configuration]
+----
+include::{testssecurityjwt}/jwks/StaticJwksSignatureSpec.groovy[indent=0, tag=yamlconfig]
+----

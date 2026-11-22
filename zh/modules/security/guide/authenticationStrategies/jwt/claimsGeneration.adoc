@@ -1,0 +1,22 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Claims Generation](https://docs.micronaut.io/5.2.x/security/#security-claimsGeneration)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/authenticationStrategies/jwt/claimsGeneration.adoc  upstream_commit: 1309a6e190b33a4d2b88f6fbef2f1b604376de1c  upstream_hash: a92dda3749de015acb7867bfbf4bc9142f2b3f28  translated_at: 2026-11-23 -->
+
+如果内置的
+link:{api}/io/micronaut/security/token/jwt/generator/claims/JWTClaimsSetGenerator.html[JWTClaimsSetGenerator] 无法满足你的需求，你可以提供自己的 https://micronaut-projects.github.io/micronaut-core/latest/guide/#replaces[替代实现] 来替换 api:io.micronaut.security.token.claims.ClaimsGenerator[]。
+
+当应用提供 api:io.micronaut.security.token.claims.ClaimsAudienceProvider[] 类型的 bean 时，内置的 `JWTClaimsSetGenerator` 会添加 `aud` claim。
+`audience()` 返回的值用作 JWT audience：
+
+snippet::io.micronaut.docs.claimsaudience.CustomClaimsAudienceProvider[tags="clazz"]
+
+如果另一个 Micronaut 应用要验证生成的 JWT，请用 `micronaut.security.token.jwt.claims-validators.audience` 配置期望的 audience：
+
+[configuration]
+----
+micronaut:
+  security:
+    token:
+      jwt:
+        claims-validators:
+          audience: https://api.example.com
+----

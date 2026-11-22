@@ -1,0 +1,20 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – JWT Encryption](https://docs.micronaut.io/5.2.x/security/#security-jwtEncryption)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/authenticationStrategies/jwt/jwtEncryption.adoc  upstream_commit: 0579b8a9c58ba50e493ce39a38bd3d3ccda233df  upstream_hash: c9db05e1259f65664cd5d41fe86df7ce68a7f427  translated_at: 2026-11-23 -->
+
+签名可以防止攻击者篡改其内容、注入恶意数据，或通过添加更多角色来尝试权限提升。然而，Claims 仅用 Base 64 就能解码。
+
+如果 Claims 包含敏感信息，你可以使用 JSON Web Encryption 算法来防止它们被解码。
+
+Micronaut 的 JWT 验证支持多个加密配置。
+
+link:{api}/io/micronaut/security/token/jwt/encryption/rsa/RSAEncryptionConfiguration.html[RSAEncryptionConfiguration]、
+link:{api}/io/micronaut/security/token/jwt/encryption/ec/ECEncryptionConfiguration.html[ECEncryptionConfiguration]、
+link:{api}/io/micronaut/security/token/jwt/encryption/secret/SecretEncryptionConfiguration.html[SecretEncryptionConfiguration] 类型的 bean 作为加密配置参与 JWT 验证。
+
+这些 bean 需要用 `@Named` https://docs.micronaut.io/latest/guide/index.html#qualifiers[限定]，因为这些配置 bean 会被工厂（link:{api}/io/micronaut/security/token/jwt/encryption/rsa/RSAEncryptionFactory.html[RSAEncryptionFactory]、
+link:{api}/io/micronaut/security/token/jwt/encryption/ec/ECEncryptionFactory.html[ECEncryptionFactory]）或其他使用
+https://docs.micronaut.io/latest/guide/index.html#eachBean[@EachBean] 驱动配置的 bean（link:{api}/io/micronaut/security/token/jwt/encryption/secret/SecretEncryptionFactory.html[SecretEncryptionFactory]）所使用。
+
+如果要在应用生成的令牌中使用加密配置，请将 `generator` 用作 `@Named` 限定符。
+
+API link:{api}/io/micronaut/security/token/jwt/validator/JsonWebTokenEncryption.html[JsonWebTokenEncryption] 可用于解密已加密的令牌。

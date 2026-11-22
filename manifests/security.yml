@@ -87,7 +87,7 @@ files:
 - file: modules/security/guide/authenticationStrategies/custom.adoc
   blob_sha: 026ee0f902b92ff1da34f52c3d65acfa2807b4b7
   size: 860
-  status: missing
+  status: current
   zh: zh/modules/security/guide/authenticationStrategies/custom.adoc
   paragraphs: 5
   updated_at: '2026-11-23'
@@ -103,7 +103,7 @@ files:
 - file: modules/security/guide/authenticationStrategies/jwt/claimsGeneration.adoc
   blob_sha: a92dda3749de015acb7867bfbf4bc9142f2b3f28
   size: 950
-  status: missing
+  status: current
   zh: zh/modules/security/guide/authenticationStrategies/jwt/claimsGeneration.adoc
   paragraphs: 6
   updated_at: '2026-11-23'
@@ -111,7 +111,7 @@ files:
 - file: modules/security/guide/authenticationStrategies/jwt/claimsValidation.adoc
   blob_sha: 73ce10e3ca3ee977ea618f410e3496a32ef34fb6
   size: 2010
-  status: missing
+  status: current
   zh: zh/modules/security/guide/authenticationStrategies/jwt/claimsValidation.adoc
   paragraphs: 4
   updated_at: '2026-11-23'
@@ -119,7 +119,7 @@ files:
 - file: modules/security/guide/authenticationStrategies/jwt/jsonWebTokenValidator.adoc
   blob_sha: ae120599332a37306902126397e674d5d79cacd8
   size: 713
-  status: missing
+  status: current
   zh: zh/modules/security/guide/authenticationStrategies/jwt/jsonWebTokenValidator.adoc
   paragraphs: 4
   updated_at: '2026-11-23'
@@ -127,7 +127,7 @@ files:
 - file: modules/security/guide/authenticationStrategies/jwt/jwtEncryption.adoc
   blob_sha: c9db05e1259f65664cd5d41fe86df7ce68a7f427
   size: 1734
-  status: missing
+  status: current
   zh: zh/modules/security/guide/authenticationStrategies/jwt/jwtEncryption.adoc
   paragraphs: 7
   updated_at: '2026-11-23'
@@ -135,7 +135,7 @@ files:
 - file: modules/security/guide/authenticationStrategies/jwt/jwtEncryption/jwtEncryptionSecret.adoc
   blob_sha: 88cd2ae042515ba3e4b0000c4cbb51d165d6106c
   size: 1070
-  status: missing
+  status: current
   zh: zh/modules/security/guide/authenticationStrategies/jwt/jwtEncryption/jwtEncryptionSecret.adoc
   paragraphs: 8
   updated_at: '2026-11-23'
@@ -143,7 +143,7 @@ files:
 - file: modules/security/guide/authenticationStrategies/jwt/jwtEncryption/jwtGeneratorEncryption.adoc
   blob_sha: 6aab90f0145f5c41a486039eb8024ec0f84db7cf
   size: 1110
-  status: missing
+  status: current
   zh: zh/modules/security/guide/authenticationStrategies/jwt/jwtEncryption/jwtGeneratorEncryption.adoc
   paragraphs: 13
   updated_at: '2026-11-23'
@@ -151,7 +151,7 @@ files:
 - file: modules/security/guide/authenticationStrategies/jwt/jwtGenerator.adoc
   blob_sha: fb3205e03e27469208d7a2703bf6d1d6a2401d01
   size: 320
-  status: missing
+  status: current
   zh: zh/modules/security/guide/authenticationStrategies/jwt/jwtGenerator.adoc
   paragraphs: 3
   updated_at: '2026-11-23'
@@ -159,7 +159,7 @@ files:
 - file: modules/security/guide/authenticationStrategies/jwt/jwtGenerator/jwtGeneratorRSA.adoc
   blob_sha: 4566772de9f6c68eb953cc504e751053790de61c
   size: 409
-  status: missing
+  status: current
   zh: zh/modules/security/guide/authenticationStrategies/jwt/jwtGenerator/jwtGeneratorRSA.adoc
   paragraphs: 4
   updated_at: '2026-11-23'
@@ -167,7 +167,7 @@ files:
 - file: modules/security/guide/authenticationStrategies/jwt/jwtGenerator/jwtGeneratorSecret.adoc
   blob_sha: fe77b2f96b8466038f7f7cbf934f26fabfb73c25
   size: 781
-  status: missing
+  status: current
   zh: zh/modules/security/guide/authenticationStrategies/jwt/jwtGenerator/jwtGeneratorSecret.adoc
   paragraphs: 8
   updated_at: '2026-11-23'
@@ -175,7 +175,7 @@ files:
 - file: modules/security/guide/authenticationStrategies/jwt/jwtGenerator/jwtGeneratorSignature.adoc
   blob_sha: 3c240c142f885d70ad84a2f907e746334593abe8
   size: 1246
-  status: missing
+  status: current
   zh: zh/modules/security/guide/authenticationStrategies/jwt/jwtGenerator/jwtGeneratorSignature.adoc
   paragraphs: 2
   updated_at: '2026-11-23'
@@ -183,7 +183,7 @@ files:
 - file: modules/security/guide/authenticationStrategies/jwt/jwtGuides.adoc
   blob_sha: a26bbec22e16e963d850eced10f66463c142787d
   size: 501
-  status: missing
+  status: current
   zh: zh/modules/security/guide/authenticationStrategies/jwt/jwtGuides.adoc
   paragraphs: 2
   updated_at: '2026-11-23'
@@ -191,7 +191,7 @@ files:
 - file: modules/security/guide/authenticationStrategies/jwt/jwtParser.adoc
   blob_sha: a42ecb28fe8e7c2c33f6db8fd90cfab27c776fe2
   size: 153
-  status: missing
+  status: current
   zh: zh/modules/security/guide/authenticationStrategies/jwt/jwtParser.adoc
   paragraphs: 1
   updated_at: '2026-11-23'
@@ -199,7 +199,7 @@ files:
 - file: modules/security/guide/authenticationStrategies/jwt/jwtValidation.adoc
   blob_sha: 4a7a5c6e592e80d7743912f9d4f0058f81f52882
   size: 2030
-  status: missing
+  status: current
   zh: zh/modules/security/guide/authenticationStrategies/jwt/jwtValidation.adoc
   paragraphs: 7
   updated_at: '2026-11-23'
@@ -207,7 +207,7 @@ files:
 - file: modules/security/guide/authenticationStrategies/jwt/jwtValidation/jwks.adoc
   blob_sha: 3b72b1391719c2a9efe17e67de52a6003bf61286
   size: 2231
-  status: missing
+  status: current
   zh: zh/modules/security/guide/authenticationStrategies/jwt/jwtValidation/jwks.adoc
   paragraphs: 15
   updated_at: '2026-11-23'
@@ -215,7 +215,7 @@ files:
 - file: modules/security/guide/authenticationStrategies/jwt/jwtValidation/jwks/jwksCache.adoc
   blob_sha: 4a17b0c3bc9faeceda6abf3baaa127d5e176fed4
   size: 1782
-  status: missing
+  status: current
   zh: zh/modules/security/guide/authenticationStrategies/jwt/jwtValidation/jwks/jwksCache.adoc
   paragraphs: 9
   updated_at: '2026-11-23'
@@ -223,7 +223,7 @@ files:
 - file: modules/security/guide/authenticationStrategies/jwt/jwtValidation/jwks/staticJwks.adoc
   blob_sha: 7743ddebac7c6927ff16bfbc503a4f6b76f951b2
   size: 378
-  status: missing
+  status: current
   zh: zh/modules/security/guide/authenticationStrategies/jwt/jwtValidation/jwks/staticJwks.adoc
   paragraphs: 3
   updated_at: '2026-11-23'
@@ -239,7 +239,7 @@ files:
 - file: modules/security/guide/authenticationStrategies/jwt/reader/bearerToken.adoc
   blob_sha: 6085940a96acd55a5093c2b93f7c1febc34777b8
   size: 1483
-  status: missing
+  status: current
   zh: zh/modules/security/guide/authenticationStrategies/jwt/reader/bearerToken.adoc
   paragraphs: 13
   updated_at: '2026-11-23'
@@ -247,7 +247,7 @@ files:
 - file: modules/security/guide/authenticationStrategies/jwt/reader/cookieToken.adoc
   blob_sha: 772d84e5db4f48a668fe7ce3a832cf545ba05c5c
   size: 537
-  status: missing
+  status: current
   zh: zh/modules/security/guide/authenticationStrategies/jwt/reader/cookieToken.adoc
   paragraphs: 6
   updated_at: '2026-11-23'
@@ -255,7 +255,7 @@ files:
 - file: modules/security/guide/authenticationStrategies/jwt/render.adoc
   blob_sha: f9a792336635312c05c36c3aae7ce657e8b27bc9
   size: 895
-  status: missing
+  status: current
   zh: zh/modules/security/guide/authenticationStrategies/jwt/render.adoc
   paragraphs: 5
   updated_at: '2026-11-23'
@@ -263,7 +263,7 @@ files:
 - file: modules/security/guide/authenticationStrategies/ldap/configuration.adoc
   blob_sha: 5cca4e4c823cc21967d7b654c24959270e726540
   size: 937
-  status: missing
+  status: current
   zh: zh/modules/security/guide/authenticationStrategies/ldap/configuration.adoc
   paragraphs: 6
   updated_at: '2026-11-23'
@@ -271,7 +271,7 @@ files:
 - file: modules/security/guide/authenticationStrategies/ldap/extending.adoc
   blob_sha: 3bb9647709f7b32836852d785b157a6699852b39
   size: 3636
-  status: missing
+  status: current
   zh: zh/modules/security/guide/authenticationStrategies/ldap/extending.adoc
   paragraphs: 25
   updated_at: '2026-11-23'
@@ -287,7 +287,7 @@ files:
 - file: modules/security/guide/authenticationStrategies/x509.adoc
   blob_sha: 72982bc28bee7eb61ce78e52a9099e2196a9b2f9
   size: 2739
-  status: missing
+  status: current
   zh: zh/modules/security/guide/authenticationStrategies/x509.adoc
   paragraphs: 13
   updated_at: '2026-11-23'
@@ -303,7 +303,7 @@ files:
 - file: modules/security/guide/csrf.adoc
   blob_sha: fc6d521ffaab5a05635d7dc11fbc311f9bc7a3f9
   size: 254
-  status: missing
+  status: current
   zh: zh/modules/security/guide/csrf.adoc
   paragraphs: 4
   updated_at: '2026-11-23'
@@ -311,7 +311,7 @@ files:
 - file: modules/security/guide/csrf/csrfApis.adoc
   blob_sha: 8906bfd7d56e38ee439f055bc1f7b3779198aad2
   size: 392
-  status: missing
+  status: current
   zh: zh/modules/security/guide/csrf/csrfApis.adoc
   paragraphs: 2
   updated_at: '2026-11-23'
@@ -319,7 +319,7 @@ files:
 - file: modules/security/guide/csrf/csrfConfiguration.adoc
   blob_sha: 2e57da285c5fe242387383d3da64fd88678a1a14
   size: 168
-  status: missing
+  status: current
   zh: zh/modules/security/guide/csrf/csrfConfiguration.adoc
   paragraphs: 2
   updated_at: '2026-11-23'
@@ -327,7 +327,7 @@ files:
 - file: modules/security/guide/csrf/csrfDependency.adoc
   blob_sha: cd75033f3b7587f9b1d1dc71d6ab397752127589
   size: 135
-  status: missing
+  status: current
   zh: zh/modules/security/guide/csrf/csrfDependency.adoc
   paragraphs: 2
   updated_at: '2026-11-23'
@@ -335,7 +335,7 @@ files:
 - file: modules/security/guide/csrf/csrfFilter.adoc
   blob_sha: 201b3c4fd03ef3aef0eb363ca1897e51be1204bb
   size: 558
-  status: missing
+  status: current
   zh: zh/modules/security/guide/csrf/csrfFilter.adoc
   paragraphs: 3
   updated_at: '2026-11-23'
@@ -343,7 +343,7 @@ files:
 - file: modules/security/guide/csrf/csrfMitigations.adoc
   blob_sha: 5d34dede8a2df99c58d6926ab57b676c9635c3e9
   size: 205
-  status: missing
+  status: current
   zh: zh/modules/security/guide/csrf/csrfMitigations.adoc
   paragraphs: 1
   updated_at: '2026-11-23'
@@ -351,7 +351,7 @@ files:
 - file: modules/security/guide/csrf/csrfMitigations/doubleSubmitCookiePattern.adoc
   blob_sha: 385dacf171cf1a80eb42d6a6d6f564c3256ce464
   size: 1481
-  status: missing
+  status: current
   zh: zh/modules/security/guide/csrf/csrfMitigations/doubleSubmitCookiePattern.adoc
   paragraphs: 7
   updated_at: '2026-11-23'
@@ -359,7 +359,7 @@ files:
 - file: modules/security/guide/csrf/csrfMitigations/signedDoubleSubmitCookiePattern.adoc
   blob_sha: 275902dbf439a22db0c0a7d2c75293a2d4de7a77
   size: 575
-  status: missing
+  status: current
   zh: zh/modules/security/guide/csrf/csrfMitigations/signedDoubleSubmitCookiePattern.adoc
   paragraphs: 4
   updated_at: '2026-11-23'
@@ -367,7 +367,7 @@ files:
 - file: modules/security/guide/csrf/csrfMitigations/syncronizerTokenPattern.adoc
   blob_sha: a9ba633515431be3685acab96456f08d5aa01cf2
   size: 518
-  status: missing
+  status: current
   zh: zh/modules/security/guide/csrf/csrfMitigations/syncronizerTokenPattern.adoc
   paragraphs: 4
   updated_at: '2026-11-23'
@@ -375,7 +375,7 @@ files:
 - file: modules/security/guide/csrf/csrfMitigations/syncronizerTokenPattern/csrfAndSession.adoc
   blob_sha: f5e4ab222f46f3da2613bde1b1ae54b8a48d9399
   size: 652
-  status: missing
+  status: current
   zh: zh/modules/security/guide/csrf/csrfMitigations/syncronizerTokenPattern/csrfAndSession.adoc
   paragraphs: 2
   updated_at: '2026-11-23'
@@ -383,7 +383,7 @@ files:
 - file: modules/security/guide/csrf/csrfTokenResolvers.adoc
   blob_sha: 2fb1ce1b77dd93353f993195a93757579a224414
   size: 111
-  status: missing
+  status: current
   zh: zh/modules/security/guide/csrf/csrfTokenResolvers.adoc
   paragraphs: 1
   updated_at: '2026-11-23'
@@ -391,7 +391,7 @@ files:
 - file: modules/security/guide/csrf/csrfTokenResolvers/fieldCsrfTokenResolver.adoc
   blob_sha: c15d7e809ed1397e0aeeffb1a4e24b62512b02f5
   size: 543
-  status: missing
+  status: current
   zh: zh/modules/security/guide/csrf/csrfTokenResolvers/fieldCsrfTokenResolver.adoc
   paragraphs: 4
   updated_at: '2026-11-23'
@@ -399,7 +399,7 @@ files:
 - file: modules/security/guide/csrf/csrfTokenResolvers/httpHeaderCsrfTokenResolver.adoc
   blob_sha: 0da166e300df79a930d287ab743bbffe3b5f61a3
   size: 1258
-  status: missing
+  status: current
   zh: zh/modules/security/guide/csrf/csrfTokenResolvers/httpHeaderCsrfTokenResolver.adoc
   paragraphs: 7
   updated_at: '2026-11-23'
@@ -519,7 +519,7 @@ files:
 - file: modules/security/guide/htmlSanitizer.adoc
   blob_sha: ca71137678b2fa6d013a866e0ee900a39e440fee
   size: 2159
-  status: missing
+  status: current
   zh: zh/modules/security/guide/htmlSanitizer.adoc
   paragraphs: 11
   updated_at: '2026-11-23'
@@ -871,7 +871,7 @@ files:
 - file: modules/security/guide/rejection.adoc
   blob_sha: 08af5be347890cba094afdb24abb979fcc1aca36
   size: 1076
-  status: missing
+  status: current
   zh: zh/modules/security/guide/rejection.adoc
   paragraphs: 9
   updated_at: '2026-11-23'
@@ -879,7 +879,7 @@ files:
 - file: modules/security/guide/rejection/wwwAuthenticate.adoc
   blob_sha: 96ccddb5e2a7c2ed267b6fbc23540f4481b98b35
   size: 812
-  status: missing
+  status: current
   zh: zh/modules/security/guide/rejection/wwwAuthenticate.adoc
   paragraphs: 6
   updated_at: '2026-11-23'
@@ -1119,7 +1119,7 @@ files:
 - file: modules/security/guide/tokenPropagation.adoc
   blob_sha: 11aa094a369e6e4e8457fbba11cc170279b775b9
   size: 1855
-  status: missing
+  status: current
   zh: zh/modules/security/guide/tokenPropagation.adoc
   paragraphs: 17
   updated_at: '2026-11-23'

@@ -392,3 +392,17 @@ modules:
       status: "approved"
       context: "不译；官方安全规则配置名（SEC-01 实译；正文首次出现加「（拦截 URL 映射）」括注）"
       aliases: ["intercept url map"]
+
+    - en: "sanitizer"
+      zh: "净化器"
+      module: "security"
+      status: "approved"
+      context: "security HTML Sanitizer 节（SEC-02 实译；OWASP Java HTML Sanitizer 产品名不译）"
+      aliases: ["sanitizers"]
+
+    - en: "token propagation"
+      zh: "令牌传播"
+      module: "security"
+      status: "approved"
+      context: "security Token Propagation 节（SEC-02 实译；TokenPropagationHttpClientFilter 等类名不译）"
+      aliases: ["propagation"]

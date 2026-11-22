@@ -1,6 +1,7 @@
 > 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Session Authentication](https://docs.micronaut.io/5.2.x/security/#security-session)，非官方译文，以英文原文为准。
 <!-- upstream_file: modules/security/guide/authenticationStrategies/session.adoc  upstream_commit: d918b5d131bc30609e19659d1c4961ef54f0e67b  upstream_hash: c6a1d8e8eb49aa3bba56b909caa71e737c9c4a1f  translated_at: 2026-11-23 -->
 
+[[session]]
 Micronaut 支持基于会话的认证。
 
 [TIP]

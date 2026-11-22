@@ -1,0 +1,12 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Example of JWT Signed with RSA](https://docs.micronaut.io/5.2.x/security/#security-jwtGeneratorRSA)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/authenticationStrategies/jwt/jwtGenerator/jwtGeneratorRSA.adoc  upstream_commit: 247168d4d114dec4b61baa9b036ea8a6a3fba09e  upstream_hash: 4566772de9f6c68eb953cc504e751053790de61c  translated_at: 2026-11-23 -->
+
+RSA 签名生成的编程式设置可能如下所示
+
+[source, groovy]
+----
+include::{testssecurityjwt}/signandencrypt/MySignatureGeneratorConfigurationFactory.groovy[indent=0, tag=clazz]
+----
+
+<1> 将 SignatureGeneratorConfiguration 命名为 `generator`，使其参与 JWT 令牌生成。
+<2> 注册一个额外的 RSASignatureGeneratorConfiguration 类型的 bean，它会被注入到此处

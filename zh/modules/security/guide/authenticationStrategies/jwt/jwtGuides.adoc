@@ -1,0 +1,9 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Guides](https://docs.micronaut.io/5.2.x/security/#security-jwtGuides)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/authenticationStrategies/jwt/jwtGuides.adoc  upstream_commit: 4edc5549856f3ca174e3a847021ce998f9906067  upstream_hash: a26bbec22e16e963d850eced10f66463c142787d  translated_at: 2026-11-23 -->
+
+阅读以下指南，进一步了解 JSON Web Token 与 JSON Web Key：
+
+- https://guides.micronaut.io/latest/micronaut-cli-jwkgen.html[使用 Micronaut 命令行应用生成 JWK]
+- https://guides.micronaut.io/latest/micronaut-security-keys-jwks.html[JWK 密钥端点]
+- https://guides.micronaut.io/latest/micronaut-security-jwt.html[Micronaut JWT 认证]
+- https://guides.micronaut.io/latest/micronaut-security-jwt-cookie.html[通过 Cookie 进行 Micronaut JWT 认证]

@@ -1,0 +1,47 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – X.509 Certificate Authentication](https://docs.micronaut.io/5.2.x/security/#security-x509)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/authenticationStrategies/x509.adoc  upstream_commit: 0435987e0711972384f270cf7aadc91989ffdfb1  upstream_hash: 72982bc28bee7eb61ce78e52a9099e2196a9b2f9  translated_at: 2026-11-23 -->
+
+Micronaut Security 支持将 https://en.wikipedia.org/wiki/X.509#Certificates[X.509 客户端证书] 与 HTTPS 一起使用，以启用 https://en.wikipedia.org/wiki/Mutual_authentication[双向认证]。
+
+在应用中 https://docs.micronaut.io/latest/guide/#https[配置 HTTPS] 后，用户可以安装 X.509 浏览器证书来提供认证信息并访问受限制的 URL。
+
+启用 X.509 后，除了客户端（例如浏览器或 API 客户端）验证服务器证书有效（即该证书由受信任的证书颁发机构（CA）签发并签名）之外，服务器还可以使用客户端 SSL 握手中的证书来验证客户端。如果客户端证书有效，且包含与应用用户对应的用户名/主体，则将授予访问权限。
+
+=== 配置
+
+如下表所示，有两个配置选项：
+
+include::{includedir}configurationProperties/io.micronaut.security.x509.X509ConfigurationProperties.adoc[]
+
+使用 `micronaut.security.x509.enabled` 启用 X.509 支持，或按环境启用。
+
+使用 `micronaut.security.x509.subject-dn-regex` 属性可以覆盖用于从证书中提取主体（用户名）的默认正则表达式。通常，主体存储在 `CN` 属性（即 Common Name，通用名称）中，并带有 `"CN="` 前缀。默认正则表达式 `"CN=(.*?)(?:,|$)"` 会提取 `"CN="` 之后、下一个（可选的）分隔符之前的文本；但如果你的证书配置不同，请按需覆盖该正则表达式。
+
+除了 X.509 专属配置外，你还必须为服务器 https://docs.micronaut.io/latest/guide/#https[配置 HTTPS]，并配置在 SSL 握手期间请求客户端证书。将 `micronaut.server.ssl.client-authentication` 属性的值设为 `want` 或 `need`，具体取决于客户端证书是可选还是必需。
+
+下面是一个启用并配置 HTTPS 与 X.509 的示例配置：
+
+[configuration]
+----
+micronaut:
+  application:
+    name: your_application_name
+  security:
+    x509:
+      enabled: true
+  ssl:
+    enabled: true
+  server:
+    ssl:
+      client-authentication: want # or 'need'
+      key-store:
+        path: classpath:ssl/keystore.p12
+        password: your_keystore_password
+        type: PKCS12
+      trust-store:
+        path: classpath:ssl/truststore.jks
+        password: your_truststore_password
+        type: JKS
+----
+
+TIP: 阅读 https://guides.micronaut.io/latest/micronaut-security-x509.html[X.509 Authentication Micronaut Guide]，了解如何配置应用以使用 X.509，以及如何创建用于测试的各类证书。

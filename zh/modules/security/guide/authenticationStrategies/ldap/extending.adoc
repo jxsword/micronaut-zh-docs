@@ -1,0 +1,82 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Extending Default Behavior](https://docs.micronaut.io/5.2.x/security/#security-extending)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/authenticationStrategies/ldap/extending.adoc  upstream_commit: 4edc5549856f3ca174e3a847021ce998f9906067  upstream_hash: 3bb9647709f7b32836852d785b157a6699852b39  translated_at: 2026-11-23 -->
+
+本节将概述一些需要自定义代码才能实现的常见需求，并说明在这些情况下该怎么做。
+
+== 认证数据
+
+认证请求成功后返回的认证对象默认是 `Authentication` 的实例，它只包含用户名以及与该用户关联的角色。你可以通过 api:security.authentication.Authentication[] `attributes` 来存储额外数据。替换 api:security.ldap.DefaultContextAuthenticationMapper[] 并提供你自己的实现即可。
+
+[source,java]
+.MyContextAuthenticationMapper.java
+----
+@Singleton
+@Replaces(DefaultContextAuthenticationMapper.class) // <1>
+public class MyContextAuthenticationMapper implements ContextAuthenticationMapper {
+
+    @Override
+    public AuthenticationResponse map(ConvertibleValues<Object> attributes, String username, Set<String> groups) {
+        // return an Authentication instance (Authentication::build methods) or an AuthenticationFailed object
+    }
+}
+----
+
+<1> 使用 @Replaces 将让你的 bean 替换上下文中的默认实现
+
+== 用户组
+
+默认情况下，如果启用该功能，在 LDAP 中找到的组将原样返回，不做任何处理。不会将来自其他源的额外组添加到列表中。常见的需求是从其他源检索额外的组，或者将组的名称规范化为特定格式。
+
+要扩展这一行为，需要创建你自己的 api:security.ldap.group.LdapGroupProcessor[] 实现。通常最好扩展默认实现，因为它包含从 LDAP 查询组的逻辑，并且会执行其他方法来处理组以及查询额外的组。
+
+[source,java]
+.MyLdapGroupProcessor.java
+----
+@Singleton
+@Replaces(DefaultLdapGroupProcessor.class) // <1>
+public class MyLdapGroupProcessor extends DefaultLdapGroupProcessor {
+
+    Set<String> getAdditionalGroups(LdapSearchResult result) { // <2>
+        //Use the result to query another source for additional groups (database, etc)
+    }
+
+    Optional<String> processGroup(String group) { // <3>
+        //convert "Admin" to "ROLE_ADMIN" for example
+        //return an empty optional to exclude the group
+    }
+}
+----
+
+<1> 使用 @Replaces 将让你的 bean 替换上下文中的默认实现
+<2> link:{api}/io/micronaut/security/ldap/group/LdapGroupProcessor.html#getAdditionalGroups-io.micronaut.security.ldap.context.LdapSearchResult-[getAdditionalGroups] 方法允许你从其他源添加组
+<3> link:{api}/io/micronaut/security/ldap/group/LdapGroupProcessor.html#processGroup-java.lang.String-[processGroup] 方法允许你转换组的名称，或将该组排除
+
+== 搜索逻辑
+
+要自定义 LDAP 搜索的执行方式，请用你自己的实现替换默认实现。参见 api:security.ldap.context.LdapSearchService[]。
+
+[source,java]
+.MyLdapSearchService.java
+----
+@Singleton
+@Replaces(DefaultLdapSearchService.class)
+public class MyLdapSearchService implements LdapSearchService {
+
+}
+----
+
+== 上下文构建
+
+要自定义 LDAP 上下文的构建方式，请用你自己的实现替换默认实现。参见 api:security.ldap.context.ContextBuilder[]。
+
+[source,java]
+.MyContextBuilder.java
+----
+@Singleton
+@Replaces(DefaultContextBuilder.class)
+public class MyContextBuilder implements ContextBuilder {
+
+}
+----
+
+TIP: 阅读 https://guides.micronaut.io/latest/micronaut-database-authentication-provider.html[LDAP 和数据库认证提供者]，进一步了解 LDAP 认证：

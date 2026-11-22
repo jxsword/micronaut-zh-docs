@@ -1,0 +1,7 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Cross-Site Request Forgery (CSRF)](https://docs.micronaut.io/5.2.x/security/#security-csrf)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/csrf.adoc  upstream_commit: cbf942deb1945f53591f750b34bb6093fd28115f  upstream_hash: fc6d521ffaab5a05635d7dc11fbc311f9bc7a3f9  translated_at: 2026-11-23 -->
+
+https://owasp.org/www-community/attacks/csrf[跨站请求伪造（Cross-Site Request Forgery，CSRF）]：
+____
+跨站请求伪造（CSRF）是一种迫使最终用户在当前已认证的 Web 应用中执行非预期操作的攻击
+____

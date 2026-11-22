@@ -1,0 +1,16 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Field CSRF Token Resolution](https://docs.micronaut.io/5.2.x/security/#security-fieldCsrfTokenResolver)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/csrf/csrfTokenResolvers/fieldCsrfTokenResolver.adoc  upstream_commit: cbf942deb1945f53591f750b34bb6093fd28115f  upstream_hash: c15d7e809ed1397e0aeeffb1a4e24b62512b02f5  translated_at: 2026-11-23 -->
+
+Micronaut Security CSRF 自带 `io.micronaut.security.csrf.resolver.FieldCsrfTokenResolver`——一个 api:security.csrf.resolver.CsrfTokenResolver[] 的实现，它会在请求的表单 URL 编码字段中查找 CSRF Token。
+
+[source, bash]
+----
+POST /transfer HTTP/1.1
+Host: vulnerable bank
+Content-Type: application/x-www-form-urlencoded
+Cookie: session=<token>
+[...]
+amount=100&toUser=intended&csrfToken=o24b65486f506e2cd4403caf0d640024
+----
+
+你可以通过设置 `micronaut.security.csrf.token-resolvers.field.enabled=false` 来禁用它

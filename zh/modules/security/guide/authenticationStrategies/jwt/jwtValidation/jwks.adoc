@@ -1,0 +1,35 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Remote JWKS](https://docs.micronaut.io/5.2.x/security/#security-jwks)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/authenticationStrategies/jwt/jwtValidation/jwks.adoc  upstream_commit: d59608be8bb4075e232cbc9d4ea85d24a74c234c  upstream_hash: 3b72b1391719c2a9efe17e67de52a6003bf61286  translated_at: 2026-11-23 -->
+
+https://tools.ietf.org/html/rfc7517[JSON Web Key（JWK）] 是一个表示加密密钥的 JSON 对象。你可以使用远程 JWK Set——表示一组 JWK 的 JSON 对象——来验证 JWT 签名。
+
+你可以将远程 JWKS 配置为签名验证器：
+
+[configuration]
+----
+include::{testssecurityjwt}/jwks/JwksSpec.groovy[indent=0, tag=yamljwksconfig]
+----
+
+上面的代码片段创建了一个带 `awscognito` 名称限定符的 link:{api}/io/micronaut/security/token/jwt/nimbus/ReactiveJwksSignature.html[ReactiveJwksSignature] bean。
+
+如果类路径上有 https://docs.micronaut.io/latest/guide/#httpClient[Micronaut HTTP Client]，则将使用它来获取远程 JWK Set。这样在获取资源时可以应用 HTTP 客户端的配置设置。如果存在命名的服务专属客户端，且该服务的名称与配置的 JWKS 提供者名称匹配，则使用该特定客户端实例；否则使用默认的 HTTP 客户端实例（应用 `micronaut.http.client.*` 的任何全局配置设置）。如果类路径上没有 Micronaut HTTP Client，则该实现将回退到外部 JWT 库依赖的内部资源获取机制。
+
+例如，要为上面示例中 JWK Set 的获取使用 HTTP 代理：
+
+[configuration]
+----
+include::{testssecurityjwt}/jwks/JwksSpec.groovy[indent=0, tag=yamlserviceclientconfig]
+----
+
+注意，当使用通过 <<openid-authorization-code, Open ID Connect>> 元数据提供的 `jwks_uri` 时，同样会应用这一方式。
+
+通过显式设置 `micronaut.security.token.jwt.signatures.jwks-client.http-client.enabled=false`，可以显式禁用基于 https://docs.micronaut.io/latest/guide/#httpClient[Micronaut HTTP Client] 的实现，改用 JWT 库的内部资源获取实现。例如：
+
+[configuration]
+----
+include::{testssecurityjwt}/jwks/JwksSpec.groovy[indent=0, tag=yamlservicefallbackclientconfig]
+----
+
+### 暴露你应用的 Json Web Key Set（JKWS）
+
+如果你想暴露自己的 JWK Set，请阅读 <<keys, Keys Controller>> 一节。

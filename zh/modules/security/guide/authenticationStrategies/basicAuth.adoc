@@ -1,6 +1,7 @@
 > 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Basic Authentication](https://docs.micronaut.io/5.2.x/security/#security-basicAuth)，非官方译文，以英文原文为准。
 <!-- upstream_file: modules/security/guide/authenticationStrategies/basicAuth.adoc  upstream_commit: a4e667931b762db6798d273ec92324e2eb43cefa  upstream_hash: 6a4eefe2b6d9bab62871396d91dcaa7f31b09d0e  translated_at: 2026-11-23 -->
 
+[[basicAuth]]
 开箱即用，Micronaut 支持 https://tools.ietf.org/html/rfc7617[RFC7617]，它定义了 "Basic" 超文本传输协议（HTTP）认证方案，该方案以 user-id/password 对的形式传输凭证，并使用 Base64 编码。
 
 只要您有任何 <<authenticationProviders,认证提供者>>，基本认证就默认启用。您可以通过将 `micronaut.security.basic-auth.enabled` 设置为 `false` 来禁用它。

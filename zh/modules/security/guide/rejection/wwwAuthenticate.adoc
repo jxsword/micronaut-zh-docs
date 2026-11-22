@@ -1,0 +1,12 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – WWW-Authenticate Response](https://docs.micronaut.io/5.2.x/security/#security-wwwAuthenticate)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/rejection/wwwAuthenticate.adoc  upstream_commit: a4e667931b762db6798d273ec92324e2eb43cefa  upstream_hash: 96ccddb5e2a7c2ed267b6fbc23540f4481b98b35  translated_at: 2026-11-23 -->
+
+____
+HTTP WWW-Authenticate 响应头声明了可能用于获取对特定资源访问权限的 HTTP 认证方法（或质询）。
+____
+
+如果存在 api:security.authentication.WwwAuthenticateChallengeProvider[] 类型的 bean，Micronaut Security 会使用它们在返回 401 Unauthorized 响应时填充 `WWW-Authenticate` 请求头。
+
+如果你启用了 <<basicAuth, 基本认证>>，默认会添加 "Basic" 认证方案的条目。你可以将 `micronaut.security.basic-auth.www-authenticate` 设为 `false` 来禁用它。
+
+如果你启用了 <<protectedResourceMetadata, 资源元数据>>，则会添加 RFC9728 的 https://datatracker.ietf.org/doc/html/rfc9728#name-www-authenticate-response[WWW-Authenticate Response] 节所定义的条目

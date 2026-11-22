@@ -1,0 +1,35 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Example of JWT Signed with Secret and Encrypted with RSA](https://docs.micronaut.io/5.2.x/security/#security-jwtGeneratorEncryption)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/authenticationStrategies/jwt/jwtEncryption/jwtGeneratorEncryption.adoc  upstream_commit: 0435987e0711972384f270cf7aadc91989ffdfb1  upstream_hash: 6aab90f0145f5c41a486039eb8024ec0f84db7cf  translated_at: 2026-11-23 -->
+
+通过配置属性设置一个 link:{api}/io/micronaut/security/token/jwt/signature/secret/SecretSignatureConfiguration.html[SecretSignatureConfiguration]
+
+[configuration]
+----
+include::{testssecurityjwt}/signandencrypt/SignSecretEncryptRSASpec.groovy[indent=0, tag=yamlconfig]
+pem:
+  path: /home/user/rsa-2048bit-key-pair.pem #<2>
+----
+
+- 将签名配置命名为 `generator`，使其参与 JWT 令牌生成。
+- `pem.path` 指定 PEM 文件的位置
+
+生成一个 2048 位的 RSA 私钥 + 公钥对：
+
+[source, bash]
+----
+openssl genrsa -out rsa-2048bit-key-pair.pem 2048
+----
+
+[source, groovy]
+----
+include::{testssecurityjwt}/signandencrypt/RSAOAEPEncryptionConfiguration.groovy[indent=0, tag=clazz]
+----
+
+- 将 bean 命名为 `generator`，以指定该 bean 参与 JWT 令牌生成。
+
+要解析 PEM 密钥，请按 https://connect2id.com/products/nimbus-jose-jwt/openssl-key-generation[OpenSSL key generation] 所述使用一个协作对象。
+
+[source, groovy]
+----
+include::{testssecurityjwt}/signandencrypt/KeyPairProvider.groovy[indent=0, tag=clazz]
+----

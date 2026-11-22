@@ -1,0 +1,14 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Cookie Token Reader](https://docs.micronaut.io/5.2.x/security/#security-cookieToken)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/authenticationStrategies/jwt/reader/cookieToken.adoc  upstream_commit: 3964d006b99c05e9e53d50dec0e1b2a90658ee05  upstream_hash: 772d84e5db4f48a668fe7ce3a832cf545ba05c5c  translated_at: 2026-11-23 -->
+
+你也可以通过 Cookie 来发送/读取 JWT 令牌。
+
+下面的时序图展示了认证流程：
+
+image::jwt-cookie.svg[]
+
+默认情况下，从 Cookie 读取令牌是禁用的。注意：要使用来自 Cookie 的 JWT 令牌，需要启用 JWT 认证。
+
+include::{includedir}configurationProperties/io.micronaut.security.token.cookie.TokenCookieConfigurationProperties.adoc[]
+
+TIP: 更多内容请阅读 https://guides.micronaut.io/latest/micronaut-security-jwt-cookie.html[Micronaut JWT Authentication with Cookies]。

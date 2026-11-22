@@ -1,0 +1,27 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Claims Validation](https://docs.micronaut.io/5.2.x/security/#security-claimsValidation)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/authenticationStrategies/jwt/claimsValidation.adoc  upstream_commit: e96d20ccd599f5040aeaa0610884022cf87a47bf  upstream_hash: 73ce10e3ca3ee977ea618f410e3496a32ef34fb6  translated_at: 2026-11-23 -->
+
+JSON Web Token 的 claims 会使用每个 api:security.token.jwt.validator.GenericJwtClaimsValidator[] 类型的 bean 进行验证。
+
+Micronaut Security 默认包含以下验证器：
+
+|===
+| Bean | 描述 | 是否启用
+| api:io.micronaut.security.token.jwt.validator.AudienceJwtClaimsValidator[]
+| JWT 的 `aud` claim 包含期望的值。
+| 设置 `micronaut.security.token.jwt.claims-validators.audience` 属性时启用。
+| api:io.micronaut.security.token.jwt.validator.ExpirationJwtClaimsValidator[]
+| JWT 未过期。它使用 `exp` claim。
+| 默认启用。将 `micronaut.security.token.jwt.claims-validators.expiration` 设为 false 可禁用。
+| api:io.micronaut.security.token.jwt.validator.IssuerJwtClaimsValidator[]
+| JWT 的 `iss` claim 被设为期望的值。
+| 设置 `micronaut.security.token.jwt.claims-validators.issuer` 属性时启用。
+| api:io.micronaut.security.token.jwt.validator.NotBeforeJwtClaimsValidator[]
+| 若设置了 JWT 的 `nbf` claim，则只有当前日期不早于所提供日期时，令牌才应有效。
+| 默认禁用。将 `micronaut.security.token.jwt.claims-validators.not-before` 属性设为 `true` 时启用
+| api:io.micronaut.security.token.jwt.validator.SubjectNotNullJwtClaimsValidator[]
+| JWT 的 `sub` claim 不为 null。
+| 默认启用。将 `micronaut.security.token.jwt.claims-validators.subject-not-null` 设为 false 可禁用。
+|===
+
+如果你使用了 `micronaut.security.authentication: idtoken`，api:io.micronaut.security.oauth2.client.IdTokenClaimsValidator[]（一个 api:security.token.jwt.validator.GenericJwtClaimsValidator[] 类型的 bean）也会注册到 bean 上下文中。`IdTokenClaimsValidator` 验证 OpenID Connect 规范 https://openid.net/specs/openid-connect-core-1_0.html#IDTokenValidation[ID Token Validation] 节的第 2–5 点。你可以将 `micronaut.security.token.jwt.claims-validators.openid-idtoken` 设为 false 来禁用它。

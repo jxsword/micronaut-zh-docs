@@ -1,0 +1,7 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – CSRF Configuration](https://docs.micronaut.io/5.2.x/security/#security-csrfConfiguration)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/csrf/csrfConfiguration.adoc  upstream_commit: cbf942deb1945f53591f750b34bb6093fd28115f  upstream_hash: 2e57da285c5fe242387383d3da64fd88678a1a14  translated_at: 2026-11-23 -->
+
+[[csrfConfiguration]]
+CSRF 可用的配置选项如下：
+
+include::{includedir}configurationProperties/io.micronaut.security.csrf.CsrfConfigurationProperties.adoc[]

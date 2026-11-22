@@ -1,0 +1,12 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – CSRF APIs](https://docs.micronaut.io/5.2.x/security/#security-csrfApis)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/csrf/csrfApis.adoc  upstream_commit: cbf942deb1945f53591f750b34bb6093fd28115f  upstream_hash: 8906bfd7d56e38ee439f055bc1f7b3779198aad2  translated_at: 2026-11-23 -->
+
+CSRF 防护的主要 API 有：
+
+* api:security.csrf.CsrfConfiguration[]
+* api:security.csrf.filter.CsrfFilterConfiguration[]
+* api:security.csrf.resolver.CsrfTokenResolver[]
+* api:security.csrf.generator.CsrfTokenGenerator[]
+* api:security.csrf.generator.CsrfHmacTokenGenerator[]
+* api:security.csrf.validator.CsrfTokenValidator[]
+* api:security.csrf.repository.CsrfTokenRepository[]

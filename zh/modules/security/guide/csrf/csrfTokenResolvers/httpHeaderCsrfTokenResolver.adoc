@@ -1,0 +1,24 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – HTTP Header CSRF Token Resolution](https://docs.micronaut.io/5.2.x/security/#security-httpHeaderCsrfTokenResolver)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/csrf/csrfTokenResolvers/httpHeaderCsrfTokenResolver.adoc  upstream_commit: cbf942deb1945f53591f750b34bb6093fd28115f  upstream_hash: 0da166e300df79a930d287ab743bbffe3b5f61a3  translated_at: 2026-11-23 -->
+
+Micronaut Security CSRF 自带 `io.micronaut.security.csrf.resolver.HttpHeaderCsrfTokenResolver`——一个 api:security.csrf.resolver.CsrfTokenResolver[] 的实现，它会在请求的 HTTP 请求头中查找 CSRF Token。
+
+[source, bash]
+----
+POST /transfer HTTP/1.1
+Host: vulnerable bank
+Content-Type: application/x-www-form-urlencoded
+Cookie: session=<token>
+X-CSRF-TOKEN: o24b65486f506e2cd4403caf0d640024
+[...]
+amount=100&toUser=intended
+----
+
+你可以通过设置 `micronaut.security.csrf.token-resolvers.http-header.enabled=false` 来禁用它
+
+`HttpHeaderCsrfTokenResolver` 所使用的 HTTP 请求头名称 <<csrfConfiguration, 可以配置>>。
+建议使用自定义的 HTTP 请求头名称。使用自定义 HTTP 请求头名称后，在没有宽松的 CORS 实现的情况下，将无法跨源发送它们。
+
+此外，如果可能，我们建议你通过 HTTP 请求头而不是表单字段来发送 CSRF token，因为它更难被攻击。
+
+例如，https://turbo.hotwired.dev/handbook/frames#anti-forgery-support-(csrf)[Turbo] 会在表单提交时通过自定义 HTTP 请求头发送 CSRF token。你可以在 https://micronaut-projects.github.io/micronaut-views/latest/guide/#turbo[Micronaut Turbo 集成] 中找到相关信息。
