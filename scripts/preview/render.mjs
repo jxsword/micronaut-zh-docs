@@ -171,12 +171,16 @@ async function renderModule(site, mod, cfg, links) {
   let ok = 0;
   const failures = [];
   let missingChapter = 0;
+  let missingPage = 0;
   const parts = [];
+  const renderedRel = new Set();
   for (const f of FRAGMENTS) {
     let src;
     if (!available.has(f.rel)) {
-      // skipped 壳（0 字节/纯 include）：章页仅输出标题；非章缺失报错
-      if (!f.chapter) { failures.push(`${f.rel}: zh 镜像缺失`); continue; }
+      // skipped 壳（0 字节/纯 include）：章页仅输出标题；叶页缺失=部分翻译的
+      // 预期中间态，计 missingPage 警告并跳过片段，不计入渲染失败（SEC-01 起
+      // 模块多批次推进，整页上线前 CI 不因未译页阻塞全站部署）
+      if (!f.chapter) { missingPage += 1; continue; }
       src = '';
       missingChapter += 1;
     } else {
@@ -193,6 +197,7 @@ async function renderModule(site, mod, cfg, links) {
       });
       parts.push(promote(html));
       ok += 1;
+      renderedRel.add(f.rel);
     } catch (e) {
       failures.push(`${f.rel}: ${String(e.message).split('\n')[0]}`);
     }
@@ -203,16 +208,25 @@ async function renderModule(site, mod, cfg, links) {
     path.join(path.dirname(fileURLToPath(import.meta.url)),
       'node_modules/@asciidoctor/core/data/asciidoctor-default.css'), 'utf-8');
 
-  function navHtml(node, nums, depth) {
+  function navHtml(node, nums, depth, keyPath = []) {
     let idx = 0;
     let items = '';
     for (const [k, v] of Object.entries(node)) {
       if (k === 'title' && typeof v !== 'object') continue;
+      const childKeys = typeof v === 'object'
+        ? Object.keys(v).filter(c => c !== 'title') : [];
+      const hasChildren = childKeys.length > 0;
+      // 叶页未译（zh 镜像缺失）→ 导航跳过（诚实导航，避免死链）
+      if (!hasChildren) {
+        const rel = [...keyPath, k].join('/') + '.adoc';
+        if (!renderedRel.has(rel)) { idx += 1; continue; }
+      }
       idx += 1;
       const num = [...nums, idx].join('.');
       const title = typeof v === 'string' ? v : (v.title || k);
       const label = `${num} ${esc(title)}`;
-      const child = typeof v === 'object' ? navHtml(v, [...nums, idx], depth + 1) : '';
+      const child = hasChildren
+        ? navHtml(v, [...nums, idx], depth + 1, [...keyPath, k]) : '';
       items += `<li data-depth="${depth}"><a href="#${anchorPfx}${k}">${label}</a>${child}</li>\n`;
     }
     return `<ul>${items}</ul>`;
@@ -224,9 +238,12 @@ async function renderModule(site, mod, cfg, links) {
   const pageTitle = site === 'core'
     ? 'Micronaut Framework 中文文档（v5.2.25 基线，非官方译文）'
     : `Micronaut ${esc(modTitle)} 中文文档（${(mod && mod.branch) || '5.2.x'} 基线，非官方译文）`;
+  const partialNote = (missingPage + missingChapter > 0)
+    ? ` 本页为部分译文（已覆盖 ${ok}/${FRAGMENTS.length} 页，未译页不在导航显示）。`
+    : '';
   const topNote = site === 'core'
     ? 'Micronaut Framework 官方文档社区非官方中文翻译（基线 v5.2.25，2026-11-19 锁定）；以英文原文为准。构建期注入的代码示例与配置属性表见各页「官方站对应章节」提示。本页为单页合集，左侧导航可在章节间直接跳转。'
-    : `Micronaut ${esc(modTitle)} 官方文档社区非官方中文翻译（${(mod && mod.branch) || '5.2.x'} 分支基线${(mod && mod.locked_at) ? `，${mod.locked_at} 锁定` : ''}）；以英文原文为准。构建期注入的代码示例与配置属性表见各页「官方站对应章节」提示。本页为单页合集，左侧导航可在章节间直接跳转。`;
+    : `Micronaut ${esc(modTitle)} 官方文档社区非官方中文翻译（${(mod && mod.branch) || '5.2.x'} 分支基线${(mod && mod.locked_at) ? `，${mod.locked_at} 锁定` : ''}）；以英文原文为准。构建期注入的代码示例与配置属性表见各页「官方站对应章节」提示。本页为单页合集，左侧导航可在章节间直接跳转。${partialNote}`;
 
   const page = `<!DOCTYPE html>
 <html lang="zh-CN">
@@ -255,6 +272,7 @@ ${parts.join('\n')}
   fs.writeFileSync(outFile, page, 'utf-8');
   return {
     site, fragments: FRAGMENTS.length, rendered: ok, missingChapter,
+    missingPage,
     failures: failures.slice(0, 8), failureCount: failures.length,
     out: outFile, seconds: +((Date.now() - t0) / 1000).toFixed(1),
   };
@@ -465,15 +483,18 @@ renderLanding(cfg, Object.fromEntries(links.map(l => [l.site, l])));
 
 const dt = ((Date.now() - t0) / 1000).toFixed(1);
 const failures = results.flatMap(r => r.failures);
+const missingTotal = results.reduce((a, r) => a + r.missingPage + r.missingChapter, 0);
 console.log(JSON.stringify({
   mode: 'aggregate-multi-module',
   pages: results.map(r => ({
     site: r.site, fragments: r.fragments, rendered: r.rendered,
-    missingChapter: r.missingChapter, failureCount: r.failureCount,
+    missingChapter: r.missingChapter, missingPage: r.missingPage,
+    failureCount: r.failureCount,
     images: r.images, seconds: r.seconds,
     sizeMB: +(fs.statSync(r.out).size / 1048576).toFixed(1),
   })),
   landing: path.join(SITE, 'landing.html'),
+  missingPageTotal: missingTotal,
   failureCount: failures.length,
   failures: failures.slice(0, 8),
   seconds: +dt,
