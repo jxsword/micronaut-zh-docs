@@ -49,11 +49,12 @@
 | micrometer | MICRO-02 | 2 | 327 | 327 | 17 | current |
 | validation | VALID-01 | 11 | 1463 | 1479 | 106 | current |
 | security | SEC-01 | 42+toc | 3432 | 3454 | — | current |
-| security | SEC-02 | 40 | 3452 | 3539 | — | pending |
+| security | SEC-02 | 40 | 3452 | 3539 | — | current |
 | security | SEC-03 | 29 | 3456 | 3503 | — | pending |
 | security | SEC-04 | 28 | 2833 | 2842 | — | pending |
 
 - 模块导航 toc.yml 标题随首批一并译出核销（micrometer 30 / validation 12 / security 145 条目中 SEC-01 的 43 条 current）。
+- SEC-02（2026-11-23 完成）：40 文件七步全流程，validate 83 文件全绿（豁免 6 条均为预期中间态/既有跟踪）；restore 拦 2 处译丢段；**回溯补注入 4 处**（[[basicAuth]]/[[session]]/[[micronautSecurityAuthenticationCookie]]/[[micronautSecurityAuthenticationIdToken]]，B16/B30 先例——SEC-01 的 11 页级目标中被引用而未注入的子集全部闭环）；批内 [[csrfConfiguration]] 译文首行注入；上游不平衡 xref（`<<basicAuth, basic auth>` 缺右 `>`）registry 扫描未捕获走豁免分支、渲染闭环由锚注入保证；术语 +2（sanitizer→净化器、token propagation→令牌传播，modules.security 现 13 条）。详见 reports/batch-SEC-02.md。
 - 模块进度报表：reports/progress.md（多账本聚合，按模块分组）；模块注册表 config/modules.json（官方导航 18 组，2026-11-23 实抓）。
 - 优先级规则（DR-006 §6）：core 增量复译优先于模块新批次；同会话不混排。
 - security 裸 `<<target>>` xref 口径（SEC-01 确立，SEC-02/03/04 沿用）：译显示文本、保留目标，目标页片段首内容之前原位注入 [[basename]]；上游悬空引用（loginController 类）保持原样走 ⑤ 豁免跟踪。
