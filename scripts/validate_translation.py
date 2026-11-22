@@ -4,13 +4,15 @@
 七项门禁：
   ① 占位符全部还原（zh 中 0 处 PROTECTED_ 残留）
   ② 代码块与指令行与上游逐字节一致
-  ③ banned 黑名单 0 命中 + 必译术语命中检查（glossary.yml）
+  ③ banned 黑名单 0 命中 + 必译术语命中检查（glossary.yml；
+     扫描集 = 通用 terms + 当前模块术语 modules.terms[module=<site>]，DR-006 §4）
   ④ 结构对齐：标题层级数与顺序一致，标题文本已译
-  ⑤ xref/锚点目标存在（未译文件豁免）
+  ⑤ xref/锚点目标存在（未译文件豁免；模块文件按 modules/<site>/ 前缀解析）
   ⑥ 溯源投影四字段齐全且与 manifest 一致
   ⑦ 风格机检子集：中英文空格 / 全角标点 / 禁繁体 / 邻接规则
 
 校验范围天然豁免 PROTECTED 占位符与代码块。
+模块文件（modules/<site>/…）经 --manifest manifests/<site>.yml 取账本。
 退出码：0 全绿 / 1 有错误 / 2 环境错误。
 """
 
@@ -61,11 +63,50 @@ TRADITIONAL_CHARS = set(
 
 
 def load_glossary() -> Dict[str, str]:
+    """通用术语（core 批次扫描集；模块术语见 load_module_glossary）。"""
     if not GLOSSARY_FILE.exists():
         return {}
     data = yaml.safe_load(GLOSSARY_FILE.read_text(encoding="utf-8")) or {}
     return {t["en"]: t["zh"] for t in data.get("terms", [])
             if t.get("en") and t.get("zh")}
+
+
+def load_module_glossary(site: Optional[str]) -> Dict[str, str]:
+    """模块专属术语（glossary.yml modules.terms，术语带 module: <site> 标注）。
+
+    validate ③ 扫描集 = 通用 + 当前模块术语（DR-006 §4；core 批次
+    不含模块专属术语，防跨模块回流——B22 教训）。site=None 返回空。"""
+    if not site or not GLOSSARY_FILE.exists():
+        return {}
+    data = yaml.safe_load(GLOSSARY_FILE.read_text(encoding="utf-8")) or {}
+    out: Dict[str, str] = {}
+    for t in (data.get("modules") or {}).get("terms", []) or []:
+        if not (t.get("en") and t.get("zh")):
+            continue
+        if t.get("module") == site:
+            out[t["en"]] = t["zh"]
+    return out
+
+
+def module_prefix_of(zh_rel: str) -> str:
+    """模块文件路径（modules/<site>/…）→ 文档树前缀；core 文件返回空串。"""
+    parts = zh_rel.split("/")
+    if len(parts) > 3 and parts[0] == "modules":
+        return f"modules/{parts[1]}"
+    return ""
+
+
+def glossary_for(zh_rel: str, base: Dict[str, str]) -> Dict[str, str]:
+    """③ 扫描集 = 通用术语 + 当前模块术语（DR-006 §4）。
+
+    core 文件（guide/…）仅通用集（模块专属术语不回流 core——B22 教训）；
+    模块文件（modules/<site>/…）追加 glossary.yml modules.terms 中
+    module == <site> 的条目。"""
+    merged = dict(base)
+    prefix = module_prefix_of(zh_rel)
+    if prefix:
+        merged.update(load_module_glossary(prefix.split("/")[1]))
+    return merged
 
 
 def load_banned() -> List[Dict]:
@@ -187,12 +228,15 @@ def check_xrefs(zh_rel: str, zh_text: str, errors: List[str],
 
     裸锚点（<<anchor,Label>>，无 # 文件前缀）经 anchor-registry 解析
     （check_anchors 全域解析：显式 [[id]] + include 文件 basename 约定）；
-    未登记的裸锚点列为豁免警告（M3 断链清零跟踪），不算错误。"""
+    未登记的裸锚点列为豁免警告（M3 断链清零跟踪），不算错误。
+    模块文件（modules/<site>/…）的 xref 目标相对该模块文档树解析
+    （前缀 modules/<site>/，DR-006 §2）。"""
     registry = load_anchor_registry()
     reg_file = {}
     for a in registry.get("anchors", []):
         if a.get("id") and a.get("id") not in reg_file:
             reg_file[a["id"]] = a.get("file", "")
+    doc_prefix = module_prefix_of(zh_rel)
     for m in RE_XREF.finditer(zh_text):
         target = (m.group(1) or m.group(2) or "").strip()
         if not target:
@@ -222,7 +266,8 @@ def check_xrefs(zh_rel: str, zh_text: str, errors: List[str],
             anchor, fpart = fpart, resolved
         elif not sep:
             anchor = ""  # 页级文件引用（含 / 或 .），存在性已验证
-        src_file = SOURCE_DIR / fpart if fpart else SOURCE_DIR / zh_rel
+        src_file = (SOURCE_DIR / doc_prefix / fpart if fpart
+                    else SOURCE_DIR / zh_rel)
         if not src_file.exists():
             errors.append(f"⑤ xref 目标文件不存在于上游：{fpart or zh_rel}")
             continue
@@ -231,7 +276,8 @@ def check_xrefs(zh_rel: str, zh_text: str, errors: List[str],
         # 目标文件已译 → zh 中须有该锚点（原位注入）；未译 → 豁免。
         # 注：不做 reg_ids 放行——登记表条目恰是被引锚点，放行会使
         # 注入机检恒真（B01 实测缺陷修复，对齐 PLAN §5.6 机检本意）
-        zh_target = ZH_DIR / fpart if fpart else ZH_DIR / zh_rel
+        zh_target = (ZH_DIR / doc_prefix / fpart if fpart
+                     else ZH_DIR / zh_rel)
         if zh_target.exists():
             zt = zh_target.read_text(encoding="utf-8")
             has = (f"[[{anchor}" in zt or f"[#{anchor}]" in zt)
@@ -333,15 +379,22 @@ def main(argv: Optional[List[str]] = None) -> int:
         prog="validate_translation.py",
         description="译文硬门禁校验（七项；退出码 0 全绿 / 1 有错 / 2 环境错误）")
     parser.add_argument("--file", default=None,
-                        help="只校验指定文件（相对 source/ 的路径）")
+                        help="只校验指定文件（相对 source/ 的路径，"
+                             "模块文件带 modules/<site>/ 前缀）")
+    parser.add_argument("--manifest", default=None,
+                        help="账本路径（缺省 manifest.yml=core；模块账本传 "
+                             "manifests/<site>.yml，与 --file 的模块前缀一致）")
     args = parser.parse_args(argv)
 
+    manifest_path = (Path(args.manifest).expanduser().resolve()
+                     if args.manifest else MANIFEST_FILE)
+
     try:
-        if not MANIFEST_FILE.exists():
-            print("ERROR: manifest.yml 不存在（先运行 sync --init）",
+        if not manifest_path.exists():
+            print(f"ERROR: {manifest_path.name} 不存在（先运行 sync --init）",
                   file=sys.stderr)
             return 2
-        manifest = yaml.safe_load(MANIFEST_FILE.read_text(encoding="utf-8"))
+        manifest = yaml.safe_load(manifest_path.read_text(encoding="utf-8"))
         entries = {f["file"]: f for f in manifest.get("files", [])}
         baseline = (manifest.get("upstream") or {}).get("baseline_commit", "")
         glossary = load_glossary()
@@ -357,7 +410,8 @@ def main(argv: Optional[List[str]] = None) -> int:
                 continue  # 未译文件不校验（空译文库全量跑仍绿）
             validated += 1
             errs, warns = validate_file(
-                SOURCE_DIR / rel, zh_file, rel, glossary, banned,
+                SOURCE_DIR / rel, zh_file, rel,
+                glossary_for(rel, glossary), banned,
                 entries.get(rel), baseline)
             for e in errs:
                 all_errors.append(f"{rel}: {e}")

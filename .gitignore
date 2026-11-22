@@ -13,3 +13,7 @@ workdir/
 # 备份与构建产物
 *.bak
 /site/
+build/
+
+# node 依赖（预览站）
+node_modules/

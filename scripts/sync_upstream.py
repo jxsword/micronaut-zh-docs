@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-"""上游 micronaut-core 文档同步脚本（blob sha 检测 + 段落级 diff + manifest 状态机）。
+"""上游 Micronaut 文档同步脚本（blob sha 检测 + 段落级 diff + manifest 状态机）。
+
+M4 起支持多模块（DR-006）：--repo/--doc-root/--manifest 参数化，core 缺省
+行为不变（manifest.yml + src/main/docs）；模块账本 manifests/<site>.yml 自动
+映射 source/modules/<site>/ 前缀，账本顶层记 ref + locked_at。
 
 移植自 google-benchmark-zh-docs sync_upstream.py（OOM 加固版，manifest schema v1），
 按 DR-002/PLAN §4 适配 Micronaut 文档树。差异点：
@@ -28,10 +32,14 @@ CLI:
   --mark-current FILE 修订核销：校验 zh/<FILE> 溯源注释四字段后标记 current
   --collect-commits   逐文件采集 upstream_commit（gh api 串行 + 本地缓存，可延后）
   --dry-run           与 --init/--apply 组合：只打印不写盘
-  --file NAME         只处理指定文件（相对 src/main/docs 的路径，调试）
+  --file NAME         只处理指定文件（相对 --doc-root 的路径，调试）
   --repo URL          覆盖上游仓库地址（测试注入本地 file:// 仓库）
-  --workdir DIR       覆盖克隆缓存目录（测试隔离）
-  --ref REF           上游分支/标签（缺省按模式：init=v5.2.25，其余=5.2.x）
+  --workdir DIR       覆盖克隆缓存目录（测试隔离；缺省按仓库 slug 分目录）
+  --ref REF           上游分支/标签（缺省按模式：init=v5.2.25，其余=5.2.x；
+                      模块 manifest 已记录 ref 时优先取账本 ref）
+  --doc-root PATH     上游文档树根（缺省 src/main/docs；M4 模块参数化，DR-006）
+  --manifest PATH     账本路径（缺省 manifest.yml=core；manifests/<site>.yml
+                      视为模块账本，快照/译文/账本字段自动加 modules/<site>/ 前缀）
 
 状态机：current（译文与上游对齐）| stale（上游已变，待修订）| partial（批次进行中）|
 missing（未开译）| skipped（0 字节/纯 include 壳，不进批次）。
@@ -90,13 +98,20 @@ SYNC_CONTEXT = None  # 测试注入用（SyncContext 实例覆盖目录常量）
 
 @dataclass
 class SyncContext:
-    """目录注入：生产用模块常量，测试注入 tmp_path 隔离目录。"""
+    """目录注入：生产用模块常量，测试注入 tmp_path 隔离目录。
+
+    doc_root：上游文档树根（core=src/main/docs，M4 模块参数化）；
+    dest_prefix：快照/译文/账本字段前缀（core 为空串，模块=modules/<site>，
+    由 --manifest 文件名推导——DR-006 §2 架构约定 manifests/<site>.yml
+    ↔ source/modules/<site>/ ↔ zh/modules/<site>/ 一一对应）。"""
     source_dir: Path
     zh_dir: Path
     reports_dir: Path
     manifest_file: Path
     workdir: Path
     repo_root: Path
+    doc_root: str = UPSTREAM_DOC
+    dest_prefix: str = ""
 
 
 @dataclass
@@ -130,6 +145,8 @@ class Manifest:
     remote: str
     baseline_commit: str = ""
     snapshot_date: str = ""
+    ref: Optional[str] = None        # 模块账本顶层 ref（DR-006 §4；core 不写）
+    locked_at: Optional[str] = None  # 模块基线锁定日（DR-006 §6；core 不写）
     files: List[Dict] = field(default_factory=list)
 
     def entry(self, fname: str) -> Optional[Dict]:
@@ -156,12 +173,13 @@ def _git(args: List[str], cwd: Optional[Path] = None) -> str:
     return result.stdout
 
 
-def _gh_api_last_commit(repo_slug: str, path: str, ref: str) -> Optional[str]:
+def _gh_api_last_commit(repo_slug: str, path: str, ref: str,
+                        doc_root: str = UPSTREAM_DOC) -> Optional[str]:
     """gh api 查询某文件在 ref 上最后一次提交 sha；失败返回 None（可延后补采）。
 
-    path 为 manifest 相对路径（如 guide/aop.adoc），查询时补全为全仓路径
-    src/main/docs/<path>。"""
-    full = path if path.startswith(UPSTREAM_DOC) else f"{UPSTREAM_DOC}/{path}"
+    path 为上游文档树相对路径（如 guide/aop.adoc），查询时补全为全仓路径
+    <doc_root>/<path>。"""
+    full = path if path.startswith(doc_root) else f"{doc_root}/{path}"
     result = subprocess.run(
         ["gh", "api",
          f"repos/{repo_slug}/commits?path={full}&sha={ref}&per_page=1",
@@ -218,11 +236,13 @@ def apply_unlocked(ctx: SyncContext) -> bool:
 
 # ---------- 上游克隆缓存（sparse 浅克隆 src/main/docs，PLAN §4.1） ----------
 
-def prepare_upstream(repo_url: str, workdir: Path, ref: str) -> str:
+def prepare_upstream(repo_url: str, workdir: Path, ref: str,
+                     doc_root: str = UPSTREAM_DOC) -> str:
     """确保 workdir 缓存检出 ref 并返回 HEAD SHA。
 
     已有缓存 → fetch --depth 1 更新；无缓存 → clone --depth 1 --sparse
-    （https 远端加 --filter=blob:none；file:// 本地仓不加 filter）。"""
+    （https 远端加 --filter=blob:none；file:// 本地仓不加 filter）。
+    sparse-checkout 只取 <doc_root>（M4 模块参数化）。"""
     if (workdir / ".git").exists():
         _git(["fetch", "--depth", "1", "origin", ref], cwd=workdir)
         _git(["checkout", "-q", "FETCH_HEAD"], cwd=workdir)
@@ -235,7 +255,7 @@ def prepare_upstream(repo_url: str, workdir: Path, ref: str) -> str:
         cmd += ["--filter=blob:none", "--sparse"]
     cmd += [repo_url, str(workdir)]
     _git(cmd)
-    _git(["sparse-checkout", "set", UPSTREAM_DOC], cwd=workdir)
+    _git(["sparse-checkout", "set", doc_root], cwd=workdir)
     return _git(["rev-parse", "HEAD"], cwd=workdir).strip()
 
 
@@ -314,14 +334,17 @@ def load_manifest(path: Path) -> Optional[Manifest]:
     data = yaml.safe_load(path.read_text(encoding="utf-8"))
     if not isinstance(data, dict) or data.get("schema") != MANIFEST_SCHEMA_VERSION:
         raise RuntimeError(
-            f"manifest.yml schema 异常（期望 {MANIFEST_SCHEMA_VERSION}）——账本疑似损坏，停止")
+            f"{path.name} schema 异常（期望 {MANIFEST_SCHEMA_VERSION}）"
+            "——账本疑似损坏，停止")
     files = data.get("files")
     if files is None:
-        raise RuntimeError("manifest.yml 缺 files 节——账本疑似损坏，停止")
+        raise RuntimeError(f"{path.name} 缺 files 节——账本疑似损坏，停止")
     up = data.get("upstream") or {}
     return Manifest(schema=data["schema"], remote=up.get("remote", UPSTREAM_REPO),
                     baseline_commit=up.get("baseline_commit", ""),
-                    snapshot_date=up.get("snapshot_date", ""), files=files)
+                    snapshot_date=up.get("snapshot_date", ""),
+                    ref=data.get("ref"), locked_at=data.get("locked_at"),
+                    files=files)
 
 
 def save_manifest(path: Path, m: Manifest):
@@ -334,6 +357,11 @@ def save_manifest(path: Path, m: Manifest):
     },
         "files": m.files,
     }
+    # 模块账本顶层 ref/locked_at（DR-006 §4）；core 账本不新增字段（缺省 None 不写）
+    if m.ref is not None:
+        data["ref"] = m.ref
+    if m.locked_at is not None:
+        data["locked_at"] = m.locked_at
     path.write_text(
         yaml.safe_dump(data, allow_unicode=True, sort_keys=False, width=100),
         encoding="utf-8")
@@ -341,6 +369,18 @@ def save_manifest(path: Path, m: Manifest):
 
 def zh_path_of(ctx: SyncContext, rel: str) -> Path:
     return _safe_join(ctx.zh_dir, rel)
+
+
+def prefixed(ctx: SyncContext, rel: str) -> str:
+    """上游文档树相对路径 → 账本/仓库相对路径（模块加 modules/<site>/ 前缀）。"""
+    return f"{ctx.dest_prefix}/{rel}" if ctx.dest_prefix else rel
+
+
+def unprefixed(ctx: SyncContext, fname: str) -> str:
+    """账本 file 字段 → 上游文档树相对路径（模块剥 modules/<site>/ 前缀）。"""
+    if ctx.dest_prefix and fname.startswith(ctx.dest_prefix + "/"):
+        return fname[len(ctx.dest_prefix) + 1:]
+    return fname
 
 
 def _has_zh(ctx: SyncContext, rel: str) -> bool:
@@ -355,12 +395,15 @@ def _segments_of(content: str, name: str) -> List:
 
 def sync_init(ctx: SyncContext, repo_url: str, ref: str,
               only_file: Optional[str], dry_run: bool) -> Dict:
-    """首次快照：source/ 全量镜像 + _upstream_commit + manifest 全量 missing/skipped。"""
+    """首次快照：source/ 全量镜像 + _upstream_commit + manifest 全量 missing/skipped。
+
+    模块模式（dest_prefix 非空，DR-006 §4）：账本顶层记 ref + locked_at，
+    file/zh 字段带 modules/<site>/ 前缀，_upstream_commit 落 source/<prefix>/。"""
     if ctx.manifest_file.exists():
-        raise RuntimeError("manifest.yml 已存在；首次快照只应执行一次。"
+        raise RuntimeError(f"{ctx.manifest_file.name} 已存在；首次快照只应执行一次。"
                            "后续同步用 --check / --apply。")
-    sha = prepare_upstream(repo_url, ctx.workdir, ref)
-    tracked, mirror = read_upstream(ctx.workdir / UPSTREAM_DOC)
+    sha = prepare_upstream(repo_url, ctx.workdir, ref, ctx.doc_root)
+    tracked, mirror = read_upstream(ctx.workdir / ctx.doc_root)
 
     if only_file:
         tracked = {k: v for k, v in tracked.items() if k == only_file}
@@ -388,28 +431,33 @@ def sync_init(ctx: SyncContext, repo_url: str, ref: str,
 
     ctx.source_dir.mkdir(parents=True, exist_ok=True)
     for name, raw in sorted(tracked.items()):
-        _write_source(ctx.source_dir, name, raw)
+        _write_source(ctx.source_dir, prefixed(ctx, name), raw)
     for name, raw in sorted(mirror.items()):
-        _write_source(ctx.source_dir, name, raw)
+        _write_source(ctx.source_dir, prefixed(ctx, name), raw)
     mirrored = [f"{rel}" for rel in sorted(mirror)]
     logger.info("镜像非账本文件 %d 个", len(mirrored))
 
-    (ctx.source_dir / "_upstream_commit").write_text(sha + "\n", encoding="utf-8")
+    (ctx.source_dir / ctx.dest_prefix / "_upstream_commit").write_text(
+        sha + "\n", encoding="utf-8")
 
     today = date.today().isoformat()
+    is_module = bool(ctx.dest_prefix)
     m = Manifest(schema=MANIFEST_SCHEMA_VERSION, remote=repo_url,
-                 baseline_commit=sha, snapshot_date=today, files=[])
+                 baseline_commit=sha, snapshot_date=today, files=[],
+                 ref=ref if is_module else None,
+                 locked_at=today if is_module else None)
     for name in sorted(tracked):
         raw = tracked[name]
         segs_n = seg_counts[name]
         skipped = (len(raw) == 0 or
                    is_shell_file(_segments_of(raw.decode("utf-8"), name)))
+        rel = prefixed(ctx, name)
         m.files.append({
-            "file": name,
+            "file": rel,
             "blob_sha": compute_blob_sha(raw),
             "size": len(raw),
             "status": "skipped" if skipped else "missing",
-            "zh": f"zh/{name}",
+            "zh": f"zh/{rel}",
             "paragraphs": segs_n,
             "updated_at": today,
         })
@@ -423,7 +471,8 @@ def sync_init(ctx: SyncContext, repo_url: str, ref: str,
                             action=f["status"]) for f in m.files],
         extra={"mirror_count": len(mirrored), "total_segments": total_segments,
                "missing": n_missing, "skipped": n_skipped,
-               "baseline_locked": True})
+               "baseline_locked": True},
+        repo_url=repo_url, doc_root=ctx.doc_root)
     ctx.reports_dir.mkdir(parents=True, exist_ok=True)
     report_path = ctx.reports_dir / f"sync-{today}-{sha[:8]}.md"
     report_path.write_text(report, encoding="utf-8")
@@ -438,21 +487,25 @@ def sync_init(ctx: SyncContext, repo_url: str, ref: str,
 
 
 def sync_check_or_apply(ctx, repo_url, ref, only_file, dry_run, apply) -> Dict:
-    """--check / --apply：文件级 blob sha 比对 → 段落级工作项 → 写盘（apply）。"""
+    """--check / --apply：文件级 blob sha 比对 → 段落级工作项 → 写盘（apply）。
+
+    模块模式经 ctx.dest_prefix 换算：上游相对路径 ↔ 账本 file 字段
+    （prefixed/unprefixed），比对与写盘口径一致。"""
     m = load_manifest(ctx.manifest_file)
     if m is None:
-        raise RuntimeError("manifest.yml 不存在；请先执行 --init 首次快照")
+        raise RuntimeError(f"{ctx.manifest_file.name} 不存在；请先执行 --init 首次快照")
     if apply and not dry_run and not apply_unlocked(ctx):
         raise RuntimeError(
             "初译期 --apply 门控禁用（PLAN §4.4）：v1.0 tag 前仅允许 --check + 开 issue。"
             "测试可临时用 MZD_ALLOW_APPLY=1。")
-    sha = prepare_upstream(repo_url, ctx.workdir, ref)
-    tracked, mirror = read_upstream(ctx.workdir / UPSTREAM_DOC)
+    sha = prepare_upstream(repo_url, ctx.workdir, ref, ctx.doc_root)
+    tracked, mirror = read_upstream(ctx.workdir / ctx.doc_root)
 
     changes: List[FileChange] = []
     workitems: Dict[str, Dict[str, int]] = {}
 
-    manifest_names = {f["file"] for f in m.files}
+    # 账本 file 字段换算为上游相对路径比对（模块账本带 modules/<site>/ 前缀）
+    manifest_names = {unprefixed(ctx, f["file"]) for f in m.files}
     upstream_names = set(tracked.keys())
     if only_file:
         manifest_names = {n for n in manifest_names if n == only_file}
@@ -465,7 +518,7 @@ def sync_check_or_apply(ctx, repo_url, ref, only_file, dry_run, apply) -> Dict:
     for new_name in sorted(added_names):
         new_sha = compute_blob_sha(tracked[new_name])
         for old_name in sorted(removed_names):
-            old_entry = m.entry(old_name)
+            old_entry = m.entry(prefixed(ctx, old_name))
             if old_entry and old_entry["blob_sha"] == new_sha:
                 renames[old_name] = new_name
                 break
@@ -477,55 +530,59 @@ def sync_check_or_apply(ctx, repo_url, ref, only_file, dry_run, apply) -> Dict:
 
     for name in sorted(manifest_names & upstream_names):
         raw = tracked[name]
-        entry = m.entry(name)
+        entry = m.entry(prefixed(ctx, name))
         new_blob = compute_blob_sha(raw)
-        ch = FileChange(name, "NONE", old_blob=entry["blob_sha"], new_blob=new_blob)
+        ch = FileChange(prefixed(ctx, name), "NONE",
+                        old_blob=entry["blob_sha"], new_blob=new_blob)
         if new_blob != entry["blob_sha"]:
             ch.type = "M"
             old_segs = _segments_of(
-                (_safe_join(ctx.source_dir, name)).read_text(encoding="utf-8"), name)
+                (_safe_join(ctx.source_dir, prefixed(ctx, name))).read_text(
+                    encoding="utf-8"), name)
             new_segs = _segments_of(raw.decode("utf-8"), name)
             counts = scan_workitems(old_segs, new_segs)
             ch.added, ch.modified, ch.removed = (counts["added"],
                                                  counts["modified"],
                                                  counts["removed"])
-            workitems[name] = counts
+            workitems[prefixed(ctx, name)] = counts
             if apply and not dry_run:
-                _write_source(ctx.source_dir, name, raw)
+                _write_source(ctx.source_dir, prefixed(ctx, name), raw)
                 entry["blob_sha"] = new_blob
                 entry["size"] = len(raw)
                 entry["paragraphs"] = len(new_segs)
                 entry["updated_at"] = today
                 entry["upstream_commit"] = ""  # 待 --collect-commits 补采
                 # stale 仅当 zh 已开译（存在译文），否则保持 missing
-                entry["status"] = "stale" if _has_zh(ctx, name) else "missing"
+                entry["status"] = ("stale" if _has_zh(ctx, prefixed(ctx, name))
+                                   else "missing")
                 ch.action = "applied"
             else:
                 ch.action = "would-apply" if apply else "detected"
         changes.append(ch)
 
     for old_name, new_name in renames.items():
-        ch = FileChange(f"{old_name} -> {new_name}", "R",
-                        old_blob=m.entry(old_name)["blob_sha"],
+        ch = FileChange(f"{prefixed(ctx, old_name)} -> {prefixed(ctx, new_name)}",
+                        "R",
+                        old_blob=m.entry(prefixed(ctx, old_name))["blob_sha"],
                         new_blob=compute_blob_sha(tracked[new_name]))
         if apply and not dry_run:
             raw = tracked[new_name]
-            _write_source(ctx.source_dir, new_name, raw)
-            src_old = _safe_join(ctx.source_dir, old_name)
+            _write_source(ctx.source_dir, prefixed(ctx, new_name), raw)
+            src_old = _safe_join(ctx.source_dir, prefixed(ctx, old_name))
             if src_old.exists():
                 src_old.unlink()
-            zh_old = zh_path_of(ctx, old_name)
+            zh_old = zh_path_of(ctx, prefixed(ctx, old_name))
             if zh_old.exists():
-                zh_new = zh_path_of(ctx, new_name)
+                zh_new = zh_path_of(ctx, prefixed(ctx, new_name))
                 zh_new.parent.mkdir(parents=True, exist_ok=True)
                 shutil.move(str(zh_old), str(zh_new))
                 text = zh_new.read_text(encoding="utf-8")
-                text = text.replace(f"upstream_file: {old_name}",
-                                    f"upstream_file: {new_name}", 1)
+                text = text.replace(f"upstream_file: {prefixed(ctx, old_name)}",
+                                    f"upstream_file: {prefixed(ctx, new_name)}", 1)
                 zh_new.write_text(text, encoding="utf-8")
-            entry = m.entry(old_name)
-            entry["file"] = new_name
-            entry["zh"] = f"zh/{new_name}"
+            entry = m.entry(prefixed(ctx, old_name))
+            entry["file"] = prefixed(ctx, new_name)
+            entry["zh"] = f"zh/{prefixed(ctx, new_name)}"
             entry["blob_sha"] = ch.new_blob
             entry["size"] = len(raw)
             entry["paragraphs"] = len(_segments_of(raw.decode("utf-8"), new_name))
@@ -538,22 +595,22 @@ def sync_check_or_apply(ctx, repo_url, ref, only_file, dry_run, apply) -> Dict:
 
     archived: List[str] = []
     for name in sorted(removed_names):
-        old_blob = entry_blob_of(m, name)
+        old_blob = entry_blob_of(m, prefixed(ctx, name))
         if apply and not dry_run:
             day = date.today().isoformat()
             for from_dir, sub in ((ctx.source_dir, "source"), (ctx.zh_dir, "zh")):
-                src = _safe_join(from_dir, name)
+                src = _safe_join(from_dir, prefixed(ctx, name))
                 if src.exists():
-                    dst = ctx.repo_root / "archive" / day / sub / name
+                    dst = ctx.repo_root / "archive" / day / sub / prefixed(ctx, name)
                     dst.parent.mkdir(parents=True, exist_ok=True)
                     shutil.move(str(src), str(dst))
-            m.files.remove(m.entry(name))
-            archived.append(name)
-            changes.append(FileChange(name, "D", old_blob=old_blob,
-                                      action="archived"))
+            m.files.remove(m.entry(prefixed(ctx, name)))
+            archived.append(prefixed(ctx, name))
+            changes.append(FileChange(prefixed(ctx, name), "D",
+                                      old_blob=old_blob, action="archived"))
         else:
-            changes.append(FileChange(name, "D",
-                                      old_blob=entry_blob_of(m, name) or "",
+            changes.append(FileChange(prefixed(ctx, name), "D",
+                                      old_blob=entry_blob_of(m, prefixed(ctx, name)) or "",
                                       action="flagged-for-human"))
     if apply and not dry_run and archived:
         logger.info("上游删除 %d 个文件，已移入 archive/（保留追溯）", len(archived))
@@ -561,15 +618,16 @@ def sync_check_or_apply(ctx, repo_url, ref, only_file, dry_run, apply) -> Dict:
     for name in sorted(added_names):
         raw = tracked[name]
         segs = _segments_of(raw.decode("utf-8"), name)
-        ch = FileChange(name, "A", new_blob=compute_blob_sha(raw))
+        ch = FileChange(prefixed(ctx, name), "A", new_blob=compute_blob_sha(raw))
         if apply and not dry_run:
-            _write_source(ctx.source_dir, name, raw)
+            _write_source(ctx.source_dir, prefixed(ctx, name), raw)
             skipped = len(raw) == 0 or is_shell_file(segs)
             m.files.append({
-                "file": name, "blob_sha": compute_blob_sha(raw),
+                "file": prefixed(ctx, name),
+                "blob_sha": compute_blob_sha(raw),
                 "size": len(raw),
                 "status": "skipped" if skipped else "missing",
-                "zh": f"zh/{name}", "paragraphs": len(segs),
+                "zh": f"zh/{prefixed(ctx, name)}", "paragraphs": len(segs),
                 "updated_at": today,
             })
             ch.action = "applied"
@@ -580,8 +638,10 @@ def sync_check_or_apply(ctx, repo_url, ref, only_file, dry_run, apply) -> Dict:
     if apply and not dry_run:
         m.files.sort(key=lambda f: f["file"])
         save_manifest(ctx.manifest_file, m)
-        (ctx.source_dir / "_upstream_commit").write_text(sha + "\n", encoding="utf-8")
-        mirrored = mirror_into_source(mirror, ctx.source_dir)
+        (ctx.source_dir / ctx.dest_prefix / "_upstream_commit").write_text(
+            sha + "\n", encoding="utf-8")
+        mirrored = mirror_into_source(
+            {prefixed(ctx, k): v for k, v in mirror.items()}, ctx.source_dir)
         if mirrored:
             logger.info("镜像非账本文件 %d 个", len(mirrored))
 
@@ -603,14 +663,16 @@ def sync_check_or_apply(ctx, repo_url, ref, only_file, dry_run, apply) -> Dict:
         report_path = ctx.reports_dir / f"sync-{today}-{sha[:8]}.md"
         report_path.write_text(
             render_report(mode="apply", sha=sha, ref=ref, dry_run=False,
-                          changes=changes, extra={"workitems": workitems}),
+                          changes=changes, extra={"workitems": workitems},
+                          repo_url=repo_url, doc_root=ctx.doc_root),
             encoding="utf-8")
         logger.info("同步报告：%s", report_path)
         summary["report"] = report_path.name
     elif changes:
         print(render_report(mode="apply" if apply else "check", sha=sha, ref=ref,
                             dry_run=True, changes=changes,
-                            extra={"workitems": workitems}))
+                            extra={"workitems": workitems},
+                            repo_url=repo_url, doc_root=ctx.doc_root))
 
     print(json.dumps(summary, ensure_ascii=False))
     return summary
@@ -665,23 +727,27 @@ def mark_current(ctx: SyncContext, fname: str) -> Dict:
 
 
 def _upstream_commit_of(ctx: SyncContext) -> str:
-    f = ctx.source_dir / "_upstream_commit"
+    # 模块账本基线取 source/<prefix>/_upstream_commit（DR-006 §4）
+    f = ctx.source_dir / ctx.dest_prefix / "_upstream_commit"
     return f.read_text(encoding="utf-8").strip() if f.exists() else ""
 
 
 def collect_commits(ctx: SyncContext, ref: str, only_file: Optional[str]) -> Dict:
-    """逐文件采集 upstream_commit（gh api 串行 + 本地缓存，失败可延后补采）。"""
+    """逐文件采集 upstream_commit（gh api 串行 + 本地缓存，失败可延后补采）。
+
+    slug 取账本 remote（模块账本 remote 为该模块仓库）；路径补全用 ctx.doc_root。"""
     m = load_manifest(ctx.manifest_file)
     if m is None:
-        raise RuntimeError("manifest.yml 不存在")
-    slug = "/".join(UPSTREAM_REPO.rstrip("/").split("/")[-2:])
-    cache_file = ctx.workdir.parent / "commit-cache.json"
+        raise RuntimeError(f"{ctx.manifest_file.name} 不存在")
+    slug = "/".join(m.remote.rstrip("/").split("/")[-2:])
+    cache_file = ctx.workdir.parent / f"commit-cache-{slug.replace('/', '__')}.json"
     cache: Dict[str, str] = {}
     if cache_file.exists():
         cache = json.loads(cache_file.read_text(encoding="utf-8"))
     collected, failed, skipped_n = 0, 0, 0
     for entry in sorted(m.files, key=lambda f: f["file"]):
-        if only_file and entry["file"] != only_file:
+        rel = unprefixed(ctx, entry["file"])
+        if only_file and rel != only_file:
             continue
         if entry.get("upstream_commit"):
             skipped_n += 1
@@ -689,7 +755,7 @@ def collect_commits(ctx: SyncContext, ref: str, only_file: Optional[str]) -> Dic
         key = f"{entry['file']}:{entry['blob_sha']}"
         commit = cache.get(key)
         if not commit:
-            commit = _gh_api_last_commit(slug, entry["file"], ref) or ""
+            commit = _gh_api_last_commit(slug, rel, ref, ctx.doc_root) or ""
             if commit:
                 cache[key] = commit
                 cache_file.parent.mkdir(parents=True, exist_ok=True)
@@ -710,14 +776,16 @@ def collect_commits(ctx: SyncContext, ref: str, only_file: Optional[str]) -> Dic
 
 # ---------- 报告渲染 ----------
 
-def render_report(mode, sha, ref, dry_run, changes, extra) -> str:
+def render_report(mode, sha, ref, dry_run, changes, extra,
+                  repo_url: str = UPSTREAM_REPO,
+                  doc_root: str = UPSTREAM_DOC) -> str:
     today = date.today().isoformat()
     lines = [
         f"# 同步报告：{today} @ {sha[:8]}（{ref}）",
         "",
         f"- 模式：`--{mode}`" + ("（dry-run 预演，未写盘）" if dry_run else ""),
         f"- 上游 commit：`{sha}`",
-        f"- 仓库：`{UPSTREAM_REPO}`（文档树 {UPSTREAM_DOC}）",
+        f"- 仓库：`{repo_url}`（文档树 {doc_root}）",
     ]
     if extra.get("baseline_locked"):
         lines.append("- 基线：tag v5.2.25 锁定（初译期基线锁定策略，PLAN §4.4）")
@@ -754,8 +822,8 @@ def render_report(mode, sha, ref, dry_run, changes, extra) -> str:
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(
         prog="sync_upstream.py",
-        description="同步上游 micronaut-core src/main/docs（--init/--check/--apply/"
-                    "--mark-current/--collect-commits；一律建议 memgate 包裹运行）")
+        description="同步上游文档树（--init/--check/--apply/--mark-current/"
+                    "--collect-commits；一律建议 memgate 包裹运行）")
     g = p.add_mutually_exclusive_group(required=True)
     g.add_argument("--init", action="store_true", help="首次快照（仅一次）")
     g.add_argument("--check", action="store_true",
@@ -763,33 +831,79 @@ def build_parser() -> argparse.ArgumentParser:
     g.add_argument("--apply", action="store_true",
                    help="应用变更（初译期 v1.0 tag 前门控禁用）")
     g.add_argument("--mark-current", metavar="FILE",
-                   help="校验溯源注释后把 zh/<FILE> 标记为 current")
+                   help="校验溯源注释后把 zh/<FILE> 标记为 current"
+                        "（FILE 为账本 file 字段，模块含 modules/<site>/ 前缀）")
     g.add_argument("--collect-commits", action="store_true",
                    help="逐文件采集 upstream_commit（gh api 串行+缓存）")
     p.add_argument("--dry-run", action="store_true",
                    help="与 --init/--apply 组合：只打印不写盘")
     p.add_argument("--file", metavar="NAME",
-                   help="只处理指定文件（相对 src/main/docs 路径）")
+                   help="只处理指定文件（相对 --doc-root 路径）")
     p.add_argument("--repo", default=UPSTREAM_REPO,
                    help=f"上游仓库 URL（默认 {UPSTREAM_REPO}；测试可注入本地 file://）")
     p.add_argument("--workdir", default=None, help="克隆缓存目录（测试隔离用）")
     p.add_argument("--ref", default=None,
-                   help="上游分支/标签（缺省：init=v5.2.25，其余=5.2.x）")
+                   help="上游分支/标签（缺省：init=v5.2.25，其余=5.2.x；"
+                        "模块账本已记录 ref 时优先取账本值）")
+    p.add_argument("--doc-root", default=UPSTREAM_DOC,
+                   help=f"上游文档树根（缺省 {UPSTREAM_DOC}；DR-006 M4 参数化）")
+    p.add_argument("--manifest", default=None,
+                   help="账本路径（缺省 manifest.yml=core；manifests/<site>.yml "
+                        "视为模块账本，自动加 modules/<site>/ 前缀）")
     return p
+
+
+def resolve_manifest(args) -> Tuple[Path, str]:
+    """解析 --manifest → (账本路径, dest_prefix)。
+
+    约定（DR-006 §2）：manifest.yml = core（前缀空）；manifests/<site>.yml =
+    模块账本（前缀 modules/<site>，与 source/modules/<site>/ 一一对应）。"""
+    if args.manifest is None:
+        return MANIFEST_FILE, ""
+    mp = Path(args.manifest).expanduser().resolve()
+    if mp.name == "manifest.yml":
+        return mp, ""
+    if mp.parent.name == "manifests" and mp.suffix == ".yml":
+        return mp, f"modules/{mp.stem}"
+    raise ValueError(
+        f"--manifest 须为 manifest.yml 或 manifests/<site>.yml：{args.manifest}")
+
+
+def manifest_ref_of(path: Path) -> Optional[str]:
+    """读取账本顶层 ref（模块基线 ref，DR-006 §6）；core 账本无此字段。"""
+    if not path.exists():
+        return None
+    try:
+        data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+    except yaml.YAMLError:
+        return None
+    return data.get("ref") if isinstance(data, dict) else None
 
 
 def main(argv: Optional[List[str]] = None):
     parser = build_parser()
     args = parser.parse_args(argv)
-    ref = args.ref or (INIT_REF if args.init else DEFAULT_REF)
+    try:
+        manifest_file, dest_prefix = resolve_manifest(args)
+    except ValueError as e:
+        parser.error(str(e))
+    ref = args.ref
+    if ref is None:
+        ref = (INIT_REF if args.init
+               else (manifest_ref_of(manifest_file) or DEFAULT_REF))
+    repo_slug = "/".join(args.repo.rstrip("/").split("/")[-2:])
 
     ctx = get_ctx()
+    # 上游克隆缓存按仓库 slug 分目录（core 与模块仓互不覆盖）
+    default_workdir = ctx.workdir / repo_slug.replace("/", "__")
     if args.workdir:
-        ctx = SyncContext(source_dir=ctx.source_dir, zh_dir=ctx.zh_dir,
-                          reports_dir=ctx.reports_dir,
-                          manifest_file=ctx.manifest_file,
-                          repo_root=ctx.repo_root,
-                          workdir=Path(args.workdir))
+        default_workdir = Path(args.workdir)
+    ctx = SyncContext(
+        source_dir=ctx.source_dir, zh_dir=ctx.zh_dir,
+        reports_dir=ctx.reports_dir,
+        manifest_file=manifest_file, repo_root=ctx.repo_root,
+        workdir=default_workdir, doc_root=args.doc_root,
+        dest_prefix=dest_prefix)
     if args.mark_current and (args.dry_run or args.file):
         parser.error("--mark-current 不支持 --dry-run/--file")
     if args.dry_run and not (args.init or args.apply):

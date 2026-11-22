@@ -302,3 +302,16 @@ banned:
   - bad: "类似 Rails 的"
     prefer: ""
     reason: "禁止类比表述"
+
+# ---- 模块专属术语（DR-006 M4：glossary 作用域设计）----
+# 术语带 module: <site> 标注；validate ③ 扫描集 = 通用 terms + 当前模块术语，
+# core 批次不含模块专属术语（防跨模块回流，B22 教训）。
+# 新术语纪律：翻译中发现先写回本节再继续（PLAN §5.1 第 3 步）。
+modules:
+  terms: []
+#    - en: "示例 term"
+#      zh: "示例译名"
+#      module: "micrometer"
+#      status: "approved"
+#      context: "micrometer 章节"
+#      aliases: []

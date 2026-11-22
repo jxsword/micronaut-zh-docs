@@ -27,6 +27,31 @@ jobs:
       - name: validate translation (empty library must pass)
         run: python3 scripts/validate_translation.py
 
+      - name: validate module manifests（DR-006：manifests/*.yml 逐账本校验）
+        run: |
+          set -e
+          shopt -s nullglob
+          for m in manifests/*.yml; do
+            python3 scripts/validate_translation.py --manifest "$m"
+          done
+
+      - name: module manifest smoke check（DR-006：模块账本 schema/ref 冒烟）
+        run: |
+          set -e
+          shopt -s nullglob
+          for m in manifests/*.yml; do
+            python3 - "$m" <<'PY'
+          import yaml, sys
+          p = sys.argv[1]
+          m = yaml.safe_load(open(p))
+          assert m.get("schema") == "v1", f"{p}: schema must be v1"
+          assert isinstance(m.get("files"), list), f"{p}: files must be a list"
+          assert m.get("ref"), f"{p}: module manifest must record ref (DR-006)"
+          assert m.get("locked_at"), f"{p}: module manifest must record locked_at"
+          print(f"module manifest smoke: {p} = {len(m['files'])} entries, ref={m['ref']}")
+          PY
+          done
+
       - name: manifest smoke check
         run: |
           python3 - <<'PY'

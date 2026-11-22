@@ -1,0 +1,763 @@
+{
+  "version": 1,
+  "comment": "模块注册表（DR-006）：分组=官方 /5.2.x/ 导航（2026-11-23 实抓 docs.micronaut.io）；repo=null 的模块开工时核实仓库 slug 后补填（SOP §4 第 1 步）；batch_prefix=null 时 inventory 回退 site 大写。pulsar/tracing 官方跨组重复引用，modules 按首组去重。",
+  "official_nav_captured": "2026-11-23",
+  "official_nav_url": "https://docs.micronaut.io/5.2.x/",
+  "unplanned": [
+    {
+      "site": "configuration-reference",
+      "note": "官方导航分组外新增条目（DR-006 计划 71 模块之外），暂不翻译，届时单独决策"
+    }
+  ],
+  "groups": [
+    {
+      "title": "Core",
+      "modules": [
+        "core",
+        "http",
+        "security"
+      ]
+    },
+    {
+      "title": "Build Plugins",
+      "modules": [
+        "gradle"
+      ]
+    },
+    {
+      "title": "AI",
+      "modules": [
+        "langchain4j",
+        "mcp"
+      ]
+    },
+    {
+      "title": "Dev & Test",
+      "modules": [
+        "test",
+        "test-resources",
+        "control-panel"
+      ]
+    },
+    {
+      "title": "Build",
+      "modules": [
+        "aot",
+        "sourcegen",
+        "openrewrite",
+        "projectgen"
+      ]
+    },
+    {
+      "title": "Data Access",
+      "modules": [
+        "sql",
+        "mongodb",
+        "redis",
+        "neo4j",
+        "cassandra",
+        "data",
+        "r2dbc",
+        "coherence",
+        "eclipsestore"
+      ]
+    },
+    {
+      "title": "Database Migration",
+      "modules": [
+        "liquibase",
+        "flyway"
+      ]
+    },
+    {
+      "title": "Errors",
+      "modules": [
+        "problem-json"
+      ]
+    },
+    {
+      "title": "Messaging",
+      "modules": [
+        "kafka",
+        "rabbitmq",
+        "nats",
+        "jms",
+        "pulsar",
+        "mqtt"
+      ]
+    },
+    {
+      "title": "Analytics",
+      "modules": [
+        "elasticsearch",
+        "micrometer",
+        "jmx",
+        "tracing",
+        "opensearch"
+      ]
+    },
+    {
+      "title": "API",
+      "modules": [
+        "spring",
+        "graphql",
+        "grpc",
+        "openapi",
+        "jackson-xml",
+        "jaxrs",
+        "servlet",
+        "serde",
+        "json-schema",
+        "guice",
+        "jakarta-el"
+      ]
+    },
+    {
+      "title": "Cloud",
+      "modules": [
+        "aws",
+        "gcp",
+        "kubernetes",
+        "azure",
+        "discovery-client",
+        "oracle-cloud",
+        "pulsar",
+        "tracing",
+        "object-storage"
+      ]
+    },
+    {
+      "title": "Configuration",
+      "modules": [
+        "toml",
+        "logging"
+      ]
+    },
+    {
+      "title": "Languages",
+      "modules": [
+        "kotlin",
+        "groovy",
+        "graal-languages"
+      ]
+    },
+    {
+      "title": "Misc",
+      "modules": [
+        "acme",
+        "picocli",
+        "cache",
+        "email",
+        "chatbots",
+        "session",
+        "crac"
+      ]
+    },
+    {
+      "title": "Reactive",
+      "modules": [
+        "rxjava3",
+        "reactor"
+      ]
+    },
+    {
+      "title": "Views",
+      "modules": [
+        "rss",
+        "views",
+        "multitenancy"
+      ]
+    },
+    {
+      "title": "Validation",
+      "modules": [
+        "hibernate-validator",
+        "validation"
+      ]
+    }
+  ],
+  "modules": {
+    "acme": {
+      "title": "ACME",
+      "group": "Misc",
+      "repo": null,
+      "branch": "5.2.x",
+      "batch_prefix": null,
+      "page": "acme.html"
+    },
+    "aot": {
+      "title": "AOT",
+      "group": "Build",
+      "repo": null,
+      "branch": "5.2.x",
+      "batch_prefix": null,
+      "page": "aot.html"
+    },
+    "aws": {
+      "title": "AWS",
+      "group": "Cloud",
+      "repo": null,
+      "branch": "5.2.x",
+      "batch_prefix": null,
+      "page": "aws.html"
+    },
+    "azure": {
+      "title": "Azure",
+      "group": "Cloud",
+      "repo": null,
+      "branch": "5.2.x",
+      "batch_prefix": null,
+      "page": "azure.html"
+    },
+    "cache": {
+      "title": "Cache",
+      "group": "Misc",
+      "repo": null,
+      "branch": "5.2.x",
+      "batch_prefix": null,
+      "page": "cache.html"
+    },
+    "cassandra": {
+      "title": "Cassandra",
+      "group": "Data Access",
+      "repo": null,
+      "branch": "5.2.x",
+      "batch_prefix": null,
+      "page": "cassandra.html"
+    },
+    "chatbots": {
+      "title": "Chatbots",
+      "group": "Misc",
+      "repo": null,
+      "branch": "5.2.x",
+      "batch_prefix": null,
+      "page": "chatbots.html"
+    },
+    "coherence": {
+      "title": "Coherence",
+      "group": "Data Access",
+      "repo": null,
+      "branch": "5.2.x",
+      "batch_prefix": null,
+      "page": "coherence.html"
+    },
+    "control-panel": {
+      "title": "Control Panel",
+      "group": "Dev & Test",
+      "repo": null,
+      "branch": "5.2.x",
+      "batch_prefix": null,
+      "page": "control-panel.html"
+    },
+    "core": {
+      "title": "Core",
+      "group": "Core",
+      "repo": "micronaut-projects/micronaut-core",
+      "branch": "5.2.x",
+      "batch_prefix": "B",
+      "page": "index.html"
+    },
+    "crac": {
+      "title": "CRaC",
+      "group": "Misc",
+      "repo": null,
+      "branch": "5.2.x",
+      "batch_prefix": null,
+      "page": "crac.html"
+    },
+    "data": {
+      "title": "Data",
+      "group": "Data Access",
+      "repo": null,
+      "branch": "5.2.x",
+      "batch_prefix": null,
+      "page": "data.html"
+    },
+    "discovery-client": {
+      "title": "Discovery Client",
+      "group": "Cloud",
+      "repo": null,
+      "branch": "5.2.x",
+      "batch_prefix": null,
+      "page": "discovery-client.html"
+    },
+    "eclipsestore": {
+      "title": "EclipseStore",
+      "group": "Data Access",
+      "repo": null,
+      "branch": "5.2.x",
+      "batch_prefix": null,
+      "page": "eclipsestore.html"
+    },
+    "elasticsearch": {
+      "title": "Elasticsearch",
+      "group": "Analytics",
+      "repo": null,
+      "branch": "5.2.x",
+      "batch_prefix": null,
+      "page": "elasticsearch.html"
+    },
+    "email": {
+      "title": "Email",
+      "group": "Misc",
+      "repo": null,
+      "branch": "5.2.x",
+      "batch_prefix": null,
+      "page": "email.html"
+    },
+    "flyway": {
+      "title": "Flyway",
+      "group": "Database Migration",
+      "repo": null,
+      "branch": "5.2.x",
+      "batch_prefix": null,
+      "page": "flyway.html"
+    },
+    "gcp": {
+      "title": "GCP",
+      "group": "Cloud",
+      "repo": null,
+      "branch": "5.2.x",
+      "batch_prefix": null,
+      "page": "gcp.html"
+    },
+    "graal-languages": {
+      "title": "Graal Languages",
+      "group": "Languages",
+      "repo": null,
+      "branch": "5.2.x",
+      "batch_prefix": null,
+      "page": "graal-languages.html"
+    },
+    "gradle": {
+      "title": "Gradle",
+      "group": "Build Plugins",
+      "external": true,
+      "url": "https://docs.micronaut.io/5.2.x/gradle/"
+    },
+    "graphql": {
+      "title": "GraphQL",
+      "group": "API",
+      "repo": null,
+      "branch": "5.2.x",
+      "batch_prefix": null,
+      "page": "graphql.html"
+    },
+    "groovy": {
+      "title": "Groovy",
+      "group": "Languages",
+      "repo": null,
+      "branch": "5.2.x",
+      "batch_prefix": null,
+      "page": "groovy.html"
+    },
+    "grpc": {
+      "title": "gRPC",
+      "group": "API",
+      "repo": null,
+      "branch": "5.2.x",
+      "batch_prefix": null,
+      "page": "grpc.html"
+    },
+    "guice": {
+      "title": "Guice",
+      "group": "API",
+      "repo": null,
+      "branch": "5.2.x",
+      "batch_prefix": null,
+      "page": "guice.html"
+    },
+    "hibernate-validator": {
+      "title": "Hibernate Validator",
+      "group": "Validation",
+      "repo": null,
+      "branch": "5.2.x",
+      "batch_prefix": null,
+      "page": "hibernate-validator.html"
+    },
+    "http": {
+      "title": "HTTP",
+      "group": "Core",
+      "repo": null,
+      "branch": "5.2.x",
+      "batch_prefix": null,
+      "page": "http.html"
+    },
+    "jackson-xml": {
+      "title": "Jackson XML",
+      "group": "API",
+      "repo": null,
+      "branch": "5.2.x",
+      "batch_prefix": null,
+      "page": "jackson-xml.html"
+    },
+    "jakarta-el": {
+      "title": "Jakarta EL",
+      "group": "API",
+      "repo": null,
+      "branch": "5.2.x",
+      "batch_prefix": null,
+      "page": "jakarta-el.html"
+    },
+    "jaxrs": {
+      "title": "JAX-RS",
+      "group": "API",
+      "repo": null,
+      "branch": "5.2.x",
+      "batch_prefix": null,
+      "page": "jaxrs.html"
+    },
+    "jms": {
+      "title": "JMS",
+      "group": "Messaging",
+      "repo": null,
+      "branch": "5.2.x",
+      "batch_prefix": null,
+      "page": "jms.html"
+    },
+    "jmx": {
+      "title": "JMX",
+      "group": "Analytics",
+      "repo": null,
+      "branch": "5.2.x",
+      "batch_prefix": null,
+      "page": "jmx.html"
+    },
+    "json-schema": {
+      "title": "JSON Schema",
+      "group": "API",
+      "repo": null,
+      "branch": "5.2.x",
+      "batch_prefix": null,
+      "page": "json-schema.html"
+    },
+    "kafka": {
+      "title": "Kafka",
+      "group": "Messaging",
+      "repo": null,
+      "branch": "5.2.x",
+      "batch_prefix": null,
+      "page": "kafka.html"
+    },
+    "kotlin": {
+      "title": "Kotlin",
+      "group": "Languages",
+      "repo": null,
+      "branch": "5.2.x",
+      "batch_prefix": null,
+      "page": "kotlin.html"
+    },
+    "kubernetes": {
+      "title": "Kubernetes",
+      "group": "Cloud",
+      "repo": null,
+      "branch": "5.2.x",
+      "batch_prefix": null,
+      "page": "kubernetes.html"
+    },
+    "langchain4j": {
+      "title": "LangChain4j",
+      "group": "AI",
+      "repo": null,
+      "branch": "5.2.x",
+      "batch_prefix": null,
+      "page": "langchain4j.html"
+    },
+    "liquibase": {
+      "title": "Liquibase",
+      "group": "Database Migration",
+      "repo": null,
+      "branch": "5.2.x",
+      "batch_prefix": null,
+      "page": "liquibase.html"
+    },
+    "logging": {
+      "title": "Logging",
+      "group": "Configuration",
+      "repo": null,
+      "branch": "5.2.x",
+      "batch_prefix": null,
+      "page": "logging.html"
+    },
+    "mcp": {
+      "title": "MCP",
+      "group": "AI",
+      "repo": null,
+      "branch": "5.2.x",
+      "batch_prefix": null,
+      "page": "mcp.html"
+    },
+    "micrometer": {
+      "title": "Micrometer",
+      "group": "Analytics",
+      "repo": "micronaut-projects/micronaut-micrometer",
+      "branch": "5.2.x",
+      "batch_prefix": "MICRO",
+      "page": "micrometer.html"
+    },
+    "mongodb": {
+      "title": "MongoDB",
+      "group": "Data Access",
+      "repo": null,
+      "branch": "5.2.x",
+      "batch_prefix": null,
+      "page": "mongodb.html"
+    },
+    "mqtt": {
+      "title": "MQTT",
+      "group": "Messaging",
+      "repo": null,
+      "branch": "5.2.x",
+      "batch_prefix": null,
+      "page": "mqtt.html"
+    },
+    "multitenancy": {
+      "title": "Multitenancy",
+      "group": "Views",
+      "repo": null,
+      "branch": "5.2.x",
+      "batch_prefix": null,
+      "page": "multitenancy.html"
+    },
+    "nats": {
+      "title": "NATS",
+      "group": "Messaging",
+      "repo": null,
+      "branch": "5.2.x",
+      "batch_prefix": null,
+      "page": "nats.html"
+    },
+    "neo4j": {
+      "title": "Neo4j",
+      "group": "Data Access",
+      "repo": null,
+      "branch": "5.2.x",
+      "batch_prefix": null,
+      "page": "neo4j.html"
+    },
+    "object-storage": {
+      "title": "Object Storage",
+      "group": "Cloud",
+      "repo": null,
+      "branch": "5.2.x",
+      "batch_prefix": null,
+      "page": "object-storage.html"
+    },
+    "openapi": {
+      "title": "OpenAPI",
+      "group": "API",
+      "repo": null,
+      "branch": "5.2.x",
+      "batch_prefix": null,
+      "page": "openapi.html"
+    },
+    "openrewrite": {
+      "title": "OpenRewrite",
+      "group": "Build",
+      "repo": null,
+      "branch": "5.2.x",
+      "batch_prefix": null,
+      "page": "openrewrite.html"
+    },
+    "opensearch": {
+      "title": "OpenSearch",
+      "group": "Analytics",
+      "repo": null,
+      "branch": "5.2.x",
+      "batch_prefix": null,
+      "page": "opensearch.html"
+    },
+    "oracle-cloud": {
+      "title": "Oracle Cloud",
+      "group": "Cloud",
+      "repo": null,
+      "branch": "5.2.x",
+      "batch_prefix": null,
+      "page": "oracle-cloud.html"
+    },
+    "picocli": {
+      "title": "Picocli",
+      "group": "Misc",
+      "repo": null,
+      "branch": "5.2.x",
+      "batch_prefix": null,
+      "page": "picocli.html"
+    },
+    "problem-json": {
+      "title": "Problem JSON",
+      "group": "Errors",
+      "repo": null,
+      "branch": "5.2.x",
+      "batch_prefix": null,
+      "page": "problem-json.html"
+    },
+    "projectgen": {
+      "title": "ProjectGen",
+      "group": "Build",
+      "repo": null,
+      "branch": "5.2.x",
+      "batch_prefix": null,
+      "page": "projectgen.html"
+    },
+    "pulsar": {
+      "title": "Pulsar",
+      "group": "Messaging",
+      "repo": null,
+      "branch": "5.2.x",
+      "batch_prefix": null,
+      "page": "pulsar.html"
+    },
+    "r2dbc": {
+      "title": "R2DBC",
+      "group": "Data Access",
+      "repo": null,
+      "branch": "5.2.x",
+      "batch_prefix": null,
+      "page": "r2dbc.html"
+    },
+    "rabbitmq": {
+      "title": "RabbitMQ",
+      "group": "Messaging",
+      "repo": null,
+      "branch": "5.2.x",
+      "batch_prefix": null,
+      "page": "rabbitmq.html"
+    },
+    "reactor": {
+      "title": "Reactor",
+      "group": "Reactive",
+      "repo": null,
+      "branch": "5.2.x",
+      "batch_prefix": null,
+      "page": "reactor.html"
+    },
+    "redis": {
+      "title": "Redis",
+      "group": "Data Access",
+      "repo": null,
+      "branch": "5.2.x",
+      "batch_prefix": null,
+      "page": "redis.html"
+    },
+    "rss": {
+      "title": "RSS",
+      "group": "Views",
+      "repo": null,
+      "branch": "5.2.x",
+      "batch_prefix": null,
+      "page": "rss.html"
+    },
+    "rxjava3": {
+      "title": "RxJava 3",
+      "group": "Reactive",
+      "repo": null,
+      "branch": "5.2.x",
+      "batch_prefix": null,
+      "page": "rxjava3.html"
+    },
+    "security": {
+      "title": "Security",
+      "group": "Core",
+      "repo": null,
+      "branch": "5.2.x",
+      "batch_prefix": null,
+      "page": "security.html"
+    },
+    "serde": {
+      "title": "Serialization",
+      "group": "API",
+      "repo": null,
+      "branch": "5.2.x",
+      "batch_prefix": null,
+      "page": "serde.html"
+    },
+    "servlet": {
+      "title": "Servlet",
+      "group": "API",
+      "repo": null,
+      "branch": "5.2.x",
+      "batch_prefix": null,
+      "page": "servlet.html"
+    },
+    "session": {
+      "title": "Session",
+      "group": "Misc",
+      "repo": null,
+      "branch": "5.2.x",
+      "batch_prefix": null,
+      "page": "session.html"
+    },
+    "sourcegen": {
+      "title": "Sourcegen",
+      "group": "Build",
+      "repo": null,
+      "branch": "5.2.x",
+      "batch_prefix": null,
+      "page": "sourcegen.html"
+    },
+    "spring": {
+      "title": "Spring",
+      "group": "API",
+      "repo": null,
+      "branch": "5.2.x",
+      "batch_prefix": null,
+      "page": "spring.html"
+    },
+    "sql": {
+      "title": "SQL",
+      "group": "Data Access",
+      "repo": null,
+      "branch": "5.2.x",
+      "batch_prefix": null,
+      "page": "sql.html"
+    },
+    "test": {
+      "title": "Test",
+      "group": "Dev & Test",
+      "repo": null,
+      "branch": "5.2.x",
+      "batch_prefix": null,
+      "page": "test.html"
+    },
+    "test-resources": {
+      "title": "Test Resources",
+      "group": "Dev & Test",
+      "repo": null,
+      "branch": "5.2.x",
+      "batch_prefix": null,
+      "page": "test-resources.html"
+    },
+    "toml": {
+      "title": "TOML",
+      "group": "Configuration",
+      "repo": null,
+      "branch": "5.2.x",
+      "batch_prefix": null,
+      "page": "toml.html"
+    },
+    "tracing": {
+      "title": "Tracing",
+      "group": "Analytics",
+      "repo": null,
+      "branch": "5.2.x",
+      "batch_prefix": null,
+      "page": "tracing.html"
+    },
+    "validation": {
+      "title": "Validation",
+      "group": "Validation",
+      "repo": "micronaut-projects/micronaut-validation",
+      "branch": "5.2.x",
+      "batch_prefix": "VALID",
+      "page": "validation.html"
+    },
+    "views": {
+      "title": "Views",
+      "group": "Views",
+      "repo": null,
+      "branch": "5.2.x",
+      "batch_prefix": null,
+      "page": "views.html"
+    }
+  }
+}

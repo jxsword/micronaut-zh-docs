@@ -95,8 +95,9 @@ def test_collect_commits_with_mocked_gh(tmp_path, monkeypatch):
     _, ctx = _init(tmp_path)
     calls = []
 
-    def fake_gh(slug, path, ref):
+    def fake_gh(slug, path, ref, doc_root):
         calls.append(path)
+        assert doc_root == "src/main/docs"
         return "a" * 40
 
     monkeypatch.setattr(su, "_gh_api_last_commit", fake_gh)
@@ -110,7 +111,7 @@ def test_collect_commits_with_mocked_gh(tmp_path, monkeypatch):
 def test_collect_commits_failure_deferred(tmp_path, monkeypatch):
     _, ctx = _init(tmp_path)
 
-    def fake_gh(slug, path, ref):
+    def fake_gh(slug, path, ref, doc_root):
         return None
 
     monkeypatch.setattr(su, "_gh_api_last_commit", fake_gh)
@@ -124,7 +125,7 @@ def test_collect_commits_skips_already_collected(tmp_path, monkeypatch):
     _, ctx = _init(tmp_path)
     calls = []
 
-    def fake_gh(slug, path, ref):
+    def fake_gh(slug, path, ref, doc_root):
         calls.append(path)
         return "b" * 40
 
@@ -138,16 +139,18 @@ def test_collect_commits_skips_already_collected(tmp_path, monkeypatch):
 
 
 def test_collect_commits_cache_reused_after_refill(tmp_path, monkeypatch):
-    """账本为空但缓存有值 → 直接从缓存取，不调 API。"""
+    """账本为空但缓存有值 → 直接从缓存取，不调 API（缓存名按账本 remote slug）。"""
     _, ctx = _init(tmp_path)
-    cache_file = ctx.workdir.parent / "commit-cache.json"
-    cache_file.parent.mkdir(parents=True, exist_ok=True)
     m = su.load_manifest(ctx.manifest_file)
+    slug = "/".join(m.remote.rstrip("/").split("/")[-2:])
+    cache_file = (ctx.workdir.parent /
+                  f"commit-cache-{slug.replace('/', '__')}.json")
+    cache_file.parent.mkdir(parents=True, exist_ok=True)
     cache = {f"{e['file']}:{e['blob_sha']}": "c" * 40 for e in m.files}
     cache_file.write_text(__import__("json").dumps(cache), encoding="utf-8")
     calls = []
 
-    def fake_gh(slug, path, ref):
+    def fake_gh(slug2, path, ref, doc_root):
         calls.append(path)
         return "d" * 40
 

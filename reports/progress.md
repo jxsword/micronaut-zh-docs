@@ -1,6 +1,16 @@
 # 翻译进度报表（自动生成，禁手改）
 
-> 生成: 2026-11-21 06:55:02 ｜ 数据源: manifest.yml ｜ 基线: 0b46d27afdfa
+> 生成: 2026-11-23 03:25:41 ｜ 数据源: manifest.yml + manifests/*.yml（DR-006 M4 聚合）
+
+## 总览（按模块）
+
+| 模块 | 文件数 | missing | stale | partial | current | skipped | 进度 |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| core | 388 | 0 | 0 | 0 | 387 | 1 | 100.0% |
+
+## core
+
+> 基线: 0b46d27afdfa，快照 2026-11-20
 
 | 章节 | 文件数 | missing | stale | partial | current | skipped | 进度 |
 |---|---:|---:|---:|---:|---:|---:|---:|
