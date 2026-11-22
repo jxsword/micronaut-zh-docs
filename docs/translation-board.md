@@ -52,6 +52,9 @@
 | security | SEC-02 | 40 | 3452 | 3539 | — | current |
 | security | SEC-03 | 29 | 3456 | 3503 | — | current |
 | security | SEC-04 | 28 | 2833 | 2842 | — | current |
+| hibernate-validator | HV-01 | 4+toc | 76 | 76 | 9 | current |
+| tracing | TRACING-01 | 24+toc | 2878 | 2929 | 219 | current |
+| session | SESSION-01 | 13+toc | 689 | 705 | 59 | current |
 
 - SEC-03（2026-11-23 完成）：29 文件七步全流程，validate 112 文件全绿（豁免 3 条均为既有跟踪：loginController 悬空 + wwwAuthenticate 上游不平衡 xref ×2）；**注入 4 锚**（[[oauth]]/[[openid-authorization-code]]/[[keys]] 消解 SEC-01/02 遗留豁免新消解 3 条 + [[openid-configuration]] 批内闭环）；批内裸 xref 3 处走 SEC-01 口径；validate 拦 ⑦ 邻接 ×1 与 ③ bean 口径 ×13 文件（新译大写 Bean 统一改小写，SEC-01 先例）；术语 +4（refresh token→刷新令牌、access token→访问令牌、Client Credentials Grant→客户端凭证许可、nonce 不译；state/issuer 试用撤回——词形通用致 ③ 误报）。详见 reports/batch-SEC-03.md。
 - **SEC-04（2026-11-23 完成，security 收口）**：28 文件七步全流程，validate 140 文件全绿；**security 145 条目全部处置完成（140 current + 5 skipped = 100%）**。注入 [[protectedResourceMetadata]] + **回溯补注入 5 锚**（runAs/jwks/ipPattern/interceptUrlMap/builtInEndpointsAccess——批内引用触发的既有页缺锚，B16/B30/SEC-02 先例第 3 次复用）；③ bean 口径修正 ×4。**全量渲染冒烟**：144/144 片段、10 锚闭环、failureCount 0；实测发现 render.mjs 两处内容缺口（无页分组键无标题页头致 5 导航死链 + 根层 securityRule/ldap 未入 toc 内容静默缺失）并修复（3ee6dde，回归对照四页逐字节一致）；「部分译文」横幅随 missingPage=0 消失。详见 reports/batch-SEC-04.md。
@@ -61,7 +64,14 @@
 - 优先级规则（DR-006 §6）：core 增量复译优先于模块新批次；同会话不混排。
 - security 裸 `<<target>>` xref 口径（SEC-01 确立，SEC-02/03/04 沿用）：译显示文本、保留目标，目标页片段首内容之前原位注入 [[basename]]；上游悬空引用（loginController 类）保持原样走 ⑤ 豁免跟踪。
 - 图片体量实测（M4.0 验收项）：试点两模块 0 图；抽样 security 8.9MB/34 图、oracle-cloud 4.5MB/28 图、aws 0.9MB/4 图、openapi/data ≤0.1MB——外推 71 模块 <300MB，**暂不启用 git-lfs**，P0/P1 里程碑（security 快照落地时）复测。
-- M4.1（P0 安全与观测）待办：hibernate-validator + tracing + session；core/security/micrometer/validation 已完成。P0 全部 100% 后 tag v1.1。
+- **M4.1 收官（2026-11-23，P0 安全与观测层 7 模块全 100%，tag v1.1）**：
+  - **HV-01**：hibernate-validator 4+toc 全单批（76 词），5 条目全 current；setup.adoc 全文件即 dependency: 指令行逐字节保留；URL+ATTRREF 复合占位符 SEC-04 同款处置。详见 reports/batch-HV-01.md。
+  - **TRACING-01**：tracing 24+toc 全单批（2878 词/219 段），25 条目全 current；**ref=8.4.x（无 5.2.x 分支按 SOP §4 用默认分支；8.3.x/8.4.x docs blob 逐 sha 一致实测，官方 5.2.x 页徽标 v8.3.0 无漂移）**；glossary +6 tracing 域术语（span→跨度/exporter→导出器/propagator→传播器/instrumentation→插桩/sampler→采样器/distributed tracing→分布式追踪）；批内锚 [[jdbc]]（ucp→`<<jdbc,JDBC>>`）译文首行注入、渲染 href↔id 闭环实测；logback ③ ×2（groupId 属性文本触发 instrumentation 检查——「MDC 集成」补述为「MDC 插桩集成」）与 mdc ④（标题补中文括注「映射诊断上下文」）修复。详见 reports/batch-TRACING-01.md。
+  - **SESSION-01**：session 13+toc 全单批（689 词），14 条目全 current；语言切换属性行 `[.lang-*]` 整体保留、双语言变体散文分别译出；glossary +1（session resolution→会话解析）。详见 reports/batch-SESSION-01.md。
+  - **三模块渲染冒烟**：tracing 24/24、session 13/13、HV 4/4 全渲染，failureCount 0；三新页内部 href→id 悬空 0（[[jdbc]] 闭环实测）；**五页回归对照差异穷举核对全部为预期产物**——四个模块页各仅 module-bar 新增 3 链接 1 行，landing 仅 3 处 todo→链接转换（tracing ×2 含 Cloud 组跨组引用、session、hibernate-validator），无其他字节变化；missingPageTotal 6 = core 1 + security 5 的 missingChapter（分组键页头，3ee6dde 设计行为，非缺页）；HTTP 冒烟 6 页全 200。
+  - 预存在噪音备案：core languageSupport/python/overloads.adoc 未入 toc 且无同名分组键可挂载（WARN、内容未渲染）——备份页同样缺失该片段，3ee6dde 以来即存在，非本会话回归；届时随 core 批次或 render 治理单独处理（实测结论 18 备案）。
+- 模块导航 toc.yml 标题随首批一并译出核销（micrometer 30 / validation 12 / security 145 条目中 SEC-01 的 43 条 / HV 5 / tracing 25 / session 14）。
+- M4.1 已收官（2026-11-23，tag v1.1）：P0 安全与观测 7 模块——core 388、security 145、micrometer 30、validation 12、hibernate-validator 5、tracing 25、session 14 全部 100%。**下一里程碑 M4.2（P1 数据与消息，17 模块）**：按组推进 data★ / sql+liquibase+flyway / mongodb+redis+neo4j+cassandra / coherence+eclipsestore / messaging 6 模块。
 
 ## 批次状态明细
 
