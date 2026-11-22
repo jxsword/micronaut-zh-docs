@@ -1,0 +1,5 @@
+It's possible to configure authorization with an OpenID provider simply with this library because OpenID standardizes how to retrieve user information from the provider. Because a user information endpoint is not part of the OAuth 2.0 specification, it is up to you to provide an implementation to retrieve that information.
+
+Here is a high level diagram of how the authorization code grant flow works with an OAuth 2.0 provider.
+
+image::standard-oauth.svg[]

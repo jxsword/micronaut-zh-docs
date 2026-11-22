@@ -1,0 +1,17 @@
+Micronaut allows the customization of the response that is sent when a request is not authorized to access a resource, or is not authenticated and the resource requires authentication.
+
+When a request is rejected, the security filter emits an api:security.authentication.AuthorizationException[]. The default implementation (api:security.authentication.DefaultAuthorizationExceptionHandler[]) redirects based on the redirect configuration only if the request accepts text/html:
+
+include::{includedir}configurationProperties/io.micronaut.security.config.RedirectConfigurationProperties.adoc[]
+
+For an unauthorized request, a 401 http response will be sent if `unauthorized.enabled` is false, or the request does not accept text/html.
+
+For a rejected request, a 403 http response will be sent if `forbidden.enabled` is false, or the request does not accept text/html.
+
+To fully customize the behavior, replace the relevant bean with your own implementation.
+
+For example:
+[source,java]
+----
+include::{testssecurityjwt}/rejection/MyRejectionHandler.java[tag=clazz,indent=0]
+----

@@ -1,0 +1,294 @@
+
+This section will document breaking changes that may happen during milestone or release candidate releases, as well as major releases eg (1.x.x -> 2.x.x).
+
+== Micronaut Security 5.0 breaking changes
+
+- The JSR 250 annotation mappers have been moved to a new module `micronaut-security-processor`.
++
+If you are using the `@RolesAllowed`, `@PermitAll` or `@DenyAll` annotations, you will need to replace the `micronaut-security-annotations` dependency with `micronaut-security-processor` in your project.
+
+=== Deprecations
+
+- The Singleton constructor `io.micronaut.security.token.jwt.validator.JwtTokenValidator(Collection<SignatureConfiguration>, Collection<EncryptionConfiguration>,
+Collection<GenericJwtClaimsValidator>, JwtAuthenticationFactory)` deprecated previously has been removed.
+`JwtTokenValidator(Collection<SignatureConfiguration>, Collection<EncryptionConfiguration>, Collection<GenericJwtClaimsValidator>, JwtAuthenticationFactory, ExecutorService)` is used instead.
+
+- The following methods in `io.micronaut.security.oauth2.client.DefaultOpenIdProviderMetadata` deprecated previously have been removed. Note that the Open ID provider name is now required in all cases:
+** Constructor `DefaultOpenIdProviderMetadata()`.
+Use `DefaultOpenIdProviderMetadata(String)` instead.
+** Static method `Builder builder()`.
+Use `DefaultOpenIdProviderMetadata(String)` instead
+** Nested constructor `DefaultOpenIdProviderMetadata.Builder()`.
+Use `DefaultOpenIdProviderMetadata.Builder(String)` instead
+
+- The Singleton constructor `io.micronaut.security.oauth2.endpoint.authorization.response.DefaultOpenIdAuthorizationResponseHandler(OpenIdTokenResponseValidator, OpenIdAuthenticationMapper, TokenEndpointClient, OauthRouteUrlBuilder<T>, StateValidator, PkcePersistence)` deprecated previously has been removed.
+`DefaultOpenIdAuthorizationResponseHandler(OpenIdTokenResponseValidator, OpenIdAuthenticationMapper, TokenEndpointClient, OauthRouteUrlBuilder<T>, StateValidator, PkcePersistence), ExecutorService)` is used instead.
+
+== Micronaut Security 4.0 breaking changes
+
+- api:security.rules.SecurityRule[] `check` method no longer contains the argument `RouteMatch`. You can easily retrieve a `RouteMatch`
+with the `HttpRequest` method argument with `request.getAttribute(HttpAttributes.ROUTE_MATCH).orElse(null)`.
+
+- For applications with `micronaut.security.authentication` set to `cookie` and `micronaut.security.redirect.enabled` set to `false`, the server responds with 401 HTTP Status code instead of 200 for login failed attempts.
+
+- `micronaut.security.intercept-url-map-prepend-pattern-with-context-path` defaults to `true`. Thus intercept url patterns are be prepended with the server context path if it is set.
+
+- Micronaut Security APIs have been decoupled from HTTP. Many APIs now have generics instead of HTTP-related types such as `HttpRequest`.
+For example,  instead of `AuthenticationProvider`, you should use `AuthenticationProvider<HttpRequest<?>>`.
+
+=== Configuration Changes
+
+Some configuration keys have changed.
+
+|===
+| Old | New
+
+| `micronaut.security.token.jwt.generator.access-token.expiration`
+| `micronaut.security.token.generator.access-token.expiration`
+
+| `micronaut.security.token.jwt.cookie.enabled`
+| `micronaut.security.token.cookie.enabled`
+
+| `micronaut.security.token.jwt.cookie.cookie-max-age`
+| `micronaut.security.token.cookie.cookie-max-age`
+
+| `micronaut.security.token.jwt.cookie.cookie-path`
+| `micronaut.security.token.cookie.cookie-path`
+
+| `micronaut.security.token.jwt.cookie.cookie-domain`
+| `micronaut.security.token.cookie.cookie-domain`
+
+| `micronaut.security.token.jwt.cookie.cookie-same-site`
+| `micronaut.security.token.cookie.cookie-same-site`
+
+| `micronaut.security.token.jwt.bearer.enabled`
+| `micronaut.security.token.bearer.enabled`
+
+|===
+
+
+=== Classes relocated
+
+Some classes have been renamed and moved from `io.micronaut.security:micronaut-security-jwt` to `io.micronaut.security:micronaut.security`.
+
+|===
+| Old Pkg | New Pkg
+
+| `io.micronaut.security.token.jwt.endpoints.TokenRefreshRequest`
+| `io.micronaut.security.endpoints.TokenRefreshRequest`
+
+| `io.micronaut.security.token.jwt.render.AccessRefreshToken`
+| `io.micronaut.security.token.render.AccessRefreshToken`
+
+| `io.micronaut.security.token.jwt.render.BearerAccessRefreshToken`
+| `io.micronaut.security.token.render.BearerAccessRefreshToken`
+
+| `io.micronaut.security.token.jwt.endpoints.OauthController`
+| `io.micronaut.security.endpoints.OauthController`
+
+| `io.micronaut.security.token.jwt.endpoints.OauthControllerConfiguration`
+| `io.micronaut.security.endpoints.OauthControllerConfiguration`
+
+| `io.micronaut.security.token.jwt.endpoints.OauthControllerConfigurationProperties`
+| `io.micronaut.security.endpoints.OauthControllerConfigurationProperties`
+
+| `io.micronaut.security.token.jwt.generator.DefaultAccessRefreshTokenGenerator`
+| `io.micronaut.security.token.generator.DefaultAccessRefreshTokenGenerator`
+
+| `io.micronaut.security.token.jwt.cookie.AccessTokenCookieConfiguration`
+| `io.micronaut.security.token.cookie.AccessTokenCookieConfiguration`
+
+| `io.micronaut.security.token.jwt.cookie.CookieLoginHandler`
+| `io.micronaut.security.token.cookie.CookieLoginHandler`
+
+| `io.micronaut.security.token.jwt.bearer.AccessRefreshTokenLoginHandler`
+| `io.micronaut.security.token.bearer.AccessRefreshTokenLoginHandler`
+
+| `io.micronaut.security.token.jwt.bearer.BearerTokenConfiguration`
+| `io.micronaut.security.token.bearer.BearerTokenConfiguration`
+
+| `io.micronaut.security.token.jwt.bearer.BearerTokenConfigurationProperties`
+| `io.micronaut.security.token.bearer.BearerTokenConfigurationProperties`
+
+| `io.micronaut.security.token.jwt.bearer.BearerTokenReader`
+| `io.micronaut.security.token.bearer.BearerTokenReader`
+
+| `io.micronaut.security.token.jwt.render.TokenRenderer`
+| `io.micronaut.security.token.render.TokenRenderer`
+
+| `io.micronaut.security.token.jwt.render.BearerTokenRenderer`
+| `io.micronaut.security.token.render.BearerTokenRenderer`
+
+| `io.micronaut.security.token.jwt.cookie.JwtCookieTokenReader`
+| `io.micronaut.security.token.cookie.CookieTokenReader`
+
+| `io.micronaut.security.token.jwt.cookie.RefreshTokenCookieConfiguration`
+| `io.micronaut.security.token.cookie.RefreshTokenCookieConfiguration`
+
+| `io.micronaut.security.token.jwt.cookie.RefreshTokenCookieConfigurationProperties`
+| `io.micronaut.security.token.cookie.RefreshTokenCookieConfigurationProperties`
+
+| `io.micronaut.security.token.jwt.cookie.JwtCookieClearerLogoutHandler`
+| `io.micronaut.security.token.cookie.TokenCookieClearerLogoutHandler`
+
+| `io.micronaut.security.token.jwt.cookie.JwtCookieLoginHandler`
+| `io.micronaut.security.token.cookie.TokenCookieLoginHandler`
+
+| `io.micronaut.security.token.jwt.cookie.JwtCookieTokenReader`
+| `io.micronaut.security.token.cookie.TokenCookieTokenReader`
+
+| `io.micronaut.security.token.jwt.generator.AccessRefreshTokenGenerator`
+| `io.micronaut.security.token.generator.AccessRefreshTokenGenerator`
+
+| `io.micronaut.security.token.jwt.generator.AccessTokenConfiguration`
+| `io.micronaut.security.token.generator.AccessTokenConfiguration`
+
+| `io.micronaut.security.token.jwt.generator.AccessTokenConfigurationProperties`
+| `io.micronaut.security.token.generator.AccessTokenConfigurationProperties`
+
+| `io.micronaut.security.token.jwt.generator.claims.ClaimsGenerator`
+| `io.micronaut.security.token.claims.ClaimsGenerator`
+
+| `io.micronaut.security.token.jwt.generator.claims.ClaimsAudienceProvider`
+| `io.micronaut.security.token.claims.ClaimsAudienceProvider`
+
+| `io.micronaut.security.token.jwt.cookie.AbstractAccessTokenCookieConfigurationProperties`
+| `io.micronaut.security.token.cookie.AbstractAccessTokenCookieConfigurationProperties`
+
+| `io.micronaut.security.token.jwt.cookie.JwtCookieConfigurationProperties`
+| `io.micronaut.security.token.cookie.TokenCookieConfigurationProperties`
+
+| `io.micronaut.security.token.jwt.generator.claims.JwtIdGenerator`
+| `io.micronaut.security.token.claims.JtiGenerator`
+
+| `io.micronaut.security.token.jwt.generator.claims.JwtClaims`
+| `io.micronaut.security.token.Claims`
+
+|===
+
+
+
+=== Annotation Mappers Removed
+
+The mappers for `javax.annotation.security` annotations – `DenyAll`, `PermitAll`, `RolesAllowed` – have been removed. Use the Jakarta versions for `jakarta.annotation.security` annotations instead.
+
+|===
+|Removed |Retained
+
+| io.micronaut.security.annotation.DenyAllAnnotationMapper
+| io.micronaut.security.annotation.JakartaDenyAllAnnotationMapper
+
+| io.micronaut.security.annotation.PermitAllAnnotationMapper
+| io.micronaut.security.annotation.JakartaPermitAllAnnotationMapper
+
+| io.micronaut.security.annotation.RolesAllowedAnnotationMapper
+| io.micronaut.security.annotation.JakartaRolesAllowedAnnotationMapper
+
+|===
+
+=== Reactive OpenIdAuthenticationMapper
+
+The return type of the `OpenIdAuthenticationMapper.createAuthenticationResponse` has changed to return a `Publisher` to be consistent with the `OauthAuthenticationMapper` interface. Because the method now returns a Publisher, blocking operations can be offloaded to another thread pool using the reactive streams implementation of your choice.
+
+== Micronaut Security 3.4 breaking changes
+
+Sensitive endpoints will now respond with an error unless a replacement for the api:security.rules.SensitiveEndpointRule[] is bound.
+
+The following code snippet illustrates how to restore the previous functionality:
+
+NOTE: The previous functionality allows any authenticated user, no matter their role to view sensitive endpoints.
+
+snippet::io.micronaut.security.docs.sensitiveendpointrule.SensitiveEndpointRuleReplacement[tags="imports,clazz"]
+
+== Micronaut Security 3.1 breaking changes
+
+Micronaut security no longer exposes `micronaut-management` dependency.
+
+== Micronaut Security 3.0 breaking changes
+
+=== User Details Removal
+
+The `UserDetails` class has been removed and all usages should be replaced with api:security.authentication.Authentication[].
+
+==== Affected APIs
+
+- api:security.authentication.AuthenticationFailed[]
+- api:security.authentication.AuthenticationResponse[]
+- api:security.handlers.LoginHandler[]
+- api:security.rules.AbstractSecurityRule[]
+- api:security.rules.SecurityRule[]
+- api:security.rules.SensitiveEndpointRule[]
+- api:security.token.event.RefreshTokenGeneratedEvent[]
+- api:security.token.generator.RefreshTokenGenerator[]
+- api:security.token.generator.TokenGenerator[]
+- api:security.token.jwt.cookie.CookieLoginHandler[]
+- api:security.token.jwt.generator.AccessRefreshTokenGenerator[]
+- api:security.token.jwt.generator.claims.ClaimsGenerator[]
+- api:security.token.jwt.render.TokenRenderer[]
+- api:security.token.refresh.RefreshTokenPersistence[]
+
+==== Classes Renamed
+
+|===
+|Old |New
+
+| io.micronaut.security.oauth2.endpoint.token.response.OauthUserDetailsMapper
+| io.micronaut.security.oauth2.endpoint.token.response.OauthAuthenticationMapper
+
+| io.micronaut.security.oauth2.endpoint.token.response.OpenIdUserDetailsMapper
+| io.micronaut.security.oauth2.endpoint.token.response.OpenIdAuthenticationMapper
+
+| io.micronaut.security.oauth2.endpoint.token.response.DefaultOpenIdUserDetailsMapper
+| io.micronaut.security.oauth2.endpoint.token.response.DefaultOpenIdAuthenticationMapper
+
+|===
+
+==== Other Changes
+
+- The api:security.event.LoginSuccessfulEvent[] that gets emitted when a user logs in will now be created with an instance of api:security.authentication.Authentication[].
+- The `AuthenticationUserDetailsAdapter` class has been deleted.
+
+=== SecurityRule Changes
+
+The api:security.rules.SecurityRule[] API has changed. The last argument to the method was a map that represented the user attributes. Instead that argument was replaced with a reference to the api:security.authentication.Authentication[]. This has the benefit of rules now having access to the username of the logged in user as well as access to the convenience method `getRoles()`.
+
+In addition, the return type of the method has changed to return a `Publisher`. This was necessary because the security rules execute as part of the security filter which may be on a non blocking thread. Because the method now returns a `Publisher`, blocking operations can be offloaded to another thread pool using the reactive streams implementation of your choice.
+
+Micronaut 2 API:
+
+`SecurityRuleResult check(HttpRequest<?> request, @Nullable RouteMatch<?> routeMatch, @Nullable Map<String, Object> claims);`
+
+Micronaut 3 API:
+
+`Publisher<SecurityRuleResult> check(HttpRequest<?> request, @Nullable RouteMatch<?> routeMatch, @Nullable Authentication authentication);`
+
+=== LDAP Package Change
+
+All classes in the `io.micronaut.configuration.security.ldap` have been moved to the `io.micronaut.security.ldap` package.
+
+=== SecurityFilter
+
+The security filter no longer extends deprecated `OncePerRequestHttpServerFilter` because it has been deprecated in Micronaut 3.
+
+=== Cookie Secure Configuration
+
+The following properties' default value has been removed in Micronaut Security 3.0.0:
+
+- `micronaut.security.oauth2.openid.nonce.cookie.cookie-secure`
+- `micronaut.security.oauth2.state.cookie.cookie-secure`
+- `micronaut.security.token.jwt.cookie.cookie-secure`
+- `micronaut.security.token.refresh.cookie.cookie-secure``
+
+NOTE: If the `cookie-secure` setting is not set, cookies will be secure if the request is determined to be HTTPS.
+
+=== Deprecations Removal
+
+Most if not all deprecated classes constructors, and methods have been removed.
+
+=== Other Changes
+
+- The constructor of api:security.token.jwt.validator.DefaultJwtAuthenticationFactory[] has changed
+- The constructor of api:security.oauth2.endpoint.token.response.IdTokenLoginHandler[] has changed
+- The constructor of api:security.session.SessionLoginHandler[] has changed
+- The constructor of api:security.authentication.BasicAuthAuthenticationFetcher[] has changed
+- The api:io.micronaut.security.token.RolesFinder[] method `findInClaims` has been deprecated and usages should be replaced with `resolveRoles(@Nullable Map<String, Object> attributes)`.

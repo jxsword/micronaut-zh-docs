@@ -1,0 +1,10 @@
+To generate a signed JWT you need to have in your app a bean of type
+link:{api}/io/micronaut/security/token/jwt/signature/rsa/RSASignatureGeneratorConfiguration.html[RSASignatureGeneratorConfiguration],
+link:{api}/io/micronaut/security/token/jwt/signature/ec/ECSignatureGeneratorConfiguration.html[ECSignatureGeneratorConfiguration],
+, or
+link:{api}/io/micronaut/security/token/jwt/signature/secret/SecretSignatureConfiguration.html[SecretSignatureConfiguration] which must be ** https://docs.micronaut.io/latest/guide/index.html#qualifiers[qualified] with `@Named` `generator`**  since the configuration beans are used by factories (
+link:{api}/io/micronaut/security/token/jwt/signature/rsa/RSASignatureGeneratorFactory.html[RSASignatureGeneratorFactory],
+link:{api}/io/micronaut/security/token/jwt/signature/ec/ECSignatureGeneratorConfiguration.html[ECSignatureGeneratorFactory]) or other beans (link:{api}/io/micronaut/security/token/jwt/signature/secret/SecretSignature.html[SecretSignature])  which use
+https://docs.micronaut.io/latest/guide/index.html#eachBean[@EachBean] to drive configuration.
+
+IMPORTANT: Remember to qualify with `@Named` `generator` your signature configuration beans which you wish to use to sign your JSON web tokens.

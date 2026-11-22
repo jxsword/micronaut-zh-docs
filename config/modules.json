@@ -658,9 +658,9 @@
     "security": {
       "title": "Security",
       "group": "Core",
-      "repo": null,
+      "repo": "micronaut-projects/micronaut-security",
       "branch": "5.2.x",
-      "batch_prefix": null,
+      "batch_prefix": "SEC",
       "page": "security.html"
     },
     "serde": {

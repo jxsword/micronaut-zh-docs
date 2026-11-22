@@ -1,0 +1,38 @@
+The minimum requirements to allow authorization with an OAuth 2.0 provider are:
+
+* Configuration of the authorization endpoint
+* Configuration of the token endpoint
+* Configuration of the client id and secret
+* An implementation of api:security.oauth2.endpoint.token.response.OauthAuthenticationMapper[]
+
+Configuration is quite simple. For example to configure authorization with Github:
+
+[configuration]
+----
+micronaut:
+  security:
+    oauth2:
+      clients:
+        github:
+          client-id: <<my client id>>
+          client-secret: <<my client secret>>
+          scopes:
+            - user:email
+            - read:user
+          authorization:
+            url: https://github.com/login/oauth/authorize
+          token:
+            url: https://github.com/login/oauth/access_token
+            auth-method: client-secret-post
+----
+
+- Configure a client. The name `github` is arbitrary
+- Provide values for `client-id` and `client-secret`
+- Optionally specify desired `scopes`
+- Provide an `authorization` endpoint URL
+- Additionally, the `token` endpoint URL and authentication method
+- `auth-method` is one of api:security.oauth2.endpoint.AuthenticationMethod[]. Choose the one your provider requires.
+
+Authentication methods are not clearly defined in link:https://tools.ietf.org/html/rfc6749#section-3.2.1[RFC 6749], however most OAuth 2.0 providers either accept `client-secret-basic` (basic authentication with id and secret), or `client-secret-post` (client id and secret are sent in the request body).
+
+TIP: To disable a specific client for any given environment, set `enabled: false` within the client configuration.

@@ -1,0 +1,5 @@
+A api:security.oauth2.endpoint.token.response.validation.OpenIdTokenResponseValidator[] bean is responsible for validating the JWT token. The default implementation follows the guidelines described in the OpenID Connect specification regarding https://openid.net/specs/openid-connect-core-1_0.html#IDTokenValidation[token validation] where possible.
+
+By default all implementations of api:io.micronaut.security.token.jwt.validator.GenericJwtClaimsValidator[] and api:io.micronaut.security.oauth2.endpoint.token.response.validation.OpenIdClaimsValidator[] are used to validate the token.
+
+To allow for additional or custom  validations, register an api:io.micronaut.security.oauth2.endpoint.token.response.validation.OpenIdClaimsValidator[] bean.

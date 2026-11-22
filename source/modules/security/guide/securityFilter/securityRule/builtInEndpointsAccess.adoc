@@ -1,0 +1,13 @@
+When you turn on security, https://docs.micronaut.io/latest/guide/index.html#providedEndpoints[Built-in endpoints] are secured depending on their sensitive value.
+
+[configuration]
+----
+include::{testssecurity}/security/securityRule/builtinendpoints/BuiltInEndpointsSpec.groovy[tag=yamlconfig,indent=0]
+----
+
+- the `/beans` endpoint is secured
+- the `/info` endpoint is open for unauthenticated access
+
+You need to replace the default implementation api:security.rules.SensitiveEndpointRule[] and implement `SensitiveEndpointRule::checkSensitiveAuthenticated` to allow authenticated users access to sensitive endpoints. For example, you may want to restrict access to users with a specific role:
+
+snippet::io.micronaut.security.docs.managementendpoints.SensitiveEndpointRuleReplacement[tags="imports,clazz"]

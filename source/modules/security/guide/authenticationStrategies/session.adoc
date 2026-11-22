@@ -1,0 +1,43 @@
+Micronaut supports Session based authentication.
+
+[TIP]
+.Using the CLI
+====
+If you are creating your project using the Micronaut CLI, supply either the `security-session` feature to configure session security in your project:
+----
+$ mn create-app my-app --features security-session
+----
+====
+
+
+To use the Micronaut's session based authentication capabilities, you must have the `security-session` dependency on your classpath. For example:
+
+dependency:io.micronaut.security:micronaut-security-processor[scope='annotationProcessor']
+
+dependency:io.micronaut.security:micronaut-security-session[]
+
+NOTE: The `micronaut-security-processor` dependency is only required to use JSR 250 annotations
+
+The following sequence illustrates the authentication flow:
+
+image::sesssion_based_auth.svg[]
+
+Check the <<redirection, Redirection configuration>> to customize session based authentication behaviour.
+
+== Example of Session-Based Authentication configuration
+
+[configuration]
+----
+include::{testsuitegeb}/security/session/SessionAuthenticationSpec.groovy[tag=yamlconfig,indent=0]
+----
+
+Read the following guides to learn more about session based authentication:
+
+- https://guides.micronaut.io/latest/micronaut-security-session.html[Session-Based Authentication Micronaut Guide]
+- https://guides.micronaut.io/latest/micronaut-security-session-database-authentication.html[Database Authentication]
+
+== Session-based authentication without redirection
+
+When you set `micronaut.security.authentication` to `session`, you enable api:security.session.SessionLoginHandler[] and api:security.session.SessionLogoutHandler[].
+
+These handlers return 303 responses to the urls defined in the <<redirection, Redirection Configuration>>. Disable redirection configuration with `micronaut.security.redirect.enabled=false` to respond with 200 responses instead.

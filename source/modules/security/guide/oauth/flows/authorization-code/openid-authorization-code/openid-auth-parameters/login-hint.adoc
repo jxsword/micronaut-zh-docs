@@ -1,0 +1,1 @@
+This library does not include an https://openid.net/specs/openid-connect-core-1_0.html#IDToken[login hint] by default with authorization requests. A api:io.micronaut.security.oauth2.endpoint.authorization.request.LoginHintResolver[] bean can be registered that will be called when the authorization request is being built.

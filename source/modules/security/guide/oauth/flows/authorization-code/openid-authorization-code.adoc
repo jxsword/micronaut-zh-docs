@@ -1,0 +1,5 @@
+Adding support for authorization code flow with an OpenID provider is extremely easy with Micronaut.
+
+Here is a high level diagram of how the authorization code grant flow works with an OpenID provider.
+
+image::openid-oauth.svg[]
