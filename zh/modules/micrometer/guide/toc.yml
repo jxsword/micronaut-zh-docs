@@ -1,0 +1,33 @@
+# > 本文翻译自 Micronaut Micrometer 官方文档（Guide 导航目录，页面标题以本目录为准，5.2.x 分支基线，2026-11-23 锁定），非官方译文，以英文原文为准。
+# <!-- upstream_file: modules/micrometer/guide/toc.yml  upstream_commit: 07c782f6edac3456121519f74b404dbfc34d5a16  upstream_hash: a37348a3128eb6c69f158809be556d96cde8366f  translated_at: 2026-11-23 -->
+
+introduction: 介绍
+releaseHistory: 发布历史
+metricsEndpoint: 指标端点
+metricsConcepts: 指标概念
+metricsAnnotations: 指标注解
+metricsAndReporters:
+  title: 指标注册表与上报器
+  metricsAndReportersAppOptics: AppOptics 注册表
+  metricsAndReportersAtlas: Atlas 注册表
+  metricsAndReportersAzureMonitor: Azure Monitor 注册表
+  metricsAndReportersCloudWatch: CloudWatch 注册表
+  metricsAndReportersDatadog: Datadog 注册表
+  metricsAndReportersDynatrace: Dynatrace 注册表
+  metricsAndReportersElastic: Elasticsearch 注册表
+  metricsAndReportersGanglia: Ganglia 注册表
+  metricsAndReportersGraphite: Graphite 注册表
+  metricsAndReportersHumio: Humio 注册表
+  metricsAndReportersInflux: Influx 注册表
+  metricsAndReportersJmx: JMX 注册表
+  metricsAndReportersKairos: Kairos 注册表
+  metricsAndReportersNewRelic: New Relic 注册表
+  metricsAndReportersNewRelicTelemetry: New Relic Telemetry 注册表
+  metricsAndReportersOracleCloud: Oracle Cloud Monitoring 注册表
+  metricsAndReportersPrometheus: Prometheus 注册表
+  metricsAndReportersSignalFx: SignalFx 注册表
+  metricsAndReportersStackdriver: Stackdriver 注册表
+  metricsAndReportersStatsD: StatsD 注册表
+  metricsAndReportersWavefront: Wavefront 注册表
+observation: Observation
+repository: 仓库
