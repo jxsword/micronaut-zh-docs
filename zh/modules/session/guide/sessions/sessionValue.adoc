@@ -1,0 +1,9 @@
+> 本文翻译自 Micronaut Session 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Session – Using @SessionValue](https://docs.micronaut.io/5.2.x/session/#session-sessionValue)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/session/guide/sessions/sessionValue.adoc  upstream_commit: bd2383c0e61cdc893a2f7f22d1b433615c9196b0  upstream_hash: a9ce84e0efb56eb8bf57a3263ad49982a7f50c93  translated_at: 2026-11-23 -->
+
+您可以使用 ann:session.annotation.SessionValue[]，而无需在控制器方法中显式注入 api:session.Session[]。例如：
+
+snippet::io.micronaut.docs.session.ShoppingController[tags="view", indent=0,title="Using @SessionValue", project-base="docs-examples/example"]
+
+<1> ann:session.annotation.SessionValue[] 声明在方法上，使返回值被存入 api:session.Session[]。注意：在返回值上使用时必须指定属性名
+<2> ann:session.annotation.SessionValue[] 用在 `@Nullable` 参数上，以非阻塞方式从 api:session.Session[] 中查找该值并在存在时提供。若未给 ann:session.annotation.SessionValue[] 指定值，则使用参数名查找属性。

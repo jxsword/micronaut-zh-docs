@@ -1,0 +1,18 @@
+# > 本文翻译自 Micronaut Session 官方文档（Guide 导航目录，页面标题以本目录为准，5.2.x 分支基线，2026-11-23 锁定），非官方译文，以英文原文为准。
+# <!-- upstream_file: modules/session/guide/toc.yml  upstream_commit: b8aa3a19d7497d6ca7fa96a42e35c0164f063d20  upstream_hash: 57baa5107eda23fd30cd979c68c3f7c9f84d8307  translated_at: 2026-11-23 -->
+
+introduction:
+  title: 介绍
+breaks: 破坏性变更
+sessions:
+  title: HTTP 会话
+  sessionFilter: 会话过滤器
+  enablingSessions: 启用会话
+  redisSessions: Redis 会话
+  configuringSessionResolution: 配置会话解析
+  workingWithSessions: 使用会话
+  sessionClients: 会话客户端
+  sessionValue: 使用 @SessionValue
+  sessionEvents: 会话事件
+releaseHistory: 发布历史
+repository: 仓库

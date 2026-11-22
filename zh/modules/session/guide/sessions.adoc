@@ -1,0 +1,7 @@
+> 本文翻译自 Micronaut Session 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Session – Http Sessions](https://docs.micronaut.io/5.2.x/session/#session-sessions)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/session/guide/sessions.adoc  upstream_commit: bd2383c0e61cdc893a2f7f22d1b433615c9196b0  upstream_hash: 22888a7392689f3a9004fa008ed5a230b74de574  translated_at: 2026-11-23 -->
+
+Micronaut 提供了本模块（灵感来自 https://projects.spring.io/spring-session/[Spring Session]）以支持这一能力，当前有两种实现：
+
+* 内存会话——若计划运行多个实例，应将其与粘性会话代理结合使用。
+* Redis 会话——此时 https://redis.io[Redis] 存储会话，并使用非阻塞 I/O 读写 Redis 中的会话。

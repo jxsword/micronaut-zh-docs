@@ -1,0 +1,4 @@
+> 本文翻译自 Micronaut Session 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Session – Introduction](https://docs.micronaut.io/5.2.x/session/#session-introduction)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/session/guide/introduction.adoc  upstream_commit: 06bb422e1e75bb5da936ff46fe6b0dfd23e8e88b  upstream_hash: a92edabb2cfc2cc7afd84bc9cc3741e0790dd2ef  translated_at: 2026-11-23 -->
+
+默认情况下，Micronaut 是一个无状态的 HTTP 服务器；但根据应用需求，您可能需要 HTTP 会话的概念。

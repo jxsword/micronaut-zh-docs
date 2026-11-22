@@ -1,0 +1,20 @@
+> 本文翻译自 Micronaut Session 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Session – Configuring Session Resolution](https://docs.micronaut.io/5.2.x/session/#session-configuringSessionResolution)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/session/guide/sessions/configuringSessionResolution.adoc  upstream_commit: bd2383c0e61cdc893a2f7f22d1b433615c9196b0  upstream_hash: 3275b15a3abd76a9326521e85a9c0d52c6ea0fc4  translated_at: 2026-11-23 -->
+
+api:session.Session[] 的解析可通过 api:session.http.HttpSessionConfiguration[] 进行配置。
+
+默认情况下，会话通过 api:session.http.HttpSessionFilter[] 解析，该过滤器通过 HTTP 请求头（使用 `Authorization-Info` 或 `X-Auth-Token` 请求头）或名为 `SESSION` 的 Cookie 查找会话标识符。
+
+您可以通过应用配置文件中的配置禁用请求头解析或 Cookie 解析：
+
+.禁用 Cookie 解析
+[configuration]
+----
+micronaut:
+  session:
+    http:
+      cookie: false
+      header: true
+----
+
+上述配置启用了请求头解析，但禁用了 Cookie 解析。您也可以配置请求头与 Cookie 的名称。

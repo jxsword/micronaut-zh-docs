@@ -1,0 +1,4 @@
+> 本文翻译自 Micronaut Session 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Session – Breaking Changes](https://docs.micronaut.io/5.2.x/session/#session-breaks)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/session/guide/breaks.adoc  upstream_commit: b8aa3a19d7497d6ca7fa96a42e35c0164f063d20  upstream_hash: 1a147c5cea038a7fac6fec3fa47de15f13377154  translated_at: 2026-11-23 -->
+
+对于 Micronaut Session 5.x，`HttpSessionFilter` 是一个 https://docs.micronaut.io/latest/guide/#filtermethods[基于方法的 `@ServerFilter`]，不再实现 https://docs.micronaut.io/latest/guide/#httpServerFilter[`HttpServerFilter`]。

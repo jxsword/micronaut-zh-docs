@@ -1,0 +1,24 @@
+> 本文翻译自 Micronaut Session 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Session – Redis Sessions](https://docs.micronaut.io/5.2.x/session/#session-redisSessions)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/session/guide/sessions/redisSessions.adoc  upstream_commit: ee51055c20cf64bcfe007878e20fea4a07cf74fc  upstream_hash: 0bd6977c2ea0df169a4200687a291abc2aecc261  translated_at: 2026-11-23 -->
+
+要在 Redis 中存储 api:session.Session[] 实例，请使用 https://micronaut-projects.github.io/micronaut-redis/latest/guide/#sessions[Micronaut Redis] 模块，其中包含详细说明。
+
+要快速上手 Redis 会话，您的构建中还需有 `redis-lettuce` 依赖：
+
+dependency:micronaut-session[groupId=io.micronaut.session]
+
+dependency:micronaut-redis-lettuce[groupId=io.micronaut.redis]
+
+并通过应用配置文件中的配置启用 Redis 会话：
+
+.启用 Redis 会话
+[configuration]
+----
+redis:
+  uri: redis://localhost:6379
+micronaut:
+  session:
+    http:
+      redis:
+        enabled: true
+----

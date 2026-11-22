@@ -1,0 +1,19 @@
+> 本文翻译自 Micronaut Session 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Session – Working with Sessions](https://docs.micronaut.io/5.2.x/session/#session-workingWithSessions)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/session/guide/sessions/workingWithSessions.adoc  upstream_commit: bd2383c0e61cdc893a2f7f22d1b433615c9196b0  upstream_hash: 2454395cdfa2f58b201691d7ccc6cc297ae9cf7b  translated_at: 2026-11-23 -->
+
+在控制器方法中，通过 api:session.Session[] 类型的参数即可获取 api:session.Session[]。例如，请看以下控制器：
+
+snippet::io.micronaut.docs.session.ShoppingController[tags="imports,class,add,endclass", project-base="docs-examples/example"]
+
+<1> `ShoppingController` 声明了一个名为 `cart` 的 api:session.Session[] 属性
+<2> api:session.Session[] 被声明为方法参数
+<3> 检索 `cart` 属性
+<4> 否则将创建新的 `Cart` 实例并存入会话
+
+注意：由于 api:session.Session[] 被声明为必需参数，执行该控制器操作时会创建一个 api:session.Session[] 并保存到 api:session.SessionStore[]。
+
+如果您不想创建不必要的会话，可以将 api:session.Session[] 声明为 `@Nullable`，此时不会不必要地创建并保存会话。例如：
+
+snippet::io.micronaut.docs.session.ShoppingController[tags="clear", indent=0,title="Using @Nullable with Sessions", project-base="docs-examples/example"]
+
+上述方法只在已存在会话时才注入 api:session.Session[]。

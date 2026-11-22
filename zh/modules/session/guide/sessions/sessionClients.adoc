@@ -1,0 +1,28 @@
+> 本文翻译自 Micronaut Session 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Session – Session Clients](https://docs.micronaut.io/5.2.x/session/#session-sessionClients)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/session/guide/sessions/sessionClients.adoc  upstream_commit: ee51055c20cf64bcfe007878e20fea4a07cf74fc  upstream_hash: 56b2ee8c01b32aba2231495457b8e64c0fbdc452  translated_at: 2026-11-23 -->
+
+如果客户端是浏览器，只要启用了 Cookie，会话就应能正常工作。但对于程序化 HTTP 客户端，您需要在 HTTP 调用之间传播会话 ID。
+
+[.lang-java.lang-kotlin.lang-groovy]
+--
+例如，调用上一示例中 `ShoppingController` 的 `viewCart` 方法时，HTTP 客户端默认会收到 `AUTHORIZATION_INFO` 请求头。以下示例演示了这一点：
+--
+
+[.lang-python]
+--
+例如，调用上一示例中 `ShoppingController` 的 `view_cart` 方法时，HTTP 客户端默认会收到 `AUTHORIZATION_INFO` 请求头。以下示例演示了这一点：
+--
+
+.检索 AUTHORIZATION_INFO 请求头
+snippet::io.micronaut.docs.session.ShoppingControllerSpec[tags="view", indent=0, project-base="docs-examples/example"]
+
+<1> 向 `/shopping/cart` 发起请求
+<2> 响应中存在 `AUTHORIZATION_INFO` 请求头
+
+随后您可以在后续请求中传递此 `AUTHORIZATION_INFO`，以复用既有的 api:session.Session[]：
+
+.发送 AUTHORIZATION_INFO 请求头
+snippet::io.micronaut.docs.session.ShoppingControllerSpec[tags="add", indent=0, project-base="docs-examples/example"]
+
+<1> 从响应中检索到 `AUTHORIZATION_INFO`
+<2> 随后作为请求头在后续请求中发送

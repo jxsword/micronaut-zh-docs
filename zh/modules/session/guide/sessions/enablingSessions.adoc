@@ -1,0 +1,6 @@
+> 本文翻译自 Micronaut Session 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Session – Enabling Sessions](https://docs.micronaut.io/5.2.x/session/#session-enablingSessions)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/session/guide/sessions/enablingSessions.adoc  upstream_commit: bd2383c0e61cdc893a2f7f22d1b433615c9196b0  upstream_hash: c1d7aaf060b514d30e1ffc77436cf02fa85093cf  translated_at: 2026-11-23 -->
+
+要启用内存会话支持，您只需要 `micronaut-session` 依赖：
+
+dependency:micronaut-session[groupId=io.micronaut.session]

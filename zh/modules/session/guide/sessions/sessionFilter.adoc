@@ -1,0 +1,8 @@
+> 本文翻译自 Micronaut Session 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Session – Session Filter](https://docs.micronaut.io/5.2.x/session/#session-sessionFilter)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/session/guide/sessions/sessionFilter.adoc  upstream_commit: b8aa3a19d7497d6ca7fa96a42e35c0164f063d20  upstream_hash: 2c4ae8c96704b54e9f5afb51a218f6ac629216ee  translated_at: 2026-11-23 -->
+
+Micronaut Session 实现的核心是 `io.micronaut.session.http.HttpSessionFilter`。
+
+SessionFilter 过滤器提供以下配置选项：
+
+include::{includedir}configurationProperties/io.micronaut.session.http.HttpSessionFilterConfigurationProperties.adoc[]

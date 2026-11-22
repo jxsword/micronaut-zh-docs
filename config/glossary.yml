@@ -476,3 +476,10 @@ modules:
       status: "approved"
       context: "追踪采样配置概念（TRACING-01 实译；brave.sampler.Sampler 等类名不译）"
       aliases: ["samplers", "Sampler", "samplers"]
+
+    - en: "session resolution"
+      zh: "会话解析"
+      module: "session"
+      status: "approved"
+      context: "session 模块核心机制（SESSION-01 实译；session/header/cookie resolution 分别为会话/请求头/Cookie 解析；Session 等类名不译）"
+      aliases: ["session resolutions"]

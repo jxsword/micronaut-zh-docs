@@ -1,0 +1,24 @@
+> 本文翻译自 Micronaut Session 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Session – Session Events](https://docs.micronaut.io/5.2.x/session/#session-sessionEvents)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/session/guide/sessions/sessionEvents.adoc  upstream_commit: bd2383c0e61cdc893a2f7f22d1b433615c9196b0  upstream_hash: b5313dc2bcd53ebf99d330c9b46440c46fd8af62  translated_at: 2026-11-23 -->
+
+您可以注册 api:context.event.ApplicationEventListener[] bean，监听 pkg:session.event[] 包中与会话相关的事件。
+
+下表汇总了这些事件：
+
+.会话事件
+|===
+|类型|描述
+
+|api:session.event.SessionCreatedEvent[]
+|api:session.Session[] 创建时触发
+
+|api:session.event.SessionDeletedEvent[]
+|api:session.Session[] 被删除时触发
+
+|api:session.event.SessionExpiredEvent[]
+|api:session.Session[] 过期时触发
+
+|api:session.event.SessionDestroyedEvent[]
+|`SessionDeletedEvent` 与 `SessionExpiredEvent` 的共同父事件
+
+|===
