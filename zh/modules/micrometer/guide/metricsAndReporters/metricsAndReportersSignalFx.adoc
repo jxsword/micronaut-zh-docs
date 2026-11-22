@@ -1,0 +1,29 @@
+> 本文翻译自 Micronaut Micrometer 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Micrometer – SignalFx Registry](https://docs.micronaut.io/5.2.x/micrometer/#micrometer-metricsAndReportersSignalFx)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/micrometer/guide/metricsAndReporters/metricsAndReportersSignalFx.adoc  upstream_commit: 78db4bb7b1e5ce2f52f5e754fae8f6e399157acd  upstream_hash: df08e721fe315af9f982d6b3391780eb8d4abf2d  translated_at: 2026-11-23 -->
+
+你可以通过 `io.micronaut.micrometer:micronaut-micrometer-registry-signalfx` 引入 SignalFx 上报器
+
+dependency:micronaut-micrometer-registry-signalfx[groupId="io.micronaut.micrometer"]
+
+你可以使用 `micronaut.metrics.export.signalfx` 配置该上报器。最常修改的配置属性如下所列，更多选项请参阅 https://github.com/micrometer-metrics/micrometer/blob/main/implementations/micrometer-registry-signalfx/src/main/java/io/micrometer/signalfx/SignalFxConfig.java[SignalFxConfig]。
+
+|=======
+|*名称* |*说明*
+|enabled |是否启用该上报器，例如按环境或为本地开发禁用。默认值：`true`
+|accessToken | SignalFX 访问令牌。必填。
+|step |上报指标的频率。默认值：`PT1M`，即 1 分钟。参见 `java.time.Duration#parse(CharSequence)`
+|descriptions | 是否将 meter 描述发送到 SignalFx。禁用可减少每次抓取发送的数据量。默认值：`true`
+|=======
+
+.SignalFx 配置示例
+[configuration]
+----
+micronaut:
+  metrics:
+    enabled: true
+    export:
+      signalfx:
+        enabled: true
+        accessToken: ${SIGNALFX_API_TOKEN}
+        step: PT1M
+----

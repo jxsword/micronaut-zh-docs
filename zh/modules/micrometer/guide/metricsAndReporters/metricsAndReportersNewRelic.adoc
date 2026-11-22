@@ -1,0 +1,31 @@
+> 本文翻译自 Micronaut Micrometer 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Micrometer – New Relic Registry](https://docs.micronaut.io/5.2.x/micrometer/#micrometer-metricsAndReportersNewRelic)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/micrometer/guide/metricsAndReporters/metricsAndReportersNewRelic.adoc  upstream_commit: 78db4bb7b1e5ce2f52f5e754fae8f6e399157acd  upstream_hash: 5f3240e41e93fae27c20089b1a38d67e2caee377  translated_at: 2026-11-23 -->
+
+你可以通过 `io.micronaut.micrometer:micronaut-micrometer-registry-new-relic` 引入 New Relic 上报器
+
+dependency:micronaut-micrometer-registry-new-relic[groupId="io.micronaut.micrometer"]
+
+你可以使用 `micronaut.metrics.export.newrelic` 配置该上报器。最常修改的配置属性如下所列，更多选项请参阅 https://github.com/micrometer-metrics/micrometer/blob/main/implementations/micrometer-registry-new-relic/src/main/java/io/micrometer/newrelic/NewRelicConfig.java[NewRelicConfig]。
+
+|=======
+|*名称* |*说明*
+|enabled |是否启用该上报器，例如按环境或为本地开发禁用。默认值：`true`
+|apiKey | New Relic API 密钥。必填。
+|accountId | New Relic 账户 ID。必填。
+|step |上报指标的频率。默认值：`PT1M`，即 1 分钟。参见 `java.time.Duration#parse(CharSequence)`
+|descriptions | 是否将 meter 描述发送到 New Relic。禁用可减少每次抓取发送的数据量。默认值：`true`
+|=======
+
+.New Relic 配置示例
+[configuration]
+----
+micronaut:
+  metrics:
+    enabled: true
+    export:
+      newrelic:
+        enabled: true
+        apiKey: ${NEWRELIC_API_KEY}
+        accountId: ${NEWRELIC_ACCOUNT_ID}
+        step: PT1M
+----

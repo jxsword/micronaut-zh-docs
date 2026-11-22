@@ -1,0 +1,30 @@
+> 本文翻译自 Micronaut Micrometer 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Micrometer – AppOptics Registry](https://docs.micronaut.io/5.2.x/micrometer/#micrometer-metricsAndReportersAppOptics)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/micrometer/guide/metricsAndReporters/metricsAndReportersAppOptics.adoc  upstream_commit: 78db4bb7b1e5ce2f52f5e754fae8f6e399157acd  upstream_hash: 3e9adb0b1265590380c97bcac5f51b76d4cc6729  translated_at: 2026-11-23 -->
+
+你可以通过 `io.micronaut.micrometer:micronaut-micrometer-registry-appoptics` 引入 AppOptics 上报器
+
+dependency:micronaut-micrometer-registry-appoptics[groupId="io.micronaut.micrometer"]
+
+你可以使用 `micronaut.metrics.export.appoptics` 配置该上报器。最常修改的配置属性如下所列，更多选项请参阅 https://github.com/micrometer-metrics/micrometer/blob/main/implementations/micrometer-registry-appoptics/src/main/java/io/micrometer/appoptics/AppOpticsConfig.java[AppOpticsConfig]。
+
+|=======
+|*名称* |*说明*
+|enabled |是否启用该上报器。例如可在本地开发时禁用。默认值：`true`
+|apiToken | AppOptics API 令牌。必填。
+|step |上报指标的频率。默认值：`PT1M`，即 1 分钟。参见 `java.time.Duration#parse(CharSequence)`
+|uri |AppOptics 后端的 URI。默认值：`\https://api.appoptics.com/v1/measurements`
+|=======
+
+.AppOptics 配置示例
+[configuration]
+----
+micronaut:
+  metrics:
+    enabled: true
+    export:
+      appoptics:
+        enabled: true
+        apiToken: ${APPOPTICS_API_TOKEN}
+        uri: https://api.appoptics.com/v1/measurements
+        step: PT1M
+----

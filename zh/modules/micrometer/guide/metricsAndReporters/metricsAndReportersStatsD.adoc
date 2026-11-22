@@ -1,0 +1,32 @@
+> 本文翻译自 Micronaut Micrometer 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Micrometer – StatsD Registry](https://docs.micronaut.io/5.2.x/micrometer/#micrometer-metricsAndReportersStatsD)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/micrometer/guide/metricsAndReporters/metricsAndReportersStatsD.adoc  upstream_commit: 78db4bb7b1e5ce2f52f5e754fae8f6e399157acd  upstream_hash: 07b18794b70bd3d0a71156106c529b43753cad0a  translated_at: 2026-11-23 -->
+
+你可以通过 `io.micronaut.micrometer:micronaut-micrometer-registry-statsd` 引入 StatsD 上报器
+
+dependency:micronaut-micrometer-registry-statsd[groupId="io.micronaut.micrometer"]
+
+你可以使用 `micronaut.metrics.export.statsd` 配置该上报器。最常修改的配置属性如下所列，更多选项请参阅 https://github.com/micrometer-metrics/micrometer/blob/main/implementations/micrometer-registry-statsd/src/main/java/io/micrometer/statsd/StatsdConfig.java[StatsdConfig]。
+
+|=======
+|*名称* |*说明*
+|enabled |是否启用该上报器，例如按环境或为本地开发禁用。默认值：`true`
+|flavor |要使用的指标类型（`datadog`、`etsy` 或 `telegraf`）。默认值：`datadog`
+|step |上报指标的频率。默认值：`PT1M`，即 1 分钟。参见 `java.time.Duration#parse(CharSequence)`
+|host |StatsD 服务器。默认值：`localhost`
+|port |StatsD 端口。默认值：`8125`
+|=======
+
+.StatsD 配置示例
+[configuration]
+----
+micronaut:
+  metrics:
+    enabled: true
+    export:
+      statsd:
+        enabled: true
+        flavor: datadog
+        step: PT1M
+        host: localhost
+        port: 8125
+----

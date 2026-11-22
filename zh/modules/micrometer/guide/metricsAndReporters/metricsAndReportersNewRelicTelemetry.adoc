@@ -1,0 +1,32 @@
+> 本文翻译自 Micronaut Micrometer 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Micrometer – New Relic Telemetry Registry](https://docs.micronaut.io/5.2.x/micrometer/#micrometer-metricsAndReportersNewRelicTelemetry)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/micrometer/guide/metricsAndReporters/metricsAndReportersNewRelicTelemetry.adoc  upstream_commit: 78db4bb7b1e5ce2f52f5e754fae8f6e399157acd  upstream_hash: 3978678e18930c78735b4daa86a7015ae843e6c4  translated_at: 2026-11-23 -->
+
+使用 https://github.com/newrelic/micrometer-registry-newrelic[New Relic 官方 Micrometer Registry] 的 New Relic 注册表，而非 Micrometer 项目提供的 New Relic 注册表。
+
+你可以通过 `io.micronaut.micrometer:micronaut-micrometer-registry-new-relic-telemetry` 引入 New Relic Telemetry 上报器
+
+dependency:micronaut-micrometer-registry-new-relic-telemetry[groupId="io.micronaut.micrometer"]
+
+你可以使用 `micronaut.metrics.export.newrelic` 配置该上报器。最常修改的配置属性如下所列，更多选项请参阅 https://github.com/newrelic/micrometer-registry-newrelic/blob/main/src/main/java/com/newrelic/telemetry/micrometer/NewRelicRegistryConfig.java[NewRelicRegistryConfig]。
+
+|=======
+|*名称* |*说明*
+|enabled |是否启用该上报器，例如按环境或为本地开发禁用。默认值：`true`
+|apiKey | New Relic API 密钥。必填。
+|serviceName| 该注册表在 New Relic 中上报时使用的服务名。
+|step |上报指标的频率。默认值：`PT1M`，即 1 分钟。参见 `java.time.Duration#parse(CharSequence)`
+|=======
+
+.New Relic Telemetry 配置示例
+[configuration]
+----
+micronaut:
+  metrics:
+    enabled: true
+    export:
+      newrelic:
+        enabled: true
+        apiKey: ${NEWRELIC_API_KEY}
+        serviceName: My Micronaut Service
+        step: PT1M
+----

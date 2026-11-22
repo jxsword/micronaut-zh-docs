@@ -1,0 +1,6 @@
+> 本文翻译自 Micronaut Micrometer 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Micrometer – Oracle Cloud Monitoring Registry](https://docs.micronaut.io/5.2.x/micrometer/#micrometer-metricsAndReportersOracleCloud)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/micrometer/guide/metricsAndReporters/metricsAndReportersOracleCloud.adoc  upstream_commit: 9a9dd9a16353ead492d84b241bc84180ea0b288c  upstream_hash: e06762b42f8bd354315eb526d06074275848f908  translated_at: 2026-11-23 -->
+
+https://docs.oracle.com/en-us/iaas/Content/Monitoring/Concepts/monitoringoverview.htm[OCI 监控服务] 使你能够通过 Oracle Cloud 的指标与告警功能，对云资源进行主动与被动监控。
+
+要配置该模块，请参阅 Oracle Cloud 模块中的 https://micronaut-projects.github.io/micronaut-oracle-cloud/latest/guide/#micrometer[Micrometer 对 Oracle 监控的支持] 文档。

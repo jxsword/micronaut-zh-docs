@@ -1,0 +1,36 @@
+> 本文翻译自 Micronaut Micrometer 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Micrometer – Dynatrace Registry](https://docs.micronaut.io/5.2.x/micrometer/#micrometer-metricsAndReportersDynatrace)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/micrometer/guide/metricsAndReporters/metricsAndReportersDynatrace.adoc  upstream_commit: 78db4bb7b1e5ce2f52f5e754fae8f6e399157acd  upstream_hash: fd625e3153b566f6e4f59898d14b8f657a642fd3  translated_at: 2026-11-23 -->
+
+你可以通过 `io.micronaut.micrometer:micronaut-micrometer-registry-dynatrace` 引入 Dynatrace 上报器
+
+dependency:micronaut-micrometer-registry-dynatrace[groupId="io.micronaut.micrometer"]
+
+你可以使用 `micronaut.metrics.export.dynatrace` 配置该上报器。最常修改的配置属性如下所列，更多选项请参阅 https://github.com/micrometer-metrics/micrometer/blob/main/implementations/micrometer-registry-dynatrace/src/main/java/io/micrometer/dynatrace/DynatraceConfig.java[DynatraceConfig]。
+
+|=======
+|*名称* |*说明*
+|enabled |是否启用该上报器，例如按环境或为本地开发禁用。默认值：`true`
+|apiToken | Dynatrace API 令牌。必填。
+|uri | Dynatrace 服务器 URI。必填。
+|decideId | 要上报的设备 ID（device ID）。必填。
+|step |上报指标的频率。默认值：`PT1M`，即 1 分钟。参见 `java.time.Duration#parse(CharSequence)`
+|descriptions | 是否将 meter 描述发送到 Dynatrace。禁用可减少每次抓取发送的数据量。默认值：`true`
+|=======
+
+.Dynatrace 配置示例
+[configuration]
+----
+endpoints:
+  prometheus:
+    sensitive: false
+micronaut:
+  metrics:
+    enabled: true
+    export:
+      dynatrace:
+        enabled: true
+        apiToken: ${DYNATRACE_DEVICE_API_TOKEN}
+        uri: ${DYNATRACE_DEVICE_URI}
+        deviceId: ${DYNATRACE_DEVICE_ID}
+        step: PT1M
+----

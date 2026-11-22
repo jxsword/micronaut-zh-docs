@@ -1,0 +1,28 @@
+> 本文翻译自 Micronaut Micrometer 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Micrometer – Atlas Registry](https://docs.micronaut.io/5.2.x/micrometer/#micrometer-metricsAndReportersAtlas)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/micrometer/guide/metricsAndReporters/metricsAndReportersAtlas.adoc  upstream_commit: 78db4bb7b1e5ce2f52f5e754fae8f6e399157acd  upstream_hash: 56c1961d428b2e51d545dbdf18c45b4545823bbb  translated_at: 2026-11-23 -->
+
+你可以通过 `io.micronaut.micrometer:micronaut-micrometer-registry-atlas` 引入 Atlas 上报器
+
+dependency:micronaut-micrometer-registry-atlas[groupId="io.micronaut.micrometer"]
+
+你可以使用 `micronaut.metrics.export.atlas` 配置该上报器。最常修改的配置属性如下所列，更多选项请参阅 https://github.com/Netflix/spectator/blob/main/spectator-reg-atlas/src/main/java/com/netflix/spectator/atlas/AtlasConfig.java[AtlasConfig]。
+
+|=======
+|*名称* |*说明*
+|enabled |是否启用该上报器，例如按环境或为本地开发禁用。默认值：`true`
+|step |上报指标的频率。默认值：`PT1M`，即 1 分钟。参见 `java.time.Duration#parse(CharSequence)`
+|uri |Atlas 后端的 URI。默认值：`\http://localhost:7101/api/v1/publish`
+|=======
+
+.Atlas 配置示例
+[configuration]
+----
+micronaut:
+  metrics:
+    enabled: true
+    export:
+      atlas:
+        enabled: true
+        uri: http://localhost:7101/api/v1/publish
+        step: PT1M
+----

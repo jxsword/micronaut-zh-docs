@@ -1,0 +1,31 @@
+> 本文翻译自 Micronaut Micrometer 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Micrometer – Wavefront Registry](https://docs.micronaut.io/5.2.x/micrometer/#micrometer-metricsAndReportersWavefront)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/micrometer/guide/metricsAndReporters/metricsAndReportersWavefront.adoc  upstream_commit: 78db4bb7b1e5ce2f52f5e754fae8f6e399157acd  upstream_hash: 5357f92f5165c561bb39a6dc2016bc4caf9cc90d  translated_at: 2026-11-23 -->
+
+你可以通过 `io.micronaut.micrometer:micronaut-micrometer-registry-wavefront` 引入 Wavefront 上报器
+
+dependency:micronaut-micrometer-registry-wavefront[groupId="io.micronaut.micrometer"]
+
+你可以使用 `micronaut.metrics.export.wavefront` 配置该上报器。最常修改的配置属性如下所列，更多选项请参阅 https://github.com/micrometer-metrics/micrometer/blob/master/implementations/micrometer-registry-wavefront/src/main/java/io/micrometer/wavefront/WavefrontConfig.java[WavefrontConfig]。
+
+|=======
+|*名称* |*说明*
+|enabled |是否启用该上报器，例如按环境或为本地开发禁用。默认值：`true`
+|apiToken | Wavefront API 令牌。必填。
+|uri |Wavefront 服务 URI。必填。
+|step |上报指标的频率。默认值：`PT1M`，即 1 分钟。参见 `java.time.Duration#parse(CharSequence)`
+|descriptions | 是否将 meter 描述发送到 Wavefront。禁用可减少每次抓取发送的数据量。默认值：`true`
+|=======
+
+.Wavefront 配置示例
+[configuration]
+----
+micronaut:
+  metrics:
+    enabled: true
+    export:
+      wavefront:
+        enabled: true
+        apiToken: ${WAVEFRONT_API_TOKEN}
+        uri: https://longboard.wavefront.com
+        step: PT1M
+----

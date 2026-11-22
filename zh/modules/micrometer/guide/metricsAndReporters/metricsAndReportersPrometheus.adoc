@@ -1,0 +1,52 @@
+> 本文翻译自 Micronaut Micrometer 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Micrometer – Prometheus Registry](https://docs.micronaut.io/5.2.x/micrometer/#micrometer-metricsAndReportersPrometheus)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/micrometer/guide/metricsAndReporters/metricsAndReportersPrometheus.adoc  upstream_commit: 78db4bb7b1e5ce2f52f5e754fae8f6e399157acd  upstream_hash: 749db61383e2f93b2d40a3571e940d9c4d070719  translated_at: 2026-11-23 -->
+
+你可以通过 `io.micronaut.micrometer:micronaut-micrometer-registry-prometheus` 引入 Prometheus 上报器
+
+dependency:micronaut-micrometer-registry-prometheus[groupId="io.micronaut.micrometer"]
+
+你可以使用 `micronaut.metrics.export.prometheus` 配置该上报器。最常修改的配置属性如下所列，更多选项请参阅 https://github.com/micrometer-metrics/micrometer/blob/main/implementations/micrometer-registry-prometheus/src/main/java/io/micrometer/prometheus/PrometheusConfig.java[PrometheusConfig]。
+
+|=======
+|*名称* |*说明*
+|enabled |是否启用该上报器，例如按环境或为本地开发禁用。默认值：`true`
+|step |上报指标的频率。默认值：`PT1M`，即 1 分钟。参见 `java.time.Duration#parse(CharSequence)`
+|descriptions | 是否将 meter 描述发送到 Prometheus。禁用可减少每次抓取发送的数据量。默认值：`true`
+|=======
+
+.Prometheus 配置示例
+[configuration]
+----
+endpoints:
+  prometheus:
+    sensitive: false
+micronaut:
+  metrics:
+    enabled: true
+    export:
+      prometheus:
+        enabled: true
+        step: PT1M
+        descriptions: true
+----
+
+*重要提示*：配置完成后，兼容 Prometheus 的指标可通过路径 `/prometheus` 访问。Prometheus 默认抓取 `/metrics`，但该路径提供的是 Micronaut 核心指标，因此需要指向 `/prometheus`。
+
+=== Prometheus 默认指标
+
+默认情况下，各绑定器会暴露一组指标。若引入 Prometheus 上报器，这些指标也会以 Prometheus 格式提供。
+
+这里列出了绑定器暴露的全部默认指标的定义。
+
+===== Web 指标
+
+.提供的指标
+|=======
+|*名称* |*说明*
+|http_client_requests_seconds_count|应用通过 HTTP Client 接口向端点发起请求的每秒总数
+|http_client_requests_seconds_sum|应用通过 HTTP Client 接口向端点发起的全部请求时长之和
+|http_client_requests_seconds_max|一个时间窗口内的最大请求时长。新时间窗口开始时该值重置为 0。默认时间窗口为两分钟。
+|http_server_requests_seconds_count|应用在端点收到的请求总数
+|http_server_requests_seconds_sum|应用在端点收到的全部请求时长之和
+|http_server_requests_seconds_max|一个时间窗口内的最大请求时长。新时间窗口开始时该值重置为 0。默认时间窗口为两分钟。
+|=======

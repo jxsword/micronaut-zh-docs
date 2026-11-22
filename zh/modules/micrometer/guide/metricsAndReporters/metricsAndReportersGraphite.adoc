@@ -1,0 +1,30 @@
+> 本文翻译自 Micronaut Micrometer 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Micrometer – Graphite Registry](https://docs.micronaut.io/5.2.x/micrometer/#micrometer-metricsAndReportersGraphite)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/micrometer/guide/metricsAndReporters/metricsAndReportersGraphite.adoc  upstream_commit: 78db4bb7b1e5ce2f52f5e754fae8f6e399157acd  upstream_hash: daec57d8917c74778059e808b7fc6ece92fa1a7d  translated_at: 2026-11-23 -->
+
+你可以通过 `io.micronaut.micrometer:micronaut-micrometer-registry-graphite` 引入 Graphite 上报器
+
+dependency:micronaut-micrometer-registry-graphite[groupId="io.micronaut.micrometer"]
+
+你可以使用 `micronaut.metrics.export.graphite` 配置该上报器。最常修改的配置属性如下所列，更多选项请参阅 https://github.com/micrometer-metrics/micrometer/blob/main/implementations/micrometer-registry-graphite/src/main/java/io/micrometer/graphite/GraphiteConfig.java[GraphiteConfig]。
+
+|=======
+|*名称* |*说明*
+|enabled |是否启用该上报器，例如按环境或为本地开发禁用。默认值：`true`
+|step |上报指标的频率。默认值：`PT1M`，即 1 分钟。参见 `java.time.Duration#parse(CharSequence)`
+|host |Graphite 服务器地址。默认值：`localhost`
+|port |Graphite 服务器端口。默认值：`2004`
+|=======
+
+.Graphite 配置示例
+[configuration]
+----
+micronaut:
+  metrics:
+    enabled: true
+    export:
+      graphite:
+        enabled: true
+        step: PT1M
+        host: localhost
+        port: 2004
+----

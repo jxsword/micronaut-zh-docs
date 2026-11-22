@@ -1,0 +1,27 @@
+> 本文翻译自 Micronaut Micrometer 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Micrometer – Influx Registry](https://docs.micronaut.io/5.2.x/micrometer/#micrometer-metricsAndReportersInflux)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/micrometer/guide/metricsAndReporters/metricsAndReportersInflux.adoc  upstream_commit: 78db4bb7b1e5ce2f52f5e754fae8f6e399157acd  upstream_hash: 5d16781cdc00103d184081ed3cbb2dd0c6c3a6d7  translated_at: 2026-11-23 -->
+
+你可以通过 `io.micronaut.micrometer:micronaut-micrometer-registry-influx` 引入 Influx 上报器
+
+dependency:micronaut-micrometer-registry-influx[groupId="io.micronaut.micrometer"]
+
+你可以使用 `micronaut.metrics.export.influx` 配置该上报器。最常修改的配置属性如下所列，更多选项请参阅 https://github.com/micrometer-metrics/micrometer/blob/main/implementations/micrometer-registry-influx/src/main/java/io/micrometer/influx/InfluxConfig.java[InfluxConfig]。
+
+|=======
+|*名称* |*说明*
+|enabled |是否启用该上报器，例如按环境或为本地开发禁用。默认值：`true`
+|step |上报指标的频率。默认值：`PT1M`，即 1 分钟。参见 `java.time.Duration#parse(CharSequence)`
+|descriptions | 是否将 meter 描述发送到 InfluxDB。禁用可减少每次抓取发送的数据量。默认值：`true`
+|=======
+
+.Influx 配置示例
+[configuration]
+----
+micronaut:
+  metrics:
+    enabled: true
+    export:
+      influx:
+        enabled: true
+        step: PT1M
+----
