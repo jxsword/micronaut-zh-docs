@@ -1,0 +1,6 @@
+> 本文翻译自 Micronaut Micrometer 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Micrometer – Release History](https://docs.micronaut.io/5.2.x/micrometer/#micrometer-releaseHistory)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/micrometer/guide/releaseHistory.adoc  upstream_commit: 98109ea84ff002369e6cb5bdb9032ca3adcf967a  upstream_hash: d17849e756d7af4a7d028817f70c301c70cb6054  translated_at: 2026-11-23 -->
+
+本项目的发布版本列表（含发布说明）见：
+
+https://github.com/{githubSlug}/releases[https://github.com/{githubSlug}/releases]

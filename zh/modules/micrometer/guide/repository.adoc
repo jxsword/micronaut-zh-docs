@@ -1,0 +1,6 @@
+> 本文翻译自 Micronaut Micrometer 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Micrometer – Repository](https://docs.micronaut.io/5.2.x/micrometer/#micrometer-repository)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/micrometer/guide/repository.adoc  upstream_commit: 98109ea84ff002369e6cb5bdb9032ca3adcf967a  upstream_hash: f10e226dd6738bf53249fb9cae8bb07bf715b274  translated_at: 2026-11-23 -->
+
+本项目的源代码见以下仓库：
+
+https://github.com/{githubSlug}[https://github.com/{githubSlug}]

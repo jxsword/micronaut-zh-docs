@@ -1,0 +1,4 @@
+> 本文翻译自 Micronaut Micrometer 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Micrometer – Introduction](https://docs.micronaut.io/5.2.x/micrometer/#micrometer-introduction)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/micrometer/guide/introduction.adoc  upstream_commit: 98109ea84ff002369e6cb5bdb9032ca3adcf967a  upstream_hash: 58dabec26c9bcc5f94bff69c30a678ed87b058e8  translated_at: 2026-11-23 -->
+
+本项目将 Micronaut 与 https://micrometer.io/[Micrometer] 集成，为 Micronaut 应用提供指标收集能力。

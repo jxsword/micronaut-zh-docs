@@ -1,0 +1,34 @@
+> 本文翻译自 Micronaut Micrometer 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Micrometer – Observation](https://docs.micronaut.io/5.2.x/micrometer/#micrometer-observation)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/micrometer/guide/observation.adoc  upstream_commit: 07c782f6edac3456121519f74b404dbfc34d5a16  upstream_hash: fc1768eece0181d6ed472981fc6672abe4555960  translated_at: 2026-11-23 -->
+
+== Micrometer Observation（观测）
+
+Micronaut Micrometer Observation 模块简化了为代码添加插桩以收集追踪与指标的过程。要开始使用，请向项目添加以下依赖：
+
+dependency:micronaut-micrometer-observation[groupId="io.micronaut.micrometer", scope="implementation"]
+
+该模块让你可以在代码中使用 https://micrometer.io/docs/observation#_using_annotations_with_observed[`@Observed`] 注解，更轻松地监控应用。此外，它还支持创建自定义 Observation。
+
+当应用注册了 `MeterRegistry` 类的单例实例时，Observation API 会导出指标。类似地，注册 `Trace` 类的单例实例则会启用追踪导出。
+
+要轻松建立 MeterRegistry 单例实例，可以引入以下依赖，它会替你完成注册过程：
+
+dependency:micronaut-micrometer-core[groupId="io.micronaut.micrometer", scope="implementation"]
+
+值得注意的是，目前 Trace 单例实例的创建需要手动配置，默认不会自动化。
+
+你还可以在 `micrometer.observations.common-key-value` 配置中指定键值对，它们会作为低基数的键值对添加到所有 observation 中。
+
+
+=== Micrometer Observation HTTP（HTTP 观测）
+
+Micronaut Observation HTTP 模块为 Micronaut HTTP 服务器和 Micronaut HTTP 客户端提供自动插桩，便于监控 HTTP 相关的指标与追踪。引入该模块后，服务器收到的每个请求以及服务器发出的每个请求都会触发创建一个 observation，并附带必要的低基数与高基数键值。根据应用的配置，这些值可以显示为指标（如果注册了 `MeterRegistry` 单例 bean）和追踪 span（如果注册了 `Trace` 单例 bean）。
+
+要在项目中引入该模块，请添加以下依赖：
+
+dependency:micronaut-micrometer-observation-http[groupId="io.micronaut.micrometer", scope="implementation"]
+
+你可以通过修改以下属性来配置该模块的行为：
+
+- 要禁用 HTTP 服务器插桩，将 `micrometer.observation.http.server.enabled` 属性设为 `false`；该属性默认值为 `true`。
+- 要禁用 HTTP 客户端插桩，将 `micrometer.observation.http.client.enabled` 属性设为 `false`；该属性默认值为 `true`。

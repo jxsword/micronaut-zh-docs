@@ -1,0 +1,6 @@
+> 本文翻译自 Micronaut Micrometer 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Micrometer – Metrics Registries & Reporters](https://docs.micronaut.io/5.2.x/micrometer/#micrometer-metricsAndReporters)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/micrometer/guide/metricsAndReporters.adoc  upstream_commit: 98109ea84ff002369e6cb5bdb9032ca3adcf967a  upstream_hash: 8f202e135ae4ed9c4f27ae85ee80a1281ed57649  translated_at: 2026-11-23 -->
+
+== 指标注册表与上报器
+
+默认配置了一个 `/metrics` 端点，指标会提供给该端点以便通过 HTTP 查看或获取。要注册特定类型的上报器，请引入对应类型注册表的配置。以下是当前支持的上报指标库。

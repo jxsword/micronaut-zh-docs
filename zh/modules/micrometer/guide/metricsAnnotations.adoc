@@ -1,0 +1,6 @@
+> 本文翻译自 Micronaut Micrometer 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Micrometer – Metrics Annotations](https://docs.micronaut.io/5.2.x/micrometer/#micrometer-metricsAnnotations)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/micrometer/guide/metricsAnnotations.adoc  upstream_commit: 6fec52308c156c01fd85b09d43a72677b2bd284a  upstream_hash: 48746d3b1f7eb71c3b0a0e974d5b1741831ae70f  translated_at: 2026-11-23 -->
+
+在注解处理器类路径中加入 `micronaut-micrometer-annotation` 依赖后，即可在任意 bean 方法上使用 Micrometer 的 `@Timed` 与 `@Counted` 注解：
+
+dependency:micronaut-micrometer-annotation[groupId="io.micronaut.micrometer", scope="annotationProcessor"]

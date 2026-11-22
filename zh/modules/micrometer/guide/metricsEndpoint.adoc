@@ -1,0 +1,147 @@
+> 本文翻译自 Micronaut Micrometer 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Micrometer – Metrics Endpoint](https://docs.micronaut.io/5.2.x/micrometer/#micrometer-metricsEndpoint)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/micrometer/guide/metricsEndpoint.adoc  upstream_commit: 78db4bb7b1e5ce2f52f5e754fae8f6e399157acd  upstream_hash: 4d5dd6632c8b5a446b5165950b5f9066d9509b84  translated_at: 2026-11-23 -->
+
+[TIP]
+.使用 CLI
+====
+如果你使用 Micronaut CLI 创建项目，提供 `micrometer-atlas`、`micrometer-graphite`、`micrometer-prometheus` 或 `micrometer-statsd` 特性之一，即可启用指标并预配置所选的注册表：
+----
+$ mn create-app my-app --features micrometer-atlas
+----
+====
+
+指标端点返回应用「指标」的相关信息。要调用该端点，向 `/metrics` 发送 GET 请求。该请求会返回注册在 `MeterRegistry` bean 中的指标名称。
+
+你可以使用 `/metrics/[name]` 获取具体指标，例如 `/metrics/jvm.memory.used`。返回结果类似：
+
+.指标详情 JSON 示例
+```json
+{
+  "name": "jvm.memory.used",
+  "measurements": [
+    {
+      "statistic": "VALUE",
+      "value": 1.45397552E8
+    }
+  ],
+  "availableTags": [
+    {
+      "tag": "area",
+      "values": [
+        "heap",
+        "nonheap"
+      ]
+    },
+    {
+      "tag": "id",
+      "values": [
+        "Compressed Class Space",
+        "PS Survivor Space",
+        "PS Old Gen",
+        "Metaspace",
+        "PS Eden Space",
+        "Code Cache"
+      ]
+    }
+  ]
+}
+```
+
+你还可以使用标签进一步过滤指标，例如 `/metrics/jvm.memory.used?tag=id:PS%20Old%20Gen`。
+
+.指标详情 JSON 示例
+```json
+{
+  "name": "jvm.memory.used",
+  "measurements": [
+    {
+      "statistic": "VALUE",
+      "value": 1.1434488E7
+    }
+  ],
+  "availableTags": [
+    {
+      "tag": "area",
+      "values": [
+        "heap"
+      ]
+    }
+  ]
+}
+```
+
+甚至可以使用多个或嵌套标签，例如 `/metrics/jvm.memory.used?tag=id:PS%20Old%20Gen&tag=area:heap`。
+
+.指标详情 JSON 示例
+```json
+{
+  "name": "jvm.memory.used",
+  "measurements": [
+    {
+      "statistic": "VALUE",
+      "value": 1.1434488E7
+    }
+  ]
+}
+```
+
+== 配置
+
+目前，只有同时引入 `micrometer-core` 和 `management` 依赖（或某个类型化注册表，如 `micrometer-registry-statsd`、`micrometer-registry-graphite` 等）时，指标端点才会启用。还必须启用全局指标开关（默认 `true`）。
+
+.属性
+
+[configuration]
+----
+micronaut:
+  metrics:
+    enabled: true
+----
+
+.Gradle
+
+[source,groovy]
+----
+dependencies {
+    ...
+    implementation "io.micronaut.micrometer:micronaut-micrometer-core"
+    // micrometer-registry-statsd also pulls in micrometer-core so included above to verbose example
+    implementation "io.micronaut.micrometer:micronaut-micrometer-registry-statsd"
+    // Also required to enable endpoint
+    implementation "io.micronaut:micronaut-management"
+    ...
+}
+----
+
+.Maven
+[source,xml]
+----
+<dependency>
+  <groupId>io.micronaut.micrometer</groupId>
+  <artifactId>micronaut-micrometer-core</artifactId>
+  <version>${micronaut.version}</version>
+</dependency>
+<!-- micrometer-registry-statsd also pulls in micrometer-core so included above to verbose example -->
+<dependency>
+  <groupId>io.micronaut.micrometer</groupId>
+  <artifactId>micronaut-micrometer-registry-statsd</artifactId>
+  <version>${micronaut.version}</version>
+</dependency>
+<!-- Also required to enable endpoint -->
+<dependency>
+  <groupId>io.micronaut</groupId>
+  <artifactId>micronaut-management</artifactId>
+  <version>${micronaut.version}</version>
+</dependency>
+----
+
+要配置指标端点，请通过 `endpoints.metrics` 提供配置。
+
+.指标端点配置示例
+[configuration]
+----
+endpoints:
+  metrics:
+    enabled: Boolean
+    sensitive: Boolean
+----

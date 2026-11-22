@@ -1,0 +1,271 @@
+> 本文翻译自 Micronaut Micrometer 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Micrometer – Metrics Concepts](https://docs.micronaut.io/5.2.x/micrometer/#micrometer-metricsConcepts)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/micrometer/guide/metricsConcepts.adoc  upstream_commit: 655e6288d067e8ac2ba140db28d38b57e6b80ad7  upstream_hash: 5ef0f694b112bee092bade5169ee8c14c7445e5e  translated_at: 2026-11-23 -->
+
+== 指标概念
+
+Micrometer 的关键 https://micrometer.io/docs/concepts[概念] 包括用于注册和使用 meter 的 https://micrometer.io/docs/concepts#_registry[MeterRegistry]。
+https://micrometer.io/docs/concepts#_meters[Meter] 是产生指标的对象。
+
+MeterRegistry 可以在创建时自动应用一些定制。
+
+=== Meter Registry 配置器
+
+* 任何实现 `MeterRegistryConfigurer` 的 bean 都会在创建时应用到每个_适用的_ MeterRegistry bean 上
+* MeterRegistryConfigurer 的 `supports()` 方法决定该配置器是否应用于特定注册表
+** 若希望所有注册表都获得该定制，返回 `true`
+** 否则，可以按注册表的类类型、类层次或其他条件进行判断
+** 注意，自动配置只有一次机会，即 bean 上下文启动时
+** 不过，在代码中你仍可对注册表配置追加其他定制
+
+.MeterRegistryConfigurer 接口
+[source,java]
+----
+include::{metricscore}/aggregator/MeterRegistryConfigurer.java[]
+----
+
+.示例
+[source,java]
+----
+include::{testsmetricscore}/SimpleMeterRegistryConfigurer.java[]
+----
+
+=== Meter 过滤器
+
+* https://micrometer.io/docs/concepts#_meter_filters[meter 过滤器] 可用于决定某个 Meter 是否加入注册表
+* 任何实现 `MeterFilter` 的 bean 都会在注册表首次创建时应用到所有注册表
+
+你可以在应用中创建类似下面的自定义过滤器。`MeterFilter` 提供了多个便捷方法帮助创建此类过滤器。
+
+.示例
+[source,java]
+----
+include::{testsmetricscore}/MeterFilterFactory.java[]
+----
+
+=== Meter 绑定器
+
+Meter 绑定器会应用到 Meter Registry，为其中_混入_指标生产者。Micrometer 为 JVM 指标、缓存、类加载器等横切关注点定义了若干绑定器。它们实现 `MeterBinder`，但按 Micrometer 当前的实现方式并不会作为 bean 自动装配，需要手动装配。
+
+==== 内置绑定器
+
+以下指标目前有绑定器且默认启用。若不希望收集或上报这些指标，可用下述设置禁用各个指标绑定器。
+
+===== JVM 指标
+
+JVM 指标绑定器提供多个 JVM 指标。
+
+*控制属性*：`micronaut.metrics.binders.jvm.enabled`
+
+.提供的指标
+|=======
+|*名称*
+| jvm.buffer.count
+| jvm.buffer.memory.used
+| jvm.buffer.total.capacity
+| jvm.classes.loaded
+| jvm.classes.unloaded
+| jvm.gc.live.data.size
+| jvm.gc.max.data.size
+| jvm.gc.memory.allocated
+| jvm.gc.memory.promoted
+| jvm.memory.committed
+| jvm.memory.max
+| jvm.memory.used
+| jvm.threads.daemon
+| jvm.threads.live
+| jvm.threads.peak
+|=======
+
+===== Web 指标
+
+Web 指标默认提供了一个 web 过滤器。所有路由、状态码、方法和异常都会被计时与计数。
+
+*控制属性*：`micronaut.metrics.binders.web.enabled`
+
+.过滤路径
+若启用，默认拦截路径 `/**`。要更改服务器经过该过滤器的路径，设置 `micronaut.metrics.http.path`；客户端则设置 `micronaut.metrics.http.client.path`。
+
+.启用百分位数
+
+百分位数配置可加入 HTTP 服务器与客户端指标。百分位数可通过 CSV 形式提供，如下所示。
+
+[configuration]
+----
+micronaut:
+  metrics:
+    binders:
+      web:
+        server:
+          percentiles: "0.95,0.99"
+        client:
+          percentiles: "0.95,0.99"
+----
+
+.提供的指标
+|=======
+|*名称*
+| http.server.requests
+| http.client.requests
+|=======
+
+===== 系统指标
+
+有多个指标可单独开关。
+
+====== 运行时间指标
+
+运行时间指标绑定器提供系统运行时间指标。
+
+*控制属性*：`micronaut.metrics.binders.uptime.enabled`
+
+.提供的指标
+|=======
+|*名称*
+| process.uptime
+| process.start.time
+|=======
+
+===== 处理器指标
+
+处理器指标绑定器提供系统处理器指标。
+
+*控制属性*：`micronaut.metrics.binders.processor.enabled`
+
+.提供的指标
+|=======
+|*名称*
+| system.load.average.1m
+| system.cpu.usage
+| system.cpu.count
+| process.cpu.usage
+|=======
+
+===== 文件描述符指标
+
+文件描述符指标绑定器提供系统文件描述符指标。
+
+*控制属性*：`micronaut.metrics.binders.files.enabled`
+
+.提供的指标
+|=======
+|*名称*
+| process.files.open
+| process.files.max
+|=======
+
+===== Logback 指标
+
+使用 https://logback.qos.ch/[Logback] 时，日志指标绑定器提供日志相关指标。
+
+*控制属性*：`micronaut.metrics.binders.logback.enabled`
+
+.提供的指标
+|=======
+|*名称*
+| logback.events
+|=======
+
+===== Hibernate 指标
+
+将配置中的 `hibernate.generate_statistics` 属性设为 `true` 即可启用 https://hibernate.org/orm/[Hibernate] 的指标。例如对默认实体管理器：
+
+启用 Hibernate 指标
+[configuration]
+----
+jpa:
+  default:
+    properties:
+      hibernate:
+        generate_statistics: true
+----
+
+https://github.com/hibernate/hibernate-orm/blob/main/hibernate-micrometer/src/main/java/org/hibernate/stat/HibernateMetrics.java[HibernateMetrics] 需要在类路径上，因此需要下载 https://mvnrepository.com/artifact/org.hibernate/hibernate-micrometer[hibernate-micrometer]：
+
+.Gradle
+
+[source,groovy]
+----
+dependencies {
+    ...
+    implementation("org.hibernate:hibernate-micrometer")
+    ...
+}
+----
+Micrometer 会自动暴露 Hibernate 统计信息。可用指标见 https://github.com/hibernate/hibernate-orm/blob/main/hibernate-micrometer/src/main/java/org/hibernate/stat/HibernateMetrics.java[HibernateMetrics] 的源码。
+
+===== DataSource 指标
+
+`DataSource` 指标绑定器提供数据源连接池指标。
+
+*控制属性*：`micronaut.metrics.binders.jdbc.enabled`
+
+NOTE: HikariCP 与其他连接池提供方的池指标名称集合不同。
+
+若使用 `io.micronaut.sql:micronaut-jdbc-hikari`，由于 HikariCP 内置了对 meter 注册表的支持，你会获得额外的池指标。
+
+.HikariCP 提供的指标
+|=======
+|*名称*
+| hikaricp.connections.idle
+| hikaricp.connections.pending
+| hikaricp.connections
+| hikaricp.connections.active
+| hikaricp.connections.creation
+| hikaricp.connections.max
+| hikaricp.connections.min
+| hikaricp.connections.usage
+| hikaricp.connections.timeout
+| hikaricp.connections.acquire
+|=======
+
+若使用 `io.micronaut.sql:micronaut-jdbc-tomcat` 或 `io.micronaut.sql:micronaut-jdbc-dbcp`，你会获得以下指标
+
+.通用连接池提供的指标
+|=======
+|*名称*
+| jdbc.connections.usage
+| jdbc.connections.active
+| jdbc.connections.max
+| jdbc.connections.min
+|=======
+
+===== Netty 服务器指标
+
+目前提供以下绑定器来监测 Netty 服务器：
+
+* *EventLoopGroupFactoryBinder*：监测并暴露事件循环组队列指标；使用 `micronaut.metrics.binders.netty.queues.enabled` 开关，默认为 *false*。暴露的内容包括队列大小、任务等待与执行时间。
+* *ByteBufAllocatorMetricsBinder*：暴露 `ByteBuf` 的默认分配器（https://netty.io/4.1/api/io/netty/buffer/ByteBufAllocatorMetric.html[UnpooledByteBufAllocator]、https://netty.io/4.1/api/io/netty/buffer/PooledByteBufAllocatorMetric.html[PooledByteBufAllocator]）的指标；使用 `micronaut.metrics.binders.netty.bytebuf-allocators.enabled` 开关，默认为 *false*。
+你可以用 `micronaut.metrics.binders.netty.bytebuf-allocators.metrics` 定制暴露哪些指标，默认暴露全部可用指标。支持的开关有：
+** `POOLED_ALLOCATOR`：暴露 `PooledByteBufAllocator` 指标，
+** `UNPOOLED_ALLOCATOR`：暴露 `UnpooledByteBufAllocator` 指标，
+** `POOLED_ARENAS`：暴露 `PooledByteBufAllocator` 的 pooled arenas 指标（需要 `POOLED_ALLOCATOR`），
+** `POOLED_ARENAS_SUBPAGES`：暴露 `PooledByteBufAllocator` 的 pooled arenas 子页指标（需要 `POOLED_ARENAS`），
+** `POOLED_ARENAS_CHUNKLISTS`：暴露 `PooledByteBufAllocator` 的 pooled arenas chunk list 指标（需要 `POOLED_ARENAS`），
+** `POOLED_ARENAS_CHUNKS`：暴露 `PooledByteBufAllocator` 的 pooled arenas chunk 指标（需要 `POOLED_ARENAS_CHUNKLISTS`）。
+* *NettyMetricsPipelineBinder*：监测 Netty 的 channel，使用 `micronaut.metrics.binders.netty.channels.enabled` 开关，默认为 *false*。
+提供的指标包括 channel 数量、当前活跃 channel 数、channel 错误数以及读写字节数。
+
+== 添加自定义指标
+
+要向应用添加指标，注入一个 `MeterRegistry` bean，并使用其提供的方法访问计数器、计时器等。
+
+更多信息参见 https://micrometer.io/docs[Micrometer 文档]。
+
+.自定义指标示例
+[source,java]
+----
+include::{testsmetricscore}/IndexController.java[]
+----
+
+== 自定义异常指标
+
+要上报自定义处理异常的响应码，实现 `io.micronaut.http.HttpResponseProvider`。
+`ExceptionHandler` 默认上报值为 500。
+
+关于 `ExceptionHandler` 的更多信息参见 https://docs.micronaut.io/latest/guide/[Micronaut 文档]。
+
+.异常处理器上报示例
+[source,java]
+----
+include::{testsmetricscore}/OutOfStockException.java[]
+----
