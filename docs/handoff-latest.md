@@ -1,70 +1,62 @@
 # 交接文档（handoff-latest）
 
-> 更新：2026-11-21 ｜ 会话：M3 收尾 + DR-006 模块扩展计划定稿（三轮复审 15 项修正）｜ 下一会话任务：**M4.0 多模块基建 + micrometer/validation 试点**（启动提示词见 `docs/新会话启动提示词.md`）
+> 更新：2026-11-23 ｜ 会话：M4.0 多模块基建 + micrometer/validation 试点（DR-006 落地）｜ 下一会话任务：**M4.1 P0 安全与观测——security 起步（2–3 会话）**（启动提示词见 `docs/新会话启动提示词.md`）
 
-## 已完成清单（M3 会话，全部随收尾提交入库 + tag v1.0）
+## 已完成清单（M4.0 会话，全部随收尾提交入库）
 
 | 工作单元 | 说明 |
 |---|---|
-| toc.yml / toc-python.yml 翻译专项 | 385+301 条标题译出（handoff 旧口径「76 条」仅数 title 行）；键/注释逐字节保留；YAML 注释版溯源投影过 mark-current；新增 scripts/check_toc.py + 5 项 pytest；manifest 核销 current |
-| 断链豁免 3 条收尾 | zh/guide/i18n.adoc 最小壳镜像（0 字节源 + `[[i18n]]` 锚）核销；clientConfiguration 回溯补注入 `[[_client_specific_configuration]]`；routing 的 `_uri_path_variables` B11 已在位。⑤ 豁免 **3 → 0** |
-| check_anchors.py 增强 | 标题自动锚解析（第三优先级，idprefix/separator 均 `_`）；registry 重生成 121 → 123，unresolved 2 → 0，既有条目零变化 |
-| 全量 sweep | spdlog 口径段级比对（4048 段）：errors 3（均为 B18 已文档化的 `////` 注释块误报）、warns 93（全部合法不译），**真漏译 0** |
-| 锚点专项 | registry 123 条逐一 grep zh/：**123/123 实锚在位**，同 id 无歧义 |
-| 抽检 ≥10% | 分层抽样（seed 20261121）39 文件（10.2%）五项机检 **39/39 PASS**；人工精读 4 文件（ideaSetup/producesAnnotation/methodInjection/pythonThreading）合格 |
-| sync drill 八步 | --check 全量（上游 cca2a1ce：388 文件 0 变更）→ --file 单文件 → --apply --dry-run → 门控拒绝验证 → --collect-commits（already=388）→ --mark-current 幂等 → --check 复跑幂等 → tag 后门控解除验证（--apply 0 变更 no-op） |
-| 术语滚动复核 | 57 组扫描：**14 条转正** glossary（advice/property source/event loop/service discovery/declarative client/health indicator/distributed tracing/circuit breaker/validation group/exception handler/error handler/camel-case/nullability annotations/data classes）；**advice 真缺陷 3 处修复**（whatsNew「重试建议」旧译、factories xref label 未译、constructorInjection 正文保留英文）；转正后 ③ 回流 387 文件 0 失败 |
-| README 在线结构 | 新增「在线对照结构」节（#core-<basename> 对照、构建期注入边界、toc 校验、官方站未渲染三章说明）；基线节更新 v1.0；结构表 toc 路径勘误；B14 看板状态笔误修正 |
-| tag `v1.0` | 指向 M3 收尾提交；`--apply` 门控（`v1.0^{commit}` 可解析即解禁）实测解除 |
+| 基建套件（4de82c6） | sync_upstream.py `--doc-root/--manifest` 参数化（manifests/<site>.yml ↔ modules/<site>/ 前缀一一对应，账本顶层 ref+locked_at，克隆缓存按仓库 slug 分目录）；validate `--manifest` + ⑤ 模块文档树前缀 + ③ 扫描集=通用+当前模块术语；assemble_zh 模块账本/toc/官方 URL（core 引用块格式 385 文件逐字节不变实测）；inventory `--manifest`+批次前缀（modules.json batch_prefix）；progress 多账本聚合按模块分组；render.mjs 聚合（modules.json 驱动逐模块单页 + landing.html 官方 18 组导航复刻 + 各页顶部模块切换条）；新增 check_all.sh；CI validate/sync workflows 模块化；pytest 100→123 绿 |
+| 试点快照（6e33c11） | micrometer（30 文件，基线 c4d064ee3af4）+ validation（12 文件，基线 079f75dc6ba8），ref 5.2.x + locked_at 2026-11-23；无 0 字节壳、无图片；inventory 切批 MICRO-01(27 文件 3239 词)/MICRO-02(2 文件 327 词)/VALID-01(11 文件 1463 词) |
+| MICRO-01（9fac35a） | 27 文件七步全流程；⑦ 行内码紧跟全角括号 41 处改写；② 门禁拦下 metricsAndReporters 误并内容（导读页实为标题+一段）；toc.yml 导航标题随批译出 |
+| MICRO-02（bdc535c） | observation/repository；④ 标题保留 API 名加括注；模块 30 条目全 current |
+| VALID-01（c9601ae） | 11 文件全模块；③ constraint→约束 module 作用域术语生效；④ 版本标题「…的破坏性变更」；模块 12 条目全 current |
+| 渲染上线 | 聚合站 core+micrometer+validation+landing 0 失败；core 剔除模块条后与 DR-005 版逐字节一致、809 个 core- 锚点零差集；本地 http://127.0.0.1:8321 冒烟 4 页 200 |
+| 图片体量实测（LFS 决策） | 试点两模块 0 图；gh api 抽样：security 8.9MB/34 图、oracle-cloud 4.5MB/28 图、aws 0.9MB/4 图、openapi/data ≤0.1MB（jackson-xml/sql/kotlin 等仓库 slug 或分支 404 未计入）——**外推 71 模块 <300MB，暂不启用 git-lfs**；security 快照落地时（P0）复测 |
+| 看板模块维度 | translation-board.md 增「模块批次总览」节（MICRO-01/02、VALID-01 + LFS 结论 + M4.1 待办） |
 
-## 状态快照（2026-11-21，M3 收尾）
+## 状态快照（2026-11-23，M4.0 收尾）
 
-- 分支 main；**远程 https://github.com/jxsword/micronaut-zh-docs（2026-11-21 建，SSH remote，push 走 SSH——见坑位 14）；在线阅读 https://jxsword.github.io/micronaut-zh-docs/（deploy-pages.yml 自动部署；DR-005 起为单页合集形态，左侧编号导航页内跳转）**；manifest：**388 条目 = 387 current + 1 skipped（appendix.adoc 0 字节壳，无引用）+ 0 missing**；全量 validate 387 文件 PASSED（0 警告 0 失败，⑤ 豁免清零）；pytest **100 绿**（+5 check_toc）
-- anchor-registry：123 条（+2 标题自动锚），unresolved 0；toc 结构校验 `scripts/check_toc.py` PASSED（686 页）
-- glossary：45 术语（31 → 45）+ 6 banned；三处 advice 旧译修复已入库
-- **tag v1.0 已打标**——初译期基线锁定解除，进入持续增量模式（PLAN §8）：
-  1. 周期性 `memgate 2048 python3 scripts/sync_upstream.py --check`（远程托管后由 sync-upstream.yml cron 驱动；本地无远程时手动/自动化均可）
-  2. 检出变更 → 开 issue（`[upstream-sync] <sha>: 同步待处理`）
-  3. issue 目标 48h 内响应：`--apply`（v1.0 后已解禁）→ 生成增量工作项 → 按 PLAN §5.1 SOP 走修订批次（只重译变更段，保留已译段）→ validate 全绿 → `--mark-current` → squash commit
-- 退出码约定不变：0=无变更 / 1=有变更待翻译 / 2=环境错误
+- 分支 main，5 个新提交（4de82c6 基建 → 6e33c11 快照 → 9fac35a/bdc535c/c9601ae 三批次）；远程 https://github.com/jxsword/micronaut-zh-docs（push 走 SSH——坑位 14）
+- core：388 条目 = 387 current + 1 skipped + 0 missing；validate 387 文件全绿；pytest 123 绿
+- micrometer：30/30 current；validation：12/12 current；两模块 validate 全绿 0 警告
+- 聚合站（DR-006）：index.html（core）+ micrometer.html + validation.html + landing.html；本地预览 http://127.0.0.1:8321（`cd build/site && setsid memgate 2048 python3 -m http.server 8321 & disown`）；在线 https://jxsword.github.io/micronaut-zh-docs/（deploy-pages.yml 自动部署）
+- glossary：45 通用术语 + 6 banned + **modules.terms 3 条**（reporter→上报器、Observation 不译 [micrometer]；constraint→约束 [validation]）
+- config/modules.json：官方导航 18 组实抓（2026-11-23），72 可译条目（core+71）+ gradle 外链；repo 字段仅 core/micrometer/validation 已填，其余开工时核实补填
+- check_all.sh：core + 已快照模块逐模块 `--check`（退出码聚合：0 无变更/1 有变更/2 环境错误），产出 reports/check-all-<date>.md + check-all-latest.jsonl（CI 逐模块开 issue 用）
 
-## 实测结论（M3 新增，继承 B01–B32 全部结论）
+## 实测结论（M4.0 新增，继承 M3 结论 1–8 与 B01–B32 全部结论）
 
-1. **源片段 .adoc 无 H1**：页题只存在于 toc.yml（上游构建特性）；toc 标题翻译是对外显示的唯一标题来源。
-2. **toc 标题口径**：385 条 = 76 `title:` 行 + 309 标量叶子；toc-python 与 toc 同键同值（多 1 条 overloads 页）。YAML 文件溯源投影写为 `#` 注释（RE_PROVENANCE 在注释行内匹配，YAML 仍合法）。
-3. **标题自动锚解析**：check_anchors 第三优先级 `idprefix="_"/idseparator="_"`（Micronaut 构建实测）；未来上游新增 auto-id 引用可直接解析，不再进 unresolved。
-4. **sweep 误报三源**：上游 `////` 注释块（B18 纪律保留）、dependency/snippet 宏行、路径型 block title 与行内码列表段——人工分诊时按类豁免。
-5. **术语转正回流纪律**：转正前先统计「源文出现文件数 × zh 译名命中」，缺口文件逐一核对语境（API 名/宏/普通行文 → 不动；真旧译 → 先修再转正）；转正后必须全量 validate（③ 回流）。本次 advice 转正抓出 3 处 B01/B02 早期旧译——术语复核确有实效。
-6. **glossary 不宜全量收录低频词**：provider/codec/aspect/connection pool 等存在 API 名或普通行文误触面，保持语境括注；specification 规范/规约两译为语境分工（Bean Validation 规范 vs 协议规约），不统一。
-7. **drill 八步**（PLAN §8「演练八步全通」落地口径，见 reports/m3-final.md §5）：前置盘点 → --check 全量 → --check --file → --apply --dry-run → 门控拒绝验证 → --collect-commits → --mark-current 幂等 → --check 复跑幂等 + 产物出树确认；tag 后补 --apply 解除验证。
-8. **0 字节壳文件的断链处置**：被 xref 引用的壳页建最小 zh 镜像（投影块 + basename 锚）；validate ①–⑦ 全过；未被引用的壳页维持 skipped。
+1. **dest 前缀约定**：`--manifest manifests/<site>.yml` ⇔ `source/modules/<site>/` ⇔ `zh/modules/<site>/` ⇔ 账本 file 字段 `modules/<site>/…` ⇔ 页 `<site>.html` ⇔ 锚 `<site>-<basename>`——全部由 manifest 文件名 stem 一一推导，无第二处配置。
+2. **模块结构同构性**：micrometer/validation 与 core 完全同构（guide/toc.yml + 嵌套 dict + title 键），segment/protect/validate/assemble/inventory 零改动复用成立；但**源文件可能是纯导读页**（metricsAndReporters.adoc 仅标题+一段，21 个 reporter 各为独立页）——切批后先 cat 源文件确认边界，勿按文件名推测内容。
+3. **模块图片可为零**：试点两模块无 resources/；渲染 imagesdir=modules/<site>/img/ 仅在存在图片时可见（copyImages 摊平 resources/img → site modules/<site>/img/）。
+4. **per-file commit 采集**：模块账本也走 `--collect-commits`（gh api 42 条全成功，串行+缓存按 remote slug 命名）；assemble 在 per-file commit 缺失时回退账本 baseline（与 mark-current 期望一致，两级兜底）。
+5. **⑦ 邻接规则高频违规模式**：reporter 表格「默认值：`X`（1 分钟）」模式——统一改写「…，即 1 分钟」；「`X`（或某个…」枚举括注——重排列举顺序让（ 跟随 CJK 词。模块批次初稿先用 grep `}}（` 自查可省一轮 validate。
+6. **④ 标题未译规则的 API 名处理**：≥2 英文词的标题（Micrometer Observation）保留 API 名 + 中文括注「（观测）」通过；单英文词标题（Configuration）可直接译中文。
+7. **check_all 退出码聚合**：脚本内部逐模块采集退出码不掩码，最终取最严重值（2>1>0）——`set -e` 不能用，采集模式与「禁止 || true」纪律兼容。
 
-## 待办（下一会话：M4.0 多模块基建 + 试点）
+## 待办（下一会话：M4.1 P0 安全与观测）
 
-1. **M4.0 全部任务见 `docs/新会话启动提示词.md`**（脚本参数化 / 渲染聚合 / 术语作用域 / check_all / micrometer+validation 试点端到端 / 图片体量实测——LFS 决策）。
-2. **core 持续增量例行**（与模块批次并行，优先级规则：core 增量复译优先）：周 `--check`（扩 check_all.sh 后逐模块）；有变更开 issue `[upstream-sync] …` 并按 §5.1 SOP 增量复译。
-3. 远程仓库后续：README 免责与 Pages 配置已做；CI workflows（validate.yml 已生效、sync-upstream.yml 待远程 cron 启用）。
-4. 5.3.x 基线切换、guides 二期、Maven/Platform 外链模块：届时单独决策（DR-007 起）。
-3. 5.3.x 正式发布时的基线切换：届时按重大决策走 decision_log（DR-004 起）。
-4. 二期 guides（CC-BY-4.0）开工前须新决策。
+1. **security 模块（2–3 会话，24 章 60+ 页最大头部模块）**：开工先 `gh api repos/micronaut-projects/micronaut-security --jq .default_branch` + 分支清单核实 5.2.x；`sync_upstream.py --repo https://github.com/micronaut-projects/micronaut-security --doc-root src/main/docs --manifest manifests/security.yml --ref 5.2.x --init`；inventory 切批 SEC-01…（batch_prefix 在 config/modules.json 补填 `{"security": {"batch_prefix": "SEC", "repo": "micronaut-projects/micronaut-security"}}`，repo 为 null 的模块开工时一律先核实补填）；按 §5.1 七步逐批推进。
+2. **validation 剩余/micrometer 后续增量**：周 check_all 检出变更走 PLAN §5.1 修订批次（core 增量优先）。
+3. **hibernate-validator + tracing + session**：同 security 流程；tracing 跨组引用（Analytics/Cloud）按首组去重口径。
+4. **图片体量复测**：security 快照落地后 du -sh source/modules/security/resources，若单模块接近 9MB 且多模块累加逼近 300MB 再议 LFS（.gitattributes）。
+5. **core 持续增量例行**：周 `bash scripts/check_all.sh`（扩后含模块）；有变更开 issue `[upstream-sync][<site>] <sha>` 并按 §5.1 增量复译。
+6. 层间收尾 tag v1.1（P0 全部 100% 后）。
+7. 5.3.x 基线切换、guides 二期、Maven/Platform 外链、configuration-reference（官方导航分组外新增，DR-006 计划外）：届时单独决策（DR-007 起）。
 
-## 调试经验与坑位（M3 增补）
+## 调试经验与坑位（M4.0 增补 19–22，继承 1–18）
 
-9. **validate 全量循环**：validate_translation.py 仅 `--file` 单参数，全量跑用 python 循环 subprocess（387 文件约 1 分钟）；subprocess 每文件冷启动可接受。
-10. **check_toc 白名单机制**：标题值含 CJK 即视为已译；纯 API/产品名条目进 ALLOWLIST（31 条）；「与源逐字节相同」仅对含 CJK 的值报警（防漏译）。
-11. **YAML 行级变换**：`key:` 节点行/注释行/空行原样保留，仅替换 `key: value` 叶值；带引号值保留引号风格；替换值与原值相同则整行不动（`'@Blocking'`）。
-12. **临时脚本沿用纪律**：Write 工具创建 + py_compile 先行 + memgate 包裹；sweep/抽检/术语扫描脚本口径已固化进 reports/m3-final.md，需要复跑时按报告口径重建即可。
-13. **--apply 会改写 source/_upstream_commit**（脚本 apply 收尾写入检测时上游 HEAD，sync_upstream.py:583）：0 变更演练后该文件会偏离基线 sha——M3 收尾时已还原（0b46d27a 与 manifest baseline_commit 一致）；真实增量 apply 后出现此变化属预期行为，配套同步报告会记录当次 HEAD，不必回滚。
-14. **git push 必须走 SSH**：gh OAuth token 无 `workflow` scope，https push 含 workflow 文件的提交会被拒（`gh auth setup-git` 也无效）；本机 SSH key（id_ed25519_github3）已认证 jxsword，remote 已设 `git@github.com:jxsword/micronaut-zh-docs.git`，直连可达。
-15. **本地预览必须走 HTTP**：沙箱 Firefox 经 xdg-desktop-portal 打开 file:// 时 URL 被重映射到 /run/user/1000/doc/<id>/，portal 只授权用户手动打开的单个文件，页内相对链接全部 404（开发者工具却显示 200）——多文件站点一律 `python3 -m http.server` / 静态服务器提供。起服务用 `setsid memgate … & disown`（nohup 子 shell 与 systemd-run 组合会 hang）。
-16. **actions/deploy-pages 偶发 "Found 0 artifact(s)"**：artifact 已上传成功但同 run 内查询为空（GitHub 侧瞬时延迟），重跑 workflow 即可（实测第 2 次 success）。
-17. **DR-005 单页站机制坑位**：asciidoctor fragment（standalone:false）丢弃 doctitle——章/页标题必须从 `==` 起写（渲染后 postprocess 全局升位 h2→h1）；article/book 模式均无法表达「多个 h1 章带正文」（article level-0 非法、book part 不许直接正文）；官方片段内容零偏移（Astro 拼接），我们 +1 偏移（内部标题深一级，导航/锚点不受影响）；asciidoctor v4 `convert()` 返回 Promise 需 await；asciidoctor 默认样式在包内 `data/asciidoctor-default.css`；中文标题自动锚 slug 保留中文（无害）。
-18. **Bash cwd 漂移**：每次命令后 cwd 可能回到上次 cd 的目录——node/python 调用前先 `cd` 或用绝对路径（两次 MODULE_NOT_FOUND 假失败均由此起）。
+19. **asciidoctor fragment 渲染冒烟要看「产物时间戳」而非退出码**：render.mjs 曾因 `esc` 函数作用域错误在 moduleBar 处 ReferenceError 退出，但旧 index.html 仍在位——「对比无回归」变成新旧同文件的空验证。核对 `ls -la build/site/*.html` 时间戳或 diff 前先确认产物确已重写。
+20. **scripts/preview/.gitignore 相对路径**：其内模式相对该目录解析（`scripts/preview/node_modules/` 写在其内永不生效）；node_modules/ 已上收至根 .gitignore 全局兜底。
+21. **workdir/protect 是会话工作区不入库**：*-translated.txt / *-restored.txt / map.json 均为临时件；批次收尾只落盘 zh/ 与报告，需要复跑时按批次报告口径从 source/ 重新 protect。
+22. **memgate 包裹 setsid 长驻服务**：`setsid memgate 2048 python3 -m http.server 8321 >/dev/null 2>&1 < /dev/null & disown`（坑位 15 的成熟变体）；memgate 在 PATH 时 check_all.sh 自动采用，CI 无 memgate 直跑（脚本内 command -v 判断）。
 
 ## 硬性纪律清单（继承，持续有效）
 
-1. `docs/翻译计划.md` 为唯一权威规范；改架构走 decision_log（DR-004 起递增）
-2. 所有脚本 memgate 包裹；`source/` 只读（仅 sync 写入）；`manifest.yml` 禁人工直改（--mark-current 除外）
+1. `docs/翻译计划-模块扩展.md`（范围/架构）+ `docs/翻译计划.md` v1.1（流程）为唯一权威规范；改架构走 decision_log（DR-007 起递增）
+2. 所有脚本 memgate 包裹；`source/` 只读（仅 sync 写入）；`manifest.yml` 与 `manifests/*.yml` 禁人工直改（--mark-current 除外）
 3. 门禁硬性化，禁止 `|| true`
-4. 每批次 squash commit + 批次报告；决策类提交末行 `Decision: DR-编号`
+4. 每批次 squash commit（消息含模块批次号/段数/词数/上游日期）+ 批次报告；决策类提交末行 `Decision: DR-编号`
 5. agent 并发上限 = 串行 1；上下文过半立即交接；里程碑收尾主动建议开新会话
+6. git push 走 SSH；网络直连失败走代理 http://192.168.33.1:10808

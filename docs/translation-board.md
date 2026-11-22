@@ -41,6 +41,20 @@
 | B31 | 3 | 955 | 960 | current |
 | B32 | 2 | 3180 | 3183 | current |
 
+## 模块批次总览（M4，DR-006：批次编号 <模块前缀>-<序号>，账本 manifests/<site>.yml）
+
+| 模块 | 批次 | 文件数 | 非代码词 | 总词 | 段数 | 状态 |
+|---|---|---:|---:|---:|---:|---|
+| micrometer | MICRO-01 | 27 | 3239 | 3307 | 307 | current |
+| micrometer | MICRO-02 | 2 | 327 | 327 | 17 | current |
+| validation | VALID-01 | 11 | 1463 | 1479 | 106 | current |
+
+- 模块导航 toc.yml 标题随首批一并译出核销（micrometer 30 条目 / validation 12 条目全 current）。
+- 模块进度报表：reports/progress.md（多账本聚合，按模块分组）；模块注册表 config/modules.json（官方导航 18 组，2026-11-23 实抓）。
+- 优先级规则（DR-006 §6）：core 增量复译优先于模块新批次；同会话不混排。
+- 图片体量实测（M4.0 验收项）：试点两模块 0 图；抽样 security 8.9MB/34 图、oracle-cloud 4.5MB/28 图、aws 0.9MB/4 图、openapi/data ≤0.1MB——外推 71 模块 <300MB，**暂不启用 git-lfs**，P0/P1 里程碑（security 快照落地时）复测。
+- M4.1（P0 安全与观测）待办：security（2–3 会话）+ hibernate-validator + tracing + session；validation/micrometer 已完成。
+
 ## 批次状态明细
 
 批次 → 文件清单：见 inventory 报告「逐批次文件清单」节（B01–B32）。
