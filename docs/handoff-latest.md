@@ -51,6 +51,7 @@
 20. **scripts/preview/.gitignore 相对路径**：其内模式相对该目录解析（`scripts/preview/node_modules/` 写在其内永不生效）；node_modules/ 已上收至根 .gitignore 全局兜底。
 21. **workdir/protect 是会话工作区不入库**：*-translated.txt / *-restored.txt / map.json 均为临时件；批次收尾只落盘 zh/ 与报告，需要复跑时按批次报告口径从 source/ 重新 protect。
 22. **memgate 包裹 setsid 长驻服务**：`setsid memgate 2048 python3 -m http.server 8321 >/dev/null 2>&1 < /dev/null & disown`（坑位 15 的成熟变体）；memgate 在 PATH 时 check_all.sh 自动采用，CI 无 memgate 直跑（脚本内 command -v 判断）。
+23. **git add 通配漏交子目录与 .yml（M4.0 实际事故，两个 fix commit 才补齐）**：`git add zh/modules/micrometer/guide/*.adoc` 根级通配不递归子目录、也不匹配 toc.yml——21 个 reporter 译文 + 导航 toc 全部漏交，CI 渲染只剩 8 个片段而本地 29 个（本地磁盘文件齐全、render 成功，掩盖了漏交）；上线后 404 才暴露。**纪律升级：模块批次 add 一律整目录（`git add zh/modules/<site>/ …`），提交前 `git status --short` 复核零遗漏，再以 CI 渲染 fragments 数与本地 render JSON 对照。**
 
 ## 硬性纪律清单（继承，持续有效）
 
