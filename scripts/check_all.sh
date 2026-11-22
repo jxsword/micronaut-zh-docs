@@ -52,7 +52,7 @@ for site in $SITES; do
     fi
     manifest_args=(--manifest "$manifest")
   fi
-  out="$("$MEMGATE" python3 scripts/sync_upstream.py "${manifest_args[@]}" --check 2>&1)"
+  out="$($MEMGATE python3 scripts/sync_upstream.py "${manifest_args[@]}" --check 2>&1)"
   code=$?
   sha8="$(printf '%s\n' "$out" | python3 -c '
 import json, sys
@@ -70,8 +70,10 @@ except Exception:
   printf '| %s | `%s` | %d | %s | %s |\n' "$site" "$manifest" "$code" "$verdict" "$sha8" >> "$MD_REPORT"
   printf '{"site":"%s","code":%d,"sha8":"%s"}\n' "$site" "$code" "$sha8" >> "$JSONL"
   case "$code" in
+    0) : ;;
     2) worst=2 ;;
     1) [ "$worst" -ne 2 ] && worst=1 ;;
+    *) worst=2 ;;  # 意外退出码（如 127）视为环境错误，禁止吞掉
   esac
 done
 

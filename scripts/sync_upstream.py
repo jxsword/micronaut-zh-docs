@@ -262,8 +262,11 @@ def prepare_upstream(repo_url: str, workdir: Path, ref: str,
 def read_upstream(doc_dir: Path) -> Tuple[Dict[str, bytes], Dict[str, bytes]]:
     """递归读取上游 src/main/docs：返回 (tracked, mirror)。
 
-    tracked = 账本跟踪文件（.adoc + toc.yml/toc-python.yml），mirror = 其余
-    （resources/ 图片等，镜像不入账本）。未知扩展名镜像并告警（全量快照原则）。"""
+    tracked = 账本跟踪文件（.adoc + toc.yml/toc-python.yml，2MB 硬上限护解析）；
+    mirror = 图片白名单文件（resources/ 等，镜像不入账本）；白名单外扩展名
+    跳过并告警不入库（SOP §4：快照仅 .adoc + toc + resources 图片入库；
+    2026-11-23 security 的 resources/img/security_diagramms.sketch 3.3MB
+    设计源文件触发本口径，guide/ 0 引用，core 资源目录亦全为白名单类型）。"""
     if not doc_dir.is_dir():
         raise RuntimeError(f"upstream docs dir not found: {doc_dir}")
     tracked: Dict[str, bytes] = {}
@@ -272,16 +275,16 @@ def read_upstream(doc_dir: Path) -> Tuple[Dict[str, bytes], Dict[str, bytes]]:
         if not p.is_file():
             continue
         rel = p.relative_to(doc_dir).as_posix()
-        data = p.read_bytes()
-        if len(data) > MAX_FILE_BYTES:
-            raise RuntimeError(f"{rel}: 文件超过 {MAX_FILE_BYTES}B 硬上限")
         if p.suffix == TRANSLATABLE_SUFFIX or p.name in TRANSLATABLE_NAMES:
+            data = p.read_bytes()
+            if len(data) > MAX_FILE_BYTES:
+                raise RuntimeError(f"{rel}: 文件超过 {MAX_FILE_BYTES}B 硬上限")
             tracked[rel] = data
+        elif p.suffix in (".png", ".svg", ".gif", ".jpg", ".jpeg",
+                          ".webp", ".ico", ".pdf"):
+            mirror[rel] = p.read_bytes()
         else:
-            if p.suffix not in (".png", ".svg", ".gif", ".jpg", ".jpeg",
-                                ".webp", ".ico", ".pdf"):
-                logger.warning("未知扩展名文件镜像（不入账本）: %s", rel)
-            mirror[rel] = data
+            logger.warning("白名单外扩展名不入库（SOP §4 快照仅 .adoc+toc+图片）: %s", rel)
     if not tracked and not mirror:
         raise RuntimeError("upstream docs 无任何文件")
     return tracked, mirror
@@ -841,8 +844,9 @@ def build_parser() -> argparse.ArgumentParser:
                    help="与 --init/--apply 组合：只打印不写盘")
     p.add_argument("--file", metavar="NAME",
                    help="只处理指定文件（相对 --doc-root 路径）")
-    p.add_argument("--repo", default=UPSTREAM_REPO,
-                   help=f"上游仓库 URL（默认 {UPSTREAM_REPO}；测试可注入本地 file://）")
+    p.add_argument("--repo", default=None,
+                   help="上游仓库 URL（缺省：取账本 upstream.remote，无账本时 "
+                        f"{UPSTREAM_REPO}；测试可注入本地 file://）")
     p.add_argument("--workdir", default=None, help="克隆缓存目录（测试隔离用）")
     p.add_argument("--ref", default=None,
                    help="上游分支/标签（缺省：init=v5.2.25，其余=5.2.x；"
@@ -882,6 +886,19 @@ def manifest_ref_of(path: Path) -> Optional[str]:
     return data.get("ref") if isinstance(data, dict) else None
 
 
+def manifest_remote_of(path: Path) -> Optional[str]:
+    """读取账本 upstream.remote（模块账本为该模块仓库；core 账本缺省时返回 None）。"""
+    if not path.exists():
+        return None
+    try:
+        data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+    except yaml.YAMLError:
+        return None
+    if not isinstance(data, dict):
+        return None
+    return (data.get("upstream") or {}).get("remote") or None
+
+
 def main(argv: Optional[List[str]] = None):
     parser = build_parser()
     args = parser.parse_args(argv)
@@ -893,7 +910,10 @@ def main(argv: Optional[List[str]] = None):
     if ref is None:
         ref = (INIT_REF if args.init
                else (manifest_ref_of(manifest_file) or DEFAULT_REF))
-    repo_slug = "/".join(args.repo.rstrip("/").split("/")[-2:])
+    # repo 解析优先级：--repo 显式传入 > 账本 upstream.remote > core 缺省。
+    # （修复：--check/--apply 曾一律取 --repo 缺省值，模块账本会误比对 core 文档树）
+    repo_url = args.repo or manifest_remote_of(manifest_file) or UPSTREAM_REPO
+    repo_slug = "/".join(repo_url.rstrip("/").split("/")[-2:])
 
     ctx = get_ctx()
     # 上游克隆缓存按仓库 slug 分目录（core 与模块仓互不覆盖）
@@ -915,12 +935,12 @@ def main(argv: Optional[List[str]] = None):
 
     try:
         if args.init:
-            result = sync_init(ctx, args.repo, ref, args.file, args.dry_run)
+            result = sync_init(ctx, repo_url, ref, args.file, args.dry_run)
         elif args.check:
-            result = sync_check_or_apply(ctx, args.repo, ref, args.file,
+            result = sync_check_or_apply(ctx, repo_url, ref, args.file,
                                          dry_run=True, apply=False)
         elif args.apply:
-            result = sync_check_or_apply(ctx, args.repo, ref, args.file,
+            result = sync_check_or_apply(ctx, repo_url, ref, args.file,
                                          dry_run=args.dry_run, apply=True)
         elif args.mark_current:
             result = mark_current(ctx, args.mark_current)
