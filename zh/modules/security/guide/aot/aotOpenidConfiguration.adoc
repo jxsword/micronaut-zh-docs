@@ -1,0 +1,14 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – OpenID Configuration Optimization](https://docs.micronaut.io/5.2.x/security/#security-aotOpenidConfiguration)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/aot/aotOpenidConfiguration.adoc  upstream_commit: 05f9725533a99457876ef6d6301f5a81fdbf759f  upstream_hash: e771e2b25b0e09290e04f450221810307abc8d3a  translated_at: 2026-11-23 -->
+
+在 Micronaut 应用中使用 <<oauth, OpenID Connect>> 时，应用会将 `.well-known/openid-configuration` 追加到您通过 `micronaut.security.oauth2.clients.*.openid.issuer` 为每个 OAuth 2.0 客户端指定的值之后来构造 URL。它会访问该 URL 以获取与指定授权服务器相关的 OpenID Connect 元数据并据此完成自身配置。
+
+然而，这是一个可能较慢的网络请求。此外，应用很可能需要执行该网络请求才能服务第一个请求。
+
+您可以使用 Micronaut Security 的 AOT 构建优化，在构建时完成该请求。
+
+要启用该优化，请将 `micronaut.security.openid-configuration.enabled=true` 添加到 `aot.properties`。
+
+WARNING: 应用使用授权服务器在构建时提供的配置。如果授权服务器在构建时间与应用启动之间更改了配置，该配置可能已经过时。
+
+了解 https://micronaut-projects.github.io/micronaut-maven-plugin/latest/examples/aot.html#configuration[Micronaut Maven 插件 AOT 配置] 与 https://micronaut-projects.github.io/micronaut-gradle-plugin/latest/#_configuration[Micronaut Gradle 插件 AOT 配置]。

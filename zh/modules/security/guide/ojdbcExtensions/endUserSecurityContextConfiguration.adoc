@@ -1,0 +1,45 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – End User Security Context Configuration](https://docs.micronaut.io/5.2.x/security/#security-endUserSecurityContextConfiguration)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/ojdbcExtensions/endUserSecurityContextConfiguration.adoc  upstream_commit: 728364dc7790b08f7f0f17baed3cce6f49734552  upstream_hash: 5115de1ad24e46e4c596128952113e3ed8d7450c  translated_at: 2026-11-23 -->
+
+### 配置
+
+下表中的参数名应添加以下前缀：
+
+`datasources.*.data-source-properties.oracle.jdbc.provider.endUserSecurityContext.`
+
+|===
+| 参数名称 | 描述 | 默认值
+
+| `tokenUrl`
+| OAuth 2.0 令牌端点 URL。
+| 无默认值。必须为该参数配置一个值。
+
+| `clientId`
+| OAuth 2.0 客户端标识符。
+| 无默认值。必须为该参数配置一个值。
+
+| `clientSecret`
+| OAuth 2.0 客户端 secret。该参数被标记为敏感的 OJDBC 提供者参数。
+| 无默认值。必须为该参数配置一个值。
+
+| `scope`
+| 随客户端凭证请求一起发送的可选 OAuth 2.0 scope。
+| 无默认值。该参数是可选的。
+
+| `dataRoles`
+| 为所有最终用户启用的一组固定的 `DATA ROLE` 名称。应为一个或多个 `DATA ROLE` 名称，以逗号分隔：`common_user_role, common_app_role, read_only_role`
+| 无默认值。该参数是可选的。
+
+| `rolePrefix`
+| 用于匹配用户角色的前缀，提供者会将匹配到的角色识别为 `DATA ROLE`。`DATA ROLE` 的名称应出现在前缀之后。例如，该参数可设为 `ORACLE_DATA_ROLE_`。对于名为 `ORACLE_DATA_ROLE_ADMIN` 的角色，提供者会识别出名为 `ADMIN` 的 `DATA ROLE`，并为最终用户启用该 `DATA ROLE`。该值应是一个不会与无意被识别为 `DATA ROLE` 的应用角色冲突的唯一字符串。
+| `ORACLE_DATA_ROLE_`
+
+| `endUserContextAttributes`
+| 可选的 JSON 对象，包含固定的 Oracle 数据库 END USER CONTEXT 属性。对象的键为 END USER CONTEXT 名称，每个值必须是包含该上下文属性的 JSON 对象。
+| 无默认值。该参数是可选的。
+
+| `attributeNames`
+| 以逗号分隔的 Micronaut Security 认证属性名称列表，其值用于从当前认证派生 END USER CONTEXT 属性。每个命名认证属性的值必须是 JSON 对象值，或包含 JSON 对象的字符串。对象的键为 END USER CONTEXT 名称，每个值必须是包含该上下文属性的 JSON 对象。
+| `ORACLE_CONTEXT_ATTRIBUTES`
+
+|===

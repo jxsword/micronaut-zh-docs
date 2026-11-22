@@ -1,0 +1,8 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Ahead-of-time optimizations](https://docs.micronaut.io/5.2.x/security/#security-aot)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/aot.adoc  upstream_commit: 05f9725533a99457876ef6d6301f5a81fdbf759f  upstream_hash: 57b62d42d2235c0a31bce983354fdb1133124542  translated_at: 2026-11-23 -->
+
+____
+https://micronaut-projects.github.io/micronaut-aot/latest/guide/[Micronaut AOT] 是一个为 Micronaut 应用与库实现 AOT（ahead-of-time）优化的框架。这些优化的内容是把通常在运行时完成的工作改为在构建时计算
+____
+
+Micronaut Security 提供多项 AOT 优化。

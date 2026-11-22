@@ -1,0 +1,6 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Static ClientCredentialsClient](https://docs.micronaut.io/5.2.x/security/#security-clientCredentailsClientOf)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/oauth/flows/clientcredentials/clientCredentailsClientOf.adoc  upstream_commit: 1c4b39f01c1b43822c87a14410231daeec885ad6  upstream_hash: cbfa6bc10ae71f63b7f49c3e7260f96c1b70ef6c  translated_at: 2026-11-23 -->
+
+如果您遇到没有 Micronaut 应用上下文的场景，可以获取静态的 api:io.micronaut.security.oauth2.client.clientcredentials.ClientCredentialsClient[]
+
+snippet::io.micronaut.security.oauth2.client.clientcredentials.ClientCredentialsClientOfTest[tags="clientcredentialsof",indent=0]

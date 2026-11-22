@@ -1,0 +1,45 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Security](https://docs.micronaut.io/5.2.x/security/#security-securityRule)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/securityRule.adoc  upstream_commit: 3efbffe63dfc0f5da71fe605b1c075d22d997c4f  upstream_hash: a907e2ee19b195abf47e661698ba33fc6e02ef92  translated_at: 2026-11-23 -->
+
+允许匿名或已认证用户访问特定端点的决策，由从 api:security.filters.SecurityFilter[] 执行的一组安全规则（Security Rules）决定。Micronaut 自带多个内置安全规则。如果它们不能满足您的需求，您可以实现自己的 api:security.rules.SecurityRule[]。
+
+安全规则返回一个发布者（publisher），它应发出单个 api:security.rules.SecurityRuleResult[]。每种结果的描述请见下表。
+
+|===
+| 结果 | 描述
+
+| api:security.rules.SecurityRuleResult#ALLOWED[ALLOWED]
+| 应授予对资源的访问，并且*不再考虑后续规则*。
+
+| api:security.rules.SecurityRuleResult#REJECTED[REJECTED]
+| 应拒绝对资源的访问，并且*不再考虑后续规则*。
+
+| api:security.rules.SecurityRuleResult#UNKNOWN[UNKNOWN]
+| 该规则不适用于所请求的资源，或无法确定是允许还是拒绝。该结果会使其他安全规则继续被考虑。
+|===
+
+IMPORTANT: 如果所有安全规则都返回 `UNKNOWN`，该请求将被拒绝！
+
+IMPORTANT: api:security.filters.SecurityFilter[] 按顺序评估安全规则。**一旦某条规则返回 `ALLOWED` 或 `REJECTED`，其余规则将不再被评估**。
+
+安全规则实现了 ordered 接口，因此所有现有规则都有一个存储该规则顺序的静态变量 `ORDER`。规则按值从小到大的顺序执行。您可以使用这些变量将自定义规则置于任何现有规则之前或之后。
+
+在下表中，您可以找到内置安全规则的顺序及其行为的简要描述。关于这些规则的更多细节，请参阅它们各自的指南章节。
+
+|===
+| 规则 | 顺序 | ACCEPT 条件 | REJECT 条件 | UNKNOWN 条件
+
+| <<ipPattern, IpPatternsRule>> | -300 | 从不 | 没有任何 IP 模式匹配主机地址 | 地址至少匹配其中一个模式，或无法解析出地址
+
+| <<secured, SecuredAnnotationRule>> | -200 | 已认证用户至少被授予一个所需角色 | 已认证用户未被授予任何所需角色 | 请求方法上未指定 secured 注解
+
+| <<interceptUrlMap, ConfigurationInterceptUrlMapRule>> | -100 | 已认证用户至少被授予一个所需角色 | 已认证用户未被授予任何所需角色 | 没有路径模式被匹配
+
+| <<builtInEndpointsAccess, SensitiveEndpointRule>> | 0 | 用户已认证 | 用户未认证 | 路径不是敏感路径
+|===
+
+WARNING: 请勿在规则实现中执行任何阻塞操作，除非将这些操作卸载到另一个线程池。
+
+WARNING: 自 2.5 版本起，Micronaut Framework 先执行过滤器，然后再读取 HTTP 请求体。
+api:security.filter.SecurityFilter[] 会评估 api:security.rules.SecurityRule[] 类型的 bean。
+因此，api:security.rules.SecurityRule[] 不能依赖 HTTP 请求体，因为 Micronaut Framework 尚未读取请求体。

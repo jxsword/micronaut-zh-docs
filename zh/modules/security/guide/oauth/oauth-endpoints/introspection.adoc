@@ -1,0 +1,8 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Introspection](https://docs.micronaut.io/5.2.x/security/#security-introspection)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/oauth/oauth-endpoints/introspection.adoc  upstream_commit: b5870a5035962177e2c25f6d1fe08ef0583fc9e3  upstream_hash: 6609bcc0d8c8e1c66ad7aeee3f4aa389af0a3dbc  translated_at: 2026-11-23 -->
+
+可以为 OAuth 2.0 与 OpenID 提供者配置内省端点 URL，不过 Micronaut 目前不会以任何方式使用该配置。
+
+请查看以下配置表：
+
+include::{includedir}configurationProperties/io.micronaut.security.oauth2.configuration.OauthClientConfigurationProperties$IntrospectionEndpointConfigurationProperties.adoc[]

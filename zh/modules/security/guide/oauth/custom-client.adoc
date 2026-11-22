@@ -1,0 +1,17 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Custom Clients](https://docs.micronaut.io/5.2.x/security/#security-custom-client)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/oauth/custom-client.adoc  upstream_commit: 785e9eda4cde11211daf70901215ebe1cbd80a77  upstream_hash: f1524474438f2cae6d79ba9d916a00f18f6d2860  translated_at: 2026-11-23 -->
+
+OAuth 2.0 授权码许可支持的核心是 api:security.oauth2.client.OauthClient[]（标准 OAuth 2.0）与 api:security.oauth2.client.OpenIdClient[]（OpenID）。当前实现基于配置构建客户端。不过，您也可以注册一个自定义客户端，该客户端会自动拥有与之关联的路由，从而启用授权码许可流程。
+
+api:security.oauth2.client.OauthClient[] 接口很简单，只需要三个方法。
+
+[source,java]
+----
+include::security-oauth2/src/main/java/io/micronaut/security/oauth2/client/OauthClient.java[indent=0,tag=clazz]
+----
+
+* `getName` 方法用于构建触发客户端方法的 URL
+* `authorizationRedirect` 方法返回一个重定向到提供者的响应
+* `onCallback` 方法接收回调授权响应，并返回一个包含认证失败或用户详情的响应。
+
+由于这个接口足够通用，可以为任何遵循重定向 / 重定向回来模式的提供者实现认证。例如，可以实现 OAuth 1.0a 提供者的支持（说的就是你，twitter）。

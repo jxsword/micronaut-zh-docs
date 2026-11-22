@@ -1,0 +1,16 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Protected Resource Metadata](https://docs.micronaut.io/5.2.x/security/#security-protectedResourceMetadata)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/oauth/oauth-endpoints/protectedResourceMetadata.adoc  upstream_commit: a4e667931b762db6798d273ec92324e2eb43cefa  upstream_hash: 0902b82440ec5a6f1566d2054dcc43b2f12bae5b  translated_at: 2026-11-23 -->
+
+[[protectedResourceMetadata]]
+____
+https://datatracker.ietf.org/doc/html/rfc9728[RFC 9728] 元数据格式，OAuth 2.0 客户端或授权服务器可使用它获取与 OAuth 2.0 受保护资源交互所需的信息。
+____
+
+您可以配置是否暴露受保护资源元数据（protected resource metadata）：
+
+include::{includedir}configurationProperties/io.micronaut.security.oauth2.metadata.ProtectedResourceMetadataConfigurationProperties.adoc[]
+
+GET 端点暴露在 `/.well-known/oauth-protected-resource`。控制该元数据的 API 是：
+api:security.oauth2.metadata.ProtectedResourceMetadataProvider[]
+
+如果默认实现不满足您的需求，您可以创建一个替换它的 bean。

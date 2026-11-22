@@ -1,0 +1,12 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Application Authorization and User Identity](https://docs.micronaut.io/5.2.x/security/#security-applicationAuthorizationAndUserIdentity)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/ojdbcExtensions/applicationAuthorizationAndUserIdentity.adoc  upstream_commit: 728364dc7790b08f7f0f17baed3cce6f49734552  upstream_hash: 69459c5a0990ba56d3ad9d998dfe9ec75d760ebf  translated_at: 2026-11-23 -->
+
+提供给 Oracle JDBC 的 `EndUserSecurityContext` 封装了两个安全令牌：
+
+**数据库访问令牌（Database Access Token）** 该令牌授权 Micronaut 应用访问数据库。提供者通过向参数定义的服务器令牌端点发送 OAuth 2.0 客户端凭证请求来获取此令牌：
+
+`datasources.*.data-source-properties.oracle.jdbc.provider.endUserSecurityContext.tokenUrl`
+
+**最终用户令牌（End User Token）** 该令牌标识 Micronaut 应用的最终用户。它通常在传入 HTTP 请求的 `Authorization` Header 中接收。Micronaut Security 通过 api:io.micronaut.security.token.reader.TokenResolver[] API 解析该令牌。提供者使用 Micronaut 的 api:security.context.SecurityContextHolder[] 检索此令牌。
+
+这两个令牌使 Oracle 数据库能够基于正在访问数据的应用用户及其使用的应用做出授权决策。

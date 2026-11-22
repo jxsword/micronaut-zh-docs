@@ -1,0 +1,12 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – JWKS Optimization](https://docs.micronaut.io/5.2.x/security/#security-aotJwks)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/aot/aotJwks.adoc  upstream_commit: 1f8d428bd5874720f0f62c1b1b953257f9e21438  upstream_hash: 37a01e2c5c483e970e6f797e035d1b4b711c3459  translated_at: 2026-11-23 -->
+
+Micronaut Security 支持 JWKS（JSON Web Key Sets），既可以 <<jwks, 直接指定>>，也可以使用获取 OpenID Connect 元数据时得到的 `jwks_uri`。Micronaut Security 使用 JWKS 验证由另一个应用或授权服务器签发的令牌的签名。
+
+Micronaut 应用需要发起网络请求来获取 JWKS。您可以使用 Micronaut Security 的 AOT 构建优化，在构建时完成该请求。
+
+要启用该优化，请将 `micronaut.security.jwks.enabled.enabled=true` 添加到 `aot.properties`。
+
+WARNING: 应用使用授权服务器在构建时暴露的 JWKS。如果授权服务器在构建时间与应用启动之间更改了 JWKS，这些 JWKS 可能已经过时。您可以通过 `JwksSignature::clear` 或 `JwkSetFetcher::clearCache` 清除密钥。
+
+了解 https://micronaut-projects.github.io/micronaut-maven-plugin/latest/examples/aot.html#configuration[Micronaut Maven 插件 AOT 配置] 与 https://micronaut-projects.github.io/micronaut-gradle-plugin/latest/#_configuration[Micronaut Gradle 插件 AOT 配置]。

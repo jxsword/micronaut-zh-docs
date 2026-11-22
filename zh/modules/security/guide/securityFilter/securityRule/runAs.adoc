@@ -1,6 +1,7 @@
 > 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Run As Annotation](https://docs.micronaut.io/5.2.x/security/#security-runAs)，非官方译文，以英文原文为准。
 <!-- upstream_file: modules/security/guide/securityFilter/securityRule/runAs.adoc  upstream_commit: f563307ffe8016f473dd7e36424fd0c485208210  upstream_hash: eb09a9ed95c93d8dd305f34eb9beaed211e55f7f  translated_at: 2026-11-23 -->
 
+[[runAs]]
 您可以使用 ann:security.annotation.RunAs[] 注解为被拦截的方法调用应用一个认证身份。
 
 snippet::io.micronaut.security.docs.authentication.RunAsService[tags="clazz"]

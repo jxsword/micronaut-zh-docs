@@ -1,0 +1,14 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Security](https://docs.micronaut.io/5.2.x/security/#security-ldap)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/ldap.adoc  upstream_commit: 3cf6df32d1e5a0d20cb61d5f21bedba1626e3592  upstream_hash: 4658995ad3937f97ac7ff3b1b8227637ff09a11f  translated_at: 2026-11-23 -->
+
+Micronaut 开箱即支持使用 LDAP 进行认证。要开始使用，请为您的应用添加 `security-ldap` 依赖。
+
+.build.gradle
+[source,groovy]
+----
+compile "io.micronaut.security:micronaut-security-ldap"
+----
+
+TIP: 请阅读 https://guides.micronaut.io/latest/micronaut-database-authentication-provider.html[LDAP 与数据库认证提供者] 查看示例。
+
+将 `micronaut.security.ldap.enabled` 设为 `false` 可全局禁用 LDAP 认证，也可以按提供者单独禁用，例如 `micronaut.security.ldap.default.enabled: false`。

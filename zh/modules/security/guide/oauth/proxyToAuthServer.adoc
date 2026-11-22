@@ -1,0 +1,16 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Proxy .well-known requests to Auth Server](https://docs.micronaut.io/5.2.x/security/#security-proxyToAuthServer)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/oauth/proxyToAuthServer.adoc  upstream_commit: 0fecd00a56a852698405d02fa140a67c13a5b1aa  upstream_hash: 269bdc45d85770ce2f2b4b1873c52a6313d18f92  translated_at: 2026-11-23 -->
+
+您可以将发往 `/.well-known/oauth-authorization-server` https://datatracker.ietf.org/doc/html/rfc8414[RFC8414] 与 `/.well-known/openid-configuration` https://openid.net/specs/openid-connect-discovery-1_0.html[OpenID Connect 发现（Discovery）] 的 GET 请求代理到授权服务器。
+
+image::proxy.svg[]
+
+要启用代理，请将以下配置属性设为 `true`：
+
+|===
+| 代理路径 | 属性
+| `/.well-known/oauth-authorization-server`
+| `micronaut.security.oauth2.clients.*.proxy-well-known-oauth-authorization-server`
+| `/.well-known/openid-configuration`
+| `micronaut.security.oauth2.clients.*.proxy-well-known-openid-configuration`
+|===

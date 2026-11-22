@@ -1,6 +1,7 @@
 > 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Intercept URL Map](https://docs.micronaut.io/5.2.x/security/#security-interceptUrlMap)，非官方译文，以英文原文为准。
 <!-- upstream_file: modules/security/guide/securityFilter/securityRule/interceptUrlMap.adoc  upstream_commit: 8950a9a7b144f7218be48e9c36f903add5eb71b5  upstream_hash: 1e45b57fc7976dd92ba0a267a212b223da679de4  translated_at: 2026-11-23 -->
 
+[[interceptUrlMap]]
 此外，您可以通过 Intercept URL Map 配置端点的认证与授权访问：
 
 [configuration]

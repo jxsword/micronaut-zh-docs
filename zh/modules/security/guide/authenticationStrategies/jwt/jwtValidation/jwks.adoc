@@ -1,6 +1,7 @@
 > 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Remote JWKS](https://docs.micronaut.io/5.2.x/security/#security-jwks)，非官方译文，以英文原文为准。
 <!-- upstream_file: modules/security/guide/authenticationStrategies/jwt/jwtValidation/jwks.adoc  upstream_commit: d59608be8bb4075e232cbc9d4ea85d24a74c234c  upstream_hash: 3b72b1391719c2a9efe17e67de52a6003bf61286  translated_at: 2026-11-23 -->
 
+[[jwks]]
 https://tools.ietf.org/html/rfc7517[JSON Web Key（JWK）] 是一个表示加密密钥的 JSON 对象。你可以使用远程 JWK Set——表示一组 JWK 的 JSON 对象——来验证 JWT 签名。
 
 你可以将远程 JWKS 配置为签名验证器：

@@ -1,0 +1,5 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Application Managed Data Roles and Attributes](https://docs.micronaut.io/5.2.x/security/#security-applicationManagedDataRolesAndAttributes)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/ojdbcExtensions/applicationManagedDataRolesAndAttributes.adoc  upstream_commit: 728364dc7790b08f7f0f17baed3cce6f49734552  upstream_hash: 533e599032c5c786fd0f8d4618b1c61cbee2bc77  translated_at: 2026-11-23 -->
+
+提供给 Oracle JDBC 的 `EndUserSecurityContext` 可以包含应用管理的 `DATA ROLE` 名称或 `END USER CONTEXT` 属性，
+它们派生自 Micronaut 的 api:security.context.SecurityContextHolder[] 中存在的 api:security.authentication.Authentication[]。

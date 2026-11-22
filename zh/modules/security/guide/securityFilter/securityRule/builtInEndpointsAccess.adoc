@@ -1,6 +1,7 @@
 > 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Built-In Endpoints Security](https://docs.micronaut.io/5.2.x/security/#security-builtInEndpointsAccess)，非官方译文，以英文原文为准。
 <!-- upstream_file: modules/security/guide/securityFilter/securityRule/builtInEndpointsAccess.adoc  upstream_commit: 8950a9a7b144f7218be48e9c36f903add5eb71b5  upstream_hash: 0eb8d63a0c96cbdd87b44e2e29b51ae5629cd77f  translated_at: 2026-11-23 -->
 
+[[builtInEndpointsAccess]]
 开启安全特性后，https://docs.micronaut.io/latest/guide/index.html#providedEndpoints[内置端点] 会依据其 sensitive 取值决定是否受保护。
 
 [configuration]

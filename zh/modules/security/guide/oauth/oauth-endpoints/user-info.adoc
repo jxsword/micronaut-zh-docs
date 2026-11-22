@@ -1,0 +1,15 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – UserInfo Endpoint](https://docs.micronaut.io/5.2.x/security/#security-user-info)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/oauth/oauth-endpoints/user-info.adoc  upstream_commit: d3d7d2f2a2995c6b998b6fbd7d4aff6965701b61  upstream_hash: 3737f3ce1e75fe4135ca7adb208bdd354e37296c  translated_at: 2026-11-23 -->
+
+Micronaut Security OAuth2 会为每个 OpenID 提供者注册一个 api:io.micronaut.security.token.validator.TokenValidator[] 类型的 bean。
+它使用远程授权服务器的 https://openid.net/specs/openid-connect-core-1_0.html#UserInfo[`UserInfo` 端点] 提供令牌验证。
+
+image::userinfo.svg[]
+
+`UserInfo` 端点 URL 会自动从授权服务器的元数据中获取（通过访问授权服务器的 `.well-known/openid-configuration` 端点获得）。
+
+不过，您也可以通过配置来设置它：
+
+include::{includedir}configurationProperties/io.micronaut.security.oauth2.configuration.OauthClientConfigurationProperties$OpenIdClientConfigurationProperties$UserInfoEndpointConfigurationProperties.adoc[]
+
+NOTE: 将 `micronaut.security.oauth2.userinfo.validator` 设为 `false` 可禁用 `UserInfo` 端点的令牌验证。

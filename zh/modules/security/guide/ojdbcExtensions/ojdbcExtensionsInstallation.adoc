@@ -1,0 +1,8 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Oracle JDBC Extensions Installation](https://docs.micronaut.io/5.2.x/security/#security-ojdbcExtensionsInstallation)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/ojdbcExtensions/ojdbcExtensionsInstallation.adoc  upstream_commit: 728364dc7790b08f7f0f17baed3cce6f49734552  upstream_hash: 6a70328c7ea3a3d6b55f3776d14815a28f934460  translated_at: 2026-11-23 -->
+
+要使用该模块，请添加以下依赖：
+
+dependency:micronaut-security-ojdbc-extensions[groupId=io.micronaut.security]
+
+此外，您必须添加一个 HTTP 客户端实现：https://docs.micronaut.io/latest/guide/#nettyHttpClient[基于 Netty 的 HTTP 客户端] 或 https://docs.micronaut.io/latest/guide/#jdkHttpClient[JDK HTTP 客户端] 二者之一。

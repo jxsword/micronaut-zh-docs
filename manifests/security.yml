@@ -7,7 +7,7 @@ files:
 - file: modules/security/guide/aot.adoc
   blob_sha: 57b62d42d2235c0a31bce983354fdb1133124542
   size: 364
-  status: missing
+  status: current
   zh: zh/modules/security/guide/aot.adoc
   paragraphs: 4
   updated_at: '2026-11-23'
@@ -15,7 +15,7 @@ files:
 - file: modules/security/guide/aot/aotConfiguration.adoc
   blob_sha: 4a2343f1080fe8c86079728fe49a632364f9135c
   size: 1055
-  status: missing
+  status: current
   zh: zh/modules/security/guide/aot/aotConfiguration.adoc
   paragraphs: 6
   updated_at: '2026-11-23'
@@ -23,7 +23,7 @@ files:
 - file: modules/security/guide/aot/aotJwks.adoc
   blob_sha: 37a01e2c5c483e970e6f797e035d1b4b711c3459
   size: 1140
-  status: missing
+  status: current
   zh: zh/modules/security/guide/aot/aotJwks.adoc
   paragraphs: 5
   updated_at: '2026-11-23'
@@ -31,7 +31,7 @@ files:
 - file: modules/security/guide/aot/aotOpenidConfiguration.adoc
   blob_sha: e771e2b25b0e09290e04f450221810307abc8d3a
   size: 1272
-  status: missing
+  status: current
   zh: zh/modules/security/guide/aot/aotOpenidConfiguration.adoc
   paragraphs: 6
   updated_at: '2026-11-23'
@@ -535,7 +535,7 @@ files:
 - file: modules/security/guide/ldap.adoc
   blob_sha: 4658995ad3937f97ac7ff3b1b8227637ff09a11f
   size: 570
-  status: missing
+  status: current
   zh: zh/modules/security/guide/ldap.adoc
   paragraphs: 6
   updated_at: '2026-11-23'
@@ -551,7 +551,7 @@ files:
 - file: modules/security/guide/oauth/custom-client.adoc
   blob_sha: f1524474438f2cae6d79ba9d916a00f18f6d2860
   size: 1231
-  status: missing
+  status: current
   zh: zh/modules/security/guide/oauth/custom-client.adoc
   paragraphs: 6
   updated_at: '2026-11-23'
@@ -687,7 +687,7 @@ files:
 - file: modules/security/guide/oauth/flows/clientcredentials/clientCredentailsClientOf.adoc
   blob_sha: cbfa6bc10ae71f63b7f49c3e7260f96c1b70ef6c
   size: 318
-  status: missing
+  status: current
   zh: zh/modules/security/guide/oauth/flows/clientcredentials/clientCredentailsClientOf.adoc
   paragraphs: 2
   updated_at: '2026-11-23'
@@ -695,7 +695,7 @@ files:
 - file: modules/security/guide/oauth/flows/clientcredentials/clientCredentialGuides.adoc
   blob_sha: d52133942e2a22c65e9bcf2e50b78c09fb28f5f3
   size: 350
-  status: missing
+  status: current
   zh: zh/modules/security/guide/oauth/flows/clientcredentials/clientCredentialGuides.adoc
   paragraphs: 2
   updated_at: '2026-11-23'
@@ -703,7 +703,7 @@ files:
 - file: modules/security/guide/oauth/flows/clientcredentials/clientecredentialshttpclient.adoc
   blob_sha: c8279a1ecb8acb24d0ec346655f1564b51c38302
   size: 1177
-  status: missing
+  status: current
   zh: zh/modules/security/guide/oauth/flows/clientcredentials/clientecredentialshttpclient.adoc
   paragraphs: 6
   updated_at: '2026-11-23'
@@ -711,7 +711,7 @@ files:
 - file: modules/security/guide/oauth/flows/password.adoc
   blob_sha: 914eb67b9ef85c423a98b7116310b5f039cb92d3
   size: 1130
-  status: missing
+  status: current
   zh: zh/modules/security/guide/oauth/flows/password.adoc
   paragraphs: 11
   updated_at: '2026-11-23'
@@ -735,7 +735,7 @@ files:
 - file: modules/security/guide/oauth/oauth-endpoints/endsession.adoc
   blob_sha: daf6371e5b8257e8610a85e8838b248cd130b7b8
   size: 2746
-  status: missing
+  status: current
   zh: zh/modules/security/guide/oauth/oauth-endpoints/endsession.adoc
   paragraphs: 13
   updated_at: '2026-11-23'
@@ -743,7 +743,7 @@ files:
 - file: modules/security/guide/oauth/oauth-endpoints/introspection.adoc
   blob_sha: 6609bcc0d8c8e1c66ad7aeee3f4aa389af0a3dbc
   size: 383
-  status: missing
+  status: current
   zh: zh/modules/security/guide/oauth/oauth-endpoints/introspection.adoc
   paragraphs: 3
   updated_at: '2026-11-23'
@@ -751,7 +751,7 @@ files:
 - file: modules/security/guide/oauth/oauth-endpoints/protectedResourceMetadata.adoc
   blob_sha: 0902b82440ec5a6f1566d2054dcc43b2f12bae5b
   size: 701
-  status: missing
+  status: current
   zh: zh/modules/security/guide/oauth/oauth-endpoints/protectedResourceMetadata.adoc
   paragraphs: 7
   updated_at: '2026-11-23'
@@ -759,7 +759,7 @@ files:
 - file: modules/security/guide/oauth/oauth-endpoints/revocation.adoc
   blob_sha: 287814fd3747855c12e52ddccf00f39203341af5
   size: 377
-  status: missing
+  status: current
   zh: zh/modules/security/guide/oauth/oauth-endpoints/revocation.adoc
   paragraphs: 3
   updated_at: '2026-11-23'
@@ -767,7 +767,7 @@ files:
 - file: modules/security/guide/oauth/oauth-endpoints/user-info.adoc
   blob_sha: 3737f3ce1e75fe4135ca7adb208bdd354e37296c
   size: 883
-  status: missing
+  status: current
   zh: zh/modules/security/guide/oauth/oauth-endpoints/user-info.adoc
   paragraphs: 6
   updated_at: '2026-11-23'
@@ -775,7 +775,7 @@ files:
 - file: modules/security/guide/oauth/oauthGuides.adoc
   blob_sha: f96b1e057f83f6ef325829424d8d9f2dae954a5d
   size: 832
-  status: missing
+  status: current
   zh: zh/modules/security/guide/oauth/oauthGuides.adoc
   paragraphs: 2
   updated_at: '2026-11-23'
@@ -791,7 +791,7 @@ files:
 - file: modules/security/guide/oauth/proxyToAuthServer.adoc
   blob_sha: 269bdc45d85770ce2f2b4b1873c52a6313d18f92
   size: 647
-  status: missing
+  status: current
   zh: zh/modules/security/guide/oauth/proxyToAuthServer.adoc
   paragraphs: 4
   updated_at: '2026-11-23'
@@ -799,7 +799,7 @@ files:
 - file: modules/security/guide/ojdbcExtensions.adoc
   blob_sha: 393eeb62d6b04b79e5f0d5eaa10b009c2480a4aa
   size: 365
-  status: missing
+  status: current
   zh: zh/modules/security/guide/ojdbcExtensions.adoc
   paragraphs: 1
   updated_at: '2026-11-23'
@@ -807,7 +807,7 @@ files:
 - file: modules/security/guide/ojdbcExtensions/applicationAuthorizationAndUserIdentity.adoc
   blob_sha: 69459c5a0990ba56d3ad9d998dfe9ec75d760ebf
   size: 947
-  status: missing
+  status: current
   zh: zh/modules/security/guide/ojdbcExtensions/applicationAuthorizationAndUserIdentity.adoc
   paragraphs: 5
   updated_at: '2026-11-23'
@@ -815,7 +815,7 @@ files:
 - file: modules/security/guide/ojdbcExtensions/applicationManagedDataRolesAndAttributes.adoc
   blob_sha: 533e599032c5c786fd0f8d4618b1c61cbee2bc77
   size: 275
-  status: missing
+  status: current
   zh: zh/modules/security/guide/ojdbcExtensions/applicationManagedDataRolesAndAttributes.adoc
   paragraphs: 1
   updated_at: '2026-11-23'
@@ -823,7 +823,7 @@ files:
 - file: modules/security/guide/ojdbcExtensions/applicationManagedDataRolesAndAttributes/applicationManagedDataRoles.adoc
   blob_sha: bac8491cde143bc60803b640614d6bf2921e01f9
   size: 877
-  status: missing
+  status: current
   zh: zh/modules/security/guide/ojdbcExtensions/applicationManagedDataRolesAndAttributes/applicationManagedDataRoles.adoc
   paragraphs: 6
   updated_at: '2026-11-23'
@@ -831,7 +831,7 @@ files:
 - file: modules/security/guide/ojdbcExtensions/applicationManagedDataRolesAndAttributes/endUserContextAttributes.adoc
   blob_sha: 5f0b8996fe21f08b8a446995805e9bead762302e
   size: 1346
-  status: missing
+  status: current
   zh: zh/modules/security/guide/ojdbcExtensions/applicationManagedDataRolesAndAttributes/endUserContextAttributes.adoc
   paragraphs: 9
   updated_at: '2026-11-23'
@@ -839,7 +839,7 @@ files:
 - file: modules/security/guide/ojdbcExtensions/applicationManagedDataRolesAndAttributes/privilegeEscalation.adoc
   blob_sha: 054c557bdb6de45977f1db605ae33a2f245be8ce
   size: 850
-  status: missing
+  status: current
   zh: zh/modules/security/guide/ojdbcExtensions/applicationManagedDataRolesAndAttributes/privilegeEscalation.adoc
   paragraphs: 3
   updated_at: '2026-11-23'
@@ -847,7 +847,7 @@ files:
 - file: modules/security/guide/ojdbcExtensions/endUserSecurityContextConfiguration.adoc
   blob_sha: 5115de1ad24e46e4c596128952113e3ed8d7450c
   size: 2292
-  status: missing
+  status: current
   zh: zh/modules/security/guide/ojdbcExtensions/endUserSecurityContextConfiguration.adoc
   paragraphs: 4
   updated_at: '2026-11-23'
@@ -855,7 +855,7 @@ files:
 - file: modules/security/guide/ojdbcExtensions/endUserSecurityContextProvider.adoc
   blob_sha: 85e529f32e12d9b7f3cdcd471413baf739dbaa46
   size: 2626
-  status: missing
+  status: current
   zh: zh/modules/security/guide/ojdbcExtensions/endUserSecurityContextProvider.adoc
   paragraphs: 8
   updated_at: '2026-11-23'
@@ -863,7 +863,7 @@ files:
 - file: modules/security/guide/ojdbcExtensions/ojdbcExtensionsInstallation.adoc
   blob_sha: 6a70328c7ea3a3d6b55f3776d14815a28f934460
   size: 358
-  status: missing
+  status: current
   zh: zh/modules/security/guide/ojdbcExtensions/ojdbcExtensionsInstallation.adoc
   paragraphs: 3
   updated_at: '2026-11-23'
@@ -895,7 +895,7 @@ files:
 - file: modules/security/guide/repository.adoc
   blob_sha: c44680d761fc97722ba730443c2296b49e60755a
   size: 130
-  status: missing
+  status: current
   zh: zh/modules/security/guide/repository.adoc
   paragraphs: 2
   updated_at: '2026-11-23'
@@ -1103,7 +1103,7 @@ files:
 - file: modules/security/guide/securityRule.adoc
   blob_sha: a907e2ee19b195abf47e661698ba33fc6e02ef92
   size: 3134
-  status: missing
+  status: current
   zh: zh/modules/security/guide/securityRule.adoc
   paragraphs: 10
   updated_at: '2026-11-23'

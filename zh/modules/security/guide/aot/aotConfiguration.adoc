@@ -1,0 +1,38 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Micronaut Security AOT Configuration](https://docs.micronaut.io/5.2.x/security/#security-aotConfiguration)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/aot/aotConfiguration.adoc  upstream_commit: 05f9725533a99457876ef6d6301f5a81fdbf759f  upstream_hash: 4a2343f1080fe8c86079728fe49a632364f9135c  translated_at: 2026-11-23 -->
+
+使用 https://micronaut-projects.github.io/micronaut-gradle-plugin/latest/#_configuration[Micronaut Gradle 插件] 时，您可以通过 `aotPlugins` 配置声明要使用的其他 AOT 模块：
+
+[source,groovy]
+----
+dependencies {
+...
+..
+//http://github.com/micronaut-projects/micronaut-security/releases
+aotPlugins("io.micronaut.security:micronaut-security-aot:3.9.0")
+}
+----
+
+对于 https://micronaut-projects.github.io/micronaut-maven-plugin/latest/examples/aot.html[Micronaut Maven 插件]，您需要执行以下操作：
+
+[source,xml]
+----
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>io.micronaut.build</groupId>
+        <artifactId>micronaut-maven-plugin</artifactId>
+        <configuration>
+          <aotDependencies>
+            <dependency>
+              <groupId>io.micronaut.security</groupId>
+              <artifactId>micronaut-security-aot</artifactId>
+              <version>3.9.0</version>
+            </dependency>
+            ...
+          </aotDependencies>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+----

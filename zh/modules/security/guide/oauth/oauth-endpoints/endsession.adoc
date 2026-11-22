@@ -1,0 +1,27 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – OpenID End Session](https://docs.micronaut.io/5.2.x/security/#security-endsession)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/oauth/oauth-endpoints/endsession.adoc  upstream_commit: 9d36b1354f4a44ca76636f623bddacc3fc9f3c4f  upstream_hash: daf6371e5b8257e8610a85e8838b248cd130b7b8  translated_at: 2026-11-23 -->
+
+OpenID Connect 规范的一部分包含一份标题为 https://openid.net/specs/openid-connect-session-1_0.html[会话管理（Session Management）] 的草案文档。由于该规范仍是草案，一些提供者对其实现方式不同，或完全没有实现。默认配置下结束会话（end session）的工作方式请见下图：
+
+image::openid-end-session.svg[]
+
+如果任何已配置的 OpenID 提供者支持结束会话行为，会注册一个响应 `/oauth/logout` 的路由，并重定向到提供者以将用户登出。还会向提供者发送一个参数，指明用户登出后提供者应将用户重定向到的 URL。默认 URL 为 `/logout`，这会使本地认证也被清除，并按照 api:security.handlers.LogoutHandler[] 发出最终重定向。
+
+以上全部内容都可以通过 `micronaut.security.oauth2.openid` 进行配置：
+
+include::{includedir}configurationProperties/io.micronaut.security.oauth2.configuration.OauthConfigurationProperties$OpenIdConfigurationProperties.adoc[]
+include::{includedir}configurationProperties/io.micronaut.security.oauth2.configuration.OauthConfigurationProperties$OpenIdConfigurationProperties$EndSessionConfigurationProperties.adoc[]
+
+要启用 `/logout` 端点，请参阅 <<logout, 登出端点>> 一节。
+
+IMPORTANT: 必须将 `get-allowed` 配置选项设为 `true`，因为 OpenID 提供者会发出重定向，而重定向是 GET 请求。
+
+本库开箱即支持 Auth0、AWS Cognito 与 Okta 的结束会话。api:security.oauth2.endpoint.endsession.request.EndSessionEndpointResolver[] 负责确定给定提供者（如果有）将使用哪个 api:security.oauth2.endpoint.endsession.request.EndSessionEndpoint[]。
+
+WARNING: 如果您为认证服务器使用了自定义域名 URL，可以通过设置 `micronaut.security.oauth2.clients.*.authorization-server` 属性来指定您使用的授权服务器，而不是推断得出。
+
+在选择任何默认提供者之前，端点解析器会先查找带有命名限定符（与配置中的客户端名称匹配）的 api:security.oauth2.endpoint.endsession.request.EndSessionEndpoint[] bean。如果未找到这样的 bean，则将默认端点与 issuer URL 进行匹配。
+
+例如，如果您正在使用某个开箱即受支持的提供者，但不想使用结束会话支持，可以按客户端将其禁用。
+
+include::{includedir}configurationProperties/io.micronaut.security.oauth2.configuration.OauthClientConfigurationProperties$OpenIdClientConfigurationProperties$EndSessionConfigurationProperties.adoc[]

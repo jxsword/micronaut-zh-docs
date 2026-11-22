@@ -1,0 +1,25 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – End User Security Context Provider](https://docs.micronaut.io/5.2.x/security/#security-endUserSecurityContextProvider)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/ojdbcExtensions/endUserSecurityContextProvider.adoc  upstream_commit: 728364dc7790b08f7f0f17baed3cce6f49734552  upstream_hash: 85e529f32e12d9b7f3cdcd471413baf739dbaa46  translated_at: 2026-11-23 -->
+
+最终用户安全上下文提供者（End User Security Context Provider）提供一个安全上下文，用于启用
+https://docs.oracle.com/en/database/oracle/oracle-database/26/ddscg/understand-oracle-deep-data-security.html[Oracle 数据库的深度数据安全（Deep Data Security）] 特性。
+这是一个以 `ojdbc-provider-micronaut-end-user-security-context` 为名称的 https://docs.oracle.com/en/database/oracle/oracle-database/26/jajdb/oracle/jdbc/spi/OracleResourceProvider.html[资源提供者（Resource Provider）]。
+
+该提供者必须配置为以 OAuth 2.0 客户端身份进行认证。该客户端应映射到 Oracle 数据库中定义的 `DATA ROLE` 或 `APPLICATION IDENTITY`。
+
+在下面的示例中，提供者被配置为通过针对 Azure Entra ID 授权服务器的客户端凭证请求进行认证。
+
+[source, properties]
+----
+datasources.default.data-source-properties.oracle.jdbc.provider.endUserSecurityContext=ojdbc-provider-micronaut-end-user-security-context
+datasources.default.data-source-properties.oracle.jdbc.provider.endUserSecurityContext.clientId=${HRAPP_CLIENT_ID}
+datasources.default.data-source-properties.oracle.jdbc.provider.endUserSecurityContext.clientSecret=${HRAPP_CLIENT_SECRET}
+datasources.default.data-source-properties.oracle.jdbc.provider.endUserSecurityContext.tokenUrl=https://login.microsoftonline.com/${HRAPP_TENANT_ID}/oauth2/v2.0/token
+datasources.default.data-source-properties.oracle.jdbc.provider.endUserSecurityContext.scope=${HRAPP_SCOPE}
+----
+
+前面的示例配置 Oracle JDBC 加载名为 `ojdbc-provider-micronaut-end-user-security-context` 的 https://docs.oracle.com/en/database/oracle/oracle-database/26/jajdb/oracle/jdbc/spi/EndUserSecurityContextProvider.html[EndUserSecurityContextProvider]。使用此配置时，Oracle JDBC 每次执行数据库操作时都会收到一个 https://docs.oracle.com/en/database/oracle/oracle-database/26/jajdb/oracle/jdbc/EndUserSecurityContext.html[oracle.jdbc.EndUserSecurityContext]。
+
+Oracle JDBC 发送到数据库的几乎所有网络请求都被视为数据库操作。这包括 SQL 执行、行获取、提交/回滚以及 LOB 数据访问。当向 Oracle JDBC 提供 `EndUserSecurityContext` 时，所有这些操作都会受到 Oracle 数据库中定义的 `DATA GRANT` 策略的约束。
+
+`DATA GRANT` 策略可以基于正在访问数据库的用户及其使用的应用来实施控制。与传统模型（所有应用用户都以同一个数据库用户身份访问数据库）相比，这提供了一种更细粒度的数据安全方法。

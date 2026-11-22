@@ -51,7 +51,7 @@
 | security | SEC-01 | 42+toc | 3432 | 3454 | — | current |
 | security | SEC-02 | 40 | 3452 | 3539 | — | current |
 | security | SEC-03 | 29 | 3456 | 3503 | — | current |
-| security | SEC-04 | 28 | 2833 | 2842 | — | pending |
+| security | SEC-04 | 28 | 2833 | 2842 | — | current |
 
 - SEC-03（2026-11-23 完成）：29 文件七步全流程，validate 112 文件全绿（豁免 3 条均为既有跟踪：loginController 悬空 + wwwAuthenticate 上游不平衡 xref ×2）；**注入 4 锚**（[[oauth]]/[[openid-authorization-code]]/[[keys]] 消解 SEC-01/02 遗留豁免 3 条 + [[openid-configuration]] 批内闭环）；批内裸 xref 3 处走 SEC-01 口径；validate 拦 ⑦ 邻接 ×1 与 ③ bean 口径 ×13 文件（新译大写 Bean 统一改小写，SEC-01 先例）；术语 +4（refresh token→刷新令牌、access token→访问令牌、Client Credentials Grant→客户端凭证许可、nonce 不译；state/issuer 试用撤回——词形通用致 ③ 误报）。详见 reports/batch-SEC-03.md。
 - 模块导航 toc.yml 标题随首批一并译出核销（micrometer 30 / validation 12 / security 145 条目中 SEC-01 的 43 条 current）。

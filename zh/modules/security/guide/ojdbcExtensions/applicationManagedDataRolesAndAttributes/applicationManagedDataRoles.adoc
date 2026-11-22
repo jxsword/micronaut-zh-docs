@@ -1,0 +1,16 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Application Managed Data Roles](https://docs.micronaut.io/5.2.x/security/#security-applicationManagedDataRoles)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/ojdbcExtensions/applicationManagedDataRolesAndAttributes/applicationManagedDataRoles.adoc  upstream_commit: 728364dc7790b08f7f0f17baed3cce6f49734552  upstream_hash: bac8491cde143bc60803b640614d6bf2921e01f9  translated_at: 2026-11-23 -->
+
+如果 api:security.authentication.Authentication[] 中的一个或多个角色以指定前缀开头，提供者就会将它们识别为应为最终用户启用的应用管理 `DATA ROLE` 名称。
+该前缀由参数指定：
+
+`datasources.*.data-source-properties.oracle.jdbc.provider.endUserSecurityContext.rolePrefix`
+
+该参数的默认值为 `ORACLE_DATA_ROLE_`。
+
+`DATA ROLE` 的名称应出现在指定前缀之后。例如，使用默认前缀时，如果已认证用户拥有值为 `ORACLE_DATA_ROLE_ADMIN` 的角色，
+提供者将识别出名为 `ADMIN` 的 `DATA ROLE`。
+
+除角色前缀外，还可以使用以下参数为提供者配置一组固定的数据角色名称：
+
+`datasources.*.data-source-properties.oracle.jdbc.provider.endUserSecurityContext.dataRoles`

@@ -1,6 +1,7 @@
 > 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – IP Pattern Rule](https://docs.micronaut.io/5.2.x/security/#security-ipPattern)，非官方译文，以英文原文为准。
 <!-- upstream_file: modules/security/guide/securityFilter/securityRule/ipPattern.adoc  upstream_commit: 8950a9a7b144f7218be48e9c36f903add5eb71b5  upstream_hash: 2acf1dfc3f40a59c259750ef5dd489911adbedd4  translated_at: 2026-11-23 -->
 
+[[ipPattern]]
 开启安全特性后，默认允许来自任何 IP 地址的流量。
 
 不过，您可以拒绝不来自白名单 IP 模式的流量，如下所示：

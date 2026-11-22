@@ -1,0 +1,8 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Revocation](https://docs.micronaut.io/5.2.x/security/#security-revocation)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/oauth/oauth-endpoints/revocation.adoc  upstream_commit: b5870a5035962177e2c25f6d1fe08ef0583fc9e3  upstream_hash: 287814fd3747855c12e52ddccf00f39203341af5  translated_at: 2026-11-23 -->
+
+可以为 OAuth 2.0 与 OpenID 提供者配置撤销端点（revocation endpoint）URL，不过 Micronaut 目前不会以任何方式使用该配置。
+
+请查看以下配置表：
+
+include::{includedir}configurationProperties/io.micronaut.security.oauth2.configuration.OauthClientConfigurationProperties$RevocationEndpointConfigurationProperties.adoc[]

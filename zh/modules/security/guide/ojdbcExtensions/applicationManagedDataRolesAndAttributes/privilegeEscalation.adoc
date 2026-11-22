@@ -1,0 +1,25 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Privilege Escalation](https://docs.micronaut.io/5.2.x/security/#security-privilegeEscalation)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/ojdbcExtensions/applicationManagedDataRolesAndAttributes/privilegeEscalation.adoc  upstream_commit: 728364dc7790b08f7f0f17baed3cce6f49734552  upstream_hash: 054c557bdb6de45977f1db605ae33a2f245be8ce  translated_at: 2026-11-23 -->
+
+您可以使用 <<runAs, RunAs 注解>> 为方法执行授予 `DATA ROLE`：
+
+[source, java]
+----
+package example.micronaut.repository;
+
+import example.micronaut.domain.EmployeeEntity;
+import example.micronaut.dto.SalaryAggregates;
+import io.micronaut.data.annotation.Query;
+import io.micronaut.data.jdbc.annotation.JdbcRepository;
+import io.micronaut.data.model.query.builder.sql.Dialect;
+import io.micronaut.data.repository.CrudRepository;
+import io.micronaut.security.annotation.RunAs;
+
+@JdbcRepository(dialect = Dialect.ORACLE)
+public interface EmployeeRepository extends CrudRepository<EmployeeEntity, Long> {
+
+    @RunAs("ORACLE_DATA_ROLE_COMPENSATION_ANALYST")
+    @Query("SELECT MIN(salary) AS min, MAX(salary) AS max, SUM(salary) AS sum, COUNT(*) AS count FROM hr.employees")
+    SalaryAggregates getSalaryAggregates();
+}
+----

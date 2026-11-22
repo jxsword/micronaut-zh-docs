@@ -1,0 +1,12 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Guides](https://docs.micronaut.io/5.2.x/security/#security-oauthGuides)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/oauth/oauthGuides.adoc  upstream_commit: 4edc5549856f3ca174e3a847021ce998f9906067  upstream_hash: f96b1e057f83f6ef325829424d8d9f2dae954a5d  translated_at: 2026-11-23 -->
+
+请阅读以下指南了解更多 OAuth 的内容：
+
+- https://guides.micronaut.io/latest/micronaut-oauth2-auth0.html[使用 Auth0 保护 Micronaut 应用]
+- https://guides.micronaut.io/latest/micronaut-oauth2-cognito.html[使用 Cognito 保护 Micronaut 应用]
+- https://guides.micronaut.io/latest/micronaut-oauth2-github.html[使用 Github 保护 Micronaut 应用]
+- https://guides.micronaut.io/latest/micronaut-oauth2-oidc-google.html[使用 Google 保护 Micronaut 应用]
+- https://guides.micronaut.io/latest/micronaut-oauth2-keycloak.html[使用 Keycloak 保护 Micronaut 应用]
+- https://guides.micronaut.io/latest/micronaut-oauth2-linkedin.html[使用 LinkedIn 保护 Micronaut 应用]
+- https://guides.micronaut.io/latest/micronaut-oauth2-okta.html[使用 Okta 保护 Micronaut 应用]

@@ -1,0 +1,32 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – End User Context Attributes](https://docs.micronaut.io/5.2.x/security/#security-endUserContextAttributes)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/ojdbcExtensions/applicationManagedDataRolesAndAttributes/endUserContextAttributes.adoc  upstream_commit: 728364dc7790b08f7f0f17baed3cce6f49734552  upstream_hash: 5f0b8996fe21f08b8a446995805e9bead762302e  translated_at: 2026-11-23 -->
+
+提供者可以从 api:security.authentication.Authentication[] 的一个或多个命名属性中读取 `END USER CONTEXT` 属性。
+属性名称由参数以逗号分隔列表的形式指定：
+
+`datasources.*.data-source-properties.oracle.jdbc.provider.endUserSecurityContext.attributeNames`
+
+该参数的默认值为 `ORACLE_CONTEXT_ATTRIBUTES`。
+
+包含一个或多个 `END USER CONTEXT` 对象属性的 JSON 对象可以作为某个已配置认证属性的值出现。例如，名为 `ORACLE_CONTEXT_ATTRIBUTES` 的认证属性可能具有如下值：
+
+[source, json]
+----
+{
+  "app_schema.user_details" : {
+    "first_name" : "George",
+    "last_name" : "Washington"
+  },
+  "app_schema.location_info" : {
+    "City" : "Mount Vernon",
+    "State" : "Virginia",
+    "Country" : "United States"
+  }
+}
+----
+
+提供者会将该属性值识别为两个 `END USER CONTEXT` 对象（名为 `user_details` 与 `location_info`）的属性，二者均在名为 `app_schema` 的数据库模式（schema）中声明。
+
+除认证属性外，还可以使用以下参数为提供者配置一组固定的属性：
+
+`datasources.*.data-source-properties.oracle.jdbc.provider.endUserSecurityContext.endUserContextAttributes`
