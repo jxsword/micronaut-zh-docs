@@ -1,0 +1,296 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Breaking Changes](https://docs.micronaut.io/5.2.x/security/#security-breaks)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/breaks.adoc  upstream_commit: 830018ffa7fd741373dbcb6f446701dad9a75f6d  upstream_hash: 61c4390aa4b29a95dda4e75354a109d887f70e54  translated_at: 2026-11-23 -->
+
+
+本节将记录里程碑版本、候选发布版本以及大版本（例如 1.x.x → 2.x.x）中可能出现的破坏性变更。
+
+== Micronaut Security 5.0 破坏性变更
+
+- JSR 250 注解映射器已被移至新模块 `micronaut-security-processor`。
++
+如果您正在使用 `@RolesAllowed`、`@PermitAll` 或 `@DenyAll` 注解，则需要把项目中的 `micronaut-security-annotations` 依赖替换为 `micronaut-security-processor`。
+
+=== 弃用项移除
+
+- 此前已弃用的单例构造器 `io.micronaut.security.token.jwt.validator.JwtTokenValidator(Collection<SignatureConfiguration>, Collection<EncryptionConfiguration>,
+Collection<GenericJwtClaimsValidator>, JwtAuthenticationFactory)` 已被移除。
+现在改用 `JwtTokenValidator(Collection<SignatureConfiguration>, Collection<EncryptionConfiguration>, Collection<GenericJwtClaimsValidator>, JwtAuthenticationFactory, ExecutorService)`。
+
+- `io.micronaut.security.oauth2.client.DefaultOpenIdProviderMetadata` 中此前已弃用的以下方法已被移除。注意：Open ID 提供者名称现在在所有场景下都是必填的：
+** 构造器 `DefaultOpenIdProviderMetadata()`。
+请改用 `DefaultOpenIdProviderMetadata(String)`。
+** 静态方法 `Builder builder()`。
+请改用 `DefaultOpenIdProviderMetadata(String)`
+** 嵌套构造器 `DefaultOpenIdProviderMetadata.Builder()`。
+请改用 `DefaultOpenIdProviderMetadata.Builder(String)`
+
+- 此前已弃用的单例构造器 `io.micronaut.security.oauth2.endpoint.authorization.response.DefaultOpenIdAuthorizationResponseHandler(OpenIdTokenResponseValidator, OpenIdAuthenticationMapper, TokenEndpointClient, OauthRouteUrlBuilder<T>, StateValidator, PkcePersistence)` 已被移除。
+现在改用 `DefaultOpenIdAuthorizationResponseHandler(OpenIdTokenResponseValidator, OpenIdAuthenticationMapper, TokenEndpointClient, OauthRouteUrlBuilder<T>, StateValidator, PkcePersistence), ExecutorService)`。
+
+== Micronaut Security 4.0 破坏性变更
+
+- api:security.rules.SecurityRule[] 的 `check` 方法不再包含 `RouteMatch` 参数。您可以方便地通过 `HttpRequest` 方法参数配合 `request.getAttribute(HttpAttributes.ROUTE_MATCH).orElse(null)` 来获取 `RouteMatch`。
+
+- 对于 `micronaut.security.authentication` 设置为 `cookie` 且 `micronaut.security.redirect.enabled` 设置为 `false` 的应用，登录失败时服务器将以 HTTP 状态码 401 响应，而不是 200。
+
+- `micronaut.security.intercept-url-map-prepend-pattern-with-context-path` 的默认值变为 `true`。因此，若设置了服务器上下文路径，Intercept URL 模式将被前置该路径。
+
+- Micronaut Security API 已与 HTTP 解耦。许多 API 现在使用泛型而不是 HTTP 相关类型，例如 `HttpRequest`。
+例如，应使用 `AuthenticationProvider<HttpRequest<?>>` 而不是 `AuthenticationProvider`。
+
+=== 配置变更
+
+一些配置键发生了变化。
+
+|===
+| 旧 | 新
+
+| `micronaut.security.token.jwt.generator.access-token.expiration`
+| `micronaut.security.token.generator.access-token.expiration`
+
+| `micronaut.security.token.jwt.cookie.enabled`
+| `micronaut.security.token.cookie.enabled`
+
+| `micronaut.security.token.jwt.cookie.cookie-max-age`
+| `micronaut.security.token.cookie.cookie-max-age`
+
+| `micronaut.security.token.jwt.cookie.cookie-path`
+| `micronaut.security.token.cookie.cookie-path`
+
+| `micronaut.security.token.jwt.cookie.cookie-domain`
+| `micronaut.security.token.cookie.cookie-domain`
+
+| `micronaut.security.token.jwt.cookie.cookie-same-site`
+| `micronaut.security.token.cookie.cookie-same-site`
+
+| `micronaut.security.token.jwt.bearer.enabled`
+| `micronaut.security.token.bearer.enabled`
+
+|===
+
+
+=== 类迁移
+
+一些类被重命名并从 `io.micronaut.security:micronaut-security-jwt` 移至 `io.micronaut.security:micronaut.security`。
+
+|===
+| 旧包 | 新包
+
+| `io.micronaut.security.token.jwt.endpoints.TokenRefreshRequest`
+| `io.micronaut.security.endpoints.TokenRefreshRequest`
+
+| `io.micronaut.security.token.jwt.render.AccessRefreshToken`
+| `io.micronaut.security.token.render.AccessRefreshToken`
+
+| `io.micronaut.security.token.jwt.render.BearerAccessRefreshToken`
+| `io.micronaut.security.token.render.BearerAccessRefreshToken`
+
+| `io.micronaut.security.token.jwt.endpoints.OauthController`
+| `io.micronaut.security.endpoints.OauthController`
+
+| `io.micronaut.security.token.jwt.endpoints.OauthControllerConfiguration`
+| `io.micronaut.security.endpoints.OauthControllerConfiguration`
+
+| `io.micronaut.security.token.jwt.endpoints.OauthControllerConfigurationProperties`
+| `io.micronaut.security.endpoints.OauthControllerConfigurationProperties`
+
+| `io.micronaut.security.token.jwt.generator.DefaultAccessRefreshTokenGenerator`
+| `io.micronaut.security.token.generator.DefaultAccessRefreshTokenGenerator`
+
+| `io.micronaut.security.token.jwt.cookie.AccessTokenCookieConfiguration`
+| `io.micronaut.security.token.cookie.AccessTokenCookieConfiguration`
+
+| `io.micronaut.security.token.jwt.cookie.CookieLoginHandler`
+| `io.micronaut.security.token.cookie.CookieLoginHandler`
+
+| `io.micronaut.security.token.jwt.bearer.AccessRefreshTokenLoginHandler`
+| `io.micronaut.security.token.bearer.AccessRefreshTokenLoginHandler`
+
+| `io.micronaut.security.token.jwt.bearer.BearerTokenConfiguration`
+| `io.micronaut.security.token.bearer.BearerTokenConfiguration`
+
+| `io.micronaut.security.token.jwt.bearer.BearerTokenConfigurationProperties`
+| `io.micronaut.security.token.bearer.BearerTokenConfigurationProperties`
+
+| `io.micronaut.security.token.jwt.bearer.BearerTokenReader`
+| `io.micronaut.security.token.bearer.BearerTokenReader`
+
+| `io.micronaut.security.token.jwt.render.TokenRenderer`
+| `io.micronaut.security.token.render.TokenRenderer`
+
+| `io.micronaut.security.token.jwt.render.BearerTokenRenderer`
+| `io.micronaut.security.token.render.BearerTokenRenderer`
+
+| `io.micronaut.security.token.jwt.cookie.JwtCookieTokenReader`
+| `io.micronaut.security.token.cookie.CookieTokenReader`
+
+| `io.micronaut.security.token.jwt.cookie.RefreshTokenCookieConfiguration`
+| `io.micronaut.security.token.cookie.RefreshTokenCookieConfiguration`
+
+| `io.micronaut.security.token.jwt.cookie.RefreshTokenCookieConfigurationProperties`
+| `io.micronaut.security.token.cookie.RefreshTokenCookieConfigurationProperties`
+
+| `io.micronaut.security.token.jwt.cookie.JwtCookieClearerLogoutHandler`
+| `io.micronaut.security.token.cookie.TokenCookieClearerLogoutHandler`
+
+| `io.micronaut.security.token.jwt.cookie.JwtCookieLoginHandler`
+| `io.micronaut.security.token.cookie.TokenCookieLoginHandler`
+
+| `io.micronaut.security.token.jwt.cookie.JwtCookieTokenReader`
+| `io.micronaut.security.token.cookie.TokenCookieTokenReader`
+
+| `io.micronaut.security.token.jwt.generator.AccessRefreshTokenGenerator`
+| `io.micronaut.security.token.generator.AccessRefreshTokenGenerator`
+
+| `io.micronaut.security.token.jwt.generator.AccessTokenConfiguration`
+| `io.micronaut.security.token.generator.AccessTokenConfiguration`
+
+| `io.micronaut.security.token.jwt.generator.AccessTokenConfigurationProperties`
+| `io.micronaut.security.token.generator.AccessTokenConfigurationProperties`
+
+| `io.micronaut.security.token.jwt.generator.claims.ClaimsGenerator`
+| `io.micronaut.security.token.claims.ClaimsGenerator`
+
+| `io.micronaut.security.token.jwt.generator.claims.ClaimsAudienceProvider`
+| `io.micronaut.security.token.claims.ClaimsAudienceProvider`
+
+| `io.micronaut.security.token.jwt.cookie.AbstractAccessTokenCookieConfigurationProperties`
+| `io.micronaut.security.token.cookie.AbstractAccessTokenCookieConfigurationProperties`
+
+| `io.micronaut.security.token.jwt.cookie.JwtCookieConfigurationProperties`
+| `io.micronaut.security.token.cookie.TokenCookieConfigurationProperties`
+
+| `io.micronaut.security.token.jwt.generator.claims.JwtIdGenerator`
+| `io.micronaut.security.token.claims.JtiGenerator`
+
+| `io.micronaut.security.token.jwt.generator.claims.JwtClaims`
+| `io.micronaut.security.token.Claims`
+
+|===
+
+
+
+=== 注解映射器移除
+
+`javax.annotation.security` 注解的映射器——`DenyAll`、`PermitAll`、`RolesAllowed`——已被移除。对于 `jakarta.annotation.security` 注解，请改用其 Jakarta 版本。
+
+|===
+|已移除 |保留
+
+| io.micronaut.security.annotation.DenyAllAnnotationMapper
+| io.micronaut.security.annotation.JakartaDenyAllAnnotationMapper
+
+| io.micronaut.security.annotation.PermitAllAnnotationMapper
+| io.micronaut.security.annotation.JakartaPermitAllAnnotationMapper
+
+| io.micronaut.security.annotation.RolesAllowedAnnotationMapper
+| io.micronaut.security.annotation.JakartaRolesAllowedAnnotationMapper
+
+|===
+
+=== 响应式 OpenIdAuthenticationMapper
+
+`OpenIdAuthenticationMapper.createAuthenticationResponse` 的返回类型已改为返回 `Publisher`，以与 `OauthAuthenticationMapper` 接口保持一致。由于该方法现在返回 Publisher，可以借助您选择的响应式流实现，把阻塞操作卸载到其他线程池。
+
+== Micronaut Security 3.4 破坏性变更
+
+除非绑定了 api:security.rules.SensitiveEndpointRule[] 的替代实现，否则敏感端点现在会以错误响应。
+
+以下代码片段展示了如何恢复之前的行为：
+
+NOTE: 之前的行为允许任何已认证用户（无论其角色）查看敏感端点。
+
+snippet::io.micronaut.security.docs.sensitiveendpointrule.SensitiveEndpointRuleReplacement[tags="imports,clazz"]
+
+== Micronaut Security 3.1 破坏性变更
+
+Micronaut Security 不再暴露 `micronaut-management` 依赖。
+
+== Micronaut Security 3.0 破坏性变更
+
+=== User Details 移除
+
+`UserDetails` 类已被移除，所有用法都应替换为 api:security.authentication.Authentication[]。
+
+==== 受影响的 API
+
+- api:security.authentication.AuthenticationFailed[]
+- api:security.authentication.AuthenticationResponse[]
+- api:security.handlers.LoginHandler[]
+- api:security.rules.AbstractSecurityRule[]
+- api:security.rules.SecurityRule[]
+- api:security.rules.SensitiveEndpointRule[]
+- api:security.token.event.RefreshTokenGeneratedEvent[]
+- api:security.token.generator.RefreshTokenGenerator[]
+- api:security.token.generator.TokenGenerator[]
+- api:security.token.jwt.cookie.CookieLoginHandler[]
+- api:security.token.jwt.generator.AccessRefreshTokenGenerator[]
+- api:security.token.jwt.generator.claims.ClaimsGenerator[]
+- api:security.token.jwt.render.TokenRenderer[]
+- api:security.token.refresh.RefreshTokenPersistence[]
+
+==== 类重命名
+
+|===
+|旧 |新
+
+| io.micronaut.security.oauth2.endpoint.token.response.OauthUserDetailsMapper
+| io.micronaut.security.oauth2.endpoint.token.response.OauthAuthenticationMapper
+
+| io.micronaut.security.oauth2.endpoint.token.response.OpenIdUserDetailsMapper
+| io.micronaut.security.oauth2.endpoint.token.response.OpenIdAuthenticationMapper
+
+| io.micronaut.security.oauth2.endpoint.token.response.DefaultOpenIdUserDetailsMapper
+| io.micronaut.security.oauth2.endpoint.token.response.DefaultOpenIdAuthenticationMapper
+
+|===
+
+==== 其他变更
+
+- 用户登录时发出的 api:security.event.LoginSuccessfulEvent[] 现在将携带一个 api:security.authentication.Authentication[] 实例来创建。
+- `AuthenticationUserDetailsAdapter` 类已被删除。
+
+=== SecurityRule 变更
+
+api:security.rules.SecurityRule[] API 发生了变化。该方法的最后一个参数原本是表示用户属性的 Map，现在被替换为对 api:security.authentication.Authentication[] 的引用。这带来的好处是，规则现在既能访问已登录用户的用户名，也能使用便捷方法 `getRoles()`。
+
+此外，该方法的返回类型已改为返回 `Publisher`。这是必要的，因为安全规则作为安全过滤器的一部分执行，而该过滤器可能运行在非阻塞线程上。由于该方法现在返回 `Publisher`，可以借助您选择的响应式流实现，把阻塞操作卸载到其他线程池。
+
+Micronaut 2 API：
+
+`SecurityRuleResult check(HttpRequest<?> request, @Nullable RouteMatch<?> routeMatch, @Nullable Map<String, Object> claims);`
+
+Micronaut 3 API：
+
+`Publisher<SecurityRuleResult> check(HttpRequest<?> request, @Nullable RouteMatch<?> routeMatch, @Nullable Authentication authentication);`
+
+=== LDAP 包变更
+
+`io.micronaut.configuration.security.ldap` 中的所有类都已移动到 `io.micronaut.security.ldap` 包。
+
+=== SecurityFilter
+
+安全过滤器不再继承已弃用的 `OncePerRequestHttpServerFilter`，因为它在 Micronaut 3 中已被弃用。
+
+=== Cookie Secure 配置
+
+以下属性在 Micronaut Security 3.0.0 中已移除默认值：
+
+- `micronaut.security.oauth2.openid.nonce.cookie.cookie-secure`
+- `micronaut.security.oauth2.state.cookie.cookie-secure`
+- `micronaut.security.token.jwt.cookie.cookie-secure`
+- `micronaut.security.token.refresh.cookie.cookie-secure``
+
+NOTE: 如果未设置 `cookie-secure`，那么当请求被判定为 HTTPS 时，Cookie 将是安全的。
+
+=== 弃用项移除
+
+几乎所有已弃用的类、构造器和方法都已被移除。
+
+=== 其他变更
+
+- api:security.token.jwt.validator.DefaultJwtAuthenticationFactory[] 的构造器已变更
+- api:security.oauth2.endpoint.token.response.IdTokenLoginHandler[] 的构造器已变更
+- api:security.session.SessionLoginHandler[] 的构造器已变更
+- api:security.authentication.BasicAuthAuthenticationFetcher[] 的构造器已变更
+- api:io.micronaut.security.token.RolesFinder[] 方法 `findInClaims` 已被弃用，用法应替换为 `resolveRoles(@Nullable Map<String, Object> attributes)`。

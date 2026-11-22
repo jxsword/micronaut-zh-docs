@@ -1,0 +1,6 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Release History](https://docs.micronaut.io/5.2.x/security/#security-releaseHistory)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/releaseHistory.adoc  upstream_commit: 64b2954230ba89d1bdec6e5059d14fd67a17be8b  upstream_hash: 27a32c8d794821198b94792d5480f7985d5dce77  translated_at: 2026-11-23 -->
+
+本项目的版本列表（含发布说明）见：
+
+https://github.com/{githubSlug}/releases[https://github.com/{githubSlug}/releases]

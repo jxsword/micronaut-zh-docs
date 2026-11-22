@@ -1,0 +1,8 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Cookie Token Reader](https://docs.micronaut.io/5.2.x/security/#security-cookieTokenReader)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/securityFilter/builtInAuthenticationFetchers/tokenAuthenticationFetcher/tokenReaders/cookieTokenReader.adoc  upstream_commit: 8950a9a7b144f7218be48e9c36f903add5eb71b5  upstream_hash: e4e9187d0979134d644530c748d4f8a37cb41653  translated_at: 2026-11-23 -->
+
+api:io.micronaut.security.token.cookie.CookieTokenReader[] 尝试从请求 Cookie 中读取令牌。
+
+以下配置属性可用于自定义从 Cookie 中读取令牌的方式：
+
+include::{includedir}configurationProperties/io.micronaut.security.token.cookie.TokenCookieConfigurationProperties.adoc[]

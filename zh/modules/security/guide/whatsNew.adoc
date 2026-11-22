@@ -1,0 +1,12 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – What's New](https://docs.micronaut.io/5.2.x/security/#security-whatsNew)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/whatsNew.adoc  upstream_commit: bd089157348e71a8c91b9b3611dd7b2cd6a7cb50  upstream_hash: b408dd379412c1f6504892243833ee768ca53725  translated_at: 2026-11-23 -->
+
+Micronaut Security 包含以下新特性与改进。
+
+== Micronaut Security 3 的新特性
+
+- 多个 API 均有改进
+- 认证状态被整合到单一接口中
+- api:security.rules.SecurityRule[] API 现已是响应式的
+- api:security.authentication.Authentication[] 新增了 `getRoles` 方法
+- api:security.authentication.Authentication[] 与 api:security.authentication.AuthenticationResponse[] 新增了若干静态方法，用于帮助创建认证相关对象

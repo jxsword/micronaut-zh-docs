@@ -1,0 +1,22 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Installation](https://docs.micronaut.io/5.2.x/security/#security-security-installation)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/security-installation.adoc  upstream_commit: b0e93e3733451b816ae6c01bdc7633523de1d19c  upstream_hash: 4208ea2a79a34fee2c5ed5953836804eb48f34f8  translated_at: 2026-11-23 -->
+
+[TIP]
+.使用 CLI
+====
+如果您正使用 Micronaut CLI 创建项目，提供 `security,` `security-jwt` 或 `security-session` 特性即可在项目中配置安全支持：
+----
+$ mn create-app my-app --features security
+----
+====
+要使用 Micronaut 的安全能力，类路径中必须有 `security` 依赖：
+
+dependency:io.micronaut.security:micronaut-security-processor[scope='annotationProcessor']
+
+dependency:io.micronaut.security:micronaut-security[]
+
+NOTE: 仅在使用 JSR 250 注解时才需要 `micronaut-security-processor` 依赖
+
+默认情况下，Micronaut 对任何端点调用都返回 HTTP 状态码 Unauthorized（401）。路由必须通过提供的机制显式放行。
+
+image::secured_by_default.svg[]

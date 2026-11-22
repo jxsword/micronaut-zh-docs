@@ -1,0 +1,32 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Built-in Login and Logout Handlers](https://docs.micronaut.io/5.2.x/security/#security-builtInHandlers)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/endpoints/builtInHandlers.adoc  upstream_commit: 9f48fbe02229dbfe1f6fe8fb7d07f5d8f36987b4  upstream_hash: d6d2c860fd22fd39017c4a19f6a260995b50e6c1  translated_at: 2026-11-23 -->
+
+您可以提供自己的 api:security.handlers.LoginHandler[] 与 api:security.handlers.LogoutHandler[] 实现。
+不过，Micronaut Security 各模块内置了多种实现，通过设置配置 `micronaut.security.authentication` 即可启用。
+
+|===
+| `micronaut.security.authentication` 值 | 所需模块 | 登录处理器 | 登出处理器
+
+| `cookie`
+| `micronaut-security`
+| api:security.token.cookie.TokenCookieLoginHandler[]
+| api:security.token.cookie.TokenCookieClearerLogoutHandler[]
+
+| `session`
+| `micronaut-session`
+| api:security.session.SessionLoginHandler[]
+| api:security.session.SessionLogoutHandler[]
+
+| `bearer`
+| `micronaut-jwt`
+| api:security.token.bearer.AccessRefreshTokenLoginHandler[]
+|
+
+| `idtoken`
+| `micronaut-oauth`
+| api:security.oauth2.endpoint.token.response.IdTokenLoginHandler[]
+|
+|===
+
+
+这些处理器可支持您设置以下场景：

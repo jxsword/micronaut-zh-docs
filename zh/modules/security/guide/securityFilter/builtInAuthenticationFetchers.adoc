@@ -1,0 +1,16 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Built-In Authentication Fetchers](https://docs.micronaut.io/5.2.x/security/#security-builtInAuthenticationFetchers)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/securityFilter/builtInAuthenticationFetchers.adoc  upstream_commit: 8950a9a7b144f7218be48e9c36f903add5eb71b5  upstream_hash: 9bcbd13b4e137738cc6773b198637aac124ac0ed  translated_at: 2026-11-23 -->
+
+您可以编写自己的 api:security.filters.AuthenticationFetcher[] 类型 bean。不过，Micronaut Security 内置了若干认证获取器：
+
+|===
+| Bean | 说明
+| api:io.micronaut.security.authentication.BasicAuthAuthenticationFetcher[]
+| 它从使用 Basic 认证的 HTTP 请求中解析凭证，然后用解析出的凭证调用每个认证提供者。
+| api:io.micronaut.security.token.TokenAuthenticationFetcher[]
+| 它尝试从 HTTP 请求中获取令牌，随后尝试验证该令牌。
+| api:io.micronaut.security.session.SessionAuthenticationFetcher[]
+| 它尝试从 HTTP 会话中获取 api:security.authentication.Authentication[]。
+| api:io.micronaut.security.x509.X509AuthenticationFetcher[]
+| 当存在 X.509 客户端证书且能够提取出名称（CN）时，创建 api:security.authentication.Authentication[]。
+|===

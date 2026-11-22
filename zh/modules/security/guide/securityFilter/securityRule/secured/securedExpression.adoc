@@ -1,0 +1,8 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Secured with expressions](https://docs.micronaut.io/5.2.x/security/#security-securedExpression)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/securityFilter/securityRule/secured/securedExpression.adoc  upstream_commit: 8950a9a7b144f7218be48e9c36f903add5eb71b5  upstream_hash: 6e0048712757f3f262aba801dfcae9b279dbfca9  translated_at: 2026-11-23 -->
+
+结合 ann:security.annotation.Secured[] 注解，您可以使用 Micronaut Framework 4.0 引入的 https://docs.micronaut.io/4.0.0-M2/guide/#evaluatedExpressions[表达式] 来访问已认证用户：
+
+snippet::io.micronaut.security.docs.securedexpressions.ExampleController[tags="exampleControllerExpressions"]
+
+`user` 的类型是 api:security.authentication.Authentication[]

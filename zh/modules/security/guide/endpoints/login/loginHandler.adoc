@@ -1,0 +1,5 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Login Handler](https://docs.micronaut.io/5.2.x/security/#security-loginHandler)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/endpoints/login/loginHandler.adoc  upstream_commit: 8950a9a7b144f7218be48e9c36f903add5eb71b5  upstream_hash: a9b5c7c3e439451681afa902629ac781f0842b6f  translated_at: 2026-11-23 -->
+
+[[loginHandler]]
+api:security.handlers.LoginHandler[] API 定义了如何响应登录成功或登录失败。例如配合 <<login,登录控制器>> 使用，或配合 <<oauth,OAuth 2.0>> 支持使用。

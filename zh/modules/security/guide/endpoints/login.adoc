@@ -1,0 +1,11 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Login Controller](https://docs.micronaut.io/5.2.x/security/#security-login)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/endpoints/login.adoc  upstream_commit: 8950a9a7b144f7218be48e9c36f903add5eb71b5  upstream_hash: feb697d3b16c8fb8fc2ec3a47101c926cd6b38ba  translated_at: 2026-11-23 -->
+
+[[login]]
+要启用 api:io.micronaut.security.endpoints.LoginController[]，您需要有一个 api:security.handlers.LoginHandler[] 类型的 bean。当然，也可以提供自定义实现。不过，已有多种 <<loginHandler,登录处理器>> 实现开箱即用。
+
+image::loginController.png[]
+
+您可以通过以下方式配置 `LoginController`：
+
+include::{includedir}configurationProperties/io.micronaut.security.endpoints.LoginControllerConfigurationProperties.adoc[]

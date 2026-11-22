@@ -329,3 +329,66 @@ modules:
       status: "approved"
       context: "validation 全模块高频（VALID-01 实译；constraint violation=约束违反）"
       aliases: ["constraints"]
+
+    - en: "Authentication Provider"
+      zh: "认证提供者"
+      module: "security"
+      status: "approved"
+      context: "security 全模块高频（SEC-01 实译；provider 单独出现亦译提供者）"
+      aliases: ["authentication providers", "AuthenticationProvider"]
+
+    - en: "Authentication Fetcher"
+      zh: "认证获取器"
+      module: "security"
+      status: "approved"
+      context: "security 高频（SEC-01 实译；从请求中获取认证信息的组件）"
+      aliases: ["authentication fetchers", "AuthenticationFetcher"]
+
+    - en: "Token Reader"
+      zh: "令牌读取器"
+      module: "security"
+      status: "approved"
+      context: "security 高频（SEC-01 实译；Bearer/Cookie 令牌读取器）"
+      aliases: ["token readers", "TokenReader"]
+
+    - en: "Token Validator"
+      zh: "令牌校验器"
+      module: "security"
+      status: "approved"
+      context: "security 高频（SEC-01 实译；validate 语境统一「验证」，validate 签名=验证）"
+      aliases: ["token validators", "TokenValidator"]
+
+    - en: "Login Handler"
+      zh: "登录处理器"
+      module: "security"
+      status: "approved"
+      context: "security 高频（SEC-01 实译；LoginHandler 不译）"
+      aliases: ["login handlers", "LoginHandler"]
+
+    - en: "Logout Handler"
+      zh: "登出处理器"
+      module: "security"
+      status: "approved"
+      context: "security 高频（SEC-01 实译；LogoutHandler 不译）"
+      aliases: ["logout handlers", "LogoutHandler"]
+
+    - en: "Security Rule"
+      zh: "安全规则"
+      module: "security"
+      status: "approved"
+      context: "security 高频（SEC-01 实译；SecurityRule 不译）"
+      aliases: ["security rules", "SecurityRule"]
+
+    - en: "Claims"
+      zh: "Claims"
+      module: "security"
+      status: "approved"
+      context: "不译；JWT Claims 三段名（Header/Claims/Signature）之一（SEC-01 实译）"
+      aliases: ["claims"]
+
+    - en: "Intercept URL Map"
+      zh: "Intercept URL Map"
+      module: "security"
+      status: "approved"
+      context: "不译；官方安全规则配置名（SEC-01 实译；正文首次出现加「（拦截 URL 映射）」括注）"
+      aliases: ["intercept url map"]

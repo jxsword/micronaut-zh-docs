@@ -1,0 +1,21 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Run As Annotation](https://docs.micronaut.io/5.2.x/security/#security-runAs)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/securityFilter/securityRule/runAs.adoc  upstream_commit: f563307ffe8016f473dd7e36424fd0c485208210  upstream_hash: eb09a9ed95c93d8dd305f34eb9beaed211e55f7f  translated_at: 2026-11-23 -->
+
+您可以使用 ann:security.annotation.RunAs[] 注解为被拦截的方法调用应用一个认证身份。
+
+snippet::io.micronaut.security.docs.authentication.RunAsService[tags="clazz"]
+
+Micronaut Security 会从 ann:security.annotation.RunAs[] 构建一个 api:security.authentication.Authentication[]，并将其设置到当前调用上下文（security context）中。
+对于同步方法，Micronaut Security 会在方法返回时恢复之前的认证身份。
+对于异步方法（例如 `CompletionStage` 和响应式返回类型），Micronaut Security 会在异步结果完成时恢复之前的认证身份。
+该注解不会对传入请求做认证，也不会永久替换调用方的身份。
+
+默认情况下，ann:security.annotation.RunAs[] 会将提供的角色与属性追加到当前认证信息之后。
+注解值是 `roles` 的别名，因此 `@RunAs("ROLE_ADMIN")` 等价于 `@RunAs(roles = "ROLE_ADMIN")`。
+若要改为替换当前值，请将 `appendRoles` 或 `appendAttributes` 设置为 `false`。
+如果省略 `name` 或其为空白，且已存在认证信息，Micronaut Security 会保留当前用户名。
+您也可以使用 `jakarta.annotation.security.RunAs`；Micronaut Security 会将其映射为 ann:security.annotation.RunAs[]，并把该 Jakarta 注解的值用作 run-as 角色。
+
+NOTE: 使用 `jakarta.annotation.security.RunAs` 要求 `io.micronaut.security:micronaut-security-processor` 位于注解处理器的类路径中（Java、Kotlin、Groovy 分别为 `annotationProcessor`、`kapt`、`compileOnly`）。
+
+一个典型用例是带有 api:scheduling.annotation.Scheduled[] 方法的 bean。由于 https://docs.micronaut.io/latest/guide/#scheduling[计划任务] 不在传入的已认证请求中运行，ann:security.annotation.RunAs[] 让计划任务可以委托给那些期望存在已认证用户的服务。

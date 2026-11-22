@@ -1,0 +1,15 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Redirection Configuration](https://docs.micronaut.io/5.2.x/security/#security-redirection)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/securityConfiguration/redirection.adoc  upstream_commit: b5870a5035962177e2c25f6d1fe08ef0583fc9e3  upstream_hash: 06c0912c8389d842eab4997052a95308a2fcffa6  translated_at: 2026-11-23 -->
+
+[[redirection]]
+多个安全流程（例如基于会话的认证、Cookie 令牌认证）可能在用户登录后涉及重定向。
+
+您可以通过以下方式配置重定向目的地：
+
+include::{includedir}configurationProperties/io.micronaut.security.config.RedirectConfigurationProperties.adoc[]
+
+include::{includedir}configurationProperties/io.micronaut.security.config.RedirectConfigurationProperties$ForbiddenRedirectConfigurationProperties.adoc[]
+
+include::{includedir}configurationProperties/io.micronaut.security.config.RedirectConfigurationProperties$UnauthorizedRedirectConfigurationProperties.adoc[]
+
+IMPORTANT: 使用 api:security.config.RedirectService[] API，它在定义了上下文路径时会将其前置到重定向 URL。

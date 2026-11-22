@@ -1,0 +1,6 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Authentication Providers Use Cases](https://docs.micronaut.io/5.2.x/security/#security-authenticationProvidersUseCases)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/authenticationProviders/authenticationProvidersUseCases.adoc  upstream_commit: ee60c5a3b956556514b21a5a8650d4e77f82abfd  upstream_hash: b95982e9b99b909b87b853e27afee549c15881af  translated_at: 2026-11-23 -->
+
+内置的 <<login,登录控制器>> 会使用所有可用的认证提供者。第一个返回成功认证响应的提供者，其返回值将被用作 JWT 令牌或会话状态的基础。
+
+以 api:security.filters.AuthenticationFetcher[] 形式实现的基本认证也会触发可用的 api:security.authentication.AuthenticationProvider[]。

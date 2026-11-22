@@ -1,0 +1,17 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – IP Pattern Rule](https://docs.micronaut.io/5.2.x/security/#security-ipPattern)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/securityFilter/securityRule/ipPattern.adoc  upstream_commit: 8950a9a7b144f7218be48e9c36f903add5eb71b5  upstream_hash: 2acf1dfc3f40a59c259750ef5dd489911adbedd4  translated_at: 2026-11-23 -->
+
+开启安全特性后，默认允许来自任何 IP 地址的流量。
+
+不过，您可以拒绝不来自白名单 IP 模式的流量，如下所示：
+
+[configuration]
+----
+include::{testssecurity}/security/securityRule/IpPatternSpec.groovy[tag=yamlconfig,indent=0]
+----
+
+在前面的代码中，link:{api}/io/micronaut/security/rules/IpPatternsRule.html[IpPatternsRule] 会拒绝不来自 `127.0.0.1` 或 `192.168.1.*` 网段的流量。
+
+IP 模式规则从不显式放行请求，只会在地址不匹配时拒绝请求。必须有其他安全规则来判定资源是否可被访问。
+
+如果期望的行为是只要地址匹配就允许访问所有资源，请创建一个在本规则之后执行、并返回 `ALLOWED` 的安全规则。

@@ -1,0 +1,4 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Built-In Authentication Providers](https://docs.micronaut.io/5.2.x/security/#security-builtInAuthenticationProviders)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/authenticationProviders/builtInAuthenticationProviders.adoc  upstream_commit: ee60c5a3b956556514b21a5a8650d4e77f82abfd  upstream_hash: c0b01937c3fb2a5ccf5bba9b40e261b7f9f85a18  translated_at: 2026-11-23 -->
+
+Micronaut 为 LDAP（api:security.ldap.LdapAuthenticationProvider[]）以及 OAuth 2.0 密码授权认证流程（api:security.oauth2.endpoint.token.request.password.OauthPasswordAuthenticationProvider[] 与 api:security.oauth2.endpoint.token.request.password.OpenIdPasswordAuthenticationProvider[]）提供了内置认证提供者。对于任何自定义认证，则必须创建一个认证提供者。

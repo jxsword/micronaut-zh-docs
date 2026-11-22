@@ -1,0 +1,22 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Jakarta Annotations](https://docs.micronaut.io/5.2.x/security/#security-jakartaAnnotations)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/securityFilter/securityRule/secured/jakartaAnnotations.adoc  upstream_commit: b0e93e3733451b816ae6c01bdc7633523de1d19c  upstream_hash: 4dd2160672f06c923944210f1f649f3ead104848  translated_at: 2026-11-23 -->
+
+或者，您也可以使用 https://jakarta.ee/specifications/annotations/2.1/annotations-spec-2.1.html[Jakarta 注解]：
+
+* `jakarta.annotation.security.PermitAll`
+* `jakarta.annotation.security.RolesAllowed`
+* `jakarta.annotation.security.DenyAll`
+
+[source, java]
+----
+include::{testssecurityjava}/security/securityRule/permitall/ExampleController.java[tag=exampleControllerPlusImports,indent=0]
+----
+
+<1> 被授予 `ROLE_ADMIN` 或 `ROLE_X` 角色的用户可以访问 `withroles` 控制器的动作。
+<2> 匿名用户（无论是否认证）都可以访问 `anonymous` 控制器的动作。
+
+NOTE: 使用 JSR 250 注解要求 `io.micronaut.security:micronaut-security-processor` 位于注解处理器的类路径中（Java、Kotlin、Groovy 分别为 `annotationProcessor`、`kapt`、`compileOnly`）。
+
+IMPORTANT: 当 ann:security.annotation.Secured[] 注解带有一组角色时，<<secured,SecuredAnnotationRule>> 会在用户拥有其中**任意**角色时授予访问权限。
+
+WARNING: 不要在同一方法上同时使用 `@Secured` 与 `@RolesAllowed` 两个注解。如果同时使用，只会生效先出现的那一个（可能是 `@RolesAllowed` 或 `@Secured`），另一个注解将被忽略。

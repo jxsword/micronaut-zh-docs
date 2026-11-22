@@ -1,0 +1,9 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Reactive Authentication Providers](https://docs.micronaut.io/5.2.x/security/#security-authenticationProviders)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/authenticationProviders.adoc  upstream_commit: 14f234aab663e6798743902fdb261483fd194db1  upstream_hash: 7957fb145b748979dcda580b0b6bfcba2628f02a  translated_at: 2026-11-23 -->
+
+[[authenticationProviders]]
+要完成用户认证，您必须提供 api:security.authentication.provider.ReactiveAuthenticationProvider[] 或 api:security.authentication.provider.HttpRequestReactiveAuthenticationProvider[] 的实现。
+
+以下代码片段展示了一个朴素的实现：
+
+snippet::io.micronaut.security.docs.reactiveauthenticationprovider.CustomAuthenticationProvider[tags="clazz"]

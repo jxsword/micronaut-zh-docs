@@ -1,0 +1,14 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Secured Annotation](https://docs.micronaut.io/5.2.x/security/#security-secured)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/securityFilter/securityRule/secured.adoc  upstream_commit: 8950a9a7b144f7218be48e9c36f903add5eb71b5  upstream_hash: e8d2bb18feaabd05f554509eb7acb5c77987b7e3  translated_at: 2026-11-23 -->
+
+[[secured]]
+如下所示，您可以使用 ann:security.annotation.Secured[] 注解来控制对控制器或控制器方法的访问。
+
+[source, groovy]
+----
+include::{testssecurity}/security/securityRule/secured/ExampleController.java[tag=exampleControllerPlusImports,indent=0]
+----
+
+<1> 已认证的用户可以访问 `authenticated` 控制器的动作。
+<2> 被授予 `ROLE_ADMIN` 或 `ROLE_X` 角色的用户可以访问 `withroles` 控制器的动作。
+<3> 匿名用户（无论是否认证）都可以访问 `anonymous` 控制器的动作。

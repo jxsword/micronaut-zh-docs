@@ -1,0 +1,6 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Security Configuration](https://docs.micronaut.io/5.2.x/security/#security-securityConfiguration)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/securityConfiguration.adoc  upstream_commit: 008666be1c830a3dd0df650aa2223331eb7e271f  upstream_hash: 237d904161467ab73ef73d1f24c7781a1339f834  translated_at: 2026-11-23 -->
+
+以下全局配置选项可用：
+
+include::{includedir}configurationProperties/io.micronaut.security.config.SecurityConfigurationProperties.adoc[]

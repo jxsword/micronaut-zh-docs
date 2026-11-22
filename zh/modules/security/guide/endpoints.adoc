@@ -1,0 +1,5 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Endpoints](https://docs.micronaut.io/5.2.x/security/#security-endpoints)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/endpoints.adoc  upstream_commit: 8950a9a7b144f7218be48e9c36f903add5eb71b5  upstream_hash: fa0b9419f2397b9a4357910aae5e945eb49fed3d  translated_at: 2026-11-23 -->
+
+<<securityFilter,安全过滤器>> 一节描述了如何为每个请求解析出 api:security.authentication.Authentication[]。它可能是位于 HTTP Header、Cookie 或 HTTP 会话中的令牌。
+那么，您如何获得这样的令牌？或者说，用户最初是如何被保存进 HTTP 会话的？在 Micronaut 应用中，您可以暴露 <<loginController,LoginController>>。

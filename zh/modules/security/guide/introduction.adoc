@@ -1,0 +1,6 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Introduction](https://docs.micronaut.io/5.2.x/security/#security-introduction)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/introduction.adoc  upstream_commit: 0435987e0711972384f270cf7aadc91989ffdfb1  upstream_hash: fd7094e986822d02a573983715b01c8ad7d3e208  translated_at: 2026-11-23 -->
+
+Micronaut Security 是一个功能完备、高度可定制的应用安全解决方案。
+
+NOTE: Micronaut Security 3.x 要求 Micronaut 3.x。

@@ -1,0 +1,4 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Token Readers](https://docs.micronaut.io/5.2.x/security/#security-tokenReaders)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/securityFilter/builtInAuthenticationFetchers/tokenAuthenticationFetcher/tokenReaders.adoc  upstream_commit: 8950a9a7b144f7218be48e9c36f903add5eb71b5  upstream_hash: 80983afc7560eb57fcaafea9d7ce17d71e457476  translated_at: 2026-11-23 -->
+
+您可以编写自己的 api:io.micronaut.security.token.reader.TokenReader[] 类型 bean。不过，Micronaut Security 内置了若干 api:io.micronaut.security.token.reader.TokenReader[] 类型的 bean。

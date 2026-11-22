@@ -1,0 +1,38 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Intercept URL Map](https://docs.micronaut.io/5.2.x/security/#security-interceptUrlMap)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/securityFilter/securityRule/interceptUrlMap.adoc  upstream_commit: 8950a9a7b144f7218be48e9c36f903add5eb71b5  upstream_hash: 1e45b57fc7976dd92ba0a267a212b223da679de4  translated_at: 2026-11-23 -->
+
+此外，您可以通过 Intercept URL Map 配置端点的认证与授权访问：
+
+[configuration]
+----
+include::{testssecurity}/security/securityRule/intercepturlmap/InterceptUrlMapSpec.groovy[tag=yamlconfig,indent=0]
+----
+
+- 模式 `/images/*` 对已认证与未认证用户都开放访问
+- 模式 `/books` 对所有已认证用户开放访问
+- 模式 `/books/grails` 对被授予任一指定角色的用户开放访问
+
+正如您在前面的代码清单中看到的，每个端点都由模式和一个可选的 HTTP 方法组合标识。
+
+如果某个请求 URI 匹配多个 Intercept URL Map 条目，将使用其中指定了与请求方法相匹配的 HTTP 方法的那一条。如果有多条未指定方法且都匹配请求 URI 的映射，则使用第一条。例如：
+
+下例定义了：所有匹配模式 `/v1/myResource/**` 且使用 HTTP 方法 `GET` 的 HTTP 请求对所有人可访问。而匹配同一 URI 模式但使用 `GET` 之外其他 HTTP 方法的请求则需要完整认证。
+
+[configuration]
+----
+micronaut:
+  security:
+    intercept-url-map:
+      - pattern: /v1/myResource/**
+        httpMethod: GET
+        access:
+          - isAnonymous()
+      - pattern: /v1/myResource/**
+        access:
+          - isAuthenticated()
+----
+
+- 以 GET 请求访问 `/v1/myResource/**` 无需认证
+- 以非 GET 请求访问 `/v1/myResource/**` 需要认证
+
+IMPORTANT: 当 ann:security.annotation.Secured[] 注解带有一组角色时，<<secured,SecuredAnnotationRule>> 会在用户拥有其中**任意**角色时授予访问权限。

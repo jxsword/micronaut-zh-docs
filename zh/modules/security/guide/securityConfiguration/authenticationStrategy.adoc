@@ -1,0 +1,4 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Authentication Strategy](https://docs.micronaut.io/5.2.x/security/#security-authenticationStrategy)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/securityConfiguration/authenticationStrategy.adoc  upstream_commit: c4ad52c1aef8e2068acb4f5efb7e7f76f2dad9fa  upstream_hash: 03c4602da32f46bb409f7fa16fcf00fdb0196922  translated_at: 2026-11-23 -->
+
+默认情况下，Micronaut 只要求一个 <<authenticationProviders,认证提供者>> 返回成功的认证响应。您可以设置 `micronaut.security.authentication-provider-strategy: ALL`，要求所有 api:security.authentication.AuthenticationProvider[] 都返回成功的认证响应。

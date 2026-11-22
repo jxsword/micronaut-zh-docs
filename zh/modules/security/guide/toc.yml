@@ -1,0 +1,190 @@
+# > 本文翻译自 Micronaut Security 官方文档（Guide 导航目录，页面标题以本目录为准，5.2.x 分支基线，2026-11-23 锁定），非官方译文，以英文原文为准。
+# <!-- upstream_file: modules/security/guide/toc.yml  upstream_commit: 728364dc7790b08f7f0f17baed3cce6f49734552  upstream_hash: b8e310bf5ab09a125875f3fee03c3bc72644c0da  translated_at: 2026-11-23 -->
+
+introduction:
+  title: 介绍
+releaseHistory: 发布历史
+whatsNew: 新特性
+breaks: 破坏性变更
+security-installation: 安装
+securityFilter:
+  title: 工作原理——安全过滤器
+  builtInAuthenticationFetchers:
+    title: 内置认证获取器
+    basicAuthAuthenticationFetcher: Basic-Auth 认证获取器
+    tokenAuthenticationFetcher:
+      title: 令牌认证获取器
+      tokenReaders:
+        title: 令牌读取器
+        bearerTokenReader: Bearer 令牌读取器
+        cookieTokenReader: Cookie 令牌读取器
+  securityRule:
+    title: 安全规则
+    ipPattern: IP 模式规则
+    secured:
+      title: Secured 注解
+      jakartaAnnotations: Jakarta 注解
+      securedExpression: 使用表达式保护
+    interceptUrlMap: Intercept URL Map（拦截 URL 映射）
+    builtInEndpointsAccess: 内置端点安全
+    runAs: Run As 注解
+exceptionHandlers: 异常处理器
+endpoints:
+  title: 端点
+  login:
+    title: 登录控制器
+    loginHandler: 登录处理器
+  logout:
+    title: 登出控制器
+    logoutHandler: 登出处理器
+  builtInHandlers:
+    title: 内置登录与登出处理器
+    micronautSecurityAuthenticationBearer: 认证模式 Bearer
+    micronautSecurityAuthenticationSession: 认证模式 Session
+    micronautSecurityAuthenticationCookie: 认证模式 Cookie
+    micronautSecurityAuthenticationIdToken: 认证模式 ID Token
+securityConfiguration:
+  title: 安全配置
+  rejectNotFound: 对不存在的路由返回 404
+  authenticationStrategy: 认证策略
+  noRedirection: 无重定向的处理器
+  redirection: 重定向配置
+authenticationProviders:
+  title: 响应式认证提供者
+  imperativeAuthenticationProviders: 认证提供者
+  authenticationProvidersUseCases: 认证提供者用例
+  builtInAuthenticationProviders: 内置认证提供者
+authenticationStrategies:
+  title: 认证策略
+  basicAuth: 基本认证
+  session: 会话认证
+  jwt:
+    title: JSON Web Token（JWT）
+    reader:
+      title: 读取 JWT 令牌
+      bearerToken: Bearer 令牌读取器
+      cookieToken: Cookie 令牌读取器
+    jwtParser: JWT 解析器
+    jwtValidation:
+      title: JWT 签名验证
+      jwks:
+        title: 远程 JWKS
+        jwksCache: JWKS 缓存
+        staticJwks: 本地 JWKS
+    jsonWebTokenValidator: JWT 验证
+    jwtGenerator:
+      title: JWT 令牌生成
+      jwtGeneratorSignature: 签名 JWT 生成
+      jwtGeneratorSecret: 使用密钥签名 JWT 的示例
+      jwtGeneratorRSA: 使用 RSA 签名 JWT 的示例
+    jwtEncryption:
+      title: JWT 加密
+      jwtEncryptionSecret: 使用密钥加密 JWT 的示例
+      jwtGeneratorEncryption: 使用密钥签名并以 RSA 加密 JWT 的示例
+    claimsGeneration: Claims 生成
+    claimsValidation: Claims 验证
+    render:
+      title: 令牌渲染
+    jwtGuides: 指南
+  ldap:
+    title: LDAP 认证
+    configuration: 配置
+    extending: 扩展默认行为
+  x509: X.509 证书认证
+  custom: 自定义认证策略
+rejection:
+  title: 拒绝处理
+  wwwAuthenticate: WWW-Authenticate 响应
+csrf:
+  title: 跨站请求伪造（CSRF）
+  csrfDependency: CSRF 依赖
+  csrfFilter: CSRF 过滤器
+  csrfMitigations:
+    title: CSRF 缓解措施
+    syncronizerTokenPattern:
+      title: 同步器令牌模式
+      csrfAndSession: CSRF 与会话
+    doubleSubmitCookiePattern: 双重提交 Cookie 模式
+    signedDoubleSubmitCookiePattern: 签名的双重提交 Cookie 模式
+  csrfConfiguration: CSRF 配置
+  csrfTokenResolvers:
+    title: CSRF 令牌解析器
+    httpHeaderCsrfTokenResolver: HTTP Header CSRF 令牌解析
+    fieldCsrfTokenResolver: 表单字段 CSRF 令牌解析
+  csrfApis: CSRF API
+htmlSanitizer: HTML 净化器
+tokenPropagation: 令牌传播
+tokenendpoints:
+  title: 内置安全令牌控制器
+  refresh: 刷新控制器
+  keys: 密钥控制器
+  introspectionendpoint: 内省端点
+retrievingAuthenticatedUser:
+  title: 获取已认证用户
+  websocket: WebSocket 方法
+  customAuthenticatedUser: 自定义绑定
+  securityService: 控制器之外的用户获取
+dataAuditing:
+  title: 数据变更审计
+  annotations: 审计注解
+  identityMapping: 自定义认证映射
+securityEvents: 安全事件
+oauth:
+  title: OAuth 2.0
+  installation:
+    title: 安装
+  openid:
+    title: OpenID Connect
+  flows:
+    title: 授权流程
+    authorization-code:
+      title: 授权码
+      oauth2-authorization-code:
+        title: OAuth 2.0
+        oauth2-configuration: 配置
+        oauth2-user-details: 用户详情映射器
+      openid-authorization-code:
+        title: OpenID Connect
+        openid-configuration: 配置
+        openid-user-details: OAuth 2.0 认证映射器
+        openid-auth-parameters:
+          title: 参数
+          nonce: Nonce
+          login-hint: 登录提示
+          id-token-hint: ID Token 提示
+        token-validation: 令牌验证
+      state: State 参数
+      pkce: PKCE
+    clientcredentials:
+      title: 客户端凭证
+      clientecredentialshttpclient: 客户端凭证的 HTTP 客户端过滤器
+      clientCredentailsClientOf: 静态 ClientCredentialsClient
+      clientCredentialGuides: 指南
+    password: 密码模式
+  oauth-endpoints:
+    title: 端点
+    endsession: OpenID 结束会话
+    introspection: 内省
+    revocation: 撤销
+    user-info: UserInfo 端点
+    protectedResourceMetadata: 受保护资源元数据
+  custom-client: 自定义客户端
+  proxyToAuthServer: 将 .well-known 请求代理到认证服务器
+  oauthGuides: 指南
+ojdbcExtensions:
+  title: Oracle JDBC 扩展
+  ojdbcExtensionsInstallation: Oracle JDBC 扩展安装
+  endUserSecurityContextProvider: 终端用户安全上下文提供者
+  applicationAuthorizationAndUserIdentity: 应用授权与用户身份
+  applicationManagedDataRolesAndAttributes:
+    title: 应用托管的数据角色与属性
+    applicationManagedDataRoles: 应用托管的数据角色
+    privilegeEscalation: 特权提升
+    endUserContextAttributes: 终端用户上下文属性
+  endUserSecurityContextConfiguration: 终端用户安全上下文配置
+aot:
+  title: 提前优化
+  aotConfiguration: Micronaut Security AOT 配置
+  aotOpenidConfiguration: OpenID 配置优化
+  aotJwks: JWKS 优化
+repository: 仓库

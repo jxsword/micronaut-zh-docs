@@ -1,0 +1,12 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Logout Controller](https://docs.micronaut.io/5.2.x/security/#security-logout)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/endpoints/logout.adoc  upstream_commit: 8950a9a7b144f7218be48e9c36f903add5eb71b5  upstream_hash: ec80a8e5a702959ca5a3e34cbaf4ad0ccb239403  translated_at: 2026-11-23 -->
+
+[[logout]]
+要启用登出控制器，您需要有一个 api:security.handlers.LogoutHandler[] 类型的 bean。控制器的行为将委托给它。
+当然，也可以提供自定义实现。不过，已有多种 <<logoutHandler,登出处理器>> 实现开箱即用。
+
+您可以通过以下方式配置登出端点：
+
+include::{includedir}configurationProperties/io.micronaut.security.endpoints.LogoutControllerConfigurationProperties.adoc[]
+
+TIP: 如果您使用的 JWT 认证不存储在 Cookie 中，则可能无需调用 `/logout` 端点，因为登出通常只是删除客户端中的 JWT 令牌。

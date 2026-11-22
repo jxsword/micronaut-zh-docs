@@ -1,0 +1,8 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Authentication Provider](https://docs.micronaut.io/5.2.x/security/#security-imperativeAuthenticationProviders)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/authenticationProviders/imperativeAuthenticationProviders.adoc  upstream_commit: 9d264b10a57d2f541806f253850713ba0441c188  upstream_hash: f4f188799dcca7d3f708c3517bf1d47c3af6ac07  translated_at: 2026-11-23 -->
+
+api:security.authentication.provider.ReactiveAuthenticationProvider[] 接口是一个响应式 API。如果您更偏好命令式风格，可以改为实现 api:security.authentication.provider.AuthenticationProvider[] 或 api:security.authentication.provider.HttpRequestAuthenticationProvider[] 接口：
+
+snippet::io.micronaut.security.docs.blockingauthenticationprovider.CustomAuthenticationProvider[tags="clazz"]
+
+IMPORTANT: 如果您的实现是阻塞式的（例如，以阻塞方式从数据库获取用户凭证来与提供的认证请求比对），请实现 api:security.authentication.provider.ExecutorAuthenticationProvider[] 或 api:security.authentication.provider.HttpRequestExecutorAuthenticationProvider[] 接口。这些 API 会指明执行器名称（默认为 `TaskExecutors.BLOCKING`），代码将在该执行器上运行，以避免阻塞主响应式流程。

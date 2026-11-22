@@ -943,5 +943,202 @@ anchors:
   - guide/cli/createProject.adoc
   - guide/ioc/scopes/builtInScopes/eagerInit.adoc
   - guide/languageSupport/groovy.adoc
-unresolved: []
-scanned_files: 386
+- id: metricsEndpoint
+  file: modules/micrometer/guide/metricsEndpoint.adoc
+  title: Configuration
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/management/providedEndpoints.adoc
+- id: authenticationProviders
+  file: modules/security/guide/authenticationProviders.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - modules/security/guide/authenticationStrategies/basicAuth.adoc
+  - modules/security/guide/securityConfiguration/authenticationStrategy.adoc
+  - modules/security/guide/securityFilter/builtInAuthenticationFetchers/basicAuthAuthenticationFetcher.adoc
+- id: jwks
+  file: modules/security/guide/authenticationStrategies/jwt/jwtValidation/jwks.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - modules/security/guide/aot/aotJwks.adoc
+- id: session
+  file: modules/security/guide/authenticationStrategies/session.adoc
+  title: Example of Session-Based Authentication configuration
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - modules/security/guide/csrf/csrfMitigations/syncronizerTokenPattern/csrfAndSession.adoc
+- id: breaks
+  file: modules/security/guide/breaks.adoc
+  title: Micronaut Security 5.0 breaking changes
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/introduction/upgrading.adoc
+  - guide/introduction/whatsNew.adoc
+- id: csrfConfiguration
+  file: modules/security/guide/csrf/csrfConfiguration.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - modules/security/guide/csrf/csrfMitigations/doubleSubmitCookiePattern.adoc
+  - modules/security/guide/csrf/csrfTokenResolvers/httpHeaderCsrfTokenResolver.adoc
+- id: micronautSecurityAuthenticationCookie
+  file: modules/security/guide/endpoints/builtInHandlers/micronautSecurityAuthenticationCookie.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - modules/security/guide/csrf/csrfMitigations/doubleSubmitCookiePattern.adoc
+- id: micronautSecurityAuthenticationIdToken
+  file: modules/security/guide/endpoints/builtInHandlers/micronautSecurityAuthenticationIdToken.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - modules/security/guide/csrf/csrfMitigations/doubleSubmitCookiePattern.adoc
+- id: login
+  file: modules/security/guide/endpoints/login.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - modules/security/guide/authenticationProviders/authenticationProvidersUseCases.adoc
+  - modules/security/guide/authenticationStrategies/jwt/render.adoc
+  - modules/security/guide/endpoints/login/loginHandler.adoc
+  - modules/security/guide/oauth/flows/password.adoc
+- id: loginHandler
+  file: modules/security/guide/endpoints/login/loginHandler.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - modules/security/guide/authenticationStrategies/jwt/render.adoc
+  - modules/security/guide/endpoints/login.adoc
+  - modules/security/guide/oauth.adoc
+  - modules/security/guide/oauth/flows/authorization-code/openid-authorization-code/openid-user-details.adoc
+- id: logout
+  file: modules/security/guide/endpoints/logout.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - modules/security/guide/endpoints/logout/logoutHandler.adoc
+  - modules/security/guide/oauth/oauth-endpoints/endsession.adoc
+- id: logoutHandler
+  file: modules/security/guide/endpoints/logout/logoutHandler.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - modules/security/guide/endpoints/logout.adoc
+  - modules/security/guide/oauth/flows/authorization-code/openid-authorization-code/openid-user-details.adoc
+- id: oauth
+  file: modules/security/guide/oauth.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - modules/security/guide/aot/aotOpenidConfiguration.adoc
+  - modules/security/guide/endpoints/login/loginHandler.adoc
+- id: openid-authorization-code
+  file: modules/security/guide/oauth/flows/authorization-code/openid-authorization-code.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - modules/security/guide/authenticationStrategies/jwt/jwtValidation/jwks.adoc
+- id: openid-configuration
+  file: modules/security/guide/oauth/flows/authorization-code/openid-authorization-code/openid-configuration.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - modules/security/guide/oauth/flows/authorization-code/pkce.adoc
+- id: introspection
+  file: modules/security/guide/oauth/oauth-endpoints/introspection.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/appendix/architecture/introspectionArch.adoc
+  - guide/httpServer/jsonBinding/serializeUsingMicronautSerialization.adoc
+  - guide/ioc/beanMappers.adoc
+- id: redirection
+  file: modules/security/guide/securityConfiguration/redirection.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - modules/security/guide/authenticationStrategies/session.adoc
+  - modules/security/guide/securityConfiguration/noRedirection.adoc
+- id: securityFilter
+  file: modules/security/guide/securityFilter.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - modules/security/guide/endpoints.adoc
+- id: builtInEndpointsAccess
+  file: modules/security/guide/securityFilter/securityRule/builtInEndpointsAccess.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - modules/security/guide/securityRule.adoc
+- id: interceptUrlMap
+  file: modules/security/guide/securityFilter/securityRule/interceptUrlMap.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - modules/security/guide/securityRule.adoc
+- id: ipPattern
+  file: modules/security/guide/securityFilter/securityRule/ipPattern.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - modules/security/guide/securityRule.adoc
+- id: runAs
+  file: modules/security/guide/securityFilter/securityRule/runAs.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - modules/security/guide/ojdbcExtensions/applicationManagedDataRolesAndAttributes/privilegeEscalation.adoc
+- id: secured
+  file: modules/security/guide/securityFilter/securityRule/secured.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - modules/security/guide/securityFilter/securityRule/interceptUrlMap.adoc
+  - modules/security/guide/securityFilter/securityRule/secured/jakartaAnnotations.adoc
+  - modules/security/guide/securityRule.adoc
+- id: keys
+  file: modules/security/guide/tokenendpoints/keys.adoc
+  title: ''
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - modules/security/guide/authenticationStrategies/jwt/jwtValidation/jwks.adoc
+- id: breaks
+  file: modules/validation/guide/breaks.adoc
+  title: Micronaut Validation 5.0.0
+  reftext: ''
+  explicit: false
+  referenced_by:
+  - guide/introduction/upgrading.adoc
+  - guide/introduction/whatsNew.adoc
+unresolved:
+- target: loginController
+  from: modules/security/guide/endpoints.adoc
+  reason: anchor-missing
+scanned_files: 570

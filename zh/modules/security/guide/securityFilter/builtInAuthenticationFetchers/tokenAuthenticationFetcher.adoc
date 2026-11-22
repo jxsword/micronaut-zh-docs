@@ -1,0 +1,6 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Token Authentication Fetcher](https://docs.micronaut.io/5.2.x/security/#security-tokenAuthenticationFetcher)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/securityFilter/builtInAuthenticationFetchers/tokenAuthenticationFetcher.adoc  upstream_commit: 8950a9a7b144f7218be48e9c36f903add5eb71b5  upstream_hash: 0143fb06e5239758ebcbcacbe7df77a840a8ab16  translated_at: 2026-11-23 -->
+
+api:io.micronaut.security.token.TokenAuthenticationFetcher[] 先通过 api:io.micronaut.security.token.reader.TokenResolver[] API 尝试从 HTTP 请求中获取令牌，随后通过 api:io.micronaut.security.token.validator.TokenValidator[] API 尝试验证该令牌。
+
+image::tokenAuthenticationFetcher.png[]

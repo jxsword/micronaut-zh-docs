@@ -1,0 +1,31 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Basic Authentication](https://docs.micronaut.io/5.2.x/security/#security-basicAuth)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/authenticationStrategies/basicAuth.adoc  upstream_commit: a4e667931b762db6798d273ec92324e2eb43cefa  upstream_hash: 6a4eefe2b6d9bab62871396d91dcaa7f31b09d0e  translated_at: 2026-11-23 -->
+
+开箱即用，Micronaut 支持 https://tools.ietf.org/html/rfc7617[RFC7617]，它定义了 "Basic" 超文本传输协议（HTTP）认证方案，该方案以 user-id/password 对的形式传输凭证，并使用 Base64 编码。
+
+只要您有任何 <<authenticationProviders,认证提供者>>，基本认证就默认启用。您可以通过将 `micronaut.security.basic-auth.enabled` 设置为 `false` 来禁用它。
+
+下面的时序图展示了认证流程：
+
+image::basicauth.svg[]
+
+下面是一个使用基本认证的 cURL 命令示例：
+
+[source, bash]
+.使用 Basic Auth 的 cURL 命令
+----
+curl "http://localhost:8080/info" \
+     -u 'user:password'
+----
+
+从 HTTP Header 中读取凭证之后，凭证会被送入一个 link:{api}/io/micronaut/security/authentication/Authenticator.html[Authenticator] 进行验证尝试。
+
+下面的代码片段展示了如何使用 https://micronaut-projects.github.io/micronaut-core/latest/api/io/micronaut/http/MutableHttpRequest.html[MutableHttpRequest] 方法中的 `basicAuth` 来发送凭证：
+
+[source, groovy]
+.通过 Authorization 请求头访问受保护资源
+----
+include::{testssecurity}/security/token/basicauth/BasicAuthSpec.groovy[tag=basicAuth, indent=0]
+----
+
+TIP: 更多内容请阅读 https://guides.micronaut.io/latest/micronaut-security-basicauth.html[Basic Authentication Micronaut 指南]。

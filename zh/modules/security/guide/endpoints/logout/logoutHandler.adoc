@@ -1,0 +1,5 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Logout Handler](https://docs.micronaut.io/5.2.x/security/#security-logoutHandler)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/endpoints/logout/logoutHandler.adoc  upstream_commit: 8950a9a7b144f7218be48e9c36f903add5eb71b5  upstream_hash: cab1dd401918df344ed7ec76ca159de989f4aecd  translated_at: 2026-11-23 -->
+
+[[logoutHandler]]
+api:security.handlers.LogoutHandler[] API 定义了如何响应登出请求。例如配合 <<logout,登出控制器>> 使用。

@@ -1,0 +1,6 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Basic-Auth Authentication Fetcher](https://docs.micronaut.io/5.2.x/security/#security-basicAuthAuthenticationFetcher)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/securityFilter/builtInAuthenticationFetchers/basicAuthAuthenticationFetcher.adoc  upstream_commit: 8950a9a7b144f7218be48e9c36f903add5eb71b5  upstream_hash: ac63b900a07b81aff9e0e028ab8b86447e675ed0  translated_at: 2026-11-23 -->
+
+api:io.micronaut.security.authentication.BasicAuthAuthenticationFetcher[] 使用 https://en.wikipedia.org/wiki/Basic_access_authentication[Basic 认证] 从 HTTP 请求中解析凭证。随后，它使用解析出的凭证调用每个 <<authenticationProviders,认证提供者>>。
+
+image::basicAuthAuthenticationFetcher.png[]

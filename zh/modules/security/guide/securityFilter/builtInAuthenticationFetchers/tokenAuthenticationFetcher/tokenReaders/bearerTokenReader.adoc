@@ -1,0 +1,8 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Bearer Token Reader](https://docs.micronaut.io/5.2.x/security/#security-bearerTokenReader)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/securityFilter/builtInAuthenticationFetchers/tokenAuthenticationFetcher/tokenReaders/bearerTokenReader.adoc  upstream_commit: 8950a9a7b144f7218be48e9c36f903add5eb71b5  upstream_hash: 1d693959b0ace542e3bf4462bde310323320aeee  translated_at: 2026-11-23 -->
+
+api:io.micronaut.security.token.bearer.BearerTokenReader[] 尝试读取 https://tools.ietf.org/html/rfc6750[RFC 6750 Bearer 令牌]。
+
+以下配置属性可用于自定义 Bearer 令牌的读取方式：
+
+include::{includedir}configurationProperties/io.micronaut.security.token.bearer.BearerTokenConfigurationProperties.adoc[]

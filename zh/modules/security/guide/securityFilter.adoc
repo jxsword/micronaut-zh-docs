@@ -1,0 +1,11 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – How It Works - Security Filter](https://docs.micronaut.io/5.2.x/security/#security-securityFilter)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/securityFilter.adoc  upstream_commit: 8950a9a7b144f7218be48e9c36f903add5eb71b5  upstream_hash: 21b97f7748544283d8637801765f48528ad27394  translated_at: 2026-11-23 -->
+
+[[securityFilter]]
+添加 `micronaut-security` 依赖后，它会提供一个 https://docs.micronaut.io/latest/guide/#filters[Micronaut HTTP 服务器过滤器]——api:security.filters.SecurityFilter[]。
+
+image::securityfilter.png[]
+
+对于每个请求，该过滤器会将请求与每个 api:security.filters.AuthenticationFetcher[] 类型的 bean 进行评估。评估结果可能解析出一个 api:security.authentication.Authentication[] 实例。
+
+随后，这个可选的认证信息会与每个 api:security.rules.SecurityRule[] 类型的 bean 进行评估，以判定请求是否获得授权。若未授权，则抛出 api:security.authentication.AuthorizationException[]。

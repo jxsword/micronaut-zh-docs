@@ -1,0 +1,5 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Handlers without redirection](https://docs.micronaut.io/5.2.x/security/#security-noRedirection)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/securityConfiguration/noRedirection.adoc  upstream_commit: 9f93ac61608e3c82b306d629d1add272801f3281  upstream_hash: d08fada1c630602f8da7f46899b8783cbc4b21b8  translated_at: 2026-11-23 -->
+
+一些内置处理器会以 303（See Other）响应跳转到 <<redirection,重定向配置>> 中定义的 URL。
+如果通过将 `micronaut.security.redirect.enabled` 设置为 `false` 来禁用重定向配置，这些处理器将改为返回 200 响应。

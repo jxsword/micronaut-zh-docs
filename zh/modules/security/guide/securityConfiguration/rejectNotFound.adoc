@@ -1,0 +1,4 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Reject Not Found Routes](https://docs.micronaut.io/5.2.x/security/#security-rejectNotFound)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/securityConfiguration/rejectNotFound.adoc  upstream_commit: a56ececf5f2a8184146b242bce3d816f0fb0e09d  upstream_hash: 0b554795598dcc3b505ce93fc9257a6762c18514  translated_at: 2026-11-23 -->
+
+默认情况下，引入 Micronaut Security 后，即使是不存在的路由，应用也返回 401 或 403。该行为可防止攻击者探测应用中存在哪些端点。不过，如果希望对不存在的路由返回 404，可以在配置中设置 `micronaut.security.reject-not-found: false`。

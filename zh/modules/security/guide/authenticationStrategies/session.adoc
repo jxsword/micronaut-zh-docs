@@ -1,0 +1,46 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Session Authentication](https://docs.micronaut.io/5.2.x/security/#security-session)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/authenticationStrategies/session.adoc  upstream_commit: d918b5d131bc30609e19659d1c4961ef54f0e67b  upstream_hash: c6a1d8e8eb49aa3bba56b909caa71e737c9c4a1f  translated_at: 2026-11-23 -->
+
+Micronaut 支持基于会话的认证。
+
+[TIP]
+.使用 CLI
+====
+如果您正使用 Micronaut CLI 创建项目，请提供 `security-session` 特性来在项目中配置会话安全：
+----
+$ mn create-app my-app --features security-session
+----
+====
+
+
+要使用 Micronaut 基于会话的认证能力，类路径中必须有 `security-session` 依赖。例如：
+
+dependency:io.micronaut.security:micronaut-security-processor[scope='annotationProcessor']
+
+dependency:io.micronaut.security:micronaut-security-session[]
+
+NOTE: 仅在使用 JSR 250 注解时才需要 `micronaut-security-processor` 依赖
+
+下面的时序图展示了认证流程：
+
+image::sesssion_based_auth.svg[]
+
+请查阅 <<redirection,重定向配置>> 以定制基于会话的认证行为。
+
+== 基于会话的认证配置示例
+
+[configuration]
+----
+include::{testsuitegeb}/security/session/SessionAuthenticationSpec.groovy[tag=yamlconfig,indent=0]
+----
+
+阅读以下指南以进一步了解基于会话的认证：
+
+- https://guides.micronaut.io/latest/micronaut-security-session.html[Session-Based Authentication Micronaut 指南]
+- https://guides.micronaut.io/latest/micronaut-security-session-database-authentication.html[Database Authentication]
+
+== 无重定向的基于会话认证
+
+将 `micronaut.security.authentication` 设置为 `session` 时，会启用 api:security.session.SessionLoginHandler[] 与 api:security.session.SessionLogoutHandler[]。
+
+这些处理器会向 <<redirection,重定向配置>> 中定义的 URL 返回 303 响应。通过 `micronaut.security.redirect.enabled=false` 禁用重定向配置后，将改为返回 200 响应。

@@ -1,0 +1,69 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – JSON Web Token](https://docs.micronaut.io/5.2.x/security/#security-jwt)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/authenticationStrategies/jwt.adoc  upstream_commit: ec078699cfe121097791a6ff3dede2e6d0ac5cff  upstream_hash: 1236e93f33b89bead1ed041a04db2d57e6db2e1d  translated_at: 2026-11-23 -->
+
+以下配置属性可用于自定义基于令牌的认证：
+
+include::{includedir}configurationProperties/io.micronaut.security.token.config.TokenConfigurationProperties.adoc[]
+
+Micronaut 提供了基于 https://jwt.io/[JSON Web Token（JWT）] 的安全能力。
+JWT 是一项 https://tools.ietf.org/html/rfc7519[IETF 标准]，它定义了一种在不安全 URL 上传输任意数据的安全的封装方式。
+
+[TIP]
+.使用 CLI
+====
+如果您正使用 Micronaut CLI 创建项目，请提供 `security-jwt` 特性来在项目中配置 JWT 支持：
+----
+$ mn create-app my-app --features security-jwt
+----
+====
+
+要使用 Micronaut 基于 JWT 的认证能力，类路径中必须有 `security-jwt` 依赖。例如：
+
+dependency:io.micronaut.security:micronaut-security-processor[scope='annotationProcessor']
+
+dependency:io.micronaut.security:micronaut-security-jwt[]
+
+NOTE: 仅在使用 JSR 250 注解时才需要 `micronaut-security-processor` 依赖
+
+以下配置属性可用于自定义基于 JWT 的认证行为：
+
+include::{includedir}configurationProperties/io.micronaut.security.token.jwt.config.JwtConfigurationProperties.adoc[]
+
+== JWT 长什么样？
+
+image::jwt.png[]
+
+===  Header
+
+一个类似下面这样的 base64 编码 JSON：
+
+[source, json]
+.JWT header
+----
+{
+    "alg": "HS256",
+    "typ": "JWT"
+}
+----
+
+=== Claims
+
+一个类似下面这样的 base64 编码 JSON：
+
+[source, json]
+.JWT claims
+----
+{
+    "exp": 1422990129,
+    "sub": "jimi",
+    "roles": [
+        "ROLE_ADMIN",
+        "ROLE_USER"
+    ],
+    "iat": 1422986529
+}
+----
+
+=== Signature
+
+取决于 header 中指定的算法，它可以是 base64 编码的 header 与 claims 的数字签名，也可以是它们的加密结果。

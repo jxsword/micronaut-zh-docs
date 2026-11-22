@@ -1,0 +1,18 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Exception Handlers](https://docs.micronaut.io/5.2.x/security/#security-exceptionHandlers)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/exceptionHandlers.adoc  upstream_commit: f32ff6e038ed2de3c43890604330d85d88ca308d  upstream_hash: 0bfa9e27bb6118e8fbb78b7f5a500b4db2e64913  translated_at: 2026-11-23 -->
+
+Micronaut Security 内置了若干 https://docs.micronaut.io/latest/guide/#exceptionHandler[异常处理器]：
+
+|===
+|异常|处理器
+| api:security.authentication.AuthenticationException[]
+| api:security.authentication.AuthenticationExceptionHandler[]
+| api:security.authentication.AuthorizationException[]
+| api:security.authentication.DefaultAuthorizationExceptionHandler[]
+| api:security.oauth2.endpoint.authorization.response.AuthorizationErrorResponseException[]
+| api:security.oauth2.endpoint.authorization.response.AuthorizationErrorResponseExceptionHandler[]
+| api:security.errors.OauthErrorResponseException[]
+| api:security.errors.OauthErrorResponseExceptionHandler[]
+|===
+
+您可能需要 https://docs.micronaut.io/latest/guide/#replaces[替换] 其中一些 bean，以便按需定制 Micronaut Security 的异常处理。
