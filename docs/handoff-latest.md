@@ -9,12 +9,12 @@
 | 周检双缺陷修复（a29e59d） | check_all.sh `${MEMGATE}` 引号致 127（4de82c6 起从未真正跑通，意外退出码聚合还会吞掉 127）；sync_upstream.py `--check/--apply` repo 解析曾一律取 --repo 缺省值（core），模块账本误比对 core 文档树产整树伪 diff（micrometer/validation 虚报 22+68 文件变更）——repo 解析改三级：--repo 显式 > 账本 upstream.remote > core 缺省；修复后三模块 check 全 0，无需开 issue |
 | security 快照（0e2a358） | micronaut-security 5.2.x @ cc524538（默认分支实为 5.5.x，按 SOP 优先 5.2.x）；145 条目=144 adoc+toc.yml、33 图 5.9MB、5 壳 skipped；**.sketch 3.3MB 白名单外不入库**（坑位 25）；modules.json 补填 repo/SEC；inventory 切批 SEC-01…04（13173 非代码词） |
 | SEC-01（016ecd3 + 5b2c185） | 42 文件+toc.yml 七步全流程；43 条目全 current；裸 `<<target>>` xref 11 目标确立「译显示文本+目标页注入 [[basename]]」口径（8 处注入，href↔id 渲染闭环实测）；glossary modules 分节 +9 条 security 术语；validate 43 文件全绿（豁免 2 条）；⑤ 登记表路径双前缀缺陷修复（016ecd3） |
-| 渲染上线 | security.html 132KB（SEC-01 片段）0 失败；id="login"/"authenticationProviders"/"secured" 与对应 href 闭环实测通过；core/micrometer/validation 页无回归 |
+| 渲染上线 | security.html（SEC-01 片段，55/144 渲染）0 真实失败；id="login"/"authenticationProviders"/"secured" 与对应 href 闭环实测通过；core/micrometer/validation 页无回归；**render 门禁修复（ca0c0f8）**：部分翻译模块不再硬拦 CI（missingPage 警告+诚实导航+部分译文提示），deploy-pages 曾被 8 条「zh 镜像缺失」拦死 |
 | 图片体量复测 | security 单模块 resources 5.9MB（不含 .sketch）；71 模块外推 <300MB 结论维持，**git-lfs 不启用** |
 
 ## 状态快照（2026-11-23，M4.1 会话 1 收尾）
 
-- 分支 main，领先 origin 5 个提交（a29e59d → 0e2a358 → 016ecd3 → 5b2c185 + 待提交的 docs/progress 更新）；远程 https://github.com/jxsword/micronaut-zh-docs（push 走 SSH——坑位 14）
+- 分支 main，本会话 7 个提交（a29e59d 周检修复 → 0e2a358 快照 → 016ecd3 validate 修复 → 5b2c185 SEC-01 → b719e86 收尾 docs → ca0c0f8 render 门禁修复 → 本 docs 补充），已推送 origin（SSH）；远程 https://github.com/jxsword/micronaut-zh-docs（push 走 SSH——坑位 14）
 - core：388 条目 = 387 current + 1 skipped，validate/pytest 123 绿无回归
 - micrometer 30/30、validation 12/12 current（check 复测无上游变更）；security 145 条目 = 43 current + 97 missing（SEC-02/03/04）+ 5 skipped，进度 30.7%
 - 聚合站：index.html + micrometer.html + validation.html + **security.html（新增，SEC-01 片段）** + landing.html
@@ -34,6 +34,7 @@
 8. **模块裸 `<<target>>` xref 口径**（security 首现，11 个页级目标）：译文译显示文本、保留 `<<target,译文>>` 原样，并在目标页 zh 片段首内容之前原位注入 `[[target]]`（B02 同款规则）；渲染端 href="#target" ↔ id="target" 天然闭环（idprefix=security- 只影响自动 id）；上游悬空引用（如 endpoints.adoc 的 <<loginController>>，官方站亦无此 id）保持原样走 ⑤ 豁免跟踪，不虚构目标。
 9. **sync 模块账本 repo 解析口径**：`--check/--apply` 的上游仓库一律「--repo 显式 > 账本 upstream.remote > core 缺省」三级解析；`--manifest manifests/<site>.yml` 而不传 `--repo` 现在正确比对模块自身仓库（修复前整树伪 diff）。
 10. **快照白名单口径**：read_upstream 仅入库 .adoc + toc/toc-python.yml + 图片白名单（.png/.svg/.gif/.jpg/.jpeg/.webp/.ico/.pdf）；白名单外扩展名（如 security 的 3.3MB .sketch 设计源）跳过并告警不入库——SOP §4「快照仅 .adoc+toc+resources 图片入库」的落地实现；新增类型需求时先在白名单显式添加再重快照。
+11. **render 部分翻译模块口径**：toc 叶页 zh 镜像缺失=多批次推进的预期中间态，不再计渲染失败硬拦 CI（此前 deploy-pages 被 8 条「zh 镜像缺失」拦死，连带阻塞整站部署）；改计 missingPage 警告 + 跳过片段 + 导航只显示已译叶页 + 页头「部分译文 N/M 页」提示；退出码只看真实渲染失败。预存在噪音：asciidoctor「no callout found」警告 core 时代就有（M4.0 成功部署 540 条），非回归。
 
 ## 待办（下一会话：SEC-02/03/04）
 
