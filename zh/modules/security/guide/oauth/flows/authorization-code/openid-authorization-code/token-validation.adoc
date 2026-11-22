@@ -1,0 +1,8 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Token Validation](https://docs.micronaut.io/5.2.x/security/#security-token-validation)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/oauth/flows/authorization-code/openid-authorization-code/token-validation.adoc  upstream_commit: d383412f8edb030243c6aea7e624b3f95cb7c88a  upstream_hash: 6af9466f5a610645a80c4cbc304f5678ba552ee8  translated_at: 2026-11-23 -->
+
+api:security.oauth2.endpoint.token.response.validation.OpenIdTokenResponseValidator[] bean 负责校验 JWT 令牌。默认实现尽可能遵循 OpenID Connect 规范中关于 https://openid.net/specs/openid-connect-core-1_0.html#IDTokenValidation[令牌校验（token validation）] 的指南。
+
+默认情况下，api:io.micronaut.security.token.jwt.validator.GenericJwtClaimsValidator[] 与 api:io.micronaut.security.oauth2.endpoint.token.response.validation.OpenIdClaimsValidator[] 的所有实现都会用于校验令牌。
+
+要允许额外的或自定义的校验，请注册一个 api:io.micronaut.security.oauth2.endpoint.token.response.validation.OpenIdClaimsValidator[] bean。

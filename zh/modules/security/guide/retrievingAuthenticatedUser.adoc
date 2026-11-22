@@ -1,0 +1,22 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Retrieve the authenticated user](https://docs.micronaut.io/5.2.x/security/#security-retrievingAuthenticatedUser)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/retrievingAuthenticatedUser.adoc  upstream_commit: f563307ffe8016f473dd7e36424fd0c485208210  upstream_hash: 561079eef474b4ddbf6c11b7e62eac5377e3213e  translated_at: 2026-11-23 -->
+
+您可能经常希望检索已认证的用户。
+
+您可以将 `java.security.Principal` 绑定为控制器中的方法参数。
+
+[source, groovy]
+----
+include::{testssecurity}/security/principalparam/UserController.groovy[tag=imports,indent=0]
+
+include::{testssecurity}/security/principalparam/UserController.groovy[tag=clazz,indent=0]
+----
+
+如果需要更多细节，您可以将 api:security.authentication.Authentication[] 绑定为控制器中的方法参数。
+
+[source, groovy]
+----
+include::{testssecurity}/security/authentication/UserController.groovy[tag=imports,indent=0]
+
+include::{testssecurity}/security/authentication/UserController.groovy[tag=clazz,indent=0]
+----

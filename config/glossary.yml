@@ -406,3 +406,31 @@ modules:
       status: "approved"
       context: "security Token Propagation 节（SEC-02 实译；TokenPropagationHttpClientFilter 等类名不译）"
       aliases: ["propagation"]
+
+    - en: "refresh token"
+      zh: "刷新令牌"
+      module: "security"
+      status: "approved"
+      context: "security tokenendpoints/oauth 组高频（SEC-03 实译；RefreshTokenGenerator 等类名不译）"
+      aliases: ["refresh tokens"]
+
+    - en: "access token"
+      zh: "访问令牌"
+      module: "security"
+      status: "approved"
+      context: "security tokenendpoints/oauth 组高频（SEC-02 render.adoc 首译、SEC-03 实录；AccessTokenGeneratedEvent 等类名不译）"
+      aliases: ["access tokens"]
+
+    - en: "Client Credentials Grant"
+      zh: "客户端凭证许可"
+      module: "security"
+      status: "approved"
+      context: "OAuth 2.0 客户端凭证许可流程（SEC-03 实译；ClientCredentialsClient 等类名不译）"
+      aliases: ["client credentials grant"]
+
+    - en: "nonce"
+      zh: "nonce"
+      module: "security"
+      status: "approved"
+      context: "不译；OpenID 认证请求防重放参数（SEC-03 实译；NoncePersistence 等类名不译。注：state/issuer 因词形通用、③ 必译检查系统性误报，不收录）"
+      aliases: []

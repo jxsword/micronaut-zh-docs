@@ -1,0 +1,66 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Refresh Controller](https://docs.micronaut.io/5.2.x/security/#security-refresh)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/tokenendpoints/refresh.adoc  upstream_commit: 8950a9a7b144f7218be48e9c36f903add5eb71b5  upstream_hash: 1c5764c0c02417cdc3e64fef797303fe09e76b47  translated_at: 2026-11-23 -->
+
+IMPORTANT: 从 Micronaut Security 2.0 开始，刷新令牌功能发生了巨大变化。如果您正在升级，请阅读本节，因为它现在的行为有所不同。
+
+刷新令牌（refresh token）可用于获取新的访问令牌。默认情况下，不会生成刷新令牌。
+
+api:security.token.generator.RefreshTokenGenerator[] API 负责生成包含在响应中的令牌。api:security.token.validator.RefreshTokenValidator[] 负责校验刷新令牌。请注意，该校验步骤与令牌的持久化无关，而是用于验证该令牌不是随机或猜测出来的值。
+
+默认已提供 api:security.token.generator.RefreshTokenGenerator[] 与 api:security.token.validator.RefreshTokenValidator[] 二者的实现。api:io.micronaut.security.token.jwt.generator.SignedRefreshTokenGenerator[] 会创建并验证一个 JWS（JSON Web 签名）编码对象，其载荷是带有基于哈希的消息认证码（HMAC）的 UUID。请查看以下配置选项：
+
+include::{includedir}configurationProperties/io.micronaut.security.token.jwt.generator.RefreshTokenConfigurationProperties.adoc[]
+
+要启用它，您必须提供一个密钥：
+
+[configuration]
+----
+micronaut:
+    security:
+        token:
+            jwt:
+                generator:
+                    refresh-token:
+                        secret: 'pleaseChangeThisSecretForANewOne'
+----
+
+令牌生成后，本库对它一无所知。该值不会被缓存或存储在任何地方。如何存储令牌、支持撤销、以及在给定令牌时检索用户详情，都由每个应用自行决定。
+
+除上述要求外，每个应用还必须提供 api:security.token.refresh.RefreshTokenPersistence[] 的实现。
+
+api:security.token.refresh.RefreshTokenPersistence[] 实现会在刷新令牌生成时收到一个事件，并负责持久化该令牌以及与之关联的用户链接。用户信息和令牌都可以在 api:security.token.event.RefreshTokenGeneratedEvent[] 中获取。
+
+### 刷新令牌
+
+Micronaut Security 自带一个控制器用于刷新访问令牌。如果上下文中包含以下类型的 bean，上下文会加载 api:security.token.jwt.endpoints.OauthController[OauthController]：api:io.micronaut.security.token.jwt.generator.AccessRefreshTokenGenerator[]、api:security.token.refresh.RefreshTokenPersistence[]、api:security.token.validator.RefreshTokenValidator[]
+
+此外，该控制器可以通过以下方式配置：
+
+include::{includedir}configurationProperties/io.micronaut.security.endpoints.OauthControllerConfigurationProperties.adoc[]
+
+该控制器暴露的端点由 https://tools.ietf.org/html/rfc6749#section-6[OAuth 2.0 规范第 6 节] 定义——刷新访问令牌。
+
+刷新令牌端点使用 api:security.token.validator.RefreshTokenValidator[] API 来验证令牌符合预期的格式。api:io.micronaut.security.token.jwt.generator.SignedRefreshTokenGenerator[] 会尝试验证签名并返回载荷。任何校验器实现都不应关心撤销状态、是否存在或其他与持久化相关的验证。
+
+如果校验器成功验证了令牌，令牌随后会传递给 api:security.token.refresh.RefreshTokenPersistence[] 实现（每个应用必须提供）。然后基于 `RefreshTokenPersistence::getAuthentication` 返回的用户详情创建新的访问令牌，并在响应中返回。
+
+下面是一个刷新令牌请求示例。向 `/oauth/access_token` 端点发送 POST 请求：
+
+[source,bash]
+.获取访问令牌的示例 HTTP 请求
+----
+POST /oauth/access_token HTTP/1.1
+Host: micronaut.example
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=refresh_token&refresh_token=eyJhbGciOiJSU0EtT0FFUCIsImVuYyI6IkEyNTZHQ00ifQ....
+----
+
+如您所见，这是一个带有 2 个参数的表单请求：
+
+`grant_type`：必须始终为 `refresh_token`。
+
+`refresh_token`：之前获取的刷新令牌。
+
+TIP: 刷新令牌必须安全地存储在您的客户端应用中。
+更多信息请参阅 https://tools.ietf.org/html/rfc6749#section-10.4[OAuth 2.0 规范第 10.4 节]。

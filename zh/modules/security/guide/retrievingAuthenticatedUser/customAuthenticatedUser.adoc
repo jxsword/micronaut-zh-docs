@@ -1,0 +1,16 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Custom Binding](https://docs.micronaut.io/5.2.x/security/#security-customAuthenticatedUser)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/retrievingAuthenticatedUser/customAuthenticatedUser.adoc  upstream_commit: 22dbbc040492183d6ca8a92ef9b569628025a0b4  upstream_hash: 5fa21d6c9d79e0cc0747949598f61e40663fc0be  translated_at: 2026-11-23 -->
+
+您可以创建自定义参数绑定器（argument binder），将已认证用户绑定到符合您应用需求的自定义类上。
+
+如果在您的应用中，已认证用户拥有电子邮件地址，您可以创建一个类似下面的类：
+
+snippet::io.micronaut.security.docs.customauthentication.AuthenticationWithEmail[]
+
+然后创建一个 `TypedRequestArgumentBinder`：
+
+snippet::io.micronaut.security.docs.customauthentication.AuthenticationWithEmailArgumentBinder[]
+
+随后您就可以将它绑定到控制器方法参数中：
+
+snippet::io.micronaut.security.docs.customauthentication.CustomAuthenticationTest[tags="method"]

@@ -1,0 +1,8 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Parameters](https://docs.micronaut.io/5.2.x/security/#security-openid-auth-parameters)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/oauth/flows/authorization-code/openid-authorization-code/openid-auth-parameters.adoc  upstream_commit: b5870a5035962177e2c25f6d1fe08ef0583fc9e3  upstream_hash: 469fa97c3f90d0b65ba39f114462230664f7249d  translated_at: 2026-11-23 -->
+
+link:https://openid.net/specs/openid-connect-core-1_0.html#AuthRequest[授权请求（authorization requests）] 的 OpenID 规范允许使用 OAuth 2.0 规范之外的额外参数。其中一些参数适合由 bean 提供，本节将对此进行描述。其他参数则可以通过配置控制。
+
+以下是授权请求参数的配置选项：
+
+include::{includedir}configurationProperties/io.micronaut.security.oauth2.configuration.OauthClientConfigurationProperties$OpenIdClientConfigurationProperties$AuthorizationEndpointConfigurationProperties.adoc[]

@@ -1,0 +1,8 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Installation](https://docs.micronaut.io/5.2.x/security/#security-installation)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/oauth/installation.adoc  upstream_commit: 441a01d0e365cea55df04bd91a86fcecba1b3df1  upstream_hash: 18d635ef2a06ca5470dc6ad98cd45e8e2dd7f811  translated_at: 2026-11-23 -->
+
+dependency:io.micronaut.security:micronaut-security-oauth2[]
+
+要使用本库的 `BUILD-SNAPSHOT` 版本，请查看 https://docs.micronaut.io/latest/guide/index.html#usingsnapshots[快照版本使用文档]。
+
+代码可在 https://github.com/micronaut-projects/micronaut-security/tree/master/security-oauth2[micronaut-security] 仓库找到。

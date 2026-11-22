@@ -1,0 +1,14 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – User outside of a controller](https://docs.micronaut.io/5.2.x/security/#security-securityService)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/retrievingAuthenticatedUser/securityService.adoc  upstream_commit: 03a63c8bfedc5498902a3aa2a53e8ed878abaa3c  upstream_hash: fa0ffd37dd46c4fefec1cb36902a1bd966800617  translated_at: 2026-11-23 -->
+
+如果您需要在控制器之外访问当前已认证的用户，可以注入 api:security.utils.SecurityService[] bean，它提供了一组与认证和授权相关的便捷方法。
+
+在底层，它使用 api:security.context.SecurityContextHolder[] 与 api:security.context.SecurityContext[] API。
+
+`SecurityContext` 的默认提供者使用服务器请求属性。您可以通过 https://docs.oracle.com/javase/tutorial/ext/basics/spi.html[Java SPI] 提供 api:io.micronaut.security.context.SecurityContextSupplier[] 的实现来替换它。
+
+=== 在 Project Reactor 中使用 SecurityService
+
+如果您使用 Micronaut Reactor 并在响应式链中访问 api:security.utils.SecurityService[]，请添加以下依赖以处理 https://docs.micronaut.io/latest/guide/#reactorContextPropagation[Reactor 上下文传播（Reactor Context Propagation）]。
+
+dependency:context-propagation[groupId=io.micrometer]

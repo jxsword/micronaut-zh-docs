@@ -1,0 +1,15 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Keys Controller](https://docs.micronaut.io/5.2.x/security/#security-keys)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/tokenendpoints/keys.adoc  upstream_commit: 8950a9a7b144f7218be48e9c36f903add5eb71b5  upstream_hash: 2fe537d61299c2a641850e3fc5daab63202d7813  translated_at: 2026-11-23 -->
+
+[[keys]]
+NOTE: 只有使用 JWT 认证时才能启用该控制器。
+
+https://tools.ietf.org/html/rfc7517[JSON Web Key（JWK）] 是一种表示加密密钥的 JSON 对象。对象的成员表示密钥的属性，包括密钥的值。
+
+与此同时，JWK Set 是表示一组 JWK 的 JSON 对象。该 JSON 对象必须有一个 "keys" 成员，它是 JWK 的数组。
+
+要启用 link:{api}/io/micronaut/security/token/jwt/endpoints/KeysController.html[KeysController]，您至少要提供一个 link:{api}/io/micronaut/security/token/jwt/endpoints/JwkProvider.html[JwkProvider] 类型的 bean。
+
+此外，您可以通过以下方式配置它：
+
+include::{includedir}configurationProperties/io.micronaut.security.token.jwt.endpoints.KeysControllerConfigurationProperties.adoc[]

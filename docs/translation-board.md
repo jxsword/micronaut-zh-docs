@@ -50,9 +50,10 @@
 | validation | VALID-01 | 11 | 1463 | 1479 | 106 | current |
 | security | SEC-01 | 42+toc | 3432 | 3454 | — | current |
 | security | SEC-02 | 40 | 3452 | 3539 | — | current |
-| security | SEC-03 | 29 | 3456 | 3503 | — | pending |
+| security | SEC-03 | 29 | 3456 | 3503 | — | current |
 | security | SEC-04 | 28 | 2833 | 2842 | — | pending |
 
+- SEC-03（2026-11-23 完成）：29 文件七步全流程，validate 112 文件全绿（豁免 3 条均为既有跟踪：loginController 悬空 + wwwAuthenticate 上游不平衡 xref ×2）；**注入 4 锚**（[[oauth]]/[[openid-authorization-code]]/[[keys]] 消解 SEC-01/02 遗留豁免 3 条 + [[openid-configuration]] 批内闭环）；批内裸 xref 3 处走 SEC-01 口径；validate 拦 ⑦ 邻接 ×1 与 ③ bean 口径 ×13 文件（新译大写 Bean 统一改小写，SEC-01 先例）；术语 +4（refresh token→刷新令牌、access token→访问令牌、Client Credentials Grant→客户端凭证许可、nonce 不译；state/issuer 试用撤回——词形通用致 ③ 误报）。详见 reports/batch-SEC-03.md。
 - 模块导航 toc.yml 标题随首批一并译出核销（micrometer 30 / validation 12 / security 145 条目中 SEC-01 的 43 条 current）。
 - SEC-02（2026-11-23 完成）：40 文件七步全流程，validate 83 文件全绿（豁免 6 条均为预期中间态/既有跟踪）；restore 拦 2 处译丢段；**回溯补注入 4 处**（[[basicAuth]]/[[session]]/[[micronautSecurityAuthenticationCookie]]/[[micronautSecurityAuthenticationIdToken]]，B16/B30 先例——SEC-01 的 11 页级目标中被引用而未注入的子集全部闭环）；批内 [[csrfConfiguration]] 译文首行注入；上游不平衡 xref（`<<basicAuth, basic auth>` 缺右 `>`）registry 扫描未捕获走豁免分支、渲染闭环由锚注入保证；术语 +2（sanitizer→净化器、token propagation→令牌传播，modules.security 现 13 条）。详见 reports/batch-SEC-02.md。
 - 模块进度报表：reports/progress.md（多账本聚合，按模块分组）；模块注册表 config/modules.json（官方导航 18 组，2026-11-23 实抓）。

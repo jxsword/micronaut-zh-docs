@@ -1,0 +1,4 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Login Hint](https://docs.micronaut.io/5.2.x/security/#security-login-hint)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/oauth/flows/authorization-code/openid-authorization-code/openid-auth-parameters/login-hint.adoc  upstream_commit: 4907cf9a473893c50de1d3f04304fc5def0616cb  upstream_hash: b21e94fd474cc837d3684c33b0cdd1a672aa9b4c  translated_at: 2026-11-23 -->
+
+本库默认不会在授权请求中包含 https://openid.net/specs/openid-connect-core-1_0.html#IDToken[login hint]。可以注册一个 api:io.micronaut.security.oauth2.endpoint.authorization.request.LoginHintResolver[] bean，在构建授权请求时会被调用。

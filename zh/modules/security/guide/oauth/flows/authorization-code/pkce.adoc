@@ -1,0 +1,8 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – PKCE](https://docs.micronaut.io/5.2.x/security/#security-pkce)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/oauth/flows/authorization-code/pkce.adoc  upstream_commit: 56ad9ac055ae923ef36436a89116daa8d324a51a  upstream_hash: 806d594bd9e12c898a358e8f68da050019275160  translated_at: 2026-11-23 -->
+
+通过设置 `micronaut.security.oauth2.clients.*.openid.issuer` 使用 OpenID Connect <<openid-configuration, 发现（Discovery）>>，并经由 `code_challenge_methods` 指定授权服务器支持 `plain`、`S256` 或两者兼有时，Micronaut Security 会按照 https://www.rfc-editor.org/rfc/rfc7636[PKCE 规范（Proof Key for Code Exchange）] 的规定，在授权请求中自动发送 code challenge。
+
+使用手动 OAuth 2.0 客户端配置时，您可以通过设置 `micronaut.security.oauth2.clients.*.authorization.code-challenge-method` 指定支持的 challenge 方法。
+
+如果内置实现无法满足您的需求，您可以提供 api:security.oauth2.endpoint.authorization.pkce.CodeVerifierGenerator[] 或 api:security.oauth2.endpoint.authorization.pkce.PkceGenerator[] bean 的 https://micronaut-projects.github.io/micronaut-core/latest/guide/#replaces[替代实现]。

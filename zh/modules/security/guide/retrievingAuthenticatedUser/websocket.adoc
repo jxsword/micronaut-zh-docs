@@ -1,0 +1,6 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – WebSocket methods](https://docs.micronaut.io/5.2.x/security/#security-websocket)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/retrievingAuthenticatedUser/websocket.adoc  upstream_commit: 77cf0e32ded10fdad5864717230868b294b7ff68  upstream_hash: de3e17f66837ade5d3147811363aecf7d326f790  translated_at: 2026-11-23 -->
+
+在使用 https://docs.micronaut.io/latest/guide/#websocketServer[WebSocket 服务器] 时，您可以将已认证用户绑定到标注了 `@OnMessage` 或 `@OnOpen` 的方法参数中。
+
+snippet::io.micronaut.security.websocket.AuthenticationWebSocketStateBinderSpec[tags="onOpen"]

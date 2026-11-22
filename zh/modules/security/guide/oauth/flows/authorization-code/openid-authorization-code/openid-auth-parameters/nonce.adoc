@@ -1,0 +1,52 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Nonce](https://docs.micronaut.io/5.2.x/security/#security-nonce)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/oauth/flows/authorization-code/openid-authorization-code/openid-auth-parameters/nonce.adoc  upstream_commit: 0435987e0711972384f270cf7aadc91989ffdfb1  upstream_hash: 2d757d52cb6bb9d17b02a97d99485159d6c7dca6  translated_at: 2026-11-23 -->
+
+默认情况下，本库会在认证请求中包含 https://openid.net/specs/openid-connect-core-1_0.html#IDToken[OpenID Connect] 规范所述的 `nonce` 参数。
+
+由于 nonce 的校验要求将 nonce 暂时存储在某处，因此必须存在一个 api:security.oauth2.endpoint.nonce.persistence.NoncePersistence[] bean，用于取回 nonce 以进行校验。
+
+Micronaut 自带两个 `NoncePersistence` 实现。一个用于将其存储在 HTTP cookie 中（api:security.oauth2.endpoint.nonce.persistence.cookie.CookieNoncePersistence[]`) and another one to persist it with a HTTP Session (api:security.oauth2.endpoint.nonce.persistence.session.SessionNoncePersistence[]`）。
+
+您可以配置使用哪个实现：
+
+include::{includedir}configurationProperties/io.micronaut.security.oauth2.endpoint.nonce.DefaultNonceConfiguration.adoc[]
+
+如果您使用默认实现（将 nonce 存储在 HTTP cookie 中），可以配置 cookie 的构建方式。请查看以下配置选项：
+
+include::{includedir}configurationProperties/io.micronaut.security.oauth2.endpoint.nonce.persistence.cookie.CookieNoncePersistenceConfiguration.adoc[]
+
+要使用 api:security.oauth2.endpoint.nonce.persistence.session.SessionNoncePersistence[]（将 nonce 存储在 HTTP 会话中）：
+
+. 为 `micronaut-session` 添加依赖
++
+dependency:io.micronaut.security:micronaut-session[]
++
+. 将 nonce 持久化设为 `session`
++
+[configuration]
+----
+micronaut:
+  security:
+    oauth2:
+      nonce:
+        persistence: session
+----
++
+
+NOTE: 您可以提供自己的 api:security.oauth2.endpoint.nonce.persistence.NoncePersistence[] 实现
+
+WARNING: 如果 nonce 校验失败，用户将无法通过认证。
+
+=== 自定义
+
+有多个接口可供提供实现，以覆盖 nonce 参数的处理方式。
+
+|===
+| 接口 | 职责 | 默认实现
+| api:security.oauth2.endpoint.nonce.NonceFactory[] | 构建 `java.lang.String` 类型的 nonce 值 | api:security.oauth2.endpoint.nonce.DefaultNonceFactory[]
+| api:security.oauth2.endpoint.token.response.validation.OpenIdTokenResponseValidator[] | 校验 OpenID 令牌响应（包括 nonce）。 | api:security.oauth2.endpoint.token.response.validation.DefaultOpenIdTokenResponseValidator[]
+| | 校验令牌响应中的 nonce claim | api:security.oauth2.endpoint.token.response.validation.NonceClaimValidator[]
+| api:security.oauth2.endpoint.nonce.persistence.NoncePersistence[] | 存储 nonce 以便后续取回进行校验 | api:security.oauth2.endpoint.nonce.persistence.cookie.CookieNoncePersistence[]
+|===
+
+要覆盖上述任一 bean 的行为，请提供一个实现并替换默认实现。

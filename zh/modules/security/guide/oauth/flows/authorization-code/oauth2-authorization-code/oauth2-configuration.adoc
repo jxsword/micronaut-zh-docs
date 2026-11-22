@@ -1,0 +1,41 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Configuration](https://docs.micronaut.io/5.2.x/security/#security-oauth2-configuration)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/oauth/flows/authorization-code/oauth2-authorization-code/oauth2-configuration.adoc  upstream_commit: 0435987e0711972384f270cf7aadc91989ffdfb1  upstream_hash: 5d3f2181d374bc16ed36db069a7e5013a412cb48  translated_at: 2026-11-23 -->
+
+使用 OAuth 2.0 提供者进行授权的最低要求是：
+
+* 配置授权端点
+* 配置令牌端点
+* 配置 client id 和 secret
+* 提供 api:security.oauth2.endpoint.token.response.OauthAuthenticationMapper[] 的实现
+
+配置非常简单。例如，要配置 Github 授权：
+
+[configuration]
+----
+micronaut:
+  security:
+    oauth2:
+      clients:
+        github:
+          client-id: <<my client id>>
+          client-secret: <<my client secret>>
+          scopes:
+            - user:email
+            - read:user
+          authorization:
+            url: https://github.com/login/oauth/authorize
+          token:
+            url: https://github.com/login/oauth/access_token
+            auth-method: client-secret-post
+----
+
+- 配置一个客户端。名称 `github` 是任意的
+- 提供 `client-id` 与 `client-secret` 的值
+- 可选：指定所需的 `scopes`
+- 提供 `authorization` 端点 URL
+- 另外，还有 `token` 端点 URL 及其认证方式
+- `auth-method` 是 api:security.oauth2.endpoint.AuthenticationMethod[] 之一。请选择您的提供者所要求的方式。
+
+认证方式在 link:https://tools.ietf.org/html/rfc6749#section-3.2.1[RFC 6749] 中没有明确定义，不过大多数 OAuth 2.0 提供者要么接受 `client-secret-basic`，即使用 id 和 secret 的 basic 认证；要么接受 `client-secret-post`，即 client id 和 secret 随请求体发送。
+
+TIP: 要在任意给定环境中禁用特定客户端，请在该客户端配置内设置 `enabled: false`。

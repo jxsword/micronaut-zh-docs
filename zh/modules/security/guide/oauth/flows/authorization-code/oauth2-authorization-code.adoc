@@ -1,0 +1,8 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – OAuth 2.0](https://docs.micronaut.io/5.2.x/security/#security-oauth2-authorization-code)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/oauth/flows/authorization-code/oauth2-authorization-code.adoc  upstream_commit: 6aa19d54cebccf075e0d6b5dd4536bef4fc71fea  upstream_hash: a508632f6274d28c939712c6fff0fe71c8805a7a  translated_at: 2026-11-23 -->
+
+仅凭本库就可以配置 OpenID 提供者的授权，因为 OpenID 标准化了如何从提供者检索用户信息。由于用户信息端点并不属于 OAuth 2.0 规范的一部分，您需要自行提供实现来检索该信息。
+
+下面是授权码许可流程与 OAuth 2.0 提供者协作方式的高层示意图。
+
+image::standard-oauth.svg[]

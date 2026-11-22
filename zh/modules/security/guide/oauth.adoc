@@ -1,0 +1,30 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – OAuth 2.0](https://docs.micronaut.io/5.2.x/security/#security-oauth)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/oauth.adoc  upstream_commit: 0435987e0711972384f270cf7aadc91989ffdfb1  upstream_hash: 05083c6f6e6ddabd7a6e7fff1a1f81a9764f28b6  translated_at: 2026-11-23 -->
+
+[[oauth]]
+Micronaut 支持使用 OAuth 2.0 服务器进行认证，包括对 OpenID 标准的支持。
+
+最简单的入门方式是配置一个支持 OpenID 的提供者。诸如 https://developer.okta.com[Okta]、https://auth0.com[Auth0]、https://aws.amazon.com/cognito[AWS Cognito]、https://www.keycloak.org[Keycloak] 和 https://developers.google.com/identity/protocols/OpenIDConnect[Google] 等平台都是常见的例子。
+
+在提供者处创建应用客户端后，您会得到一个 client id 和一个 client secret。将 client id、secret 与 issuer URL 相结合，就足以启用 OpenID 提供者的授权码许可流程。
+
+例如，要将 Google 配置为提供者：
+
+[configuration,subs="verbatim"]
+----
+micronaut:
+  security:
+    oauth2:
+      clients:
+        google:
+          client-secret: <<your client secret>>
+          client-id: <<your client id>>
+          openid:
+            issuer: https://accounts.google.com
+----
+
+对于普通 OAuth 2.0，启用授权码许可流程需要不同的步骤。
+
+要使完整的授权码流程能够工作，还有一些额外的要求。上下文中必须有 api:security.handlers.LoginHandler[]，用于决定登录成功或失败后如何响应。当然，您可以提供自定义实现。不过，已有多个 <<loginHandler, 登录处理器>> 实现开箱即用。
+
+TIP: 请阅读以下指南了解更多内容：**使用 https://guides.micronaut.io/latest/micronaut-oauth2-okta.html[Okta]、https://guides.micronaut.io/latest/micronaut-oauth2-cognito.html[Cognito]、https://guides.micronaut.io/latest/micronaut-oauth2-oidc-google.html[Google] 保护 Micronaut 应用**。

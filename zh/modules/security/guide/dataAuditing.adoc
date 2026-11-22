@@ -1,0 +1,4 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Data Change Auditing](https://docs.micronaut.io/5.2.x/security/#security-dataAuditing)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/dataAuditing.adoc  upstream_commit: 7ad6d49595336973cefb9fcbc68e75d9184a8850  upstream_hash: fd73642c8c7b1b09e56bf6d6d3eee9d12993b66d  translated_at: 2026-11-23 -->
+
+Micronaut Security 提供了与 https://micronaut-projects.github.io/micronaut-data/latest/guide/[Micronaut Data] 的集成，用于自动记录创建或更新特定实体的用户身份。

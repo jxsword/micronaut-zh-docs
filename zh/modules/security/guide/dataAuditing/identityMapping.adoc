@@ -1,0 +1,10 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Custom Authentication Mapping](https://docs.micronaut.io/5.2.x/security/#security-identityMapping)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/dataAuditing/identityMapping.adoc  upstream_commit: 7ad6d49595336973cefb9fcbc68e75d9184a8850  upstream_hash: 235f220d231a14c381c82defabbe31d0b1038359  translated_at: 2026-11-23 -->
+
+提供了 api:security.audit.PrincipalToStringConverter[]，用于将当前 api:security.Authentication[] 对象映射到被标注的 String 字段。默认实现将 `Principal.getName()` 的值映射到这些字段。要自定义该映射，您可以提供自己的 `TypeConverter` 实现，替换 `PrincipalToStringConverter`。例如：
+
+snippet::io.micronaut.security.audit.docs.customconverter.AuthenticationToStringConverter[tags="clazz"]
+<1> `Authentication` 与 `String` 之间的转换已实现
+<2> 该实现将一个自定义属性映射到自动填充的身份字段
+
+该类型转换机制还可用于将 `Authentication` 映射到比 String 更复杂的字段类型，例如自定义的领域专属 `User` 对象。

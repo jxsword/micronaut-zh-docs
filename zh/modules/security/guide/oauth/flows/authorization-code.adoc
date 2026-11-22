@@ -1,0 +1,26 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Authorization Code](https://docs.micronaut.io/5.2.x/security/#security-authorization-code)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/oauth/flows/authorization-code.adoc  upstream_commit: 68ca2ac782e1edb8499f5783238fa7c9c617f45a  upstream_hash: 5559b8d7a06f51f82e1b52fd297dfc9c5a3976fc  translated_at: 2026-11-23 -->
+
+授权码许可流程（authorization code grant flow）是 OAuth 2.0 与 OpenID 提供者中最典型的认证流程。无论提供者是否支持 OpenID，该流程的主要步骤都是相同的，详见 link:https://tools.ietf.org/html/rfc6749#section-4.1[RFC6749 - 授权码许可]。
+
+OAuth 2.0 授权码流程需要一个回调端点。此外，还提供一个登录端点用于触发该流程。这些 URI 均可配置。
+
+include::{includedir}configurationProperties/io.micronaut.security.oauth2.configuration.OauthConfigurationProperties.adoc[]
+
+登录与回调的 URI 模板中有一个模板变量 `{provider}`。路由构建器使用该变量为每个已配置的提供者构建路由。名称 `provider` 在此上下文中是特殊的，不可更改。不过，只要提供者变量位于 URI 的*路径*中，URI 可以以任何方式调整。
+
+例如 `/oauth/login{?provider}` 不是有效配置，因为 Micronaut 在路由请求时不会考虑 URL 的查询部分。提供者变量必须是*路径*的一部分。
+
+TIP: 可以指定一个默认提供者。该配置的值必须与某个客户端名称匹配。默认提供者会使用相同的 URI 模板，只是以 `null` 作为提供者参数传入。默认情况下，这会使 `/oauth/login` 重定向到默认提供者的认证页面。
+
+#### OAuth 登录与 CSRF
+
+为了防止强制登录攻击，您必须在 OAuth 登录端点上实现 CSRF 防护。由于本库无法控制登录可能来源的表单，我们无法确保已应用 CSRF。此外，关于令牌如何存储以及应如何获取，也没有合理的默认值。实现 CSRF 相对简单。
+
+1. 在渲染用户可以选择通过 OAuth 登录的登录表单时，服务器应将一个值存储在该用户专属的服务器端状态（会话）、客户端状态（仅限 HTTP 访问的 cookie 等）或其他机制中。
+2. 该值随响应发送，随后包含在使用 OAuth 登录的请求中。该值可以作为查询参数发送，也可以作为 cookie 发送，等等。
+3. 编写一个服务器过滤器来比较用户专属状态中的值与请求中发送的值。如果两者不匹配，则拒绝该请求。
+
+下面是一个示例：
+
+snippet::io.micronaut.security.oauth2.docs.endpoint.OAuthCsrfFilter[tags="imports,class"]

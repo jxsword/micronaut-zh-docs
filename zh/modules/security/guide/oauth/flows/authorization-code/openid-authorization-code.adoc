@@ -1,0 +1,9 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – OpenID Connect](https://docs.micronaut.io/5.2.x/security/#security-openid-authorization-code)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/oauth/flows/authorization-code/openid-authorization-code.adoc  upstream_commit: 4907cf9a473893c50de1d3f04304fc5def0616cb  upstream_hash: bd9ec887db81086a572ad486ed61865bc149e300  translated_at: 2026-11-23 -->
+
+[[openid-authorization-code]]
+使用 Micronaut 为 OpenID 提供者添加授权码流程支持非常容易。
+
+下面是授权码许可流程与 OpenID 提供者协作方式的高层示意图。
+
+image::openid-oauth.svg[]

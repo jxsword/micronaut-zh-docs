@@ -1,0 +1,12 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – OpenID Connect](https://docs.micronaut.io/5.2.x/security/#security-openid)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/oauth/openid.adoc  upstream_commit: 47476c179190e38326df1d04ebeb87075b2164ee  upstream_hash: 487399ed3aaafdca657e9665920daba856b69201  translated_at: 2026-11-23 -->
+
+> https://openid.net/connect/[OpenID Connect 1.0] 是建立在 OAuth 2.0 协议之上的简单身份层。它允许客户端基于授权服务器执行的认证来验证最终用户（End-User）的身份，并以可互操作的、类似 REST 的方式获取最终用户的基本档案信息。
+
+如果您刚接触 OpenID Connect，我们推荐观看 https://www.youtube.com/watch?v=996OiexHze0[OAuth 2.0 and OpenID Connect] 以获得更好的理解。
+
+NOTE: 要使用 OpenID 客户端流程，构建中必须包含 `security-jwt` 依赖，因为 OpenID 依赖 JWT 令牌。
+
+dependency:io.micronaut.security:micronaut-security-jwt[]
+
+IMPORTANT: 尽管 OpenID 提供者会返回 JWT 令牌，但默认情况下该令牌不会直接用于 Micronaut 的请求授权。相反，如果应用使用 JWT，则会创建一个新令牌。这使得授权可以在自定义认证提供者、普通 OAuth 2.0 流程和 OpenID 流程之间标准化。它还使得 OpenID 认证的结果可以支持纯基于会话的授权。要直接使用提供者的令牌，请将认证模式设置为 `idtoken`。

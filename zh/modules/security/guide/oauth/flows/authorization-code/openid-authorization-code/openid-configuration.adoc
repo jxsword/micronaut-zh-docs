@@ -1,0 +1,38 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – Configuration](https://docs.micronaut.io/5.2.x/security/#security-openid-configuration)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/oauth/flows/authorization-code/openid-authorization-code/openid-configuration.adoc  upstream_commit: af12498c6bbc0251e651d23cd3088f83074eafd4  upstream_hash: ac4a09f6a62947455f65b0b19fbc94a34db098b0  translated_at: 2026-11-23 -->
+
+[[openid-configuration]]
+使用 OpenID 提供者进行授权的要求是：
+
+* 配置 client id 和 secret
+* 配置 issuer
+
+[configuration]
+----
+micronaut:
+    security:
+        oauth2:
+            clients:
+                okta:
+                    client-id: <<my client id>>
+                    client-secret: <<my client secret>>
+                    openid:
+                        issuer: <<my openid issuer>>
+----
+
+- 配置一个客户端。名称 `okta` 是任意的
+- 提供 `client-id` 与 `client-secret` 的值
+- 指定 OpenID 提供者的 issuer URL
+
+issuer URL 将用于发现提供者暴露的端点。
+
+TIP: 要在任意给定环境中禁用特定客户端，请在该客户端配置内设置 `enabled: false`。
+
+配置选项请参见以下表格：
+
+include::{includedir}configurationProperties/io.micronaut.security.oauth2.configuration.OauthClientConfigurationProperties$OpenIdClientConfigurationProperties.adoc[]
+include::{includedir}configurationProperties/io.micronaut.security.oauth2.configuration.OauthClientConfigurationProperties$OpenIdClientConfigurationProperties$AuthorizationEndpointConfigurationProperties.adoc[]
+include::{includedir}configurationProperties/io.micronaut.security.oauth2.configuration.OauthClientConfigurationProperties$OpenIdClientConfigurationProperties$TokenEndpointConfigurationProperties.adoc[]
+include::{includedir}configurationProperties/io.micronaut.security.oauth2.configuration.OauthClientConfigurationProperties$OpenIdClientConfigurationProperties$EndSessionConfigurationProperties.adoc[]
+include::{includedir}configurationProperties/io.micronaut.security.oauth2.configuration.OauthClientConfigurationProperties$OpenIdClientConfigurationProperties$RegistrationEndpointConfigurationProperties.adoc[]
+include::{includedir}configurationProperties/io.micronaut.security.oauth2.configuration.OauthClientConfigurationProperties$OpenIdClientConfigurationProperties$UserInfoEndpointConfigurationProperties.adoc[]

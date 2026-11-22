@@ -1,0 +1,29 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – OAuth 2.0 Authentication Mapper](https://docs.micronaut.io/5.2.x/security/#security-openid-user-details)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/oauth/flows/authorization-code/openid-authorization-code/openid-user-details.adoc  upstream_commit: 2f32b65cae23931355b880cebb7392a0f1d9290d  upstream_hash: 3e21fb4eb462511409fee271176c8e1d83542f01  translated_at: 2026-11-23 -->
+
+由于 OpenID 标准会在令牌响应中返回 JWT 令牌，因此无需额外的调用即可检索用户信息。此外，JWT 中存储的数据是标准化的，所以您可以跨提供者使用相同的代码检索这些信息。
+
+默认已提供 api:security.oauth2.endpoint.token.response.OpenIdAuthenticationMapper[] 的实现，用于将 JWT 令牌映射为 api:security.authentication.Authentication[]。默认实现会保留所有 OpenID 特定的 JWT Claims，并可能根据配置包含其他 Claims。原始提供者名称始终会以 "oauth2Provider" Claim 键包含在 JWT 中。下表解释了这些额外的 Claims。
+
+include::{includedir}configurationProperties/io.micronaut.security.oauth2.configuration.OauthConfigurationProperties$OpenIdConfigurationProperties$AdditionalClaimsConfigurationProperties.adoc[]
+
+IMPORTANT: 已知在启用上述全部选项并使用 cookie JWT 存储时，Keycloak 会出现问题，原因是其令牌非常大，导致生成的 cookie 超出浏览器允许的大小。
+
+如果默认实现不满足需求，可以覆盖全局默认实现，或提供特定于某个提供者的实现。
+
+IMPORTANT: 如果您希望使用自定义 `OpenIdAuthenticationMapper`，则不能使用 `micronaut.security.authentication` = `idtoken`。您应当使用 `micronaut.security.authentication` = `cookie`，或者提供您自己的 <<loginHandler, 登录处理器>> 与 <<logoutHandler, 登出处理器>> 实现。
+
+要覆盖全局默认映射器，注册一个替换 api:security.oauth2.endpoint.token.response.DefaultOpenIdAuthenticationMapper[] 的 bean。
+
+snippet::io.micronaut.security.oauth2.docs.openid.GlobalOpenIdAuthenticationMapper[tags="clazz"]
+
+要覆盖特定提供者的用户详情映射行为，注册一个带有命名限定符的 bean，限定符值等于客户端配置中指定的名称。
+
+snippet::io.micronaut.security.oauth2.docs.openid.OktaAuthenticationMapper[tags="clazz"]
+
+<1> 添加了与配置中的名称相匹配的命名限定符
+<2> 提供者名称会传递给该方法。仅对全局版本有用
+<3> 完整的令牌响应可用
+<4> JWT Claims 可用
+<5> OAuth 认证期间使用的 state 对象
+<6> 返回一个 api:security.authentication.AuthenticationResponse[] 实例

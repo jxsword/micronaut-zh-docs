@@ -407,7 +407,7 @@ files:
 - file: modules/security/guide/dataAuditing.adoc
   blob_sha: fd73642c8c7b1b09e56bf6d6d3eee9d12993b66d
   size: 225
-  status: missing
+  status: current
   zh: zh/modules/security/guide/dataAuditing.adoc
   paragraphs: 1
   updated_at: '2026-11-23'
@@ -415,7 +415,7 @@ files:
 - file: modules/security/guide/dataAuditing/annotations.adoc
   blob_sha: f0894237782b0dd452c661831d17157f0303b8b5
   size: 533
-  status: missing
+  status: current
   zh: zh/modules/security/guide/dataAuditing/annotations.adoc
   paragraphs: 3
   updated_at: '2026-11-23'
@@ -423,7 +423,7 @@ files:
 - file: modules/security/guide/dataAuditing/identityMapping.adoc
   blob_sha: 235f220d231a14c381c82defabbe31d0b1038359
   size: 792
-  status: missing
+  status: current
   zh: zh/modules/security/guide/dataAuditing/identityMapping.adoc
   paragraphs: 4
   updated_at: '2026-11-23'
@@ -543,7 +543,7 @@ files:
 - file: modules/security/guide/oauth.adoc
   blob_sha: 05083c6f6e6ddabd7a6e7fff1a1f81a9764f28b6
   size: 1765
-  status: missing
+  status: current
   zh: zh/modules/security/guide/oauth.adoc
   paragraphs: 9
   updated_at: '2026-11-23'
@@ -567,7 +567,7 @@ files:
 - file: modules/security/guide/oauth/flows/authorization-code.adoc
   blob_sha: 5559b8d7a06f51f82e1b52fd297dfc9c5a3976fc
   size: 2604
-  status: missing
+  status: current
   zh: zh/modules/security/guide/oauth/flows/authorization-code.adoc
   paragraphs: 11
   updated_at: '2026-11-23'
@@ -575,7 +575,7 @@ files:
 - file: modules/security/guide/oauth/flows/authorization-code/oauth2-authorization-code.adoc
   blob_sha: a508632f6274d28c939712c6fff0fe71c8805a7a
   size: 458
-  status: missing
+  status: current
   zh: zh/modules/security/guide/oauth/flows/authorization-code/oauth2-authorization-code.adoc
   paragraphs: 3
   updated_at: '2026-11-23'
@@ -583,7 +583,7 @@ files:
 - file: modules/security/guide/oauth/flows/authorization-code/oauth2-authorization-code/oauth2-configuration.adoc
   blob_sha: 5d3f2181d374bc16ed36db069a7e5013a412cb48
   size: 1631
-  status: missing
+  status: current
   zh: zh/modules/security/guide/oauth/flows/authorization-code/oauth2-authorization-code/oauth2-configuration.adoc
   paragraphs: 8
   updated_at: '2026-11-23'
@@ -591,7 +591,7 @@ files:
 - file: modules/security/guide/oauth/flows/authorization-code/oauth2-authorization-code/oauth2-user-details.adoc
   blob_sha: 147de7d1d139bfafc8584284a21653a323446ae6
   size: 2097
-  status: missing
+  status: current
   zh: zh/modules/security/guide/oauth/flows/authorization-code/oauth2-authorization-code/oauth2-user-details.adoc
   paragraphs: 12
   updated_at: '2026-11-23'
@@ -599,7 +599,7 @@ files:
 - file: modules/security/guide/oauth/flows/authorization-code/openid-authorization-code.adoc
   blob_sha: bd9ec887db81086a572ad486ed61865bc149e300
   size: 230
-  status: missing
+  status: current
   zh: zh/modules/security/guide/oauth/flows/authorization-code/openid-authorization-code.adoc
   paragraphs: 3
   updated_at: '2026-11-23'
@@ -607,7 +607,7 @@ files:
 - file: modules/security/guide/oauth/flows/authorization-code/openid-authorization-code/openid-auth-parameters.adoc
   blob_sha: 469fa97c3f90d0b65ba39f114462230664f7249d
   size: 660
-  status: missing
+  status: current
   zh: zh/modules/security/guide/oauth/flows/authorization-code/openid-authorization-code/openid-auth-parameters.adoc
   paragraphs: 3
   updated_at: '2026-11-23'
@@ -615,7 +615,7 @@ files:
 - file: modules/security/guide/oauth/flows/authorization-code/openid-authorization-code/openid-auth-parameters/id-token-hint.adoc
   blob_sha: 60f0c47f8593865c573792abaf9b4b4007071a07
   size: 328
-  status: missing
+  status: current
   zh: zh/modules/security/guide/oauth/flows/authorization-code/openid-authorization-code/openid-auth-parameters/id-token-hint.adoc
   paragraphs: 1
   updated_at: '2026-11-23'
@@ -623,7 +623,7 @@ files:
 - file: modules/security/guide/oauth/flows/authorization-code/openid-authorization-code/openid-auth-parameters/login-hint.adoc
   blob_sha: b21e94fd474cc837d3684c33b0cdd1a672aa9b4c
   size: 323
-  status: missing
+  status: current
   zh: zh/modules/security/guide/oauth/flows/authorization-code/openid-authorization-code/openid-auth-parameters/login-hint.adoc
   paragraphs: 1
   updated_at: '2026-11-23'
@@ -631,7 +631,7 @@ files:
 - file: modules/security/guide/oauth/flows/authorization-code/openid-authorization-code/openid-auth-parameters/nonce.adoc
   blob_sha: 2d757d52cb6bb9d17b02a97d99485159d6c7dca6
   size: 2842
-  status: missing
+  status: current
   zh: zh/modules/security/guide/oauth/flows/authorization-code/openid-authorization-code/openid-auth-parameters/nonce.adoc
   paragraphs: 18
   updated_at: '2026-11-23'
@@ -639,7 +639,7 @@ files:
 - file: modules/security/guide/oauth/flows/authorization-code/openid-authorization-code/openid-configuration.adoc
   blob_sha: ac4a09f6a62947455f65b0b19fbc94a34db098b0
   size: 2035
-  status: missing
+  status: current
   zh: zh/modules/security/guide/oauth/flows/authorization-code/openid-authorization-code/openid-configuration.adoc
   paragraphs: 14
   updated_at: '2026-11-23'
@@ -647,7 +647,7 @@ files:
 - file: modules/security/guide/oauth/flows/authorization-code/openid-authorization-code/openid-user-details.adoc
   blob_sha: 3e21fb4eb462511409fee271176c8e1d83542f01
   size: 2553
-  status: missing
+  status: current
   zh: zh/modules/security/guide/oauth/flows/authorization-code/openid-authorization-code/openid-user-details.adoc
   paragraphs: 11
   updated_at: '2026-11-23'
@@ -655,7 +655,7 @@ files:
 - file: modules/security/guide/oauth/flows/authorization-code/openid-authorization-code/token-validation.adoc
   blob_sha: 6af9466f5a610645a80c4cbc304f5678ba552ee8
   size: 745
-  status: missing
+  status: current
   zh: zh/modules/security/guide/oauth/flows/authorization-code/openid-authorization-code/token-validation.adoc
   paragraphs: 3
   updated_at: '2026-11-23'
@@ -663,7 +663,7 @@ files:
 - file: modules/security/guide/oauth/flows/authorization-code/pkce.adoc
   blob_sha: 806d594bd9e12c898a358e8f68da050019275160
   size: 898
-  status: missing
+  status: current
   zh: zh/modules/security/guide/oauth/flows/authorization-code/pkce.adoc
   paragraphs: 3
   updated_at: '2026-11-23'
@@ -671,7 +671,7 @@ files:
 - file: modules/security/guide/oauth/flows/authorization-code/state.adoc
   blob_sha: fe9610ee24faf9cb2abd4601b6f7776d9592608b
   size: 2471
-  status: missing
+  status: current
   zh: zh/modules/security/guide/oauth/flows/authorization-code/state.adoc
   paragraphs: 14
   updated_at: '2026-11-23'
@@ -679,7 +679,7 @@ files:
 - file: modules/security/guide/oauth/flows/clientcredentials.adoc
   blob_sha: 1511911e1620695d9db0fd391163fab32095032d
   size: 1297
-  status: missing
+  status: current
   zh: zh/modules/security/guide/oauth/flows/clientcredentials.adoc
   paragraphs: 11
   updated_at: '2026-11-23'
@@ -719,7 +719,7 @@ files:
 - file: modules/security/guide/oauth/installation.adoc
   blob_sha: 18d635ef2a06ca5470dc6ad98cd45e8e2dd7f811
   size: 366
-  status: missing
+  status: current
   zh: zh/modules/security/guide/oauth/installation.adoc
   paragraphs: 3
   updated_at: '2026-11-23'
@@ -783,7 +783,7 @@ files:
 - file: modules/security/guide/oauth/openid.adoc
   blob_sha: 487399ed3aaafdca657e9665920daba856b69201
   size: 1193
-  status: missing
+  status: current
   zh: zh/modules/security/guide/oauth/openid.adoc
   paragraphs: 5
   updated_at: '2026-11-23'
@@ -903,7 +903,7 @@ files:
 - file: modules/security/guide/retrievingAuthenticatedUser.adoc
   blob_sha: 561079eef474b4ddbf6c11b7e62eac5377e3213e
   size: 685
-  status: missing
+  status: current
   zh: zh/modules/security/guide/retrievingAuthenticatedUser.adoc
   paragraphs: 7
   updated_at: '2026-11-23'
@@ -911,7 +911,7 @@ files:
 - file: modules/security/guide/retrievingAuthenticatedUser/customAuthenticatedUser.adoc
   blob_sha: 5fa21d6c9d79e0cc0747949598f61e40663fc0be
   size: 606
-  status: missing
+  status: current
   zh: zh/modules/security/guide/retrievingAuthenticatedUser/customAuthenticatedUser.adoc
   paragraphs: 7
   updated_at: '2026-11-23'
@@ -919,7 +919,7 @@ files:
 - file: modules/security/guide/retrievingAuthenticatedUser/securityService.adoc
   blob_sha: fa0ffd37dd46c4fefec1cb36902a1bd966800617
   size: 954
-  status: missing
+  status: current
   zh: zh/modules/security/guide/retrievingAuthenticatedUser/securityService.adoc
   paragraphs: 6
   updated_at: '2026-11-23'
@@ -927,7 +927,7 @@ files:
 - file: modules/security/guide/retrievingAuthenticatedUser/websocket.adoc
   blob_sha: de3e17f66837ade5d3147811363aecf7d326f790
   size: 273
-  status: missing
+  status: current
   zh: zh/modules/security/guide/retrievingAuthenticatedUser/websocket.adoc
   paragraphs: 2
   updated_at: '2026-11-23'
@@ -983,7 +983,7 @@ files:
 - file: modules/security/guide/securityEvents.adoc
   blob_sha: 88fcc6b88b103bffd0b01aa37be5fcd9b3f1b3d3
   size: 1220
-  status: missing
+  status: current
   zh: zh/modules/security/guide/securityEvents.adoc
   paragraphs: 3
   updated_at: '2026-11-23'
@@ -1135,7 +1135,7 @@ files:
 - file: modules/security/guide/tokenendpoints/introspectionendpoint.adoc
   blob_sha: f90ea1926a20b44a055980d72171e06cb84a3dc8
   size: 1417
-  status: missing
+  status: current
   zh: zh/modules/security/guide/tokenendpoints/introspectionendpoint.adoc
   paragraphs: 10
   updated_at: '2026-11-23'
@@ -1143,7 +1143,7 @@ files:
 - file: modules/security/guide/tokenendpoints/keys.adoc
   blob_sha: 2fe537d61299c2a641850e3fc5daab63202d7813
   size: 816
-  status: missing
+  status: current
   zh: zh/modules/security/guide/tokenendpoints/keys.adoc
   paragraphs: 6
   updated_at: '2026-11-23'
@@ -1151,7 +1151,7 @@ files:
 - file: modules/security/guide/tokenendpoints/refresh.adoc
   blob_sha: 1c5764c0c02417cdc3e64fef797303fe09e76b47
   size: 4455
-  status: missing
+  status: current
   zh: zh/modules/security/guide/tokenendpoints/refresh.adoc
   paragraphs: 26
   updated_at: '2026-11-23'

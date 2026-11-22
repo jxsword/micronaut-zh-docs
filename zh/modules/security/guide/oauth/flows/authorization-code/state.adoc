@@ -1,0 +1,41 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – State Parameter](https://docs.micronaut.io/5.2.x/security/#security-state)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/oauth/flows/authorization-code/state.adoc  upstream_commit: 0435987e0711972384f270cf7aadc91989ffdfb1  upstream_hash: fe9610ee24faf9cb2abd4601b6f7776d9592608b  translated_at: 2026-11-23 -->
+
+默认情况下，本库会在认证请求中包含 link:https://tools.ietf.org/html/rfc6749#section-4.1.1[RFC 6749] 所述的 `state` 参数。其中存储了一个 JSON 序列化对象，包含用于校验的 nonce 值。
+
+由于 state 的校验要求将 state 暂时存储在某处，因此必须存在一个 api:security.oauth2.endpoint.authorization.state.persistence.StatePersistence[] bean，用于取回 state 以进行校验。默认实现将 state 存储在 HTTP cookie 中。要配置 cookie 的构建方式，请查看以下配置选项：
+
+include::{includedir}configurationProperties/io.micronaut.security.oauth2.endpoint.authorization.state.persistence.cookie.CookieStatePersistenceConfiguration.adoc[]
+
+您可以提供自己的实现，不过本库也已提供将 state 存储在 HTTP 会话中的 state 持久化实现。
+
+要启用基于 HTTP 会话的 state 持久化：
+
+. 为 `micronaut-session` 添加依赖
++
+dependency:io.micronaut.security:micronaut-session[]
++
+. 将 state 持久化设为 `session`
++
+[configuration]
+----
+micronaut.security.oauth2.state.persistence: session
+----
+
++
+
+如果 state 校验失败，用户将无法通过认证。
+
+=== 自定义
+
+有多个接口可供提供实现，以覆盖 state 参数的处理方式。
+
+|===
+| 接口 | 职责 | 默认实现
+| api:security.oauth2.endpoint.authorization.state.StateFactory[] | 构建 api:security.oauth2.endpoint.authorization.state.State[] | api:security.oauth2.endpoint.authorization.state.DefaultStateFactory[]
+| api:security.oauth2.endpoint.authorization.state.StateSerDes[] | 序列化与反序列化 state 对象以用于授权请求 | api:security.oauth2.endpoint.authorization.state.JacksonStateSerDes[]
+| api:security.oauth2.endpoint.authorization.state.validation.StateValidator[] | 校验授权响应中收到的 state | api:security.oauth2.endpoint.authorization.state.validation.DefaultStateValidator[]
+| api:security.oauth2.endpoint.authorization.state.persistence.StatePersistence[] | 存储 state 以便后续取回进行校验 | api:security.oauth2.endpoint.authorization.state.persistence.cookie.CookieStatePersistence[]
+|===
+
+要覆盖上述任一 bean 的行为，请提供一个实现并替换默认实现。

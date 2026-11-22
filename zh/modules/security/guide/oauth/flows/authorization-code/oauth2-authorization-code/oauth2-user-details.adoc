@@ -1,0 +1,29 @@
+> 本文翻译自 Micronaut Security 官方文档（5.2.x 分支基线，2026-11-23 锁定） [Security – User Details Mapper](https://docs.micronaut.io/5.2.x/security/#security-oauth2-user-details)，非官方译文，以英文原文为准。
+<!-- upstream_file: modules/security/guide/oauth/flows/authorization-code/oauth2-authorization-code/oauth2-user-details.adoc  upstream_commit: 23c32ee20e6580bcb58c515585d7c9cd371da20f  upstream_hash: 147de7d1d139bfafc8584284a21653a323446ae6  translated_at: 2026-11-23 -->
+
+除配置之外，用户还需要实现 api:security.oauth2.endpoint.token.response.OauthAuthenticationMapper[]。该实现必须以与客户端配置中名称相匹配的名称限定符进行限定。
+
+用户详情映射器（user details mapper）的用途是将 api:security.oauth2.endpoint.token.response.TokenResponse[] 转换为 api:security.authentication.Authentication[]。这需要调用提供者暴露的某个端点来检索用户信息。收到该信息后，即可按您的需求填充用户详情。
+
+用户详情映射器的常见需求可能是：将来自 OAuth 2.0 提供者的数据与来自远程数据库的数据相结合，和/或创建新的用户记录。api:security.authentication.Authentication[] 对象存储三个基本属性：`username`、`roles` 以及任意 `attributes`。存储在用户详情中的所有数据都可以在接受 api:security.authentication.Authentication[] 的控制器中检索。
+
+例如，下面演示如何为 Github 实现它。
+
+创建一个类来存储响应数据：
+
+snippet::io.micronaut.security.oauth2.docs.github.GithubUser[tags="clazz"]
+
+创建一个 HTTP 客户端来发起请求：
+
+snippet::io.micronaut.security.oauth2.docs.github.GithubApiClient[tags="clazz"]
+
+创建将该流程串联起来的用户详情映射器：
+
+snippet::io.micronaut.security.oauth2.docs.github.GithubAuthenticationMapper[tags="clazz"]
+
+<1> 该 bean 必须带有与配置中的名称相匹配的命名限定符。
+<2> 如何发起检索用户信息的请求完全由您决定，不过本示例中我们使用声明式客户端。
+<3> 令牌端点响应会传递给该方法。
+<4> 用户信息被转换为 api:security.authentication.Authentication[]。
+
+TIP: 请阅读 **使用 https://guides.micronaut.io/latest/micronaut-oauth2-github.html[Github] 与 https://guides.micronaut.io/latest/micronaut-oauth2-linkedin.html[LinkedIn] 保护 Micronaut 应用** 指南查看示例。
